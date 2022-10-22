@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "module": "esnext",
+        "target": "es2017",
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "sourceMap": false,
+        "strict": true,
+        "noUnusedLocals": false,
+        "alwaysStrict": true,
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "removeComments": true,
+        "moduleResolution": "node",
+        "outDir": "./dist/",
+        "rootDir": "wwwroot/ts",
+        "lib": [
+            "dom",
+            "esnext",
+        ]
+    },
+    "exclude": [
+        "node_modules",
+    ]
+}

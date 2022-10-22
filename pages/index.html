@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Document</title>
+    <style>
+        .container {
+            width: 500px;
+        }
+
+        .button {
+            position: relative;
+            width: 300px;
+            height: 40px;
+            margin: 10px auto 0 auto;
+            background: #b9aea2;
+            box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .button:first-child:before {
+            content: ' ';
+            position: absolute;
+            z-index: -1;
+            width: 40px;
+            height: 0px;
+            top: 14px;
+            left: -20px;
+            margin: 0px 0px 0 0px;
+            border-top: 20px solid transparent;
+            border-left: 15px solid white;
+            border-bottom: 20px solid transparent;
+            -webkit-transform: skew(-5deg);
+            -moz-transform: skew(-5deg);
+                -o-transform: skew(-5deg);
+            background: #b9aea2;
+        }
+
+        .button:last-child:before {
+            content: ' ';
+            position: absolute;
+            z-index: -1;
+            width: 40px;
+            height: 0px;
+            top: 14px;
+            right: -20px;
+            margin: 0px 0px 0 0px;
+            border-top: 20px solid transparent;
+            border-right: 15px solid white;
+            border-bottom: 20px solid transparent;
+            -webkit-transform: skew(5deg);
+            -moz-transform: skew(5deg);
+                -o-transform: skew(5deg);
+            background: #b9aea2;
+        }
+
+        .button:after {
+            content: ' ';
+            position: absolute;
+            display: block;
+            width: 240px;
+            height: 10px;
+            bottom: -10px;
+            left: 30px;
+            -webkit-transform: skew(-80deg);
+            -moz-transform: skew(-80deg);
+                -o-transform: skew(-80deg);
+            background: #6b6562;
+        }
+
+        .button:last-child:after {
+            width: 0;
+            height: 0;
+            background: transparent;
+        }
+    </style>
+</head>
+<body class="container">
+    <div class="button">
+        Start
+    </div>
+    <div class="button">
+        Load
+    </div>
+</body>
+<script type="module">
+    import * as SchemaTest from "../wwwroot/js-src/SchemaTest.js";
+    
+    SchemaTest.SchemaTest.main();
+</script>
+</html>

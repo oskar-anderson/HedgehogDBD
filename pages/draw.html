@@ -218,22 +218,23 @@
     let schema = ModuleSchemaTest.SchemaTest.schema1;
     let tables = new ModuleParser.Parser().parse(schema);
     console.log(tables);
-    let display = new ModuleDisplay.Display(height, width);
-    display.init();
-    console.log(JSON.parse(JSON.stringify(display.screen)));
-    for (const table of tables) {
-        display.setWorldTable(table)
-    }
 
     let draw = new ModuleDraw.Draw();
-    await draw.init();
-    draw.initScreen(display.screen, width, height, 14)
+    await draw.init(1080, 720);
+    draw.initScreen()
+
+    for (const table of tables) {
+        draw.setWorldTable(table)
+    }
+    draw.render()
+
+
 
     document.querySelector('#getInfo').addEventListener('click', () => {
+        console.log(draw.viewport.lastViewport.scaleX);
         console.log(draw.getScreensize());
     })
     console.log(draw.viewport.scale.x);
-    console.log(draw.viewport.findFitWidth());
 </script>
 
 

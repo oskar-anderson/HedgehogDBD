@@ -7,7 +7,7 @@ const { exec } = require("child_process");
 readdirSync('./wwwroot/js-src').forEach(f => rmSync(`./wwwroot/js-src/${f}`, {recursive: true}));
 console.log('cleared js...');
 
-exec("git xca", (error, stdout, stderr) => {
+exec("git add . && git commit -m \"Updated: `date +\"%Y-%m-%dT%H:%M:%S\"`\"", (error, stdout, stderr) => {
     if (error) {
         console.log(`error: ${error.message}`);
         return;

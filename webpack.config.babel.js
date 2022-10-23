@@ -16,6 +16,7 @@ exec("git xca", (error, stdout, stderr) => {
 });
 
 readdirSync('./wwwroot/js-src').forEach(f => rmSync(`./wwwroot/js-src/${f}`, {recursive: true}));
+console.log('cleared js...');
 
 const SrcFilePaths = glob.sync('./wwwroot/ts/**/*.ts')
 const ClassNameToSrcFilePath = SrcFilePaths.reduce(

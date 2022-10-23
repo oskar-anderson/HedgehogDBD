@@ -3,6 +3,10 @@ const glob = require('glob');
 const { readdirSync, rmSync } = require('fs');
 const { exec } = require("child_process");
 
+
+readdirSync('./wwwroot/js-src').forEach(f => rmSync(`./wwwroot/js-src/${f}`, {recursive: true}));
+console.log('cleared js...');
+
 exec("git xca", (error, stdout, stderr) => {
     if (error) {
         console.log(`error: ${error.message}`);
@@ -15,9 +19,6 @@ exec("git xca", (error, stdout, stderr) => {
     console.log(`stdout: ${stdout}`);
 });
 
-readdirSync('./wwwroot/js-src').forEach(f => rmSync(`./wwwroot/js-src/${f}`, {recursive: true}));
-console.log('cleared js...');
-
 const SrcFilePaths = glob.sync('./wwwroot/ts/**/*.ts')
 const ClassNameToSrcFilePath = SrcFilePaths.reduce(
     function(obj, el){
@@ -26,6 +27,7 @@ const ClassNameToSrcFilePath = SrcFilePaths.reduce(
     }, {}
     )
 
+console.log("ts to js mapping...");
 console.log(ClassNameToSrcFilePath);
 module.exports = {
     entry: ClassNameToSrcFilePath,

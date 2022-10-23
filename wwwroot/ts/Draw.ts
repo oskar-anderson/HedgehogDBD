@@ -20,22 +20,45 @@ export class Draw {
 
     }
 
-    getScreenSize() {
+    getWorld() {
         return new Rectangle(
-            Math.floor(this.viewport.x),
-            Math.floor(this.viewport.y),
-            this.viewport.width,
-            this.viewport.height
+            // @ts-ignore: Object is possibly 'null'.
+            Math.floor(this.viewport.hitArea.x),
+            // @ts-ignore: Object is possibly 'null'.
+            Math.floor(this.viewport.hitArea.y),
+            this.viewport.worldWidth,
+            this.viewport.worldHeight
         );
     }
 
-    getCharGridSize() {
-        let screenSize = this.getScreenSize();
+    getScreen() {
+        return new Rectangle(
+            // @ts-ignore: Object is possibly 'null'.
+            Math.floor(this.viewport.hitArea.x),
+            // @ts-ignore: Object is possibly 'null'.
+            Math.floor(this.viewport.hitArea.y),
+            this.viewport.screenWidth,
+            this.viewport.screenHeight
+        );
+    }
+
+    getScreenCharGridSize() {
+        let screenSize = this.getScreen();
         return new Rectangle(
             0,
             0,
-            Math.floor(screenSize.width / this.fontCharSizeWidth),
-            Math.floor(screenSize.height / this.fontCharSizeHeight), 
+            Math.ceil(screenSize.width / this.fontCharSizeWidth),
+            Math.ceil(screenSize.height / this.fontCharSizeHeight), 
+            );
+    }
+
+    getWorldCharGridSize() {
+        let worldSize = this.getWorld();
+        return new Rectangle(
+            0,
+            0,
+            Math.ceil(worldSize.width / this.fontCharSizeWidth),
+            Math.ceil(worldSize.height / this.fontCharSizeHeight), 
             );
     }
 
@@ -105,7 +128,7 @@ export class Draw {
     }
 
     initScreen() {
-        let charGridSize = this.getCharGridSize();
+        let charGridSize = this.getScreenCharGridSize();
         for (let y = 0; y < charGridSize.height; y++) {
             for (let x = 0; x < charGridSize.width; x++) {
                 this.screenDrawArea.push(' ');
@@ -117,9 +140,11 @@ export class Draw {
     }
 
     render(isForceScreenReset = true) {
-        let charGridSize = this.getCharGridSize();
-        console.log(`getScreenSize`, this.getScreenSize());
+        let charGridSize = this.getScreenCharGridSize();
+        console.log(`getScreenSize`, this.getScreen());
         console.log(`getCharGridSize`, charGridSize);
+        // @ts-ignore: Object is possibly 'null'.
+        console.log(`Y: ${Math.floor(this.viewport.hitArea.y)}, X: ${this.viewport.hitArea.x}`)
         console.log(this.viewport);
         console.log(this.screenDrawArea);
         if (isForceScreenReset) {
@@ -127,9 +152,9 @@ export class Draw {
         }
         for (let y = 0; y < charGridSize.height; y++) {
             for (let x = 0; x < charGridSize.width; x++) {
-                console.log(`x: ${x}, y: ${y}, index: ${y * charGridSize.width + x}`);
+                // console.log(`x: ${x}, y: ${y}, index: ${y * charGridSize.width + x}`);
+                let tile = this.screenDrawArea[y * charGridSize.width + x];
                 if (isForceScreenReset) {
-                    let tile = this.screenDrawArea[y * charGridSize.width + x];
                     let bitmapText = new PIXI.BitmapText(tile,
                         {
                             fontName: "Press Start 2P",
@@ -140,18 +165,18 @@ export class Draw {
                     bitmapText.y = y * this.fontCharSizeHeight;
                     this.viewport.addChild(bitmapText)
                 } else {
-                    (this.viewport.children[y * charGridSize.width + x] as PIXI.Text).text = this.screenDrawArea[y * charGridSize.width + x];
+                    (this.viewport.children[y * charGridSize.width + x] as PIXI.Text).text = tile;
                 }
             }
         }
     }
 
-    getWorldPontCanvasIndex(x: number, y: number) {
-        return y * this.getCharGridSize().width + x;
+    getWorldPointCanvasIndex(x: number, y: number) {
+        return y * this.getScreenCharGridSize().width + x;
     }
 
     isWorldPointInScreen(x: number, y: number) {
-        return this.getCharGridSize().contains(x, y);
+        return this.getScreenCharGridSize().contains(x, y);
     }
 
     setWorldTable(table: Table) {
@@ -172,7 +197,7 @@ export class Draw {
                 if (rect.y + 1 === y && x < rect.right && x > rect.left) {
                     let tile = table.head[headIndex] ?? ' ';
                     headIndex++;
-                    this.screenDrawArea[this.getWorldPontCanvasIndex(x, y)] = tile;
+                    this.screenDrawArea[this.getWorldPointCanvasIndex(x, y)] = tile;
                 }
             }    
         }
@@ -195,7 +220,7 @@ export class Draw {
         if (! this.isWorldPointInScreen(x, y)) {
             return
         }
-        this.screenDrawArea[this.getWorldPontCanvasIndex(x, y)] = char;
+        this.screenDrawArea[this.getWorldPointCanvasIndex(x, y)] = char;
     }
 
     paintWorldRectToScreenSafe(rect: Rectangle, fillchar: string) {

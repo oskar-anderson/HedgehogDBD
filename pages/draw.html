@@ -220,19 +220,14 @@
     console.log(tables);
 
     let draw = new ModuleDraw.Draw();
-    await draw.init(1080, 720);
-    draw.initScreen()
-
-    for (const table of tables) {
-        draw.setWorldTable(table)
-    }
+    await draw.init(1080, 720, tables);
     draw.render()
 
 
 
     document.querySelector('#getInfo').addEventListener('click', () => {
         console.log(draw.viewport.lastViewport.scaleX);
-        console.log(draw.getScreensize());
+        draw.render();
     })
     console.log(draw.viewport.scale.x);
 </script>

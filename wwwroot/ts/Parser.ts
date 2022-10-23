@@ -1,6 +1,6 @@
 import { Rectangle } from "pixi.js";
-import { Table } from "./Table";
-import { TableRow } from "./TableRow";
+import { Table } from "./model/Table";
+import { TableRow } from "./model/TableRow";
 
 export class Parser {
     constructor() {

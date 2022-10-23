@@ -1,5 +1,5 @@
 import { Rectangle } from "pixi.js";
-import { Table } from "./Table";
+import { Table } from "./model/Table";
 
 export class Display {
 

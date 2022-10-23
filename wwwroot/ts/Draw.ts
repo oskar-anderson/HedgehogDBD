@@ -1,7 +1,7 @@
 import { Viewport } from "pixi-viewport";
 import * as PIXI from "pixi.js";
 import { Rectangle } from "pixi.js";
-import { Table } from "./Table";
+import { Table } from "./model/Table";
 
 export class Draw {
 
@@ -185,4 +185,3 @@ export class Draw {
         }
     }
 }
-

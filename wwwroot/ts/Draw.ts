@@ -12,30 +12,37 @@ export class Draw {
     screenDrawArea: string[] = [];
     fontCharSizeWidth = 14;
     fontCharSizeHeight = 14;
+    minZoomOut = 4;
+    maxZoomIn = 2;
+    tables: Table[] = [];
 
     constructor() {
 
     }
 
     getScreenSize() {
-        return new Rectangle(Math.floor(this.viewport.x), Math.floor(this.viewport.y), this.viewport.width, this.viewport.height);
+        return new Rectangle(
+            Math.floor(this.viewport.x),
+            Math.floor(this.viewport.y),
+            this.viewport.width,
+            this.viewport.height
+        );
     }
 
     getCharGridSize() {
         let screenSize = this.getScreenSize();
         return new Rectangle(
-            Math.floor(screenSize.x / this.fontCharSizeWidth),
-            Math.floor(screenSize.y / this.fontCharSizeHeight),
+            0,
+            0,
             Math.floor(screenSize.width / this.fontCharSizeWidth),
             Math.floor(screenSize.height / this.fontCharSizeHeight), 
             );
     }
 
-    async init(screenSizeWidth: number, screenSizeHeight: number) {
+    async init(screenSizeWidth: number, screenSizeHeight: number, tables: Table[]) {
+        this.tables = tables;
         let screenSize = new Rectangle(0, 0, screenSizeWidth, screenSizeHeight);
         let maxWorldSizeToZoomOutRatio = 1;
-        let minZoomOut = 4;
-        let maxZoomIn = 2;
         this.app = new PIXI.Application({
             width: screenSize.width,
             height: screenSize.height,
@@ -49,8 +56,8 @@ export class Draw {
         this.viewport = new Viewport({
             screenHeight: screenSize.height,
             screenWidth:  screenSize.width,
-            worldHeight:  screenSize.height * minZoomOut * maxWorldSizeToZoomOutRatio,
-            worldWidth:   screenSize.width * minZoomOut * maxWorldSizeToZoomOutRatio,
+            worldHeight:  screenSize.height * this.minZoomOut * maxWorldSizeToZoomOutRatio,
+            worldWidth:   screenSize.width * this.minZoomOut * maxWorldSizeToZoomOutRatio,
 
             interaction: this.app.renderer.plugins.interaction
         });
@@ -63,21 +70,30 @@ export class Draw {
         // activate plugins
         this.viewport
             .drag().clamp({ 
-                left:  -screenSize.width * minZoomOut * maxWorldSizeToZoomOutRatio + screenSize.width,
-                top:   -screenSize.height * minZoomOut * maxWorldSizeToZoomOutRatio + screenSize.height,
-                right:  screenSize.width * minZoomOut,
-                bottom: screenSize.height * minZoomOut,
+                left:  -screenSize.width * this.minZoomOut * maxWorldSizeToZoomOutRatio + screenSize.width,
+                top:   -screenSize.height * this.minZoomOut * maxWorldSizeToZoomOutRatio + screenSize.height,
+                right:  screenSize.width * this.minZoomOut,
+                bottom: screenSize.height * this.minZoomOut,
             })
             .wheel().clampZoom({ 
-                maxScale: maxZoomIn, 
-                minScale: 1/minZoomOut
+                maxScale: this.maxZoomIn, 
+                minScale: 1/this.minZoomOut
             });
+
+
+        this.viewport.addListener('wheel', () => {
+            this.initScreen()
+            this.render(true)
+        });
+
+        this.initScreen();
 
         await new Promise<void>((resolve, reject) => {
             this.app.loader.load();
             
             this.app.loader.onComplete.add(() => {
                 console.log("Loader complete");
+                this.render(true)
                 resolve();
             })
             this.app.loader.onError.add(() => {
@@ -95,32 +111,37 @@ export class Draw {
                 this.screenDrawArea.push(' ');
             }
         }
-        for (let y = 0; y < charGridSize.height; y++) {
-            for (let x = 0; x < charGridSize.width; x++) {
-                let tile = this.screenDrawArea[y * charGridSize.width + x];
-                let bitmapText = new PIXI.BitmapText(tile,
-                    {
-                        fontName: "Press Start 2P",
-                        align: 'right',
-                        tint: 0x008000
-                    });
-                bitmapText.x = x * this.fontCharSizeWidth;
-                bitmapText.y = y * this.fontCharSizeHeight;
-                this.viewport.addChild(bitmapText)
-            }
+        for (const table of this.tables) {
+            this.setWorldTable(table);
         }
     }
 
-    render() {
+    render(isForceScreenReset = true) {
         let charGridSize = this.getCharGridSize();
         console.log(`getScreenSize`, this.getScreenSize());
         console.log(`getCharGridSize`, charGridSize);
-        console.log(this.viewport.children);
+        console.log(this.viewport);
         console.log(this.screenDrawArea);
+        if (isForceScreenReset) {
+            this.viewport.removeChildren();
+        }
         for (let y = 0; y < charGridSize.height; y++) {
             for (let x = 0; x < charGridSize.width; x++) {
                 console.log(`x: ${x}, y: ${y}, index: ${y * charGridSize.width + x}`);
-                (this.viewport.children[y * charGridSize.width + x] as PIXI.Text).text = this.screenDrawArea[y * charGridSize.width + x]
+                if (isForceScreenReset) {
+                    let tile = this.screenDrawArea[y * charGridSize.width + x];
+                    let bitmapText = new PIXI.BitmapText(tile,
+                        {
+                            fontName: "Press Start 2P",
+                            align: 'right',
+                            tint: 0x008000
+                        });
+                    bitmapText.x = x * this.fontCharSizeWidth;
+                    bitmapText.y = y * this.fontCharSizeHeight;
+                    this.viewport.addChild(bitmapText)
+                } else {
+                    (this.viewport.children[y * charGridSize.width + x] as PIXI.Text).text = this.screenDrawArea[y * charGridSize.width + x];
+                }
             }
         }
     }

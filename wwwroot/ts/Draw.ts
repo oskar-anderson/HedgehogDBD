@@ -12,8 +12,8 @@ export class Draw {
     worldDrawArea: string[] = [];
     fontCharSizeWidth = 14;
     fontCharSizeHeight = 14;
-    minZoomOut = 4;
-    maxZoomIn = 2;
+    zoomOut = 3;
+    zoomIn = 2;
     tables: Table[] = [];
 
     constructor() {
@@ -93,8 +93,8 @@ export class Draw {
         this.viewport = new Viewport({
             screenHeight: screenSize.height,
             screenWidth:  screenSize.width,
-            worldHeight:  screenSize.height * this.minZoomOut * maxWorldSizeToZoomOutRatio,
-            worldWidth:   screenSize.width * this.minZoomOut * maxWorldSizeToZoomOutRatio,
+            worldHeight:  screenSize.height * this.zoomOut * maxWorldSizeToZoomOutRatio,
+            worldWidth:   screenSize.width * this.zoomOut * maxWorldSizeToZoomOutRatio,
 
             interaction: this.app.renderer.plugins.interaction
         });
@@ -107,14 +107,14 @@ export class Draw {
         // activate plugins
         this.viewport
             .drag().clamp({ 
-                left:  -screenSize.width * this.minZoomOut * maxWorldSizeToZoomOutRatio + screenSize.width,
-                top:   -screenSize.height * this.minZoomOut * maxWorldSizeToZoomOutRatio + screenSize.height,
-                right:  screenSize.width * this.minZoomOut,
-                bottom: screenSize.height * this.minZoomOut,
+                left:  - screenSize.width * 0.5, //  + screenSize.width
+                top:   - screenSize.height * 0.5, //  + screenSize.height
+                right:  screenSize.width * this.zoomOut + screenSize.width * 0.5,
+                bottom: screenSize.height * this.zoomOut + screenSize.height * 0.5,
             })
             .wheel().clampZoom({ 
-                maxScale: this.maxZoomIn, 
-                minScale: 1/this.minZoomOut
+                maxScale: this.zoomIn, 
+                minScale: 1/this.zoomOut
             });
 
 
@@ -154,7 +154,7 @@ export class Draw {
     }
 
     render(isForceScreenReset = true) {
-        let screenCharGrid = this.getScreenCharGrid();
+        let screenCharGrid = this.getWorldCharGrid();
         let worldCharGridSize = this.getWorldCharGrid();
         console.log(`getScreenSize`, this.getScreen());
         console.log(`getCharGridSize`, screenCharGrid);

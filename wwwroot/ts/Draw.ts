@@ -1,6 +1,7 @@
 import { Viewport } from "pixi-viewport";
 import * as PIXI from "pixi.js";
 import { Point, Rectangle } from "pixi.js";
+import '@pixi/math-extras';
 import { Table } from "./model/Table";
 
 export class Draw {
@@ -98,10 +99,6 @@ export class Draw {
 
             interaction: this.app.renderer.plugins.interaction
         });
-        console.log(`init viewport - X: ${this.viewport.x}, Y: ${this.viewport.height}, width: ${this.viewport.width}, height: ${this.viewport.height}`)
-        console.log(JSON.parse(JSON.stringify(this.viewport.hitArea)));
-        console.log(this.viewport);
-
         this.app.stage.addChild(this.viewport);
         
         // activate plugins
@@ -119,6 +116,7 @@ export class Draw {
 
 
         this.viewport.addListener('wheel', () => {
+            console.log("wheel")
             this.initScreen()
             this.render(true)
         });
@@ -143,6 +141,7 @@ export class Draw {
 
     initScreen() {
         let charGridSize = this.getWorldCharGrid();
+        this.worldDrawArea = [];
         for (let y = 0; y < charGridSize.height; y++) {
             for (let x = 0; x < charGridSize.width; x++) {
                 this.worldDrawArea.push(' ');
@@ -158,10 +157,6 @@ export class Draw {
         let worldCharGridSize = this.getWorldCharGrid();
         console.log(`getScreenSize`, this.getScreen());
         console.log(`getCharGridSize`, screenCharGrid);
-        // @ts-ignore: Object is possibly 'null'.
-        console.log(`Y: ${Math.floor(this.viewport.hitArea.y)}, X: ${this.viewport.hitArea.x}`)
-        console.log(this.viewport);
-        console.log(this.worldDrawArea);
         if (isForceScreenReset) {
             this.viewport.removeChildren();
         }
@@ -190,43 +185,22 @@ export class Draw {
         return y * this.getWorldCharGrid().width + x;
     }
 
-    isWorldPointInScreen(x: number, y: number) {
+    isWorldCharGridInScreenCharGrid(x: number, y: number) {
         return this.getScreenCharGrid().contains(x, y);
     }
 
     setWorldTable(table: Table) {
         let worldCharGridRect = table.rect;
-        let screenCharGridRect = this.convertWorldCharGridRectToScreenCharGridRect(table.rect);
         let headIndex = 0;
         let firstColumnWidth = table.getColumnWidths()[0];
         let secondColumnWidth = table.getColumnWidths()[1];
         let thirdColumnWidth = table.getColumnWidths()[2];
-        this.paintWorldPatch8Safe(
-            this.convertWorldCharGridRectToScreenCharGridRect(
-                new Rectangle(worldCharGridRect.x, worldCharGridRect.y, worldCharGridRect.width, 2)
-            )
-        );
-        this.paintWorldPatch8Safe(
-            this.convertWorldCharGridRectToScreenCharGridRect(
-                new Rectangle(worldCharGridRect.x, worldCharGridRect.y + 2, firstColumnWidth, worldCharGridRect.height - 2)
-            )
-        );
-        this.paintWorldPatch8Safe(
-            this.convertWorldCharGridRectToScreenCharGridRect(
-                new Rectangle(worldCharGridRect.x + firstColumnWidth, worldCharGridRect.y + 2, secondColumnWidth, worldCharGridRect.height - 2)
-            )
-        );
-        this.paintWorldPatch8Safe(
-            this.convertWorldCharGridRectToScreenCharGridRect(
-                new Rectangle(worldCharGridRect.x + firstColumnWidth + secondColumnWidth, worldCharGridRect.y + 2, thirdColumnWidth, worldCharGridRect.height - 2)
-            )
-        );
-        for (let x = screenCharGridRect.x; x <= screenCharGridRect.right; x++) {
-            for (let y = screenCharGridRect.y; y <= screenCharGridRect.bottom; y++) {
-                let worldPoint = this.convertWorldPointToScreenPoint(x, y);
-                if (! this.isWorldPointInScreen(worldPoint.x, worldPoint.y)) {
-                    continue;
-                }
+        this.paintWorldPatch8Safe(new Rectangle(worldCharGridRect.x, worldCharGridRect.y, worldCharGridRect.width, 2));
+        this.paintWorldPatch8Safe(new Rectangle(worldCharGridRect.x, worldCharGridRect.y + 2, firstColumnWidth, worldCharGridRect.height - 2));
+        this.paintWorldPatch8Safe(new Rectangle(worldCharGridRect.x + firstColumnWidth, worldCharGridRect.y + 2, secondColumnWidth, worldCharGridRect.height - 2));
+        this.paintWorldPatch8Safe(new Rectangle(worldCharGridRect.x + firstColumnWidth + secondColumnWidth, worldCharGridRect.y + 2, thirdColumnWidth, worldCharGridRect.height - 2));
+        for (let x = worldCharGridRect.x; x <= worldCharGridRect.right; x++) {
+            for (let y = worldCharGridRect.y; y <= worldCharGridRect.bottom; y++) {
                 if (worldCharGridRect.y + 1 === y && x < worldCharGridRect.right && x > worldCharGridRect.left) {
                     let tile = table.head[headIndex] ?? ' ';
                     headIndex++;
@@ -250,7 +224,7 @@ export class Draw {
     }
 
     paintWorldPointToScreenSafe(x: number, y: number, char: string) {
-        if (! this.isWorldPointInScreen(x, y)) {
+        if (! this.getWorldCharGrid().contains(x, y)) {
             return
         }
         this.worldDrawArea[this.getWorldPointCanvasIndex(x, y)] = char;

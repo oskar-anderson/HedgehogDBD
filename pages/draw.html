@@ -221,15 +221,11 @@
 
     let draw = new ModuleDraw.Draw();
     await draw.init(1080, 720, tables);
-    draw.render(false)
-
-
 
     document.querySelector('#getInfo').addEventListener('click', () => {
         console.log(draw.viewport.lastViewport.scaleX);
-        draw.render();
+        draw.render(true);
     })
-    console.log(draw.viewport.scale.x);
 </script>
 
 

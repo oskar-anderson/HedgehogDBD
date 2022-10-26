@@ -4,6 +4,7 @@ name: Compile TypeScript
 on:
   push:
     branches: [ master ]
+
 jobs:
   run-action:
     name: Run action

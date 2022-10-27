@@ -3,6 +3,7 @@ import * as PIXI from "pixi.js";
 import { Point, Rectangle } from "pixi.js";
 import '@pixi/math-extras';
 import { Table } from "./model/Table";
+import { Minimap } from "./Minimap";
 
 export class Draw {
 
@@ -40,6 +41,16 @@ export class Draw {
             this.viewport.screenHeight
         );
     }
+
+    getWorldCharCridRectToScreenRect(rect: Rectangle) {
+        return new Rectangle(
+            rect.x * this.fontCharSizeWidth,
+            rect.y * this.fontCharSizeHeight,
+            rect.width * this.fontCharSizeWidth,
+            rect.height * this.fontCharSizeHeight,
+        )
+    }
+
 
     getScreenCharGrid() {
         let screenSize = this.getScreen();
@@ -119,9 +130,37 @@ export class Draw {
             console.log("wheel")
             this.initScreen()
             this.render(true)
+            let screen = this.getScreen();
+            screen.width = this.viewport.screenWidth / this.viewport.scale.x;
+            screen.height = this.viewport.screenHeight / this.viewport.scale.y;
+            mm.update(this.tables, screen);
         });
 
+        this.viewport.addListener('moved', () => {
+            console.log("moved")
+            let screen = this.getScreen();
+            screen.width = this.viewport.screenWidth / this.viewport.scale.x;
+            screen.height = this.viewport.screenHeight / this.viewport.scale.y;
+            mm.update(this.tables, screen);
+        })
+
         this.initScreen();
+
+        let mm = new Minimap()
+        mm.init(
+            this.getWorld().height, 
+            this.getWorld().width, 
+            this.fontCharSizeWidth, 
+            this.fontCharSizeHeight, 
+            new Rectangle(
+                this.getScreen().right - 180 - 20,
+                this.getScreen().top + 20,
+                180,
+                120,
+            )
+        );
+        this.app.stage.addChild(mm.container);
+        mm.update(this.tables, this.getScreen());
 
         await new Promise<void>((resolve, reject) => {
             this.app.loader.load();

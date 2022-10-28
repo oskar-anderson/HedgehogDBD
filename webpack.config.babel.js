@@ -1,7 +1,7 @@
 const path = require('path');
 const glob = require('glob');
 
-const SrcFilePaths = glob.sync('./wwwroot/ts/**/*.ts')
+const SrcFilePaths = glob.sync('./webapp/wwwroot/ts/**/*.ts')
 const ClassNameToSrcFilePath = SrcFilePaths.reduce(
     function(obj, el){
         obj[path.parse(el).name] = el;
@@ -37,7 +37,7 @@ module.exports = {
         library: {
             type: "module"
         },
-        path: path.resolve(__dirname, 'wwwroot', 'js-src'),
+        path: path.resolve(__dirname, 'webapp', 'wwwroot', 'js-src'),
         clean: true,
     }
 };

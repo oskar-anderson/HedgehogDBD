@@ -1,10 +1,5 @@
 const path = require('path');
 const glob = require('glob');
-const { readdirSync, rmSync } = require('fs');
-
-
-console.log('clearing js...');
-readdirSync('./wwwroot/js-src').forEach(f => rmSync(`./wwwroot/js-src/${f}`, {recursive: true}));
 
 const SrcFilePaths = glob.sync('./wwwroot/ts/**/*.ts')
 const ClassNameToSrcFilePath = SrcFilePaths.reduce(
@@ -42,6 +37,7 @@ module.exports = {
         library: {
             type: "module"
         },
-        path: path.resolve(__dirname, 'wwwroot', 'js-src')
+        path: path.resolve(__dirname, 'wwwroot', 'js-src'),
+        clean: true,
     }
 };

@@ -12,8 +12,7 @@
         "experimentalDecorators": true,
         "removeComments": true,
         "moduleResolution": "node",
-        "outDir": "./dist/",
-        "rootDir": "wwwroot/ts",
+        "rootDir": "webapp/wwwroot/ts",
         "lib": [
             "dom",
             "esnext",

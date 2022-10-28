@@ -1,6 +1,8 @@
 import * as PIXI from "pixi.js";
 import { Rectangle } from "pixi.js";
 import { Table } from "./model/Table";
+import '@pixi/events';
+import { Viewport } from "pixi-viewport";
 
 export class Minimap {
 
@@ -9,15 +11,17 @@ export class Minimap {
     background: PIXI.Graphics;
     worldHeight: number = 0;
     worldWidth: number = 0;
-    minimapRect = new Rectangle(150, 150, 180, 120);
+    minimapRect = new Rectangle();
     fontWidth: number = 0;
     fontHeight: number = 0;
+    // @ts-ignore: Object is possibly 'null'.
+    viewPort: Viewport = null
 
     constructor() {
 
     }
 
-    init(worldHeight: number, worldWidth: number, fontWidth: number, fontHeight: number, minimapRect: Rectangle) {
+    init(worldHeight: number, worldWidth: number, fontWidth: number, fontHeight: number, minimapRect: Rectangle, minimapNavigationCallback: (x: number, y: number) => void) {
         this.worldHeight = worldHeight;
         this.worldWidth = worldWidth;
         this.fontWidth = fontWidth;
@@ -28,6 +32,14 @@ export class Minimap {
         this.container.addChild(this.background);
         this.container.x = this.minimapRect.x;
         this.container.y = this.minimapRect.y;
+        this.container.interactive = true;
+        this.container.addEventListener('click', async (e: any) => {
+            let minimapX = e.data.global.x - this.minimapRect.x;
+            let minimapY = e.data.global.y - this.minimapRect.y;
+            let worldX = Math.floor(minimapX / this.minimapRect.width * worldWidth);
+            let worldY = Math.floor(minimapY / this.minimapRect.height * worldHeight);
+            minimapNavigationCallback(worldX, worldY);
+        })
         return this.container;
       }
     

@@ -17,6 +17,7 @@ export class Draw {
     zoomOut = 3;
     zoomIn = 2;
     tables: Table[] = [];
+    screenContainerSize: Rectangle = new Rectangle()
 
     constructor() {
 
@@ -34,15 +35,15 @@ export class Draw {
     getScreen() {
         return new Rectangle(
             // @ts-ignore: Object is possibly 'null'.
-            Math.floor(this.viewport.hitArea.x),
+            Math.floor(this.viewport.left),
             // @ts-ignore: Object is possibly 'null'.
-            Math.floor(this.viewport.hitArea.y),
-            this.viewport.screenWidth,
-            this.viewport.screenHeight
+            Math.floor(this.viewport.top),
+            this.viewport.screenWidth / this.viewport.scale.x,
+            this.viewport.screenHeight / this.viewport.scale.y
         );
     }
 
-    getWorldCharCridRectToScreenRect(rect: Rectangle) {
+    getWorldCharCridToScreen(rect: Rectangle) {
         return new Rectangle(
             rect.x * this.fontCharSizeWidth,
             rect.y * this.fontCharSizeHeight,
@@ -69,16 +70,7 @@ export class Draw {
             0,
             Math.ceil(worldSize.width / this.fontCharSizeWidth),
             Math.ceil(worldSize.height / this.fontCharSizeHeight), 
-            );
-    }
-
-    convertWorldCharGridRectToScreenCharGridRect(rect: Rectangle) {
-        return new Rectangle(
-            rect.x + this.getScreenCharGrid().x,
-            rect.y + this.getScreenCharGrid().y,
-            rect.width + this.getScreenCharGrid().x,
-            rect.height + this.getScreenCharGrid().y,
-        )
+        );
     }
 
     convertWorldPointToScreenPoint(x: number, y: number) {
@@ -90,11 +82,11 @@ export class Draw {
 
     async init(screenSizeWidth: number, screenSizeHeight: number, tables: Table[]) {
         this.tables = tables;
-        let screenSize = new Rectangle(0, 0, screenSizeWidth, screenSizeHeight);
+        this.screenContainerSize = new Rectangle(0, 0, screenSizeWidth, screenSizeHeight);
         let maxWorldSizeToZoomOutRatio = 1;
         this.app = new PIXI.Application({
-            width: screenSize.width,
-            height: screenSize.height,
+            width: this.screenContainerSize.width,
+            height: this.screenContainerSize.height,
             backgroundColor: 0xAAAAAA
         });
 
@@ -103,10 +95,10 @@ export class Draw {
         this.app.loader.add('../wwwroot/font/ps2p/14xml/ps2p-14.fnt');
 
         this.viewport = new Viewport({
-            screenHeight: screenSize.height,
-            screenWidth:  screenSize.width,
-            worldHeight:  screenSize.height * this.zoomOut * maxWorldSizeToZoomOutRatio,
-            worldWidth:   screenSize.width * this.zoomOut * maxWorldSizeToZoomOutRatio,
+            screenHeight: this.screenContainerSize.height,
+            screenWidth:  this.screenContainerSize.width,
+            worldHeight:  this.screenContainerSize.height * this.zoomOut * maxWorldSizeToZoomOutRatio,
+            worldWidth:   this.screenContainerSize.width * this.zoomOut * maxWorldSizeToZoomOutRatio,
 
             interaction: this.app.renderer.plugins.interaction
         });
@@ -115,10 +107,10 @@ export class Draw {
         // activate plugins
         this.viewport
             .drag().clamp({ 
-                left:  - screenSize.width * 0.5, //  + screenSize.width
-                top:   - screenSize.height * 0.5, //  + screenSize.height
-                right:  screenSize.width * this.zoomOut + screenSize.width * 0.5,
-                bottom: screenSize.height * this.zoomOut + screenSize.height * 0.5,
+                left:   0,
+                top:    0,
+                right:  this.screenContainerSize.width * this.zoomOut,
+                bottom: this.screenContainerSize.height * this.zoomOut,
             })
             .wheel().clampZoom({ 
                 maxScale: this.zoomIn, 
@@ -126,22 +118,16 @@ export class Draw {
             });
 
 
-        this.viewport.addListener('wheel', () => {
+        this.viewport.addEventListener('wheel', () => {
             console.log("wheel")
             this.initScreen()
             this.render(true)
-            let screen = this.getScreen();
-            screen.width = this.viewport.screenWidth / this.viewport.scale.x;
-            screen.height = this.viewport.screenHeight / this.viewport.scale.y;
-            mm.update(this.tables, screen);
+            mm.update(this.tables, this.getScreen());
         });
 
-        this.viewport.addListener('moved', () => {
+        this.viewport.addEventListener('moved', () => {
             console.log("moved")
-            let screen = this.getScreen();
-            screen.width = this.viewport.screenWidth / this.viewport.scale.x;
-            screen.height = this.viewport.screenHeight / this.viewport.scale.y;
-            mm.update(this.tables, screen);
+            mm.update(this.tables, this.getScreen());
         })
 
         this.initScreen();
@@ -153,14 +139,19 @@ export class Draw {
             this.fontCharSizeWidth, 
             this.fontCharSizeHeight, 
             new Rectangle(
-                this.getScreen().right - 180 - 20,
-                this.getScreen().top + 20,
+                this.screenContainerSize.right - 180 - 20,
+                this.screenContainerSize.top + 20,
                 180,
                 120,
-            )
+            ),
+            (x: number, y: number) => { 
+                console.log("minimap navigation");
+                this.viewport.moveCenter(x, y);
+                mm.update(this.tables, this.getScreen()) 
+            }
         );
         this.app.stage.addChild(mm.container);
-        mm.update(this.tables, this.getScreen());
+        mm.update(this.tables, this.screenContainerSize);
 
         await new Promise<void>((resolve, reject) => {
             this.app.loader.load();
@@ -194,7 +185,7 @@ export class Draw {
     render(isForceScreenReset = true) {
         let screenCharGrid = this.getWorldCharGrid();
         let worldCharGridSize = this.getWorldCharGrid();
-        console.log(`getScreenSize`, this.getScreen());
+        console.log(`getScreen`, this.getScreen());
         console.log(`getCharGridSize`, screenCharGrid);
         if (isForceScreenReset) {
             this.viewport.removeChildren();
@@ -222,10 +213,6 @@ export class Draw {
 
     getWorldPointCanvasIndex(x: number, y: number) {
         return y * this.getWorldCharGrid().width + x;
-    }
-
-    isWorldCharGridInScreenCharGrid(x: number, y: number) {
-        return this.getScreenCharGrid().contains(x, y);
     }
 
     setWorldTable(table: Table) {

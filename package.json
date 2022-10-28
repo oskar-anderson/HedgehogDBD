@@ -12,6 +12,7 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
+    "@pixi/events": "^6.5.8",
     "@pixi/math-extras": "^6.5.8",
     "pixi-viewport": "^4.36.0",
     "pixi.js": "^6.5.6"

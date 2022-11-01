@@ -35,7 +35,8 @@ export class Parser {
                         }
                     )
                 ) {
-                    let possibleTable = new Table(new Rectangle(x, y, 0, 0), "", []);
+                    // @ts-ignore
+                    let possibleTable = new Table({ rect: new Rectangle(x, y, 0, 0), head: "", tableRows: [] });
                     for (let a = 0; 
                         a < width - x
                         && ["-", "+"].includes(board[y * width + x + a]); 

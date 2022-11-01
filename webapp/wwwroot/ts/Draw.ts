@@ -100,8 +100,6 @@ export class Draw {
         this.app.stage.addChild(this.viewport);
         this.initViewport();
 
-        this.initScreen();
-
         this.minimap = new Minimap()
         this.minimap.init(
             this.getWorld().height, 
@@ -121,7 +119,8 @@ export class Draw {
             }
         );
         this.app.stage.addChild(this.minimap.container);
-        this.minimap.update(this.tables, this.screenContainerSize);
+        
+        this.initScreen();
 
         await new Promise<void>((resolve, reject) => {
             this.app.loader.load();
@@ -147,17 +146,16 @@ export class Draw {
                 this.worldDrawArea.push(' ');
             }
         }
-        for (const table of this.tables) {
-            if (! table.isVisible) { continue; }
+        let tables = this.tables.filter(x => !x.isHoverSource);
+        for (const table of tables) {
             this.setWorldTable(table);
         }
+        this.minimap.update(tables, this.getScreen());
     }
 
     render(isForceScreenReset = true) {
         let screenCharGrid = this.getWorldCharGrid();
         let worldCharGridSize = this.getWorldCharGrid();
-        console.log(`getScreen`, this.getScreen());
-        console.log(`getCharGridSize`, screenCharGrid);
         if (isForceScreenReset) {
             this.viewport.removeChildren();
         }
@@ -278,7 +276,7 @@ export class Draw {
     }
 
     resumeSelect() {
-        let hover: Table | null = null;
+
         let mouseMoveFunc = (e: PIXI.InteractionEvent, table: Table, tablePivotX: number, tablePivotY: number) => {
             console.log(`mousemove`);
             let x = this.getScreen().x + e.data.global.x / this.viewport.scale.x;
@@ -286,9 +284,11 @@ export class Draw {
             console.log(`Y: ${y}, X: ${x}`);
             let charGridX = Math.floor(x / this.fontCharSizeWidth);
             let charGridY = Math.floor(y / this.fontCharSizeHeight);
-            console.log(`charGridY: ${charGridY}, charGridX: ${charGridX}, tablePivotX: ${tablePivotX}, tablePivotY: ${tablePivotY}`)
-            table.rect.x = charGridX + tablePivotX;
-            table.rect.y = charGridY + tablePivotY;
+            let newX = charGridX + tablePivotX
+            let newY = charGridY + tablePivotY
+            if (table.rect.x === newX && table.rect.y === newY) return;
+            table.rect.x = newX;
+            table.rect.y = newY;
             this.initScreen()
             this.render(false);
         };
@@ -301,12 +301,14 @@ export class Draw {
             console.log(`Y: ${y}, X: ${x}`);
             let charGridX = Math.floor(x / this.fontCharSizeWidth);
             let charGridY = Math.floor(y / this.fontCharSizeHeight);
+            let hover: Table | null = null;
             for (let table of this.tables) {
                 if (table.getContainingRect().contains(charGridX, charGridY)) {
                     let tablePivotX = table.rect.x - charGridX;
                     let tablePivotY = table.rect.y - charGridY;
                     hover = table.copy();
-                    table.isVisible = false;
+                    hover.isHoverTarget = true;
+                    table.isHoverSource = true;
                     this.viewport.on('mousemove', (e) => mouseMoveFunc(e, hover!, tablePivotX, tablePivotY));
                     this.viewport.on('mouseout', () => {
                         console.log("mouseout");
@@ -314,6 +316,9 @@ export class Draw {
                         this.viewport.removeAllListeners('mouseout');  
                     });
                 }
+            }
+            if (hover !== null) {
+                this.tables.push(hover);
             }
         })
 
@@ -325,7 +330,7 @@ export class Draw {
             let isGoodPlaceForTableFunc = (hover: Table | null) => {
                 if (hover != null) {
                     let isGoodPlacement = true;
-                    for (let table of this.tables.filter(x => x.isVisible)) {
+                    for (let table of this.tables.filter(x => !x.isHoverSource && !x.isHoverTarget)) {
                         if (table.rect.intersects(hover.rect)) {
                             isGoodPlacement = false;
                         }
@@ -335,15 +340,20 @@ export class Draw {
                 }
                 return false;
             }
+            let hover = this.tables.find(x => x.isHoverTarget) ?? null;
+            this.tables = this.tables.filter(x => !x.isHoverTarget);
             let isGoodPlaceForTable = isGoodPlaceForTableFunc(hover)
-            console.log(`isGoodPlaceForTable: ${isGoodPlaceForTable}, hover: ${hover}`, hover);
+            console.log(`isGoodPlaceForTable: ${isGoodPlaceForTable}`);
             if (isGoodPlaceForTable) {
-                let invisible = this.tables.findIndex(x => !x.isVisible);
-                this.tables[invisible] = (hover as Table).copy();
+                let invisible = this.tables.find(x => x.isHoverSource)!;
+                invisible.moveRelative(hover!.rect.x - invisible.rect.x, hover!.rect.y - invisible.rect.y);
+                invisible.isHoverSource = false;
             } else {
-                this.tables.filter(x => !x.isVisible).forEach(x => x.isVisible = true);
+                this.tables.forEach(x => x.isHoverSource = false);
             }
-            hover = null;
+
+            this.initScreen();
+            this.render();
             this.viewport.removeAllListeners('mousemove');
             this.viewport.removeAllListeners('mouseout');  
         })

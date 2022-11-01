@@ -6,12 +6,13 @@ export class Table {
     head: string;
     tableRows: TableRow[];
     color: string = "";
-    isVisible = true;
+    isHoverSource = false;
+    isHoverTarget = false;
     
-    constructor(rect: Rectangle, head: string, tableRows: TableRow[]) {
-        this.rect = rect;
-        this.head = head;
-        this.tableRows = tableRows;
+    constructor(table: { rect: Rectangle, head: string, tableRows: TableRow[] }) {
+        this.rect = table.rect;
+        this.head = table.head;
+        this.tableRows = table.tableRows;
     }
 
     getColumnWidths() {
@@ -48,10 +49,21 @@ export class Table {
     }
 
     copy(): Table {
-        return new Table(
-            new Rectangle(this.rect.x, this.rect.y, this.rect.width, this.rect.height),
-            this.head,
-            this.tableRows
+        let copy1 = new Table(structuredClone(this));
+        let copy = new Table(
+            {
+                rect: new Rectangle(this.rect.x, this.rect.y, this.rect.width, this.rect.height),
+                head: this.head,
+                tableRows: this.tableRows
+            }
         );
+        console.log(copy1)
+        console.log(copy)
+        return copy;
+    }
+
+    moveRelative(x: number, y: number) {
+        this.rect.x += x;
+        this.rect.y += y;
     }
 }

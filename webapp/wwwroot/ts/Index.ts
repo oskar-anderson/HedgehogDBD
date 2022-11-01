@@ -1,4 +1,4 @@
-import { Draw } from "./Draw"
+import { Draw } from "./DrawController"
 
 export default class Index {
     static Draw = Draw

@@ -5,6 +5,8 @@ export class Table {
     rect: Rectangle;
     head: string;
     tableRows: TableRow[];
+    color: string = "";
+    isVisible = true;
     
     constructor(rect: Rectangle, head: string, tableRows: TableRow[]) {
         this.rect = rect;
@@ -21,17 +23,35 @@ export class Table {
 
         let pad = 3;  // padding plus one non-writable wall
         return [
-            this.rect.width - ((longestDatatypeLenght + pad) + (longestAttributeLenght + pad)), 
+            this.getCornerRect().width - ((longestDatatypeLenght + pad) + (longestAttributeLenght + pad)), 
             longestDatatypeLenght + pad, 
             longestAttributeLenght + pad
         ];
     }
 
     getHeadRect() {
-        return new Rectangle(this.rect.x, this.rect.y, this.rect.width, 2);
+        let rect = this.getContainingRect();
+        return new Rectangle(rect.x, rect.y, rect.width, 2);
     }
 
     getBodyRect() {
-        return new Rectangle(this.rect.x, this.rect.y + 2, this.rect.width, this.rect.height - 2);
+        let rect = this.getContainingRect();
+        return new Rectangle(rect.x, rect.y + 2, rect.width, rect.height - 2);
+    }
+
+    getContainingRect() {
+        return this.rect;
+    }
+
+    getCornerRect() {
+        return new Rectangle(this.rect.x, this.rect.y, this.rect.width - 1, this.rect.height - 1);
+    }
+
+    copy(): Table {
+        return new Table(
+            new Rectangle(this.rect.x, this.rect.y, this.rect.width, this.rect.height),
+            this.head,
+            this.tableRows
+        );
     }
 }

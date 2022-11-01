@@ -31,30 +31,29 @@ export class Parser {
                 if (tile === "+" && 
                     ! tables.some(
                         function(table) { 
-                            return table.rect.contains(x, y);
+                            return table.getContainingRect().contains(x, y);
                         }
                     )
                 ) {
                     let possibleTable = new Table(new Rectangle(x, y, 0, 0), "", []);
-                    let a = 0;
-                    while (a < width - x) {
-                        if (["|", "+"].includes(board[y * width + x + a])) {
-                            if (x + a + 1 < width && board[y * width + x + a + 1] === " ") {
-                                possibleTable.rect.width = a + 1;
-                                break;
-                            }
+                    for (let a = 0; 
+                        a < width - x
+                        && ["-", "+"].includes(board[y * width + x + a]); 
+                        a++) {
+                        if (x + a + 1 < width && board[y * width + x + a + 1] === " ") {
+                            possibleTable.rect.width = a + 2;
+                            break;
                         }
-                        a++;
                     }
-                    a = 0;
-                    while (a < height - y && possibleTable.rect.width != 0) {
-                        if (["|", "+"].includes(board[(y + a) * width + x])) {
-                            if (y + a + 1 < height && board[(y + a + 1) * width + x] === " ") {
-                                possibleTable.rect.height = a + 1;
-                                break;
-                            }
+                    for (let a = 0; 
+                        possibleTable.rect.width != 0 
+                        && a < height - y
+                        && ["|", "+"].includes(board[(y + a) * width + x]); 
+                        a++) {
+                        if (y + a + 1 < height && board[(y + a + 1) * width + x] === " ") {
+                            possibleTable.rect.height = a + 2;
+                            break;
                         }
-                        a++;
                     }
                     if (possibleTable.rect.width != 0 && possibleTable.rect.height != 0) {
                         tables.push(possibleTable)
@@ -66,13 +65,13 @@ export class Parser {
         for (let table of tables) {
             let tableSpec = board.slice(
                 (table.rect.y + 1) * width + table.rect.left + 1, 
-                (table.rect.y + 1) * width + table.rect.right - 1)
+                (table.rect.y + 1) * width + table.rect.right - 2)
                 .join("").trim();
             table.head = tableSpec.split(":")[0];
-            for (let cy = table.rect.y + 3; cy < table.rect.bottom - 1; cy++) {
+            for (let cy = table.rect.y + 3; cy < table.rect.bottom - 2; cy++) {
                 let row = board.slice(
                     (cy) * width + table.rect.left + 1, 
-                    (cy) * width + table.rect.right - 1)
+                    (cy) * width + table.rect.right - 2)
                     .join("").trim();
                 let columns = row.split("|").map(function(item) { return item.trim(); });
                 let attributeList = columns[2].split(',').map(x => x.trim());

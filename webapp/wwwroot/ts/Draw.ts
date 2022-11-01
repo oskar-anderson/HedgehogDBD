@@ -1,7 +1,8 @@
 import { Viewport } from "pixi-viewport";
 import * as PIXI from "pixi.js";
-import { Point, Rectangle } from "pixi.js";
+import { InteractionEvent, Point, Rectangle } from "pixi.js";
 import '@pixi/math-extras';
+import '@pixi/events';
 import { Table } from "./model/Table";
 import { Minimap } from "./Minimap";
 
@@ -18,6 +19,9 @@ export class Draw {
     zoomIn = 2;
     tables: Table[] = [];
     screenContainerSize: Rectangle = new Rectangle()
+    // @ts-ignore: Object is possibly 'null'.
+    minimap: Minimap = null;
+    activeTool: string = "pan";
 
     constructor() {
 
@@ -34,10 +38,8 @@ export class Draw {
 
     getScreen() {
         return new Rectangle(
-            // @ts-ignore: Object is possibly 'null'.
-            Math.floor(this.viewport.left),
-            // @ts-ignore: Object is possibly 'null'.
-            Math.floor(this.viewport.top),
+            Math.floor(this.viewport.left), // positive number
+            Math.floor(this.viewport.top), // positive number
             this.viewport.screenWidth / this.viewport.scale.x,
             this.viewport.screenHeight / this.viewport.scale.y
         );
@@ -73,13 +75,6 @@ export class Draw {
         );
     }
 
-    convertWorldPointToScreenPoint(x: number, y: number) {
-        return new Point(
-            x + this.getScreenCharGrid().x,
-            y + this.getScreenCharGrid().y
-        );
-    }
-
     async init(screenSizeWidth: number, screenSizeHeight: number, tables: Table[]) {
         this.tables = tables;
         this.screenContainerSize = new Rectangle(0, 0, screenSizeWidth, screenSizeHeight);
@@ -103,37 +98,12 @@ export class Draw {
             interaction: this.app.renderer.plugins.interaction
         });
         this.app.stage.addChild(this.viewport);
-        
-        // activate plugins
-        this.viewport
-            .drag().clamp({ 
-                left:   0,
-                top:    0,
-                right:  this.screenContainerSize.width * this.zoomOut,
-                bottom: this.screenContainerSize.height * this.zoomOut,
-            })
-            .wheel().clampZoom({ 
-                maxScale: this.zoomIn, 
-                minScale: 1/this.zoomOut
-            });
-
-
-        this.viewport.addEventListener('wheel', () => {
-            console.log("wheel")
-            this.initScreen()
-            this.render(true)
-            mm.update(this.tables, this.getScreen());
-        });
-
-        this.viewport.addEventListener('moved', () => {
-            console.log("moved")
-            mm.update(this.tables, this.getScreen());
-        })
+        this.initViewport();
 
         this.initScreen();
 
-        let mm = new Minimap()
-        mm.init(
+        this.minimap = new Minimap()
+        this.minimap.init(
             this.getWorld().height, 
             this.getWorld().width, 
             this.fontCharSizeWidth, 
@@ -147,11 +117,11 @@ export class Draw {
             (x: number, y: number) => { 
                 console.log("minimap navigation");
                 this.viewport.moveCenter(x, y);
-                mm.update(this.tables, this.getScreen()) 
+                this.minimap.update(this.tables, this.getScreen()) 
             }
         );
-        this.app.stage.addChild(mm.container);
-        mm.update(this.tables, this.screenContainerSize);
+        this.app.stage.addChild(this.minimap.container);
+        this.minimap.update(this.tables, this.screenContainerSize);
 
         await new Promise<void>((resolve, reject) => {
             this.app.loader.load();
@@ -178,6 +148,7 @@ export class Draw {
             }
         }
         for (const table of this.tables) {
+            if (! table.isVisible) { continue; }
             this.setWorldTable(table);
         }
     }
@@ -216,7 +187,7 @@ export class Draw {
     }
 
     setWorldTable(table: Table) {
-        let worldCharGridRect = table.rect;
+        let worldCharGridRect = table.getCornerRect();
         let headIndex = 0;
         let firstColumnWidth = table.getColumnWidths()[0];
         let secondColumnWidth = table.getColumnWidths()[1];
@@ -261,6 +232,143 @@ export class Draw {
             for (let x = rect.x; x < rect.right; x++) {
                 this.paintWorldPointToScreenSafe(x, y, fillchar);
             } 
+        }
+    }
+
+    initViewport(enableDrag: boolean = true) {
+        // activate plugins
+        this.viewport
+            .drag({ pressDrag: enableDrag }).clamp({ 
+                left:   0,
+                top:    0,
+                right:  this.screenContainerSize.width * this.zoomOut,
+                bottom: this.screenContainerSize.height * this.zoomOut,
+            })
+            .wheel().clampZoom({ 
+                maxScale: this.zoomIn, 
+                minScale: 1/this.zoomOut
+            });
+
+        // make zooming update minimap
+        this.viewport.addEventListener('wheel', () => {
+            console.log("wheel")
+            this.minimap.update(this.tables, this.getScreen());
+        });
+
+        // make panning update minimap camera indicator location
+        this.viewport.addEventListener('moved', () => {
+            console.log("moved")
+            this.minimap.update(this.tables, this.getScreen());
+        })
+    }
+
+    pausePanning() {
+        this.initViewport(false) // viewport is still needed for minimap updating
+    }
+
+    resumePanning() {
+        this.initViewport(true)
+    }
+
+    pauseSelect() {
+        this.viewport.removeAllListeners('mousedown');
+        this.viewport.removeAllListeners('mouseup');
+        this.viewport.removeAllListeners('mousemove');
+        this.viewport.removeAllListeners('mouseout');  
+    }
+
+    resumeSelect() {
+        let hover: Table | null = null;
+        let mouseMoveFunc = (e: PIXI.InteractionEvent, table: Table, tablePivotX: number, tablePivotY: number) => {
+            console.log(`mousemove`);
+            let x = this.getScreen().x + e.data.global.x / this.viewport.scale.x;
+            let y = this.getScreen().y + e.data.global.y / this.viewport.scale.y;
+            console.log(`Y: ${y}, X: ${x}`);
+            let charGridX = Math.floor(x / this.fontCharSizeWidth);
+            let charGridY = Math.floor(y / this.fontCharSizeHeight);
+            console.log(`charGridY: ${charGridY}, charGridX: ${charGridX}, tablePivotX: ${tablePivotX}, tablePivotY: ${tablePivotY}`)
+            table.rect.x = charGridX + tablePivotX;
+            table.rect.y = charGridY + tablePivotY;
+            this.initScreen()
+            this.render(false);
+        };
+
+
+        this.viewport.on('mousedown', (e: PIXI.InteractionEvent) => {  // same as addEventListener except type can be specified inside parameter
+            console.log("mousedown");
+            let x = this.getScreen().x + e.data.global.x / this.viewport.scale.x;
+            let y = this.getScreen().y + e.data.global.y / this.viewport.scale.y;
+            console.log(`Y: ${y}, X: ${x}`);
+            let charGridX = Math.floor(x / this.fontCharSizeWidth);
+            let charGridY = Math.floor(y / this.fontCharSizeHeight);
+            for (let table of this.tables) {
+                if (table.getContainingRect().contains(charGridX, charGridY)) {
+                    let tablePivotX = table.rect.x - charGridX;
+                    let tablePivotY = table.rect.y - charGridY;
+                    hover = table.copy();
+                    table.isVisible = false;
+                    this.viewport.on('mousemove', (e) => mouseMoveFunc(e, hover!, tablePivotX, tablePivotY));
+                    this.viewport.on('mouseout', () => {
+                        console.log("mouseout");
+                        this.viewport.removeAllListeners('mousemove');
+                        this.viewport.removeAllListeners('mouseout');  
+                    });
+                }
+            }
+        })
+
+        this.viewport.on('mouseup', (e: PIXI.InteractionEvent) => {  // same as addEventListener except type can be specified inside parameter
+            console.log("mouseup");
+            let x = this.getScreen().x + e.data.global.x / this.viewport.scale.x;
+            let y = this.getScreen().y + e.data.global.y / this.viewport.scale.y;
+            console.log(`Y: ${y}, X: ${x}`);
+            let isGoodPlaceForTableFunc = (hover: Table | null) => {
+                if (hover != null) {
+                    let isGoodPlacement = true;
+                    for (let table of this.tables.filter(x => x.isVisible)) {
+                        if (table.rect.intersects(hover.rect)) {
+                            isGoodPlacement = false;
+                        }
+                    }
+                    return isGoodPlacement;
+
+                }
+                return false;
+            }
+            let isGoodPlaceForTable = isGoodPlaceForTableFunc(hover)
+            console.log(`isGoodPlaceForTable: ${isGoodPlaceForTable}, hover: ${hover}`, hover);
+            if (isGoodPlaceForTable) {
+                let invisible = this.tables.findIndex(x => !x.isVisible);
+                this.tables[invisible] = (hover as Table).copy();
+            } else {
+                this.tables.filter(x => !x.isVisible).forEach(x => x.isVisible = true);
+            }
+            hover = null;
+            this.viewport.removeAllListeners('mousemove');
+            this.viewport.removeAllListeners('mouseout');  
+        })
+    }
+
+    handleToolChange(toolname: string) {
+        let previousTool = this.activeTool;
+        this.activeTool = toolname;
+        
+        switch(previousTool) {
+            case "pan":
+                this.pausePanning();
+                break;
+            case "select":
+                this.pauseSelect()
+                break;
+        }
+        
+        switch(this.activeTool) {
+            case "pan":
+                this.resumePanning();
+                break;
+            case "select":
+                this.resumeSelect()
+                break;
         }
     }
 }

@@ -171,6 +171,14 @@
 
         </div>
     </header>
+    <header style="width: 100%;">
+        <div class="bar" style="display: flex;">
+            <button class="tool-select" data-tooltype="pan">Pan</button>
+            <button class="tool-select" data-tooltype="select">Select</button>
+            <button class="tool-select" data-tooltype="newTable">New Table</button>
+            <button class="tool-select" data-tooltype="newRelation">New Relation</button>
+        </div>
+    </header>
     <div class="canvas-container">
 
     </div>
@@ -218,7 +226,6 @@
     import * as ModuleDraw from "../wwwroot/js-src/Draw.js";
     import * as ModuleSchemaTest from "../wwwroot/js-src/SchemaTest.js";
     import * as ModuleParser from "../wwwroot/js-src/Parser.js";
-    import * as ModuleDisplay from "../wwwroot/js-src/Display.js";
 
     let height = 40;
     let width = 100;
@@ -233,6 +240,13 @@
         console.log(draw.viewport.lastViewport.scaleX);
         draw.render(true);
     })
+
+    document.querySelectorAll('.tool-select').forEach(
+        x => x.addEventListener('click', () => {
+            let selectedTool = x.dataset.tooltype;
+            console.log(selectedTool);
+            draw.handleToolChange(selectedTool)
+    }));
 </script>
 
 

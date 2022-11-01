@@ -1,7 +1,6 @@
 import * as PIXI from "pixi.js";
 import { Rectangle } from "pixi.js";
 import { Table } from "./model/Table";
-import '@pixi/events';
 import { Viewport } from "pixi-viewport";
 
 export class Minimap {
@@ -16,6 +15,7 @@ export class Minimap {
     fontHeight: number = 0;
     // @ts-ignore: Object is possibly 'null'.
     viewPort: Viewport = null
+    areEventListenersActive: boolean = true;
 
     constructor() {
 
@@ -33,7 +33,8 @@ export class Minimap {
         this.container.x = this.minimapRect.x;
         this.container.y = this.minimapRect.y;
         this.container.interactive = true;
-        this.container.addEventListener('click', async (e: any) => {
+        this.container.addListener('click', async (e: any) => {
+            if (! this.areEventListenersActive) { return }
             let minimapX = e.data.global.x - this.minimapRect.x;
             let minimapY = e.data.global.y - this.minimapRect.y;
             let worldX = Math.floor(minimapX / this.minimapRect.width * worldWidth);
@@ -44,7 +45,7 @@ export class Minimap {
       }
     
     update(entities: Table[], screen: Rectangle) {
-        console.log(`minimap update, screen: ${screen}`);
+        console.log(`minimap update`);
         this.container.removeChildren();
         this.background = this.initBackground();
         this.container.addChild(this.background);
@@ -80,6 +81,4 @@ export class Minimap {
         background.endFill();
         return background;
     }
-
-
 }

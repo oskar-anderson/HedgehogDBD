@@ -6,22 +6,16 @@ import '@pixi/events';
 import { Table } from "./model/Table";
 import { Minimap } from "./Minimap";
 
-export class Draw {
+export class DrawController {
 
     // @ts-ignore: Object is possibly 'null'.
     app: PIXI.Application = null;
     // @ts-ignore: Object is possibly 'null'.
     viewport: Viewport = null;
-    worldDrawArea: string[] = [];
-    fontCharSizeWidth = 14;
-    fontCharSizeHeight = 14;
-    zoomOut = 3;
-    zoomIn = 2;
-    tables: Table[] = [];
-    screenContainerSize: Rectangle = new Rectangle()
     // @ts-ignore: Object is possibly 'null'.
     minimap: Minimap = null;
-    activeTool: string = "pan";
+    // @ts-ignore: Object is possibly 'null'.
+    draw: Draw = null;
 
     constructor() {
 
@@ -47,7 +41,7 @@ export class Draw {
 
     getWorldCharCridToScreen(rect: Rectangle) {
         return new Rectangle(
-            rect.x * this.fontCharSizeWidth,
+            rect.x * this.draw.fontCharSizeWidth,
             rect.y * this.fontCharSizeHeight,
             rect.width * this.fontCharSizeWidth,
             rect.height * this.fontCharSizeHeight,
@@ -331,7 +325,17 @@ export class Draw {
                 if (hover != null) {
                     let isGoodPlacement = true;
                     for (let table of this.tables.filter(x => !x.isHoverSource && !x.isHoverTarget)) {
+                        let isIntersecting = !(table.rect.left > hover.rect.right || 
+                            table.rect.right < hover.rect.left || 
+                            table.rect.top > hover.rect.bottom ||
+                            table.rect.bottom < hover.rect.top);
+                        console.log(isIntersecting);
                         if (table.rect.intersects(hover.rect)) {
+                            console.log(
+                                `intersects table: ${table.head}`,
+                                `table: `, JSON.parse(JSON.stringify(table.rect)), 
+                                `hover: `, JSON.parse(JSON.stringify(hover.rect)),
+                                )
                             isGoodPlacement = false;
                         }
                     }

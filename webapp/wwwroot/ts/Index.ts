@@ -1,5 +1,5 @@
-import { Draw } from "./DrawController"
+import { DrawController } from "./DrawController"
 
 export default class Index {
-    static Draw = Draw
+    static Draw = DrawController
 }

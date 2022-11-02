@@ -49,7 +49,8 @@ export class Table {
     }
 
     copy(): Table {
-        let copy1 = new Table(structuredClone(this));
+        
+        let copy1 = new Table(JSON.parse(JSON.stringify(this)));
         let copy = new Table(
             {
                 rect: new Rectangle(this.rect.x, this.rect.y, this.rect.width, this.rect.height),
@@ -59,7 +60,7 @@ export class Table {
         );
         console.log(copy1)
         console.log(copy)
-        return copy;
+        return copy1;
     }
 
     moveRelative(x: number, y: number) {

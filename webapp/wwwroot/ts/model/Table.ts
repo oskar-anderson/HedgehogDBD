@@ -2,6 +2,7 @@ import { Rectangle } from "pixi.js";
 import { TableRow } from "./TableRow";
 
 export class Table {
+    id: string = crypto.randomUUID();
     rect: Rectangle;
     head: string;
     tableRows: TableRow[];
@@ -60,11 +61,7 @@ export class Table {
         );
         console.log(copy1)
         console.log(copy)
-        return copy1;
+        return copy;
     }
 
-    moveRelative(x: number, y: number) {
-        this.rect.x += x;
-        this.rect.y += y;
-    }
 }

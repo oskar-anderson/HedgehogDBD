@@ -5,6 +5,8 @@ import '@pixi/math-extras';
 import '@pixi/events';
 import { Table } from "./model/Table";
 import { Minimap } from "./Minimap";
+import { Draw } from "./model/Draw";
+import { CommandPattern } from "./model/CommandPattern";
 
 export class DrawController {
 
@@ -42,9 +44,9 @@ export class DrawController {
     getWorldCharCridToScreen(rect: Rectangle) {
         return new Rectangle(
             rect.x * this.draw.fontCharSizeWidth,
-            rect.y * this.fontCharSizeHeight,
-            rect.width * this.fontCharSizeWidth,
-            rect.height * this.fontCharSizeHeight,
+            rect.y * this.draw.fontCharSizeHeight,
+            rect.width * this.draw.fontCharSizeWidth,
+            rect.height * this.draw.fontCharSizeHeight,
         )
     }
 
@@ -52,10 +54,10 @@ export class DrawController {
     getScreenCharGrid() {
         let screenSize = this.getScreen();
         return new Rectangle(
-            Math.floor(screenSize.x / this.fontCharSizeWidth),
-            Math.floor(screenSize.y / this.fontCharSizeHeight),
-            Math.ceil(screenSize.width / this.fontCharSizeWidth),
-            Math.ceil(screenSize.height / this.fontCharSizeHeight), 
+            Math.floor(screenSize.x / this.draw.fontCharSizeWidth),
+            Math.floor(screenSize.y / this.draw.fontCharSizeHeight),
+            Math.ceil(screenSize.width / this.draw.fontCharSizeWidth),
+            Math.ceil(screenSize.height / this.draw.fontCharSizeHeight), 
             );
     }
 
@@ -64,18 +66,17 @@ export class DrawController {
         return new Rectangle(
             0,
             0,
-            Math.ceil(worldSize.width / this.fontCharSizeWidth),
-            Math.ceil(worldSize.height / this.fontCharSizeHeight), 
+            Math.ceil(worldSize.width / this.draw.fontCharSizeWidth),
+            Math.ceil(worldSize.height / this.draw.fontCharSizeHeight), 
         );
     }
 
     async init(screenSizeWidth: number, screenSizeHeight: number, tables: Table[]) {
-        this.tables = tables;
-        this.screenContainerSize = new Rectangle(0, 0, screenSizeWidth, screenSizeHeight);
-        let maxWorldSizeToZoomOutRatio = 1;
+        this.draw = new Draw();
+        this.draw.init(tables, new Rectangle(0, 0, screenSizeWidth, screenSizeHeight));
         this.app = new PIXI.Application({
-            width: this.screenContainerSize.width,
-            height: this.screenContainerSize.height,
+            width: this.draw.screenContainerSize.width,
+            height: this.draw.screenContainerSize.height,
             backgroundColor: 0xAAAAAA
         });
 
@@ -84,10 +85,10 @@ export class DrawController {
         this.app.loader.add('../wwwroot/font/ps2p/14xml/ps2p-14.fnt');
 
         this.viewport = new Viewport({
-            screenHeight: this.screenContainerSize.height,
-            screenWidth:  this.screenContainerSize.width,
-            worldHeight:  this.screenContainerSize.height * this.zoomOut * maxWorldSizeToZoomOutRatio,
-            worldWidth:   this.screenContainerSize.width * this.zoomOut * maxWorldSizeToZoomOutRatio,
+            screenHeight: this.draw.screenContainerSize.height,
+            screenWidth:  this.draw.screenContainerSize.width,
+            worldHeight:  this.draw.screenContainerSize.height * this.draw.zoomOut,
+            worldWidth:   this.draw.screenContainerSize.width * this.draw.zoomOut,
 
             interaction: this.app.renderer.plugins.interaction
         });
@@ -98,30 +99,29 @@ export class DrawController {
         this.minimap.init(
             this.getWorld().height, 
             this.getWorld().width, 
-            this.fontCharSizeWidth, 
-            this.fontCharSizeHeight, 
+            this.draw.fontCharSizeWidth, 
+            this.draw.fontCharSizeHeight, 
             new Rectangle(
-                this.screenContainerSize.right - 180 - 20,
-                this.screenContainerSize.top + 20,
+                this.draw.screenContainerSize.right - 180 - 20,
+                this.draw.screenContainerSize.top + 20,
                 180,
                 120,
             ),
             (x: number, y: number) => { 
                 console.log("minimap navigation");
                 this.viewport.moveCenter(x, y);
-                this.minimap.update(this.tables, this.getScreen()) 
+                this.minimap.update(this.draw.getVisibleTables(), this.getScreen()) 
             }
         );
         this.app.stage.addChild(this.minimap.container);
         
-        this.initScreen();
 
         await new Promise<void>((resolve, reject) => {
             this.app.loader.load();
             
             this.app.loader.onComplete.add(() => {
                 console.log("Loader complete");
-                this.render(true)
+                this.render(true);
                 resolve();
             })
             this.app.loader.onError.add(() => {
@@ -132,22 +132,20 @@ export class DrawController {
         
     }
 
-    initScreen() {
+    render(isForceScreenReset = true) {
         let charGridSize = this.getWorldCharGrid();
-        this.worldDrawArea = [];
+        this.draw.worldDrawArea = [];
         for (let y = 0; y < charGridSize.height; y++) {
             for (let x = 0; x < charGridSize.width; x++) {
-                this.worldDrawArea.push(' ');
+                this.draw.worldDrawArea.push(' ');
             }
         }
-        let tables = this.tables.filter(x => !x.isHoverSource);
+        let tables = this.draw.getVisibleTables();
         for (const table of tables) {
             this.setWorldTable(table);
         }
         this.minimap.update(tables, this.getScreen());
-    }
 
-    render(isForceScreenReset = true) {
         let screenCharGrid = this.getWorldCharGrid();
         let worldCharGridSize = this.getWorldCharGrid();
         if (isForceScreenReset) {
@@ -156,7 +154,7 @@ export class DrawController {
         for (let y = 0; y < screenCharGrid.height; y++) {
             for (let x = 0; x < screenCharGrid.width; x++) {
                 // console.log(`x: ${x}, y: ${y}, index: ${y * charGridSize.width + x}`);
-                let tile = this.worldDrawArea[y * worldCharGridSize.width + x];
+                let tile = this.draw.worldDrawArea[y * worldCharGridSize.width + x];
                 if (isForceScreenReset) {
                     let bitmapText = new PIXI.BitmapText(tile,
                         {
@@ -164,8 +162,8 @@ export class DrawController {
                             align: 'right',
                             tint: 0x008000
                         });
-                    bitmapText.x = x * this.fontCharSizeWidth;
-                    bitmapText.y = y * this.fontCharSizeHeight;
+                    bitmapText.x = x * this.draw.fontCharSizeWidth;
+                    bitmapText.y = y * this.draw.fontCharSizeHeight;
                     this.viewport.addChild(bitmapText)
                 } else {
                     (this.viewport.children[y * screenCharGrid.width + x] as PIXI.Text).text = tile;
@@ -193,7 +191,7 @@ export class DrawController {
                 if (worldCharGridRect.y + 1 === y && x < worldCharGridRect.right && x > worldCharGridRect.left) {
                     let tile = table.head[headIndex] ?? ' ';
                     headIndex++;
-                    this.worldDrawArea[this.getWorldPointCanvasIndex(x, y)] = tile;
+                    this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)] = tile;
                 }
             }    
         }
@@ -216,7 +214,7 @@ export class DrawController {
         if (! this.getWorldCharGrid().contains(x, y)) {
             return
         }
-        this.worldDrawArea[this.getWorldPointCanvasIndex(x, y)] = char;
+        this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)] = char;
     }
 
     paintWorldRectToScreenSafe(rect: Rectangle, fillchar: string) {
@@ -233,24 +231,24 @@ export class DrawController {
             .drag({ pressDrag: enableDrag }).clamp({ 
                 left:   0,
                 top:    0,
-                right:  this.screenContainerSize.width * this.zoomOut,
-                bottom: this.screenContainerSize.height * this.zoomOut,
+                right:  this.draw.screenContainerSize.width * this.draw.zoomOut,
+                bottom: this.draw.screenContainerSize.height * this.draw.zoomOut,
             })
             .wheel().clampZoom({ 
-                maxScale: this.zoomIn, 
-                minScale: 1/this.zoomOut
+                maxScale: this.draw.zoomIn, 
+                minScale: 1/this.draw.zoomOut
             });
 
         // make zooming update minimap
         this.viewport.addEventListener('wheel', () => {
             console.log("wheel")
-            this.minimap.update(this.tables, this.getScreen());
+            this.minimap.update(this.draw.getVisibleTables(), this.getScreen());
         });
 
         // make panning update minimap camera indicator location
         this.viewport.addEventListener('moved', () => {
             console.log("moved")
-            this.minimap.update(this.tables, this.getScreen());
+            this.minimap.update(this.draw.getVisibleTables(), this.getScreen());
         })
     }
 
@@ -276,15 +274,14 @@ export class DrawController {
             let x = this.getScreen().x + e.data.global.x / this.viewport.scale.x;
             let y = this.getScreen().y + e.data.global.y / this.viewport.scale.y;
             console.log(`Y: ${y}, X: ${x}`);
-            let charGridX = Math.floor(x / this.fontCharSizeWidth);
-            let charGridY = Math.floor(y / this.fontCharSizeHeight);
+            let charGridX = Math.floor(x / this.draw.fontCharSizeWidth);
+            let charGridY = Math.floor(y / this.draw.fontCharSizeHeight);
             let newX = charGridX + tablePivotX
             let newY = charGridY + tablePivotY
             if (table.rect.x === newX && table.rect.y === newY) return;
             table.rect.x = newX;
             table.rect.y = newY;
-            this.initScreen()
-            this.render(false);
+            this.render(false)
         };
 
 
@@ -293,10 +290,10 @@ export class DrawController {
             let x = this.getScreen().x + e.data.global.x / this.viewport.scale.x;
             let y = this.getScreen().y + e.data.global.y / this.viewport.scale.y;
             console.log(`Y: ${y}, X: ${x}`);
-            let charGridX = Math.floor(x / this.fontCharSizeWidth);
-            let charGridY = Math.floor(y / this.fontCharSizeHeight);
+            let charGridX = Math.floor(x / this.draw.fontCharSizeWidth);
+            let charGridY = Math.floor(y / this.draw.fontCharSizeHeight);
             let hover: Table | null = null;
-            for (let table of this.tables) {
+            for (let table of this.draw.tables) {
                 if (table.getContainingRect().contains(charGridX, charGridY)) {
                     let tablePivotX = table.rect.x - charGridX;
                     let tablePivotY = table.rect.y - charGridY;
@@ -312,7 +309,7 @@ export class DrawController {
                 }
             }
             if (hover !== null) {
-                this.tables.push(hover);
+                this.draw.tables.push(hover);
             }
         })
 
@@ -324,7 +321,7 @@ export class DrawController {
             let isGoodPlaceForTableFunc = (hover: Table | null) => {
                 if (hover != null) {
                     let isGoodPlacement = true;
-                    for (let table of this.tables.filter(x => !x.isHoverSource && !x.isHoverTarget)) {
+                    for (let table of this.draw.tables.filter(x => !x.isHoverSource && !x.isHoverTarget)) {
                         let isIntersecting = !(table.rect.left > hover.rect.right || 
                             table.rect.right < hover.rect.left || 
                             table.rect.top > hover.rect.bottom ||
@@ -344,28 +341,40 @@ export class DrawController {
                 }
                 return false;
             }
-            let hover = this.tables.find(x => x.isHoverTarget) ?? null;
-            this.tables = this.tables.filter(x => !x.isHoverTarget);
+            let hover = this.draw.tables.find(x => x.isHoverTarget) ?? null;
+            this.draw.tables = this.draw.tables.filter(x => !x.isHoverTarget);
             let isGoodPlaceForTable = isGoodPlaceForTableFunc(hover)
             console.log(`isGoodPlaceForTable: ${isGoodPlaceForTable}`);
             if (isGoodPlaceForTable) {
-                let invisible = this.tables.find(x => x.isHoverSource)!;
-                invisible.moveRelative(hover!.rect.x - invisible.rect.x, hover!.rect.y - invisible.rect.y);
+                let invisible = this.draw.tables.find(x => x.isHoverSource)!;
+                let xDiff = hover!.rect.x - invisible.rect.x;
+                let yDiff = hover!.rect.y - invisible.rect.y;
+                
+                invisible.rect = this.draw.transactions.execute(
+                    new CommandPattern(
+                        "moveTableRelative", 
+                        {
+                            id: invisible.id,
+                            x: xDiff, 
+                            y: yDiff 
+                        }
+                    ),
+                    this.draw
+                )!;
                 invisible.isHoverSource = false;
             } else {
-                this.tables.forEach(x => x.isHoverSource = false);
+                this.draw.tables.forEach(x => x.isHoverSource = false);
             }
 
-            this.initScreen();
-            this.render();
+            this.render(false);
             this.viewport.removeAllListeners('mousemove');
             this.viewport.removeAllListeners('mouseout');  
         })
     }
 
     handleToolChange(toolname: string) {
-        let previousTool = this.activeTool;
-        this.activeTool = toolname;
+        let previousTool = this.draw.activeTool;
+        this.draw.activeTool = toolname;
         
         switch(previousTool) {
             case "pan":
@@ -376,7 +385,7 @@ export class DrawController {
                 break;
         }
         
-        switch(this.activeTool) {
+        switch(this.draw.activeTool) {
             case "pan":
                 this.resumePanning();
                 break;

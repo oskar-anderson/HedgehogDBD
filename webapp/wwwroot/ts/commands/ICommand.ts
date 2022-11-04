@@ -1,4 +1,4 @@
 export interface ICommand {
-    execute(transaction: any): any
-    undo(transaction: any): any
+    execute(args: any): any
+    undo(args: any): any
 }

@@ -1,26 +1,25 @@
 import { Rectangle } from "pixi.js";
 import { Draw } from "../../model/Draw";
-import { ICommandRegister } from "../ICommandRegister";
+import { ICommand } from "../ICommand";
 
-@ICommandRegister.register
-export class MoveTableRelative {
+export class MoveTableRelative implements ICommand {
     context: Draw;
 
     constructor(context: Draw) {
         this.context = context;
     }
 
-    execute(transaction: any): Rectangle {
-        if (! transaction.args.id || !transaction.args.x || !transaction.args.y) throw Error("Mandatory args not specified!")
-        let table = this.context.tables.find(x => x.id === transaction.args.id)!;
-        table.rect.x += transaction.args.x;
-        table.rect.y += transaction.args.y;
+    execute(args: any): Rectangle {
+        if (! args.id || !args.x || !args.y) throw Error("Mandatory args not specified!")
+        let table = this.context.tables.find(x => x.id === args.id)!;
+        table.rect.x += args.x;
+        table.rect.y += args.y;
         return table.rect;
     }
 
-    undo(transaction: any): Rectangle  {
-        transaction.args.x = -transaction.args.x;
-        transaction.args.y = -transaction.args.y;
-        return this.execute(transaction);
+    undo(args: any): Rectangle  {
+        args.x = -args.x;
+        args.y = -args.y;
+        return this.execute(args);
     }
 }

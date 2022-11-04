@@ -6,9 +6,7 @@ import '@pixi/events';
 import { Table } from "./model/Table";
 import { Minimap } from "./Minimap";
 import { Draw } from "./model/Draw";
-import { ICommandRegister } from "./commands/ICommandRegister";
 import { MoveTableRelative } from "./commands/appCommands/MoveTableRelative";
-import { MoveTableTest } from "./commands/appCommands/MoveTableTest";
 
 export class DrawController {
 
@@ -74,8 +72,6 @@ export class DrawController {
     }
 
     async init(screenSizeWidth: number, screenSizeHeight: number, tables: Table[]) {
-        console.log(ICommandRegister.GetImplementations()[0].name);
-        console.log(ICommandRegister.GetImplementations()[0].prototype);
         this.draw = new Draw();
         this.draw.init(tables, new Rectangle(0, 0, screenSizeWidth, screenSizeHeight));
         this.app = new PIXI.Application({
@@ -356,7 +352,7 @@ export class DrawController {
                 
                 
                 invisible.rect = this.draw.transactions.execute(
-                    MoveTableTest.name, 
+                    MoveTableRelative.name, 
                     {
                         id: invisible.id,
                         x: xDiff, 

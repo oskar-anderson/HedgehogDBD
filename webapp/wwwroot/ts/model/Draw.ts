@@ -1,6 +1,6 @@
 import { Rectangle } from "pixi.js";
 import { Table } from "./Table";
-import { Transaction } from "./../Transaction";
+import { Transaction } from "../commands/Transaction";
 
 export class Draw {
     transactions = new Transaction()

@@ -6,7 +6,9 @@ import '@pixi/events';
 import { Table } from "./model/Table";
 import { Minimap } from "./Minimap";
 import { Draw } from "./model/Draw";
-import { CommandPattern } from "./model/CommandPattern";
+import { ICommandRegister } from "./commands/ICommandRegister";
+import { MoveTableRelative } from "./commands/appCommands/MoveTableRelative";
+import { MoveTableTest } from "./commands/appCommands/MoveTableTest";
 
 export class DrawController {
 
@@ -72,6 +74,8 @@ export class DrawController {
     }
 
     async init(screenSizeWidth: number, screenSizeHeight: number, tables: Table[]) {
+        console.log(ICommandRegister.GetImplementations()[0].name);
+        console.log(ICommandRegister.GetImplementations()[0].prototype);
         this.draw = new Draw();
         this.draw.init(tables, new Rectangle(0, 0, screenSizeWidth, screenSizeHeight));
         this.app = new PIXI.Application({
@@ -350,15 +354,14 @@ export class DrawController {
                 let xDiff = hover!.rect.x - invisible.rect.x;
                 let yDiff = hover!.rect.y - invisible.rect.y;
                 
+                
                 invisible.rect = this.draw.transactions.execute(
-                    new CommandPattern(
-                        "moveTableRelative", 
-                        {
-                            id: invisible.id,
-                            x: xDiff, 
-                            y: yDiff 
-                        }
-                    ),
+                    MoveTableTest.name, 
+                    {
+                        id: invisible.id,
+                        x: xDiff, 
+                        y: yDiff 
+                    },
                     this.draw
                 )!;
                 invisible.isHoverSource = false;

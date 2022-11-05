@@ -81,6 +81,25 @@ export class DrawController {
         });
 
         document.querySelector('.canvas-container')?.appendChild(this.app.view);
+        document.querySelector('#undo')!.addEventListener('click', () => {
+            console.log("undo event");
+            this.draw.transactions.undo(this.draw);
+            this.render(false);
+        });
+        document.querySelector('#redo')!.addEventListener('click', () => {
+            console.log("redo event");
+            this.draw.transactions.redo(this.draw);
+            this.render(false);
+        });
+        document.querySelector('#save-as-png')!.addEventListener('click', () => {
+            console.log("save-as-png event");
+            this.takeScreenshot();
+        });
+        document.querySelector('#save-to-clipboard')!.addEventListener('click', () => {
+            console.log("save-to-clipboard event");
+            this.saveToClipboard();
+        });
+
 
         this.app.loader.add('../wwwroot/font/ps2p/14xml/ps2p-14.fnt');
 
@@ -134,12 +153,7 @@ export class DrawController {
 
     render(isForceScreenReset = true) {
         let charGridSize = this.getWorldCharGrid();
-        this.draw.worldDrawArea = [];
-        for (let y = 0; y < charGridSize.height; y++) {
-            for (let x = 0; x < charGridSize.width; x++) {
-                this.draw.worldDrawArea.push(' ');
-            }
-        }
+        this.draw.worldDrawArea = new Array(charGridSize.height * charGridSize.width).fill(' ');
         let tables = this.draw.getVisibleTables();
         for (const table of tables) {
             this.setWorldTable(table);
@@ -322,17 +336,7 @@ export class DrawController {
                 if (hover != null) {
                     let isGoodPlacement = true;
                     for (let table of this.draw.tables.filter(x => !x.isHoverSource && !x.isHoverTarget)) {
-                        let isIntersecting = !(table.rect.left > hover.rect.right || 
-                            table.rect.right < hover.rect.left || 
-                            table.rect.top > hover.rect.bottom ||
-                            table.rect.bottom < hover.rect.top);
-                        console.log(isIntersecting);
                         if (table.rect.intersects(hover.rect)) {
-                            console.log(
-                                `intersects table: ${table.head}`,
-                                `table: `, JSON.parse(JSON.stringify(table.rect)), 
-                                `hover: `, JSON.parse(JSON.stringify(hover.rect)),
-                                )
                             isGoodPlacement = false;
                         }
                     }
@@ -392,5 +396,29 @@ export class DrawController {
                 this.resumeSelect()
                 break;
         }
+    }
+
+    takeScreenshot() {
+        this.app.renderer.plugins.extract.canvas(this.viewport).toBlob((b: Blob) => {
+            const a = document.createElement('a');
+            document.body.append(a);
+            a.download = 'screenshot';
+            a.href = URL.createObjectURL(b);
+            a.click();
+            a.remove();
+        }, 'image/png');
+    }
+
+    saveToClipboard() {
+        let charGridSize = this.getWorldCharGrid();
+        let sb = [];
+        for (let y = 0; y < charGridSize.height; y++) {
+            for (let x = 0; x < charGridSize.width; x++) {
+                let letter = this.draw.worldDrawArea[y * charGridSize.width + x];
+                sb.push(letter);
+            }
+            sb.push("\n");
+        }
+        navigator.clipboard.writeText(sb.join(""));
     }
 }

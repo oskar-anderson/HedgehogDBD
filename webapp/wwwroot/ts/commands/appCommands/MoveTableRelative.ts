@@ -10,7 +10,6 @@ export class MoveTableRelative implements ICommand {
     }
 
     execute(args: any): Rectangle {
-        if (! args.id || !args.x || !args.y) throw Error("Mandatory args not specified!")
         let table = this.context.tables.find(x => x.id === args.id)!;
         table.rect.x += args.x;
         table.rect.y += args.y;

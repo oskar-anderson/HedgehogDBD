@@ -59,8 +59,6 @@ export class Table {
                 tableRows: this.tableRows
             }
         );
-        console.log(copy1)
-        console.log(copy)
         return copy;
     }
 

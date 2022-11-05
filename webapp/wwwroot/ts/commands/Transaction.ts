@@ -4,19 +4,16 @@ import { ICommand } from "./ICommand";
 
 
 export class Transaction {
-    undoHistory: CommandPattern[] = [];
-    redoHistory: CommandPattern[] = [];
+    undoHistory: string[] = Array(100);
+    redoHistory: string[] = Array(100);
     
-    constructor() {
+    constructor() {}
 
-    }
-
-    execute(commandName: string, args: any, context: Draw) {
+    execute(commandName: string, args: any, context: Draw): any {
         let command = new CommandPattern(commandName, args)
-        this.undoHistory.push(command)
+        this.undoHistory = Transaction.pushCapped<string>(this.undoHistory, JSON.stringify(command));
         this.redoHistory = []
-        let commandInstance = this.getICommandInstance(command.commandName, context)
-        return commandInstance.execute(command.args)
+        return this.getICommandInstance(command.commandName, context).execute(command.args)
     }
 
     private getICommandInstance(commandName: string, context: Draw): ICommand {
@@ -27,22 +24,22 @@ export class Transaction {
         return new implementation.constructor(context);
     }
 
-    redo(context: Draw) {
-        let command = this.redoHistory.pop();
-        if (command) {
-            this.undoHistory.push(command)
-            let commandInstance = this.getICommandInstance(command.commandName, context);
-            return commandInstance.execute(command.args);
-        }
+    redo(context: Draw): any {
+        if (this.redoHistory.length === 0) return;
+        let command = JSON.parse(this.redoHistory.pop()!) as CommandPattern;
+        this.undoHistory = Transaction.pushCapped<string>(this.undoHistory, JSON.stringify(command));
+        return this.getICommandInstance(command.commandName, context).execute(command.args);
     }
 
-    undo(context: Draw) {
-        let command = this.undoHistory.pop();
-        if (command) {
-            this.redoHistory.push(command)
-            let commandInstance = this.getICommandInstance(command.commandName, context);
-            return commandInstance.undo(command.args);
-        }
+    undo(context: Draw): any {
+        if (this.undoHistory.length === 0) return;
+        let command = JSON.parse(this.undoHistory.pop()!) as CommandPattern;
+        this.redoHistory = Transaction.pushCapped<string>(this.redoHistory, JSON.stringify(command));
+        return this.getICommandInstance(command.commandName, context).undo(command.args);
+    }
+
+    private static pushCapped<T>(arr: T[], value: T): T[] {
+        arr = arr.slice(-(arr.length - 1)); arr.push(value); return arr;
     }
 }
 

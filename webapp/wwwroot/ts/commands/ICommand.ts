@@ -1,4 +1,5 @@
-export interface ICommand {
-    execute(args: any): any
-    undo(args: any): any
+export interface ICommand<T> {
+    getArgs(): any
+    redo(): void
+    undo(): void
 }

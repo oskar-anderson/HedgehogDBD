@@ -1,9 +1,9 @@
 import { Rectangle } from "pixi.js";
 import { Table } from "./Table";
-import { Transaction } from "../commands/Transaction";
+import { History } from "../commands/History";
 
 export class Draw {
-    transactions = new Transaction()
+    history = new History();
     worldDrawArea: string[] = [];
     fontCharSizeWidth = 14;
     fontCharSizeHeight = 14;

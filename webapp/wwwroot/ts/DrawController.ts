@@ -6,7 +6,8 @@ import '@pixi/events';
 import { Table } from "./model/Table";
 import { Minimap } from "./Minimap";
 import { Draw } from "./model/Draw";
-import { MoveTableRelative } from "./commands/appCommands/MoveTableRelative";
+import { CommandMoveTableRelative } from "./commands/appCommands/CommandMoveTableRelative";
+import { History } from "./commands/History";
 
 export class DrawController {
 
@@ -83,12 +84,12 @@ export class DrawController {
         document.querySelector('.canvas-container')?.appendChild(this.app.view);
         document.querySelector('#undo')!.addEventListener('click', () => {
             console.log("undo event");
-            this.draw.transactions.undo(this.draw);
+            this.draw.history.undo(this.draw);
             this.render(false);
         });
         document.querySelector('#redo')!.addEventListener('click', () => {
             console.log("redo event");
-            this.draw.transactions.redo(this.draw);
+            this.draw.history.redo(this.draw);
             this.render(false);
         });
         document.querySelector('#save-as-png')!.addEventListener('click', () => {
@@ -196,10 +197,10 @@ export class DrawController {
         let firstColumnWidth = table.getColumnWidths()[0];
         let secondColumnWidth = table.getColumnWidths()[1];
         let thirdColumnWidth = table.getColumnWidths()[2];
-        this.paintWorldPatch8Safe(new Rectangle(worldCharGridRect.x, worldCharGridRect.y, worldCharGridRect.width, 2));
-        this.paintWorldPatch8Safe(new Rectangle(worldCharGridRect.x, worldCharGridRect.y + 2, firstColumnWidth, worldCharGridRect.height - 2));
-        this.paintWorldPatch8Safe(new Rectangle(worldCharGridRect.x + firstColumnWidth, worldCharGridRect.y + 2, secondColumnWidth, worldCharGridRect.height - 2));
-        this.paintWorldPatch8Safe(new Rectangle(worldCharGridRect.x + firstColumnWidth + secondColumnWidth, worldCharGridRect.y + 2, thirdColumnWidth, worldCharGridRect.height - 2));
+        this.paintWorld9PatchSafe(new Rectangle(worldCharGridRect.x, worldCharGridRect.y, worldCharGridRect.width, 2));
+        this.paintWorld9PatchSafe(new Rectangle(worldCharGridRect.x, worldCharGridRect.y + 2, firstColumnWidth, worldCharGridRect.height - 2));
+        this.paintWorld9PatchSafe(new Rectangle(worldCharGridRect.x + firstColumnWidth, worldCharGridRect.y + 2, secondColumnWidth, worldCharGridRect.height - 2));
+        this.paintWorld9PatchSafe(new Rectangle(worldCharGridRect.x + firstColumnWidth + secondColumnWidth, worldCharGridRect.y + 2, thirdColumnWidth, worldCharGridRect.height - 2));
         for (let x = worldCharGridRect.x; x <= worldCharGridRect.right; x++) {
             for (let y = worldCharGridRect.y; y <= worldCharGridRect.bottom; y++) {
                 if (worldCharGridRect.y + 1 === y && x < worldCharGridRect.right && x > worldCharGridRect.left) {
@@ -212,31 +213,27 @@ export class DrawController {
     }
 
     
-    paintWorldPatch8Safe(rect: Rectangle) {
-        let [tl, t, tr, ml, mr, bl, b, br] = ['+', '-', '+', '|', '|', '+', '-', '+'];
-        this.paintWorldPointToScreenSafe(rect.left, rect.top, tl);
-        this.paintWorldRectToScreenSafe(new Rectangle(rect.x + 1, rect.y, rect.width - 1, 1), t);
-        this.paintWorldPointToScreenSafe(rect.right, rect.top, tr);
-        this.paintWorldRectToScreenSafe(new Rectangle(rect.x, rect.y + 1, 1, rect.height - 1), ml);
-        this.paintWorldRectToScreenSafe(new Rectangle(rect.right, rect.y + 1, 1, rect.height - 1), mr);
-        this.paintWorldPointToScreenSafe(rect.left, rect.bottom, bl);
-        this.paintWorldRectToScreenSafe(new Rectangle(rect.x + 1, rect.bottom, rect.width - 1, 1), b);
-        this.paintWorldPointToScreenSafe(rect.right, rect.bottom, br);
-    }
-
-    paintWorldPointToScreenSafe(x: number, y: number, char: string) {
-        if (! this.getWorldCharGrid().contains(x, y)) {
-            return
+    paintWorld9PatchSafe(rect: Rectangle) {
+        let [tl, t, tr, ml, mr, bl, b, br] = ['+', '-', '+', '|', '|', '+', '-', '+'];  // skip middle
+        let paintWorldPointToScreenSafe = (x: number, y: number, char: string) => {
+            if (! this.getWorldCharGrid().contains(x, y)) { return; }
+            this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)] = char;
         }
-        this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)] = char;
-    }
-
-    paintWorldRectToScreenSafe(rect: Rectangle, fillchar: string) {
-        for (let y = rect.y; y < rect.bottom; y++) {
-            for (let x = rect.x; x < rect.right; x++) {
-                this.paintWorldPointToScreenSafe(x, y, fillchar);
-            } 
+        let paintWorldRectToScreenSafe = (rect: Rectangle, fillchar: string) => {
+            for (let y = rect.y; y < rect.bottom; y++) {
+                for (let x = rect.x; x < rect.right; x++) {
+                    paintWorldPointToScreenSafe(x, y, fillchar);
+                } 
+            }
         }
+        paintWorldRectToScreenSafe(new Rectangle(rect.left, rect.top, 1, 1), tl);
+        paintWorldRectToScreenSafe(new Rectangle(rect.x + 1, rect.y, rect.width - 1, 1), t);
+        paintWorldRectToScreenSafe(new Rectangle(rect.right, rect.top, 1, 1), tr);
+        paintWorldRectToScreenSafe(new Rectangle(rect.x, rect.y + 1, 1, rect.height - 1), ml);
+        paintWorldRectToScreenSafe(new Rectangle(rect.right, rect.y + 1, 1, rect.height - 1), mr);
+        paintWorldRectToScreenSafe(new Rectangle(rect.left, rect.bottom, 1, 1), bl);
+        paintWorldRectToScreenSafe(new Rectangle(rect.x + 1, rect.bottom, rect.width - 1, 1), b);
+        paintWorldRectToScreenSafe(new Rectangle(rect.right, rect.bottom, 1, 1), br);
     }
 
     initViewport(enableDrag: boolean = true) {
@@ -354,16 +351,13 @@ export class DrawController {
                 let xDiff = hover!.rect.x - invisible.rect.x;
                 let yDiff = hover!.rect.y - invisible.rect.y;
                 
-                
-                invisible.rect = this.draw.transactions.execute(
-                    MoveTableRelative.name, 
-                    {
+                this.draw.history.execute(new CommandMoveTableRelative(
+                    this.draw, {
                         id: invisible.id,
                         x: xDiff, 
-                        y: yDiff 
-                    },
-                    this.draw
-                )!;
+                        y: yDiff
+                    })
+                );
                 invisible.isHoverSource = false;
             } else {
                 this.draw.tables.forEach(x => x.isHoverSource = false);

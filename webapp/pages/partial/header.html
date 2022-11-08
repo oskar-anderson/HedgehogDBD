@@ -1,0 +1,31 @@
+<div>
+
+    <style>    
+        /* Nav Menu
+        -------------------------------------------------------------- */
+
+        #nav ul { padding: 8px 0px 0 0; overflow: hidden; }
+
+        #nav li { list-style-type: none; float: left; padding: 0px 0px 0px 3px }
+
+        #nav li a { font-family: 'Share Tech Mono';  color: #fff; font-size: 1.5em; font-weight: 400; display: block; float: left; padding: 9px 13px 0px 13px; height: 28px; }
+
+        #nav li a:hover, #nav .current-item a { background: #c4c4c4; color: #171717; }
+
+        #nav li a, #nav li a:hover, #nav li a:visited { text-decoration: none; }
+
+    </style>
+
+    <div id="wrapHeader">
+        <div class="rastermodeler-logo"> <a href="index.html" id="logo" title="Home | RasterModeler"></a></div>
+        <div id="nav">
+            <ul>
+                <li class='{{ "current-item" if active_nav == "home" }}'><a href="index.html">Home</a></li>
+                <li class='{{ "current-item" if active_nav == "draw" }}'><a href="draw.html">Draw</a></li>
+                <li class='{{ "current-item" if active_nav == "features" }}'><a href="features.html">Features</a></li>
+                <li class='{{ "current-item" if active_nav == "downloads" }}'><a href="downloads.html">Downloads</a></li>
+                <li class='{{ "current-item" if active_nav == "resources" }}'><a href="resources.html">Resources</a></li>
+            </ul>
+        </div>
+    </div>
+</div>

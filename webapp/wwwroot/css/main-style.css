@@ -14,3 +14,19 @@ hr {
     opacity: .25;
 }
 
+
+a, a:link, a:visited { color: #e3e3e3; font-size: 1em; text-decoration: none; }
+
+a:visited { text-decoration: none; }
+
+a:hover, a:visited:hover { color: #e3e3e3; text-decoration: underline; }
+
+h1, h2, h3, h4, h5, h6 { color: #28db00; }
+
+h1 { font-size: 2em; line-height: 25px }
+
+h2 { font-size: 1.25em; }
+
+h3, h4, h5, h6 { font-size: 1.333em; }
+
+pre { font-family: "Courier New"; }

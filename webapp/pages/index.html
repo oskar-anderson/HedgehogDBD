@@ -1,91 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Document</title>
+    <title>Home | RasterModeler - Yet another entity relationship modeler</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="description" content="RasterModeler, A text based entity relation modeler">
+    <meta name="keywords" content="RasterModeler,ASCII,free,modeler,entity,relation,ERD,text">
+
+    <link rel="stylesheet" type="text/css" href="../wwwroot/css/reset.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../wwwroot/css/main-style.css" media="screen">
     <style>
-        .container {
-            width: 500px;
-        }
+        
+        body { background-color: #000000; }
 
-        .button {
-            position: relative;
-            width: 300px;
-            height: 40px;
-            margin: 10px auto 0 auto;
-            background: #b9aea2;
-            box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
-        }
+        p { padding: 10px 0px 5px 0px; }
 
-        .button:first-child:before {
-            content: ' ';
-            position: absolute;
-            z-index: -1;
-            width: 40px;
-            height: 0px;
-            top: 14px;
-            left: -20px;
-            margin: 0px 0px 0 0px;
-            border-top: 20px solid transparent;
-            border-left: 15px solid white;
-            border-bottom: 20px solid transparent;
-            -webkit-transform: skew(-5deg);
-            -moz-transform: skew(-5deg);
-                -o-transform: skew(-5deg);
-            background: #b9aea2;
-        }
 
-        .button:last-child:before {
-            content: ' ';
-            position: absolute;
-            z-index: -1;
-            width: 40px;
-            height: 0px;
-            top: 14px;
-            right: -20px;
-            margin: 0px 0px 0 0px;
-            border-top: 20px solid transparent;
-            border-right: 15px solid white;
-            border-bottom: 20px solid transparent;
-            -webkit-transform: skew(5deg);
-            -moz-transform: skew(5deg);
-                -o-transform: skew(5deg);
-            background: #b9aea2;
-        }
+        /* General Layout
+        -------------------------------------------------------------- */
 
-        .button:after {
-            content: ' ';
-            position: absolute;
-            display: block;
-            width: 240px;
-            height: 10px;
-            bottom: -10px;
-            left: 30px;
-            -webkit-transform: skew(-80deg);
-            -moz-transform: skew(-80deg);
-                -o-transform: skew(-80deg);
-            background: #6b6562;
-        }
+        #wrapHeader { margin: 0px; padding: 0px 0px 0px 0px; height: 215px; width: 912px; margin: 0 auto; position: relative; top: 0px; z-index: 10; }
 
-        .button:last-child:after {
-            width: 0;
-            height: 0;
-            background: transparent;
-        }
+        #wrapContent { clear: both; position: relative; z-index: 1; overflow: hidden; width: 912px; margin: -15px auto 0px auto; padding: 0px 0px 0px 0px; }
+
+        #footer { width: 912px; margin: 0 auto; overflow: hidden; padding: 0px 0px 20px 0px }
+
+        /* Title Logo
+        -------------------------------------------------------------- */
+
+        #logo { display: block; width: 600px; margin: 0 auto; }
+
+        #logo { display: block; overflow: hidden; width: 600px; height: 0px; padding-top: 141px; background: url(../wwwroot/img/rastermodeler_logo.png) no-repeat center center; z-index: 100; }
+
+        /* Content
+        -------------------------------------------------------------- */
+
+        .img-link a img { border: 5px solid #000; }
+        .img-link a:hover img { border: 5px solid #171717; }
+
+        .main-block { overflow: hidden; padding: 10px 0px 30px; text-align: justify; }
+
+        .main-block-445 { width: 445px; }
+
+
+        .float-right { float: right; }
+        .float-left { float: left; }
+
+        .title h1, .title h2, .title h4 { font-family: 'Share Tech Mono'; font-size: 1.5em; }
+
+        .title { padding-bottom: 8px; }
+
+        .list li { list-style-position: inside; list-style-type: disc; }
+
     </style>
+    <link href='https://fonts.googleapis.com/css?family=Share+Tech+Mono' rel='stylesheet' type='text/css'>
+    <link rel="icon" href="../wwwroot/favicon-32x32.png" type="image/x-icon">
+    <script src="https://mozilla.github.io/nunjucks/files/nunjucks.js"></script>
+
 </head>
-<body class="container">
-    <div class="button">
-        Start
-    </div>
-    <div class="button">
-        Load
-    </div>
-</body>
-<script type="module">
-    import * as SchemaTest from "../wwwroot/js-src/SchemaTest.js";
+
+<body style="display: none;">
+<div>
+
+    <!-- header: begin -->
+    {% include "partial/header.html" %}
+    <!-- header: end -->
+
     
-    SchemaTest.SchemaTest.main();
+    <!-- content of page: begin -->
+    <div id="wrapContent">
+        <div>
+            <img src="../wwwroot/img/demo1.png" alt="RasterModeler demo" title="RasterModeler demo">
+        </div>
+        <div class="main-block">
+            <div class="main-block-445 float-left">
+                <div class="title">
+                    <h1>About</h1>
+                </div>
+                <p>
+                    RasterModeler is a powerful and customizable entity relation schema modeler. 
+                    Create editable schemas that can be easily embedded in html and markdown files.
+                    Export model to SQL statements using builtin scripts or create your own script according to your needs.
+                    This software has been provided free of charge, No login or registration required. 
+                    You can help make this software better by submitting new scripts to <a href="https://www.github.com/oskar-anderson/RasterModeler">project Github repository</a>.
+                </p>
+            </div>
+            <div class="main-block-445 float-right">
+                <div class="title">
+                    <h1>Start</h1>
+                </div>
+                <div>
+                    <p>
+                        Start drawing now using the browser based web version <a href="draw.html">click here</a>.
+                    </p>
+                    <p>
+                        The web version is subject to frequent changes.
+                        You can get a permanent stable Electron based version of the product for Windows and Linux on <a href="downloads.html">Downloads</a> page.
+                    </p>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="main-block">
+            <div class="main-block-445 float-left">
+                <div class="title">
+                    <h1>Features</h1>
+                </div>
+                <p>
+                    <ul class="list">
+                        <li>Create and edit tables</li>
+                        <li>Preview support for creating and moving objects over the canvas</li>
+                        <li>Camera minimap navigation</li>
+                        <li>Zooming support</li>
+                        <li>Undo/redo commands</li>
+                        <li>Select tables and edit their name, type and special properties</li>
+                        <li>Export to clipboard or save as .TXT or .PNG</li>
+                        <li>Import .TXT files</li>
+                        <li>View, manage and execute builtin scripts</li>
+                        <li>Write your own scripts using builtin text editor</li>
+                        <li>Share your scripts with others using Utterances comments</li>
+                    </ul>
+                </p>
+            </div>
+            <div class="main-block-445 float-right">
+                <div class="title">
+                    <h1>Special thanks</h1>
+                </div>
+                <p>People who would like to improve RasterModeler can </p>
+                <div class ="gallery" id="gallery1">
+                    Lorem ipson
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- content of page: end -->
+
+	<!-- footer: begin -->
+    {% include "partial/footer.html" %}
+	<!-- footer: end -->
+</div>
+
+</body>
+
+<script>
+    let body = document.querySelector('body');
+    let data = body.innerHTML;
+
+
+    let result = nunjucks.renderString(data, { active_nav: "home" });
+    body.innerHTML = result;
+    body.style.display = "block";
 </script>
 </html>

@@ -1,3 +1,5 @@
+@import url(https://fonts.googleapis.com/css?family=Share+Tech+Mono);
+
 .dropdown-menu {
     --bs-dropdown-border-radius: 0.1875em;
     --bs-dropdown-padding-y: 0.2rem;
@@ -30,3 +32,17 @@ h2 { font-size: 1.25em; }
 h3, h4, h5, h6 { font-size: 1.333em; }
 
 pre { font-family: "Courier New"; }
+ 
+body { background-color: #000000; color: #9da9af; }
+
+p { padding: 10px 0px 5px 0px; }
+
+
+/* General Layout
+-------------------------------------------------------------- */
+
+#wrapHeader { margin: 0px; padding: 0px 0px 0px 0px; width: 912px; margin: 0 auto; position: relative; top: 0px; z-index: 10; }
+
+#wrapContent { width: 912px; margin: 0px auto 0px auto; padding: 0px 0px 0px 0px; }
+
+#footer { width: 912px; margin: 0 auto; overflow: hidden; padding: 0px 0px 20px 0px; }

@@ -78,7 +78,7 @@ export class DrawController {
         this.app = new PIXI.Application({
             width: this.draw.screenContainerSize.width,
             height: this.draw.screenContainerSize.height,
-            backgroundColor: 0xAAAAAA
+            backgroundColor: 0xff55ff
         });
 
         document.querySelector('.canvas-container')?.appendChild(this.app.view);
@@ -102,7 +102,7 @@ export class DrawController {
         });
 
 
-        this.app.loader.add('../wwwroot/font/ps2p/14xml/ps2p-14.fnt');
+        this.app.loader.add('../wwwroot/font/ps2p/ps2p-14-xml-black-text-with-alpha5offset1.fnt');
 
         this.viewport = new Viewport({
             screenHeight: this.draw.screenContainerSize.height,
@@ -175,7 +175,6 @@ export class DrawController {
                         {
                             fontName: "Press Start 2P",
                             align: 'right',
-                            tint: 0x008000
                         });
                     bitmapText.x = x * this.draw.fontCharSizeWidth;
                     bitmapText.y = y * this.draw.fontCharSizeHeight;

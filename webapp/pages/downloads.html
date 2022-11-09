@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Home | RasterModeler - Yet another entity relationship modeler</title>
+    <title>Downloads | RasterModeler - Yet another entity relationship modeler</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="description" content="RasterModeler, A text based entity relation modeler">
     <meta name="keywords" content="RasterModeler,ASCII,free,modeler,entity,relation,ERD,text">
@@ -20,9 +20,7 @@
     <!-- header: end -->
 
     
-    <!-- content of page: begin -->
-    {% include "content/home.html" %}
-    <!-- content of page: end -->
+    In development
 
 	<!-- footer: begin -->
     {% include "partial/footer.html" %}
@@ -37,7 +35,7 @@
     let data = page.innerHTML;
 
 
-    let result = nunjucks.renderString(data, { active_nav: "home" });
+    let result = nunjucks.renderString(data, { active_nav: "downloads" });
     page.innerHTML = result;
     page.style.display = "block";
 </script>

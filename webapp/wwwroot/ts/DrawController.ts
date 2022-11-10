@@ -78,7 +78,7 @@ export class DrawController {
         this.app = new PIXI.Application({
             width: this.draw.screenContainerSize.width,
             height: this.draw.screenContainerSize.height,
-            backgroundColor: 0xff55ff
+            backgroundColor: 0xe6e6e6
         });
 
         document.querySelector('.canvas-container')?.appendChild(this.app.view);
@@ -102,7 +102,7 @@ export class DrawController {
         });
 
 
-        this.app.loader.add('../wwwroot/font/ps2p/ps2p-14-xml-black-text-with-alpha5offset1.fnt');
+        this.app.loader.add('../wwwroot/font/ps2p/consolas-14-xml-white-text-with-alpha-padding0-spacing1.fnt');
 
         this.viewport = new Viewport({
             screenHeight: this.draw.screenContainerSize.height,
@@ -173,8 +173,9 @@ export class DrawController {
                 if (isForceScreenReset) {
                     let bitmapText = new PIXI.BitmapText(tile,
                         {
-                            fontName: "Press Start 2P",
+                            fontName: "Consolas",
                             align: 'right',
+                            tint: 0x008000
                         });
                     bitmapText.x = x * this.draw.fontCharSizeWidth;
                     bitmapText.y = y * this.draw.fontCharSizeHeight;
@@ -192,28 +193,65 @@ export class DrawController {
 
     setWorldTable(table: Table) {
         let worldCharGridRect = table.getCornerRect();
-        let headIndex = 0;
+        for (let x = worldCharGridRect.x; x <= worldCharGridRect.right; x++) {
+            for (let y = worldCharGridRect.y; y <= worldCharGridRect.bottom; y++) {
+                this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)] = ' ';
+            }
+        }
         let firstColumnWidth = table.getColumnWidths()[0];
         let secondColumnWidth = table.getColumnWidths()[1];
         let thirdColumnWidth = table.getColumnWidths()[2];
-        this.paintWorld9PatchSafe(new Rectangle(worldCharGridRect.x, worldCharGridRect.y, worldCharGridRect.width, 2));
-        this.paintWorld9PatchSafe(new Rectangle(worldCharGridRect.x, worldCharGridRect.y + 2, firstColumnWidth, worldCharGridRect.height - 2));
-        this.paintWorld9PatchSafe(new Rectangle(worldCharGridRect.x + firstColumnWidth, worldCharGridRect.y + 2, secondColumnWidth, worldCharGridRect.height - 2));
-        this.paintWorld9PatchSafe(new Rectangle(worldCharGridRect.x + firstColumnWidth + secondColumnWidth, worldCharGridRect.y + 2, thirdColumnWidth, worldCharGridRect.height - 2));
-        for (let x = worldCharGridRect.x; x <= worldCharGridRect.right; x++) {
-            for (let y = worldCharGridRect.y; y <= worldCharGridRect.bottom; y++) {
-                if (worldCharGridRect.y + 1 === y && x < worldCharGridRect.right && x > worldCharGridRect.left) {
-                    let tile = table.head[headIndex] ?? ' ';
-                    headIndex++;
-                    this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)] = tile;
-                }
-            }    
+        let rectHead = new Rectangle(worldCharGridRect.x, worldCharGridRect.y, worldCharGridRect.width, 2);
+        let rectNameRow = new Rectangle(worldCharGridRect.x, worldCharGridRect.y + 2, firstColumnWidth, worldCharGridRect.height - 2);
+        let rectTypeRow = new Rectangle(worldCharGridRect.x + firstColumnWidth, worldCharGridRect.y + 2, secondColumnWidth, worldCharGridRect.height - 2);
+        let rectAttributeRow = new Rectangle(worldCharGridRect.x + firstColumnWidth + secondColumnWidth, worldCharGridRect.y + 2, thirdColumnWidth, worldCharGridRect.height - 2);
+        if (table.head === "customers") console.log("worldCharGridRect: ", worldCharGridRect);
+        let parts = ['+', '-', '+', '|', 'X', '|', '+', '-', '+'];
+        this.paintWorld9PatchSafe(rectHead, parts);
+        this.paintWorld9PatchSafe(rectNameRow, parts);
+        this.paintWorld9PatchSafe(rectTypeRow, parts);
+        this.paintWorld9PatchSafe(rectAttributeRow, parts);
+        let rectHeadInner = new Rectangle(rectHead.left + 2, rectHead.top + 1, rectHead.width - 4, rectHead.height - 2);
+        for (let x = rectHeadInner.x; x <= rectHeadInner.right; x++) {
+            for (let y = rectHeadInner.y; y <= rectHeadInner.bottom; y++) {
+                let tile = table.head[x - rectHeadInner.x] ?? ' ';
+                this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)] = tile;
+            }
+        }
+        let rectNameRowInner = new Rectangle(rectNameRow.left + 2, rectNameRow.top + 1, rectNameRow.width - 4, rectNameRow.height - 2)
+        if (table.head === "customers") console.log("rectNameRowInner: ", rectNameRowInner);
+        for (let x = rectNameRowInner.x; x <= rectNameRowInner.right; x++) {
+            for (let y = rectNameRowInner.y; y <= rectNameRowInner.bottom; y++) {
+                let row = table.tableRows[y - rectNameRowInner.y];
+                let tile = row.name[x - rectNameRowInner.x] ?? ' ';
+                this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)] = tile;
+                
+            }
+        }
+        let rectTypeRowInner = new Rectangle(rectTypeRow.left + 2, rectTypeRow.top + 1, rectTypeRow.width - 4, rectTypeRow.height - 2);
+        if (table.head === "customers") console.log("rectTypeRowInner: ", rectTypeRowInner);
+        for (let x = rectTypeRowInner.x; x <= rectTypeRowInner.right; x++) {
+            for (let y = rectTypeRowInner.y; y <= rectTypeRowInner.bottom; y++) {
+                let row = table.tableRows[y - rectTypeRowInner.y];
+                let tile = row.datatype[x - rectTypeRowInner.x] ?? ' ';
+                this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)] = tile;
+                
+            }
+        }
+        let rectSpecialRowInner = new Rectangle(rectAttributeRow.left + 2, rectAttributeRow.top + 1, rectAttributeRow.width - 4, rectAttributeRow.height - 2);
+        for (let x = rectSpecialRowInner.x; x <= rectSpecialRowInner.right; x++) {
+            for (let y = rectSpecialRowInner.y; y <= rectSpecialRowInner.bottom; y++) {
+                let row = table.tableRows[y - rectSpecialRowInner.y];
+                let tile = row.attributes[x - rectSpecialRowInner.x] ?? ' ';
+                this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)] = tile;
+                
+            }
         }
     }
 
     
-    paintWorld9PatchSafe(rect: Rectangle) {
-        let [tl, t, tr, ml, mr, bl, b, br] = ['+', '-', '+', '|', '|', '+', '-', '+'];  // skip middle
+    paintWorld9PatchSafe(rect: Rectangle, parts: string[]) {
+        let [tl, t, tr, ml, _, mr, bl, b, br] = parts;  // skip middle
         let paintWorldPointToScreenSafe = (x: number, y: number, char: string) => {
             if (! this.getWorldCharGrid().contains(x, y)) { return; }
             this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)] = char;

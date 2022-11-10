@@ -5,7 +5,7 @@ import { History } from "../commands/History";
 export class Draw {
     history = new History();
     worldDrawArea: string[] = [];
-    fontCharSizeWidth = 14;
+    fontCharSizeWidth = 7;
     fontCharSizeHeight = 14;
     zoomOut = 3;
     zoomIn = 2;

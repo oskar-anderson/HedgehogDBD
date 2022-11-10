@@ -42,7 +42,7 @@ export class Parser {
                         && ["-", "+"].includes(board[y * width + x + a]); 
                         a++) {
                         if (x + a + 1 < width && board[y * width + x + a + 1] === " ") {
-                            possibleTable.rect.width = a + 2;
+                            possibleTable.rect.width = a + 1;
                             break;
                         }
                     }
@@ -52,7 +52,7 @@ export class Parser {
                         && ["|", "+"].includes(board[(y + a) * width + x]); 
                         a++) {
                         if (y + a + 1 < height && board[(y + a + 1) * width + x] === " ") {
-                            possibleTable.rect.height = a + 2;
+                            possibleTable.rect.height = a + 1;
                             break;
                         }
                     }
@@ -69,7 +69,7 @@ export class Parser {
                 (table.rect.y + 1) * width + table.rect.right - 2)
                 .join("").trim();
             table.head = tableSpec.split(":")[0];
-            for (let cy = table.rect.y + 3; cy < table.rect.bottom - 2; cy++) {
+            for (let cy = table.rect.y + 3; cy < table.rect.bottom - 1; cy++) {
                 let row = board.slice(
                     (cy) * width + table.rect.left + 1, 
                     (cy) * width + table.rect.right - 2)

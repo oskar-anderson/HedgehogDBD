@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 import { Rectangle } from "pixi.js";
-import { Table } from "./model/Table";
+import { Table } from "../model/Table";
 import { Viewport } from "pixi-viewport";
 
 export class Minimap {

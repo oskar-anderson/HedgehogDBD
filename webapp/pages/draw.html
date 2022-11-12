@@ -193,23 +193,15 @@
     </div>
 </body>
 <script type="module" >
-    import * as ModuleDrawController from "../wwwroot/js-src/DrawController.js";
+    import * as ModuleProgramm from "../wwwroot/js-src/Programm.js";
     import * as ModuleSchemaTest from "../wwwroot/js-src/SchemaTest.js";
     import * as ModuleParser from "../wwwroot/js-src/Parser.js";
 
-    let height = 40;
-    let width = 100;
     let schema = ModuleSchemaTest.SchemaTest.schema1;
     let tables = new ModuleParser.Parser().parse(schema);
     console.log(tables);
 
-    let draw = new ModuleDrawController.DrawController();
-    await draw.init(1080, 720, tables);
-
-    document.querySelector('#getInfo').addEventListener('click', () => {
-        console.log(draw.viewport.lastViewport.scaleX);
-        draw.render(true);
-    })
+    let draw = ModuleProgramm.Programm.main(tables);
 
     document.querySelectorAll('.tool-select').forEach(
         x => x.addEventListener('click', () => {

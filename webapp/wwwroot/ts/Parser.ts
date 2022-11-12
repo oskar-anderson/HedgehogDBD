@@ -1,4 +1,4 @@
-import { Rectangle } from "pixi.js";
+import { Point, Rectangle } from "pixi.js";
 import { Table } from "./model/Table";
 import { TableRow } from "./model/TableRow";
 
@@ -45,7 +45,7 @@ export class Parser {
                             possibleTable.rect.width = a + 1;
                             break;
                         }
-                    }
+                    }possibleTable.rect
                     for (let a = 0; 
                         possibleTable.rect.width != 0 
                         && a < height - y
@@ -77,6 +77,16 @@ export class Parser {
                 let columns = row.split("|").map(function(item) { return item.trim(); });
                 let attributeList = columns[2].split(',').map(x => x.trim());
                 table.tableRows.push(new TableRow(columns[0], columns[1], attributeList));
+            }
+        }
+
+        for (let table of tables) {
+            if (table.head !== "customers") continue;
+            let rectAsPoints = [];
+            for (let y = table.rect.y; y < table.rect.bottom; y++) {
+                for (let x = table.rect.x; x < table.rect.right; x++) {
+                    rectAsPoints.push(new Point(x, y));
+                }
             }
         }
 

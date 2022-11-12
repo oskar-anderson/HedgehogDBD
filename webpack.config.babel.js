@@ -1,18 +1,11 @@
 const path = require('path');
-const glob = require('glob');
 
-const SrcFilePaths = glob.sync('./webapp/wwwroot/ts/**/*.ts')
-const ClassNameToSrcFilePath = SrcFilePaths.reduce(
-    function(obj, el){
-        obj[path.parse(el).name] = el;
-        return obj
-    }, {}
-    )
-
-console.log("ts to js mapping...");
-console.log(ClassNameToSrcFilePath);
 module.exports = {
-    entry: ClassNameToSrcFilePath,
+    entry: {
+        Parser: './webapp/wwwroot/ts/Parser.ts',
+        SchemaTest: './webapp/wwwroot/ts/SchemaTest.ts',
+        Programm: './webapp/wwwroot/ts/Programm.ts'
+    },
     target: "web",
     mode: 'development',
     devtool: 'inline-source-map',

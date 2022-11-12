@@ -5,21 +5,19 @@ import { History } from "../commands/History";
 export class Draw {
     history = new History();
     worldDrawArea: string[] = [];
-    fontCharSizeWidth = 7;
-    fontCharSizeHeight = 14;
-    zoomOut = 3;
-    zoomIn = 2;
+    static fontCharSizeWidth = 7;
+    static fontCharSizeHeight = 14;
+    static zoomOut = 3;
+    static zoomIn = 2;
     tables: Table[] = [];
-    screenContainerSize: Rectangle = new Rectangle()
     activeTool: string = "pan";
     
     constructor() {
 
     }
 
-    init(tables: Table[], screenContainerSize: Rectangle) {
+    init(tables: Table[]) {
         this.tables = tables;
-        this.screenContainerSize = screenContainerSize;
     }
 
     getVisibleTables() {

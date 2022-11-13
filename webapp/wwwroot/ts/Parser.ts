@@ -1,13 +1,16 @@
 import { Point, Rectangle } from "pixi.js";
+import { Relation } from "./model/Relation";
+import { Schema } from "./model/Schema";
 import { Table } from "./model/Table";
 import { TableRow } from "./model/TableRow";
+import { MyRect } from "./MyRect";
 
 export class Parser {
     constructor() {
 
     }
 
-    parse(schema: string) {
+    parse(schema: string): Schema {
         let rows = schema.split('\n');
         let width = Math.max(...(rows.map(el => el.length)));
         let height = rows.length;
@@ -80,17 +83,82 @@ export class Parser {
             }
         }
 
+        let relations: Relation[] = [];
         for (let table of tables) {
-            if (table.head !== "customers") continue;
-            let rectAsPoints = [];
-            for (let y = table.rect.y; y < table.rect.bottom; y++) {
-                for (let x = table.rect.x; x < table.rect.right; x++) {
-                    rectAsPoints.push(new Point(x, y));
+            let outer = (new MyRect(table.rect.x - 1, table.rect.y - 1, table.rect.width + 2, table.rect.height + 2)).ToPoints();
+            let edgePoints = outer.filter(point => ! table.rect.contains(point.x, point.y))
+            for (const edgePoint of edgePoints) {
+                if (! new Rectangle(0, 0, width, height).contains(edgePoint.x, edgePoint.y)) continue
+                let edgeChar = board[edgePoint.y * width + edgePoint.x];
+                if (! ["!", "?", "m"].includes(edgeChar)) continue;
+                if (relations.some(relation => 
+                    relation.points[relation.points.length - 1].point.x === edgePoint.x &&
+                    relation.points[relation.points.length - 1].point.y === edgePoint.y
+                )) { continue; }
+
+                let getNext = (currentPoint: Point, direction: string) => {
+                    switch (direction) {
+                        case "right":
+                            return new Point(currentPoint.x + 1, currentPoint.y);
+                        case "left":
+                            return new Point(currentPoint.x - 1, currentPoint.y);
+                        case "down":
+                            return new Point(currentPoint.x, currentPoint.y + 1);
+                        case "up":
+                            return new Point(currentPoint.x, currentPoint.y - 1);
+                        default:
+                            throw Error(`Unknown direction ${direction}`);
+                    }
+                };
+                let direction = "";
+                direction += table.rect.contains(edgePoint.x - 1, edgePoint.y) ? "right" : "";
+                direction += table.rect.contains(edgePoint.x + 1, edgePoint.y) ? "left" : "";
+                direction += table.rect.contains(edgePoint.x, edgePoint.y - 1) ? "down" : "";
+                direction += table.rect.contains(edgePoint.x, edgePoint.y + 1) ? "up" : "";
+                // console.log(edgePoint, edgeChar, direction);
+                let pointToCheck = getNext(edgePoint, direction)
+                
+                let points = [{ point: edgePoint, char: edgeChar}];
+                let targetTable = null;
+                let isRelationBuildingDone = false;
+                while (! isRelationBuildingDone) {
+                    let char = board[pointToCheck.y * width + pointToCheck.x]
+                    points.push({ point: pointToCheck, char: char});
+                    switch (char) {
+                        case ".":
+                            pointToCheck = getNext(pointToCheck, direction);
+                            continue;
+                        case "/":
+                            direction = { "right": "up", "down": "left", "left": "down", "up": "right" }[direction]!
+                            pointToCheck = getNext(pointToCheck, direction);
+                            continue;
+                        case "\\":
+                            direction = { "right": "down", "down": "right", "left": "up", "up": "left" }[direction]!
+                            pointToCheck = getNext(pointToCheck, direction);
+                            continue;
+                        case "!":
+                        case "?":
+                        case "m":
+                            pointToCheck = getNext(pointToCheck, direction);
+                            for (const table of tables) {
+                                if (table.rect.contains(pointToCheck.x, pointToCheck.y)) {
+                                    targetTable = table;
+                                }
+                            }
+                            if (targetTable === null) throw Error(`Cannot parse input! No table at: '${pointToCheck}', symbol: '${char}'`);
+                            isRelationBuildingDone = true;
+                            break;
+                        default:
+                            console.error(points)
+                            throw Error(`Cannot parse input! Unknown symbol at: '${pointToCheck}', symbol: '${char}'`)
+                    }
                 }
+                let relation = new Relation(points, table, targetTable!);
+                relations.push(relation);
             }
         }
 
 
-        return tables;
+        return new Schema(tables, relations);
     }
 }

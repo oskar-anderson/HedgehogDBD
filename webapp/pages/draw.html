@@ -197,11 +197,10 @@
     import * as ModuleSchemaTest from "../wwwroot/js-src/SchemaTest.js";
     import * as ModuleParser from "../wwwroot/js-src/Parser.js";
 
-    let schema = ModuleSchemaTest.SchemaTest.schema1;
-    let tables = new ModuleParser.Parser().parse(schema);
-    console.log(tables);
+    let schema = await ModuleSchemaTest.SchemaTest.parseTest1();
+    console.log(schema);
 
-    let draw = ModuleProgramm.Programm.main(tables);
+    let draw = ModuleProgramm.Programm.main(schema);
 
     document.querySelectorAll('.tool-select').forEach(
         x => x.addEventListener('click', () => {

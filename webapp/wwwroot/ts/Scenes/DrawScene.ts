@@ -7,6 +7,8 @@ import * as PIXI from "pixi.js";
 import { BottomBar } from "../components/BottomBar";
 import { Table } from "../model/Table";
 import { CommandMoveTableRelative } from "../commands/appCommands/CommandMoveTableRelative";
+import { Schema } from "../model/Schema";
+import { Relation } from "../model/Relation";
 
 export class DrawScene extends Container implements IScene {
 
@@ -17,11 +19,10 @@ export class DrawScene extends Container implements IScene {
     mousemoveListeners: ((x: number, y: number) => void)[] = [];
     
     
-    constructor(tables: Table[]) {
+    constructor(schema: Schema) {
         super();
 
-        this.draw = new Draw();
-        this.draw.init(tables);
+        this.draw = new Draw(schema);
 
         document.querySelector('#undo')!.addEventListener('click', () => {
             console.log("undo event");
@@ -81,9 +82,9 @@ export class DrawScene extends Container implements IScene {
             }
         });
 
-        this.bottomBar = new BottomBar();
+        this.bottomBar = new BottomBar(this.getScreen());
         this.mousemoveListeners.push((x, y) => {
-            this.bottomBar.pointermove(x, y);
+            this.bottomBar.pointermove(x, y, this.getScreen());
         });
         this.addChild(this.bottomBar.getContainer());
         this.renderScreen(true);
@@ -193,6 +194,9 @@ export class DrawScene extends Container implements IScene {
         for (const table of tables) {
             this.setWorldTable(table);
         }
+        for (const relation of this.draw.schema.relations) {
+            this.setWorldRelation(relation);
+        }
         this.minimap.update(tables, this.getScreen());
 
         let screenCharGrid = this.getWorldCharGrid();
@@ -224,6 +228,12 @@ export class DrawScene extends Container implements IScene {
 
     getWorldPointCanvasIndex(x: number, y: number) {
         return y * this.getWorldCharGrid().width + x;
+    }
+
+    setWorldRelation(relation: Relation) {
+        for (const point of relation.points) {
+            this.draw.worldDrawArea[point.point.y * this.getWorldCharGrid().width + point.point.x] = point.char;
+        }
     }
 
     setWorldTable(table: Table) {
@@ -345,7 +355,7 @@ export class DrawScene extends Container implements IScene {
                 let charGridX = Math.floor(x / Draw.fontCharSizeWidth);
                 let charGridY = Math.floor(y / Draw.fontCharSizeHeight);
                 let hover: Table | null = null;
-                for (let table of this.draw.tables) {
+                for (let table of this.draw.schema.tables) {
                     if (table.getContainingRect().contains(charGridX, charGridY)) {
                         let tablePivotX = table.rect.x - charGridX;
                         let tablePivotY = table.rect.y - charGridY;
@@ -361,7 +371,7 @@ export class DrawScene extends Container implements IScene {
                     }
                 }
                 if (hover !== null) {
-                    this.draw.tables.push(hover);
+                    this.draw.schema.tables.push(hover);
                 }
             })
     
@@ -373,7 +383,7 @@ export class DrawScene extends Container implements IScene {
                 let isGoodPlaceForTableFunc = (hover: Table | null) => {
                     if (hover != null) {
                         let isGoodPlacement = true;
-                        for (let table of this.draw.tables.filter(x => !x.isHoverSource && !x.isHoverTarget)) {
+                        for (let table of this.draw.schema.tables.filter(x => !x.isHoverSource && !x.isHoverTarget)) {
                             if (table.rect.intersects(hover.rect)) {
                                 isGoodPlacement = false;
                             }
@@ -383,12 +393,12 @@ export class DrawScene extends Container implements IScene {
                     }
                     return false;
                 }
-                let hover = this.draw.tables.find(x => x.isHoverTarget) ?? null;
-                this.draw.tables = this.draw.tables.filter(x => !x.isHoverTarget);
+                let hover = this.draw.schema.tables.find(x => x.isHoverTarget) ?? null;
+                this.draw.schema.tables = this.draw.schema.tables.filter(x => !x.isHoverTarget);
                 let isGoodPlaceForTable = isGoodPlaceForTableFunc(hover)
                 console.log(`isGoodPlaceForTable: ${isGoodPlaceForTable}`);
                 if (isGoodPlaceForTable) {
-                    let invisible = this.draw.tables.find(x => x.isHoverSource)!;
+                    let invisible = this.draw.schema.tables.find(x => x.isHoverSource)!;
                     let xDiff = hover!.rect.x - invisible.rect.x;
                     let yDiff = hover!.rect.y - invisible.rect.y;
                     
@@ -401,7 +411,7 @@ export class DrawScene extends Container implements IScene {
                     );
                     invisible.isHoverSource = false;
                 } else {
-                    this.draw.tables.forEach(x => x.isHoverSource = false);
+                    this.draw.schema.tables.forEach(x => x.isHoverSource = false);
                 }
     
                 this.renderScreen(false);

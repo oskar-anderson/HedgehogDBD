@@ -1,22 +1,24 @@
 import { Point } from "pixi.js";
 import { Table } from "./Table";
 
-export class relation {
+export class Relation {
 
-    points = [];
+    points: { point: Point, char: string }[];
     target: Table;
     source: Table;
-    targetConnectionPoint: Point;
-    sourceConnectionPoint: Point;
 
-    constructor(source: Table, target: Table, sourceConnectionPoint: Point, targetConnectionPoint: Point) {
+    constructor(points: { point: Point, char: string }[], source: Table, target: Table) {
+        this.points = points;
         this.source = source;
         this.target = target;
-        this.sourceConnectionPoint = sourceConnectionPoint;
-        this.targetConnectionPoint = targetConnectionPoint;
     }
 
+    getTargetConnectionPoint() {
+        return this.points[0]
+    }
 
-
+    getSourceConnectionPoint() {
+        return this.points[this.points.length - 1]
+    }
 
 }

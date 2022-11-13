@@ -4,6 +4,7 @@
   },
   "type": "module",
   "devDependencies": {
+    "@types/node": "^18.11.9",
     "babel-register": "^6.26.0",
     "glob": "^8.0.3",
     "ts-loader": "^9.4.1",

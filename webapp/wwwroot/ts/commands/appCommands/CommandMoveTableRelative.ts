@@ -17,14 +17,14 @@ export class CommandMoveTableRelative implements ICommand<CommandMoveTableRelati
 
     redo() {
         if (! CommandMoveTableRelativeArgs.isObjectCompatible(this.args)) { throw Error("Unexpected args"); };
-        let table = this.context.tables.find(x => x.id === this.args.id)!;
+        let table = this.context.schema.tables.find(x => x.id === this.args.id)!;
         table.rect.x += this.args.x;
         table.rect.y += this.args.y;
     }
 
     undo()  {
         if (! CommandMoveTableRelativeArgs.isObjectCompatible(this.args)) { throw Error("Unexpected args"); };
-        let table = this.context.tables.find(x => x.id === this.args.id)!;
+        let table = this.context.schema.tables.find(x => x.id === this.args.id)!;
         table.rect.x -= this.args.x;
         table.rect.y -= this.args.y;
     }

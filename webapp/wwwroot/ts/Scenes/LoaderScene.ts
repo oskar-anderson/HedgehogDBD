@@ -2,6 +2,7 @@ import { Container, Graphics, Loader } from "pixi.js";
 import { IScene, Manager } from "../Manager";
 import { DrawScene } from "./DrawScene";
 import { Table } from "../model/Table";
+import { Schema } from "../model/Schema";
 
 export class LoaderScene extends Container implements IScene {
 
@@ -10,11 +11,11 @@ export class LoaderScene extends Container implements IScene {
     private loaderBarBorded: Graphics;
     private loaderBarFill: Graphics;
 
-    private tables: Table[] = [];
+    private schema: Schema;
 
-    constructor(tables: Table[]) {
+    constructor(schema: Schema) {
         super();
-        this.tables = tables;
+        this.schema = schema;
 
         const loaderBarWidth = Manager.width * 0.8;
 
@@ -42,7 +43,7 @@ export class LoaderScene extends Container implements IScene {
             this.loaderBarFill.scale.x = progressRatio;
         });
         Loader.shared.onComplete.once((loader) => { 
-            Manager.changeScene(new DrawScene(this.tables));
+            Manager.changeScene(new DrawScene(this.schema));
         });
 
         Loader.shared.load();

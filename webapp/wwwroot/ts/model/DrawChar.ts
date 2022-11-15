@@ -1,8 +1,9 @@
 export class DrawChar {
     char: string = " ";
-    color: string = "ffffff";
+    color: number = 0x008000;
 
-    constructor() {
-        
+    constructor(char: string, color: number) {
+        this.char = char;
+        this.color = color;
     }
 }

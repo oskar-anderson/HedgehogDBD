@@ -6,7 +6,7 @@ export class Table {
     rect: Rectangle;
     head: string;
     tableRows: TableRow[];
-    color: string = "";
+    color: number = 0x008000;
     isHoverSource = false;
     isHoverTarget = false;
     

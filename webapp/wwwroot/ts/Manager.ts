@@ -49,7 +49,7 @@ export class Manager {
         if (Manager.currentScene) {
             Manager.app.stage.removeChild(Manager.currentScene);
             Manager.currentScene.destroy();
-            newScene.destroyHtmlUi();
+            Manager.currentScene.destroyHtmlUi();
         }
 
         // Add the new one

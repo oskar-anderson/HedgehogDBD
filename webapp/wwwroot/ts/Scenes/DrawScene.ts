@@ -9,6 +9,9 @@ import { Table } from "../model/Table";
 import { CommandMoveTableRelative } from "../commands/appCommands/CommandMoveTableRelative";
 import { Schema } from "../model/Schema";
 import { Relation } from "../model/Relation";
+import { DrawChar } from "../model/DrawChar";
+import { LoaderScene } from "./LoaderScene";
+import { TableScene } from "./TableScene";
 
 export class DrawScene extends Container implements IScene {
 
@@ -17,23 +20,21 @@ export class DrawScene extends Container implements IScene {
     draw: Draw;
     bottomBar: BottomBar;
     mousemoveListeners: ((x: number, y: number) => void)[] = [];
-    contectMenu: Sprite | null = null;
     
-    constructor(schema: Schema) {
+    constructor(draw: Draw) {
         super();
 
-        this.draw = new Draw(schema);
+        this.draw = draw;
 
         this.viewport = new Viewport({
             screenHeight: Manager.height,
             screenWidth:  Manager.width,
             worldHeight:  Manager.height * Draw.zoomOut,
             worldWidth:   Manager.width * Draw.zoomOut,
-
-            interaction: Manager.getInteractionManager()
         });
         this.addChild(this.viewport);
-        this.initViewport();
+        this.initViewport(this.draw.activeTool === "pan");
+        this.handleToolChange(this.draw.activeTool)
 
         this.minimap = new Minimap()
         this.minimap.init(
@@ -185,7 +186,7 @@ export class DrawScene extends Container implements IScene {
         let sb = [];
         for (let y = 0; y < charGridSize.height; y++) {
             for (let x = 0; x < charGridSize.width; x++) {
-                let letter = this.draw.worldDrawArea[y * charGridSize.width + x];
+                let letter = this.draw.worldDrawArea[y * charGridSize.width + x].char;
                 sb.push(letter);
             }
             sb.push("\n");
@@ -214,7 +215,7 @@ export class DrawScene extends Container implements IScene {
     }
 
     
-    initViewport(enableDrag: boolean = true) {
+    initViewport(enableDrag: boolean) {
         // activate plugins
         this.viewport
             .drag({ pressDrag: enableDrag }).clamp({ 
@@ -299,9 +300,18 @@ export class DrawScene extends Container implements IScene {
     
     renderScreen(isForceScreenReset = true) {
         let charGridSize = this.getWorldCharGrid();
-        this.draw.worldDrawArea = new Array(charGridSize.height * charGridSize.width).fill(' ');
+        for (let y = 0; y < charGridSize.height; y++) {
+            for (let x = 0; x < charGridSize.width; x++) {
+                this.draw.worldDrawArea[y * charGridSize.width + x] = new DrawChar(' ', 0x008000);
+            }
+        }
         let tables = this.draw.getVisibleTables();
+        console.log(JSON.parse(JSON.stringify(tables)));
         for (const table of tables) {
+            if (table.head.trim() === "order_items") {
+                console.log("order_items")
+                console.log(table)
+            }
             this.setWorldTable(table);
         }
         for (const relation of this.draw.schema.relations) {
@@ -319,17 +329,18 @@ export class DrawScene extends Container implements IScene {
                 // console.log(`x: ${x}, y: ${y}, index: ${y * charGridSize.width + x}`);
                 let tile = this.draw.worldDrawArea[y * worldCharGridSize.width + x];
                 if (isForceScreenReset) {
-                    let bitmapText = new PIXI.BitmapText(tile,
+                    let bitmapText = new PIXI.BitmapText(tile.char,
                         {
                             fontName: "Consolas",
                             align: 'right',
-                            tint: 0x008000
+                            tint: tile.color
                         });
                     bitmapText.x = x * Draw.fontCharSizeWidth;
                     bitmapText.y = y * Draw.fontCharSizeHeight;
                     this.viewport.addChild(bitmapText)
                 } else {
-                    (this.viewport.children[y * screenCharGrid.width + x] as PIXI.Text).text = tile;
+                    (this.viewport.children[y * screenCharGrid.width + x] as PIXI.Text).text = tile.char;
+                    (this.viewport.children[y * screenCharGrid.width + x] as PIXI.Text).tint = tile.color;
                 }
             }
         }
@@ -342,11 +353,17 @@ export class DrawScene extends Container implements IScene {
 
     setWorldRelation(relation: Relation) {
         for (const point of relation.points) {
-            this.draw.worldDrawArea[point.point.y * this.getWorldCharGrid().width + point.point.x] = point.char;
+            this.draw.worldDrawArea[point.point.y * this.getWorldCharGrid().width + point.point.x].char = point.char;
         }
     }
 
     setWorldTable(table: Table) {
+        for (let x = table.rect.x; x < table.rect.right; x++) {
+            for (let y = table.rect.y; y < table.rect.bottom; y++) {
+                this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].char = ' ';
+                this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].color = this.draw.selectedTable?.id === table.id ? 0x800080 : 0x008000;
+            }
+        }
         let worldCharGridRect = table.getCornerRect();
         let firstColumnWidth = table.getColumnWidths()[0];
         let secondColumnWidth = table.getColumnWidths()[1];
@@ -364,7 +381,7 @@ export class DrawScene extends Container implements IScene {
         for (let x = rectHeadInner.x; x <= rectHeadInner.right; x++) {
             for (let y = rectHeadInner.y; y <= rectHeadInner.bottom; y++) {
                 let tile = table.head[x - rectHeadInner.x] ?? ' ';
-                this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)] = tile;
+                this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].char = tile;
             }
         }
         let rectNameRowInner = new Rectangle(rectNameRow.left + 2, rectNameRow.top + 1, rectNameRow.width - 4, rectNameRow.height - 2)
@@ -372,8 +389,7 @@ export class DrawScene extends Container implements IScene {
             for (let y = rectNameRowInner.y; y <= rectNameRowInner.bottom; y++) {
                 let row = table.tableRows[y - rectNameRowInner.y];
                 let tile = row.name[x - rectNameRowInner.x] ?? ' ';
-                this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)] = tile;
-                
+                this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].char = tile;
             }
         }
         let rectTypeRowInner = new Rectangle(rectTypeRow.left + 2, rectTypeRow.top + 1, rectTypeRow.width - 4, rectTypeRow.height - 2);
@@ -381,8 +397,7 @@ export class DrawScene extends Container implements IScene {
             for (let y = rectTypeRowInner.y; y <= rectTypeRowInner.bottom; y++) {
                 let row = table.tableRows[y - rectTypeRowInner.y];
                 let tile = row.datatype[x - rectTypeRowInner.x] ?? ' ';
-                this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)] = tile;
-                
+                this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].char = tile;
             }
         }
         let rectSpecialRowInner = new Rectangle(rectAttributeRow.left + 2, rectAttributeRow.top + 1, rectAttributeRow.width - 4, rectAttributeRow.height - 2);
@@ -390,8 +405,7 @@ export class DrawScene extends Container implements IScene {
             for (let y = rectSpecialRowInner.y; y <= rectSpecialRowInner.bottom; y++) {
                 let row = table.tableRows[y - rectSpecialRowInner.y];
                 let tile = row.attributes.join(", ")[x - rectSpecialRowInner.x] ?? ' ';
-                this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)] = tile;
-                
+                this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].char = tile;
             }
         }
     }
@@ -401,7 +415,7 @@ export class DrawScene extends Container implements IScene {
         let [tl, t, tr, ml, _, mr, bl, b, br] = _9patch;  // skip middle
         let paintWorldPointToScreenSafe = (x: number, y: number, char: string) => {
             if (! this.getWorldCharGrid().contains(x, y)) { return; }
-            this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)] = char;
+            this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].char = char;
         }
         let paintWorldRectToScreenSafe = (rect: Rectangle, fillchar: string) => {
             for (let y = rect.y; y < rect.bottom; y++) {
@@ -424,6 +438,8 @@ export class DrawScene extends Container implements IScene {
     handleToolChange(toolname: string) {
         let previousTool = this.draw.activeTool;
         this.draw.activeTool = toolname;
+        console.log("previousTool", previousTool)
+        console.log("this.draw.activeTool", this.draw.activeTool)
 
         let resumeSelect = () => {
             let mouseMoveFunc = (e: PIXI.InteractionEvent, table: Table, tablePivotX: number, tablePivotY: number) => {
@@ -441,17 +457,8 @@ export class DrawScene extends Container implements IScene {
             };
     
             // pointerdown unlike mousedown captures right click as well
-            this.viewport.on('pointerdown', (e: PIXI.InteractionEvent) => {  // same as addEventListener except type can be specified inside parameter
+            this.viewport.on('mousedown', (e: PIXI.InteractionEvent) => {  // same as addEventListener except type can be specified inside parameter
                 console.log("mousedown");
-                console.log(e);
-                if (this.contectMenu) {
-                    this.removeChild(this.contectMenu);
-                }
-                console.log(JSON.stringify(e.data));
-                // @ts-ignore
-                console.log(JSON.stringify(e.data.originalEvent.clientY));
-                console.log(this.getScreen());
-                console.log(this.viewport.scale);
                 let x = this.getScreen().x + e.data.global.x / this.viewport.scale.x;
                 let y = this.getScreen().y + e.data.global.y / this.viewport.scale.y;
                 let charGridX = Math.floor(x / Draw.fontCharSizeWidth);
@@ -459,14 +466,10 @@ export class DrawScene extends Container implements IScene {
                 let hover: Table | null = null;
                 for (let table of this.draw.schema.tables) {
                     if (table.getContainingRect().contains(charGridX, charGridY)) {
-                        if (e.data.button === 2) {
-                            console.log("context menu");
-
-                            return;
-                        }
                         let tablePivotX = table.rect.x - charGridX;
                         let tablePivotY = table.rect.y - charGridY;
                         hover = table.copy();
+                        this.draw.selectedTable = hover;
                         hover.isHoverTarget = true;
                         table.isHoverSource = true;
                         this.viewport.on('mousemove', (e) => mouseMoveFunc(e, hover!, tablePivotX, tablePivotY));
@@ -479,6 +482,7 @@ export class DrawScene extends Container implements IScene {
                 }
                 if (hover !== null) {
                     this.draw.schema.tables.push(hover);
+                    this.renderScreen(false);
                 }
             })
     
@@ -514,6 +518,7 @@ export class DrawScene extends Container implements IScene {
                         })
                     );
                     invisible.isHoverSource = false;
+                    this.draw.selectedTable = invisible;
                 } else {
                     this.draw.schema.tables.forEach(x => x.isHoverSource = false);
                 }
@@ -521,6 +526,22 @@ export class DrawScene extends Container implements IScene {
                 this.renderScreen(false);
                 this.viewport.removeAllListeners('mousemove');
                 this.viewport.removeAllListeners('mouseout');  
+            })
+        }
+
+        let resumeEditTable = () => {
+            this.viewport.on('mousedown', (e: PIXI.InteractionEvent) => {  // same as addEventListener except type can be specified inside parameter
+                console.log("mousedown");
+                let x = this.getScreen().x + e.data.global.x / this.viewport.scale.x;
+                let y = this.getScreen().y + e.data.global.y / this.viewport.scale.y;
+                let charGridX = Math.floor(x / Draw.fontCharSizeWidth);
+                let charGridY = Math.floor(y / Draw.fontCharSizeHeight);
+                for (let table of this.draw.schema.tables) {
+                    if (table.getContainingRect().contains(charGridX, charGridY)) {
+                        this.draw.selectedTable = table;
+                        Manager.changeScene(new TableScene(this.draw))
+                    }
+                }
             })
         }
         
@@ -531,15 +552,13 @@ export class DrawScene extends Container implements IScene {
                 break;
             case "select":
                 // pauseSelect
-                this.viewport.removeAllListeners('pointerdown');
+                this.viewport.removeAllListeners('mousedown');
                 this.viewport.removeAllListeners('mouseup');
                 this.viewport.removeAllListeners('mousemove');
                 this.viewport.removeAllListeners('mouseout');
-                if (this.contectMenu) {
-                    this.removeChild(this.contectMenu);
-                }
                 break;
             case "editTable":
+                this.viewport.removeAllListeners('mousedown');
                 break;
         }
         
@@ -552,7 +571,7 @@ export class DrawScene extends Container implements IScene {
                 resumeSelect()
                 break;
             case "editTable":
-
+                resumeEditTable();
                 break;
         }
     }

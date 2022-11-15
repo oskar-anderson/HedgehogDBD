@@ -68,6 +68,7 @@
 <body>
     <div class="top-menu-action-container"></div>
     <div class="tool-select-container"></div>
+    <div class="table-edit-container"></div>
     <div class="canvas-container">
 
     </div>
@@ -77,10 +78,10 @@
     import * as ModuleSchemaTest from "../wwwroot/js-src/SchemaTest.js";
     import * as ModuleParser from "../wwwroot/js-src/Parser.js";
 
-    let schema = await ModuleSchemaTest.SchemaTest.parseTest1();
-    console.log(schema);
+    let draw = await ModuleSchemaTest.SchemaTest.parseTest1();
+    console.log(draw.schema);
 
-    let draw = ModuleProgramm.Programm.main(schema);
+    ModuleProgramm.Programm.main(draw);
 </script>
 
 

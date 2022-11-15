@@ -45,7 +45,6 @@ export class Minimap {
       }
     
     update(entities: Table[], screen: Rectangle) {
-        console.log(`minimap update`);
         this.container.removeChildren();
         this.background = this.initBackground();
         this.container.addChild(this.background);

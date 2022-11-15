@@ -1,4 +1,5 @@
 import { Point, Rectangle } from "pixi.js";
+import { Draw } from "./model/Draw";
 import { Relation } from "./model/Relation";
 import { Schema } from "./model/Schema";
 import { Table } from "./model/Table";
@@ -10,7 +11,7 @@ export class Parser {
 
     }
 
-    parse(schema: string): Schema {
+    parse(schema: string): Draw {
         let rows = schema.split('\n');
         let width = Math.max(...(rows.map(el => el.length)));
         let height = rows.length;
@@ -159,6 +160,6 @@ export class Parser {
         }
 
 
-        return new Schema(tables, relations);
+        return new Draw(new Schema(tables, relations));
     }
 }

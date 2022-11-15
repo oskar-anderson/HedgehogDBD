@@ -4,6 +4,7 @@
   },
   "type": "module",
   "devDependencies": {
+    "@types/bootstrap": "^5.2.6",
     "@types/node": "^18.11.9",
     "babel-register": "^6.26.0",
     "glob": "^8.0.3",
@@ -15,6 +16,7 @@
   "dependencies": {
     "@pixi/events": "^6.5.8",
     "@pixi/math-extras": "^6.5.8",
+    "bootstrap": "^5.2.2",
     "lodash": "^4.17.21",
     "pixi-viewport": "^4.36.0",
     "pixi.js": "^6.5.6"

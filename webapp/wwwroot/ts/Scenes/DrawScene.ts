@@ -1,5 +1,5 @@
 import { Viewport } from "pixi-viewport";
-import { Container, Graphics, InteractionEvent, Loader, Rectangle } from "pixi.js";
+import { BitmapText, Container, Graphics, InteractionEvent, Loader, Rectangle, Sprite } from "pixi.js";
 import { IScene, Manager } from "../Manager";
 import { Minimap } from "../components/Minimap";
 import { Draw } from "../model/Draw";
@@ -12,48 +12,19 @@ import { Relation } from "../model/Relation";
 
 export class DrawScene extends Container implements IScene {
 
+    // @ts-ignore
     viewport: Viewport;
     minimap: Minimap;
     draw: Draw;
     bottomBar: BottomBar;
     mousemoveListeners: ((x: number, y: number) => void)[] = [];
-    
+    contectMenu: Sprite | null = null;
     
     constructor(schema: Schema) {
         super();
 
         this.draw = new Draw(schema);
-
-        this.viewport = new Viewport({
-            screenHeight: Manager.height,
-            screenWidth:  Manager.width,
-            worldHeight:  Manager.height * Draw.zoomOut,
-            worldWidth:   Manager.width * Draw.zoomOut,
-
-            interaction: Manager.getInteractionManager()
-        });
-        this.addChild(this.viewport);
         this.initViewport();
-
-        this.minimap = new Minimap()
-        this.minimap.init(
-            this.getWorld().height, 
-            this.getWorld().width, 
-            Draw.fontCharSizeWidth, 
-            Draw.fontCharSizeHeight, 
-            new Rectangle(
-                Manager.width - 180 - 20,
-                20,
-                180,
-                120,
-            ),
-            (x: number, y: number) => { 
-                console.log("minimap navigation");
-                this.viewport.moveCenter(x, y);
-                this.minimap.update(this.draw.getVisibleTables(), this.getScreen()) 
-            }
-        );
-        this.addChild(this.minimap.container);
 
         this.interactive = true;
         this.on('mousemove', (e: InteractionEvent) => { 
@@ -68,7 +39,6 @@ export class DrawScene extends Container implements IScene {
             this.bottomBar.pointermove(x, y, this.getScreen());
         });
         this.addChild(this.bottomBar.getContainer());
-        this.renderScreen(true);
     }
 
     initHtmlUi(): void {
@@ -76,7 +46,8 @@ export class DrawScene extends Container implements IScene {
         <header style="width: 100%;">
             <div class="bar" style="display: flex;">
                 <button class="tool-select" data-tooltype="pan">Pan</button>
-                <button class="tool-select" data-tooltype="select">Select</button>
+                <button class="tool-select" data-tooltype="select">Move table</button>
+                <button class="tool-select" data-tooltype="editTable">Edit table</button>
                 <button class="tool-select" data-tooltype="newTable">New Table</button>
                 <button class="tool-select" data-tooltype="newRelation">New Relation</button>
             </div>
@@ -142,67 +113,7 @@ export class DrawScene extends Container implements IScene {
                     </li>
 
                     <hr>
-                    
-                    <!-- https://www.svgrepo.com/svg/313810/cut-solid -->
-                    <li>
-                        <svg width="24px" height="24px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M 19.65625 4.3125 C 18.882813 4.40625 18.195313 4.953125 17.96875 5.75 L 15.3125 15.0625 L 11.96875 16.03125 C 11.730469 14.335938 10.257813 13 8.5 13 C 6.578125 13 5 14.578125 5 16.5 C 5 18.421875 6.578125 20 8.5 20 C 9.789063 20 10.925781 19.269531 11.53125 18.21875 L 14.65625 17.34375 L 13.78125 20.46875 C 12.730469 21.074219 12 22.210938 12 23.5 C 12 25.421875 13.578125 27 15.5 27 C 17.421875 27 19 25.421875 19 23.5 C 19 21.742188 17.664063 20.269531 15.96875 20.03125 L 20.4375 4.375 C 20.171875 4.300781 19.914063 4.28125 19.65625 4.3125 Z M 27.625 11.5625 L 18.90625 14.03125 L 18.25 16.3125 L 26.25 14.03125 C 27.3125 13.726563 27.929688 12.625 27.625 11.5625 Z M 8.5 15 C 9.339844 15 10 15.660156 10 16.5 C 10 17.339844 9.339844 18 8.5 18 C 7.660156 18 7 17.339844 7 16.5 C 7 15.660156 7.660156 15 8.5 15 Z M 15.5 22 C 16.339844 22 17 22.660156 17 23.5 C 17 24.339844 16.339844 25 15.5 25 C 14.660156 25 14 24.339844 14 23.5 C 14 22.660156 14.660156 22 15.5 22 Z"/></svg>
-                        Cut
-                    </li>
-
-                    <li>
-                        <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21,8.94a1.31,1.31,0,0,0-.06-.27l0-.09a1.07,1.07,0,0,0-.19-.28h0l-6-6h0a1.07,1.07,0,0,0-.28-.19.32.32,0,0,0-.09,0A.88.88,0,0,0,14.05,2H10A3,3,0,0,0,7,5V6H6A3,3,0,0,0,3,9V19a3,3,0,0,0,3,3h8a3,3,0,0,0,3-3V18h1a3,3,0,0,0,3-3V9S21,9,21,8.94ZM15,5.41,17.59,8H16a1,1,0,0,1-1-1ZM15,19a1,1,0,0,1-1,1H6a1,1,0,0,1-1-1V9A1,1,0,0,1,6,8H7v7a3,3,0,0,0,3,3h5Zm4-4a1,1,0,0,1-1,1H10a1,1,0,0,1-1-1V5a1,1,0,0,1,1-1h3V7a3,3,0,0,0,3,3h3Z"/></svg>
-                        Copy
-                    </li>
-
-                    <!-- https://www.svgrepo.com/svg/352321/paste -->
-                    <li>
-                        <svg width="24" height="24" viewBox="-32 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M128 184c0-30.879 25.122-56 56-56h136V56c0-13.255-10.745-24-24-24h-80.61C204.306 12.89 183.637 0 160 0s-44.306 12.89-55.39 32H24C10.745 32 0 42.745 0 56v336c0 13.255 10.745 24 24 24h104V184zm32-144c13.255 0 24 10.745 24 24s-10.745 24-24 24-24-10.745-24-24 10.745-24 24-24zm184 248h104v200c0 13.255-10.745 24-24 24H184c-13.255 0-24-10.745-24-24V184c0-13.255 10.745-24 24-24h136v104c0 13.2 10.8 24 24 24zm104-38.059V256h-96v-96h6.059a24 24 0 0 1 16.97 7.029l65.941 65.941a24.002 24.002 0 0 1 7.03 16.971z"/></svg>
-                        Paste
-                    </li>
                 </ul>
-
-
-                <!-- View -->
-                <span type="button" class="dropdown-head" data-bs-toggle="dropdown">View</span>
-                <ul class="dropdown-menu">
-                    <li>
-                        Zoom In
-                    </li>
-
-                    <li>
-                        Zoom Out
-                    </li>
-                </ul>
-
-
-                <!-- History -->
-                <span title="No transactions to take back" type="button" class="dropdown-head disabled" data-bs-toggle="dropdown">History</span>
-                <ul class="dropdown-menu">
-                    
-                </ul>
-
-
-                <!-- Help -->
-                <span type="button" class="dropdown-head" data-bs-toggle="dropdown">Help</span>
-                <ul class="dropdown-menu">
-                    <li>
-                        About
-                    </li>
-                    <li>
-                        Scripting Samples
-                    </li>
-
-                </ul>
-
-                <!-- Help -->
-                <span type="button" class="dropdown-head" data-bs-toggle="dropdown">Debug</span>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a id="getInfo">Get Info</a>
-                    </li>
-                </ul>
-
-
             </div>
         </header>
         `;
@@ -274,6 +185,21 @@ export class DrawScene extends Container implements IScene {
 
     
     initViewport(enableDrag: boolean = true) {
+        if (this.viewport) {
+            this.removeChild(this.viewport);
+            this.viewport.destroy()
+        }
+        this.viewport = new Viewport({
+            screenHeight: Manager.height,
+            screenWidth:  Manager.width,
+            worldHeight:  Manager.height * Draw.zoomOut,
+            worldWidth:   Manager.width * Draw.zoomOut,
+
+            interaction: Manager.getInteractionManager()
+        });
+        this.addChild(this.viewport);
+
+
         // activate plugins
         this.viewport
             .drag({ pressDrag: enableDrag }).clamp({ 
@@ -287,6 +213,30 @@ export class DrawScene extends Container implements IScene {
                 minScale: 1/Draw.zoomOut
             });
 
+        if (this.minimap?.container) {
+            this.removeChild(this.minimap.container);
+            this.minimap.container.destroy()
+        }
+        this.minimap = new Minimap()
+        this.minimap.init(
+            this.getWorld().height, 
+            this.getWorld().width, 
+            Draw.fontCharSizeWidth, 
+            Draw.fontCharSizeHeight, 
+            new Rectangle(
+                Manager.width - 180 - 20,
+                20,
+                180,
+                120,
+            ),
+            (x: number, y: number) => { 
+                console.log("minimap navigation");
+                this.viewport.moveCenter(x, y);
+                this.minimap.update(this.draw.getVisibleTables(), this.getScreen()) 
+            }
+        );
+        this.addChild(this.minimap.container);
+
         // make zooming update minimap
         this.viewport.on('wheel', () => {
             console.log("wheel")
@@ -299,6 +249,7 @@ export class DrawScene extends Container implements IScene {
             this.cullViewport();
             this.minimap.update(this.draw.getVisibleTables(), this.getScreen());
         })
+        this.renderScreen(true);
     }
 
     
@@ -483,14 +434,14 @@ export class DrawScene extends Container implements IScene {
     handleToolChange(toolname: string) {
         let previousTool = this.draw.activeTool;
         this.draw.activeTool = toolname;
+        console.log("previousTool", previousTool)
+        console.log("this.draw.activeTool", this.draw.activeTool)
 
         let resumeSelect = () => {
             let mouseMoveFunc = (e: PIXI.InteractionEvent, table: Table, tablePivotX: number, tablePivotY: number) => {
                 console.log(`mousemove`);
-                console.log(e);
                 let x = this.getScreen().x + e.data.global.x / this.viewport.scale.x;
                 let y = this.getScreen().y + e.data.global.y / this.viewport.scale.y;
-                console.log(`Y: ${y}, X: ${x}`);
                 let charGridX = Math.floor(x / Draw.fontCharSizeWidth);
                 let charGridY = Math.floor(y / Draw.fontCharSizeHeight);
                 let newX = charGridX + tablePivotX
@@ -501,10 +452,13 @@ export class DrawScene extends Container implements IScene {
                 this.renderScreen(false)
             };
     
-    
-            this.viewport.on('mousedown', (e: PIXI.InteractionEvent) => {  // same as addEventListener except type can be specified inside parameter
+            // pointerdown unlike mousedown captures right click as well
+            this.viewport.on('pointerdown', (e: PIXI.InteractionEvent) => {  // same as addEventListener except type can be specified inside parameter
                 console.log("mousedown");
                 console.log(e);
+                if (this.contectMenu) {
+                    this.removeChild(this.contectMenu);
+                }
                 console.log(JSON.stringify(e.data));
                 // @ts-ignore
                 console.log(JSON.stringify(e.data.originalEvent.clientY));
@@ -512,12 +466,16 @@ export class DrawScene extends Container implements IScene {
                 console.log(this.viewport.scale);
                 let x = this.getScreen().x + e.data.global.x / this.viewport.scale.x;
                 let y = this.getScreen().y + e.data.global.y / this.viewport.scale.y;
-                console.log(`Y: ${y}, X: ${x}`);
                 let charGridX = Math.floor(x / Draw.fontCharSizeWidth);
                 let charGridY = Math.floor(y / Draw.fontCharSizeHeight);
                 let hover: Table | null = null;
                 for (let table of this.draw.schema.tables) {
                     if (table.getContainingRect().contains(charGridX, charGridY)) {
+                        if (e.data.button === 2) {
+                            console.log("context menu");
+
+                            return;
+                        }
                         let tablePivotX = table.rect.x - charGridX;
                         let tablePivotY = table.rect.y - charGridY;
                         hover = table.copy();
@@ -538,9 +496,6 @@ export class DrawScene extends Container implements IScene {
     
             this.viewport.on('mouseup', (e: PIXI.InteractionEvent) => {  // same as addEventListener except type can be specified inside parameter
                 console.log("mouseup");
-                let x = this.getScreen().x + e.data.global.x / this.viewport.scale.x;
-                let y = this.getScreen().y + e.data.global.y / this.viewport.scale.y;
-                console.log(`Y: ${y}, X: ${x}`);
                 let isGoodPlaceForTableFunc = (hover: Table | null) => {
                     if (hover != null) {
                         let isGoodPlacement = true;
@@ -588,10 +543,15 @@ export class DrawScene extends Container implements IScene {
                 break;
             case "select":
                 // pauseSelect
-                this.viewport.removeAllListeners('mousedown');
+                this.viewport.removeAllListeners('pointerdown');
                 this.viewport.removeAllListeners('mouseup');
                 this.viewport.removeAllListeners('mousemove');
-                this.viewport.removeAllListeners('mouseout');  
+                this.viewport.removeAllListeners('mouseout');
+                if (this.contectMenu) {
+                    this.removeChild(this.contectMenu);
+                }
+                break;
+            case "editTable":
                 break;
         }
         
@@ -602,6 +562,9 @@ export class DrawScene extends Container implements IScene {
                 break;
             case "select":
                 resumeSelect()
+                break;
+            case "editTable":
+
                 break;
         }
     }

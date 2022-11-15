@@ -30,7 +30,10 @@ export class Manager {
             width: width,
             height: height
         });
-        document.querySelector('.canvas-container')?.appendChild(this.app.view);
+        document.querySelector('.canvas-container')!.appendChild(this.app.view);
+        document.querySelector('.canvas-container')!.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+          });
         Manager.app.ticker.add((time) => Manager.update());  // I HATE the "frame passed" approach. I would rather use `Manager.app.ticker.deltaMS`
 
         // listen for the browser telling us that the screen size changed

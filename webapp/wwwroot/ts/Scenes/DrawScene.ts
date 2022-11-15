@@ -24,25 +24,6 @@ export class DrawScene extends Container implements IScene {
 
         this.draw = new Draw(schema);
 
-        document.querySelector('#undo')!.addEventListener('click', () => {
-            console.log("undo event");
-            this.draw.history.undo(this.draw);
-            this.renderScreen(false);
-        });
-        document.querySelector('#redo')!.addEventListener('click', () => {
-            console.log("redo event");
-            this.draw.history.redo(this.draw);
-            this.renderScreen(false);
-        });
-        document.querySelector('#save-as-png')!.addEventListener('click', () => {
-            console.log("save-as-png event");
-            Manager.takeScreenshot(this.viewport);
-        });
-        document.querySelector('#save-to-clipboard')!.addEventListener('click', () => {
-            console.log("save-to-clipboard event");
-            this.saveToClipboard();
-        });
-
         this.viewport = new Viewport({
             screenHeight: Manager.height,
             screenWidth:  Manager.width,
@@ -90,7 +71,175 @@ export class DrawScene extends Container implements IScene {
         this.renderScreen(true);
     }
 
+    initHtmlUi(): void {
+        let header = `
+        <header style="width: 100%;">
+            <div class="bar" style="display: flex;">
+                <button class="tool-select" data-tooltype="pan">Pan</button>
+                <button class="tool-select" data-tooltype="select">Select</button>
+                <button class="tool-select" data-tooltype="newTable">New Table</button>
+                <button class="tool-select" data-tooltype="newRelation">New Relation</button>
+            </div>
+        </header>
+        `;
+        document.querySelector(".tool-select-container")!.innerHTML = header;
+        document.querySelectorAll('.tool-select').forEach(
+            x => x.addEventListener('click', () => {
+                let selectedTool = (x as HTMLElement).dataset.tooltype!;
+                console.log(selectedTool);
+                this.handleToolChange(selectedTool)
+        }));
+
+        let topMenuActions = `
+        <header style="width: 100%;">
+            <div class="bar" style="display: flex;">
+
+                <!-- File -->
+                <span type="button" class="dropdown-head" data-bs-toggle="dropdown">
+                    File
+                </span>
+                <ul class="dropdown-menu">
+                    <li id="save-as-txt">
+                        <svg id="saveButton" fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path class="icon" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg>
+                        Download
+                    </li>
+                    
+                    <!-- https://www.svgrepo.com/svg/357887/image-download -->
+                    <li id="save-as-png">
+                        <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.71,6.29a1,1,0,0,0-1.42,0L20,7.59V2a1,1,0,0,0-2,0V7.59l-1.29-1.3a1,1,0,0,0-1.42,1.42l3,3a1,1,0,0,0,.33.21.94.94,0,0,0,.76,0,1,1,0,0,0,.33-.21l3-3A1,1,0,0,0,22.71,6.29ZM19,13a1,1,0,0,0-1,1v.38L16.52,12.9a2.79,2.79,0,0,0-3.93,0l-.7.7L9.41,11.12a2.85,2.85,0,0,0-3.93,0L4,12.6V7A1,1,0,0,1,5,6h8a1,1,0,0,0,0-2H5A3,3,0,0,0,2,7V19a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V14A1,1,0,0,0,19,13ZM5,20a1,1,0,0,1-1-1V15.43l2.9-2.9a.79.79,0,0,1,1.09,0l3.17,3.17,0,0L15.46,20Zm13-1a.89.89,0,0,1-.18.53L13.31,15l.7-.7a.77.77,0,0,1,1.1,0L18,17.21Z"/></svg>
+                        Save as PNG
+                    </li>
+                    
+                    <!-- https://www.svgrepo.com/svg/357606/copy -->
+                    <li id="save-to-clipboard">
+                        <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21,8.94a1.31,1.31,0,0,0-.06-.27l0-.09a1.07,1.07,0,0,0-.19-.28h0l-6-6h0a1.07,1.07,0,0,0-.28-.19.32.32,0,0,0-.09,0A.88.88,0,0,0,14.05,2H10A3,3,0,0,0,7,5V6H6A3,3,0,0,0,3,9V19a3,3,0,0,0,3,3h8a3,3,0,0,0,3-3V18h1a3,3,0,0,0,3-3V9S21,9,21,8.94ZM15,5.41,17.59,8H16a1,1,0,0,1-1-1ZM15,19a1,1,0,0,1-1,1H6a1,1,0,0,1-1-1V9A1,1,0,0,1,6,8H7v7a3,3,0,0,0,3,3h5Zm4-4a1,1,0,0,1-1,1H10a1,1,0,0,1-1-1V5a1,1,0,0,1,1-1h3V7a3,3,0,0,0,3,3h3Z"/></svg>
+                        Copy to Clipboard
+                    </li>
+
+                    <hr>
+                    
+                    <li>
+                        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path class="icon" d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"></path></svg>
+                        Upload
+                    </li>
+
+                </ul>
+
+
+                <!-- Edit -->
+                <span type="button" class="dropdown-head" data-bs-toggle="dropdown">
+                    Edit
+                </span>
+                <ul class="dropdown-menu">
+                    <li id="undo">
+                        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path class="icon inactive" d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"></path></svg>
+                        Undo
+                    </li>
+
+                    <li id="redo">
+                        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path class="icon inactive" d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z"></path></svg>
+                        Redo
+                    </li>
+
+                    <hr>
+                    
+                    <!-- https://www.svgrepo.com/svg/313810/cut-solid -->
+                    <li>
+                        <svg width="24px" height="24px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M 19.65625 4.3125 C 18.882813 4.40625 18.195313 4.953125 17.96875 5.75 L 15.3125 15.0625 L 11.96875 16.03125 C 11.730469 14.335938 10.257813 13 8.5 13 C 6.578125 13 5 14.578125 5 16.5 C 5 18.421875 6.578125 20 8.5 20 C 9.789063 20 10.925781 19.269531 11.53125 18.21875 L 14.65625 17.34375 L 13.78125 20.46875 C 12.730469 21.074219 12 22.210938 12 23.5 C 12 25.421875 13.578125 27 15.5 27 C 17.421875 27 19 25.421875 19 23.5 C 19 21.742188 17.664063 20.269531 15.96875 20.03125 L 20.4375 4.375 C 20.171875 4.300781 19.914063 4.28125 19.65625 4.3125 Z M 27.625 11.5625 L 18.90625 14.03125 L 18.25 16.3125 L 26.25 14.03125 C 27.3125 13.726563 27.929688 12.625 27.625 11.5625 Z M 8.5 15 C 9.339844 15 10 15.660156 10 16.5 C 10 17.339844 9.339844 18 8.5 18 C 7.660156 18 7 17.339844 7 16.5 C 7 15.660156 7.660156 15 8.5 15 Z M 15.5 22 C 16.339844 22 17 22.660156 17 23.5 C 17 24.339844 16.339844 25 15.5 25 C 14.660156 25 14 24.339844 14 23.5 C 14 22.660156 14.660156 22 15.5 22 Z"/></svg>
+                        Cut
+                    </li>
+
+                    <li>
+                        <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21,8.94a1.31,1.31,0,0,0-.06-.27l0-.09a1.07,1.07,0,0,0-.19-.28h0l-6-6h0a1.07,1.07,0,0,0-.28-.19.32.32,0,0,0-.09,0A.88.88,0,0,0,14.05,2H10A3,3,0,0,0,7,5V6H6A3,3,0,0,0,3,9V19a3,3,0,0,0,3,3h8a3,3,0,0,0,3-3V18h1a3,3,0,0,0,3-3V9S21,9,21,8.94ZM15,5.41,17.59,8H16a1,1,0,0,1-1-1ZM15,19a1,1,0,0,1-1,1H6a1,1,0,0,1-1-1V9A1,1,0,0,1,6,8H7v7a3,3,0,0,0,3,3h5Zm4-4a1,1,0,0,1-1,1H10a1,1,0,0,1-1-1V5a1,1,0,0,1,1-1h3V7a3,3,0,0,0,3,3h3Z"/></svg>
+                        Copy
+                    </li>
+
+                    <!-- https://www.svgrepo.com/svg/352321/paste -->
+                    <li>
+                        <svg width="24" height="24" viewBox="-32 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M128 184c0-30.879 25.122-56 56-56h136V56c0-13.255-10.745-24-24-24h-80.61C204.306 12.89 183.637 0 160 0s-44.306 12.89-55.39 32H24C10.745 32 0 42.745 0 56v336c0 13.255 10.745 24 24 24h104V184zm32-144c13.255 0 24 10.745 24 24s-10.745 24-24 24-24-10.745-24-24 10.745-24 24-24zm184 248h104v200c0 13.255-10.745 24-24 24H184c-13.255 0-24-10.745-24-24V184c0-13.255 10.745-24 24-24h136v104c0 13.2 10.8 24 24 24zm104-38.059V256h-96v-96h6.059a24 24 0 0 1 16.97 7.029l65.941 65.941a24.002 24.002 0 0 1 7.03 16.971z"/></svg>
+                        Paste
+                    </li>
+                </ul>
+
+
+                <!-- View -->
+                <span type="button" class="dropdown-head" data-bs-toggle="dropdown">View</span>
+                <ul class="dropdown-menu">
+                    <li>
+                        Zoom In
+                    </li>
+
+                    <li>
+                        Zoom Out
+                    </li>
+                </ul>
+
+
+                <!-- History -->
+                <span title="No transactions to take back" type="button" class="dropdown-head disabled" data-bs-toggle="dropdown">History</span>
+                <ul class="dropdown-menu">
+                    
+                </ul>
+
+
+                <!-- Help -->
+                <span type="button" class="dropdown-head" data-bs-toggle="dropdown">Help</span>
+                <ul class="dropdown-menu">
+                    <li>
+                        About
+                    </li>
+                    <li>
+                        Scripting Samples
+                    </li>
+
+                </ul>
+
+                <!-- Help -->
+                <span type="button" class="dropdown-head" data-bs-toggle="dropdown">Debug</span>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a id="getInfo">Get Info</a>
+                    </li>
+                </ul>
+
+
+            </div>
+        </header>
+        `;
+        document.querySelector(".top-menu-action-container")!.innerHTML = topMenuActions;
+        document.querySelector('#undo')!.addEventListener('click', () => {
+            console.log("undo event");
+            this.draw.history.undo(this.draw);
+            this.renderScreen(false);
+        });
+        document.querySelector('#redo')!.addEventListener('click', () => {
+            console.log("redo event");
+            this.draw.history.redo(this.draw);
+            this.renderScreen(false);
+        });
+        document.querySelector('#save-as-png')!.addEventListener('click', () => {
+            console.log("save-as-png event");
+            Manager.takeScreenshot(this.viewport);
+        });
+        document.querySelector('#save-to-clipboard')!.addEventListener('click', () => {
+            console.log("save-to-clipboard event");
+            this.saveToClipboard();
+        });
+        document.querySelector('#save-as-txt')!.addEventListener('click', () => {
+            console.log("save-as-txt event");
+            this.saveAsTxt();
+        });
+    }
+    destroyHtmlUi(): void {
+        document.querySelector(".tool-select-container")!.innerHTML = "";
+        document.querySelector(".top-menu-action-container")!.innerHTML = "";
+    }
+
     saveToClipboard() {
+        navigator.clipboard.writeText(this.getSaveContent());
+    }
+
+    getSaveContent() {
         let charGridSize = this.getWorldCharGrid();
         let sb = [];
         for (let y = 0; y < charGridSize.height; y++) {
@@ -100,7 +249,27 @@ export class DrawScene extends Container implements IScene {
             }
             sb.push("\n");
         }
-        navigator.clipboard.writeText(sb.join(""));
+        return sb.join("");
+    }
+
+    saveAsTxt() {
+        let element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(this.getSaveContent()));
+        let date = new Date();
+        element.setAttribute('download', 
+            `RasterModeler_${
+                date.getFullYear() + "-" + 
+                date.getMonth().toString().padStart(2, '0') + "-" + 
+                date.getDay().toString().padStart(2, '0') + "_" + 
+                date.getDay().toString().padStart(2, '0') + "-" + 
+                date.getMinutes().toString().padStart(2, '0') + "-" + 
+                date.getSeconds().toString().padStart(2, '0') 
+            }.txt`);
+      
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
     }
 
     
@@ -238,11 +407,6 @@ export class DrawScene extends Container implements IScene {
 
     setWorldTable(table: Table) {
         let worldCharGridRect = table.getCornerRect();
-        for (let x = worldCharGridRect.x; x <= worldCharGridRect.right; x++) {
-            for (let y = worldCharGridRect.y; y <= worldCharGridRect.bottom; y++) {
-                this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)] = ' ';
-            }
-        }
         let firstColumnWidth = table.getColumnWidths()[0];
         let secondColumnWidth = table.getColumnWidths()[1];
         let thirdColumnWidth = table.getColumnWidths()[2];
@@ -250,7 +414,6 @@ export class DrawScene extends Container implements IScene {
         let rectNameRow = new Rectangle(worldCharGridRect.x, worldCharGridRect.y + 2, firstColumnWidth, worldCharGridRect.height - 2);
         let rectTypeRow = new Rectangle(worldCharGridRect.x + firstColumnWidth, worldCharGridRect.y + 2, secondColumnWidth, worldCharGridRect.height - 2);
         let rectAttributeRow = new Rectangle(worldCharGridRect.x + firstColumnWidth + secondColumnWidth, worldCharGridRect.y + 2, thirdColumnWidth, worldCharGridRect.height - 2);
-        if (table.head === "customers") console.log("worldCharGridRect: ", worldCharGridRect);
         let parts = ['+', '-', '+', '|', 'X', '|', '+', '-', '+'];
         this.paintWorld9PatchSafe(rectHead, parts);
         this.paintWorld9PatchSafe(rectNameRow, parts);
@@ -264,7 +427,6 @@ export class DrawScene extends Container implements IScene {
             }
         }
         let rectNameRowInner = new Rectangle(rectNameRow.left + 2, rectNameRow.top + 1, rectNameRow.width - 4, rectNameRow.height - 2)
-        if (table.head === "customers") console.log("rectNameRowInner: ", rectNameRowInner);
         for (let x = rectNameRowInner.x; x <= rectNameRowInner.right; x++) {
             for (let y = rectNameRowInner.y; y <= rectNameRowInner.bottom; y++) {
                 let row = table.tableRows[y - rectNameRowInner.y];
@@ -274,7 +436,6 @@ export class DrawScene extends Container implements IScene {
             }
         }
         let rectTypeRowInner = new Rectangle(rectTypeRow.left + 2, rectTypeRow.top + 1, rectTypeRow.width - 4, rectTypeRow.height - 2);
-        if (table.head === "customers") console.log("rectTypeRowInner: ", rectTypeRowInner);
         for (let x = rectTypeRowInner.x; x <= rectTypeRowInner.right; x++) {
             for (let y = rectTypeRowInner.y; y <= rectTypeRowInner.bottom; y++) {
                 let row = table.tableRows[y - rectTypeRowInner.y];
@@ -287,7 +448,7 @@ export class DrawScene extends Container implements IScene {
         for (let x = rectSpecialRowInner.x; x <= rectSpecialRowInner.right; x++) {
             for (let y = rectSpecialRowInner.y; y <= rectSpecialRowInner.bottom; y++) {
                 let row = table.tableRows[y - rectSpecialRowInner.y];
-                let tile = row.attributes[x - rectSpecialRowInner.x] ?? ' ';
+                let tile = row.attributes.join(", ")[x - rectSpecialRowInner.x] ?? ' ';
                 this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)] = tile;
                 
             }

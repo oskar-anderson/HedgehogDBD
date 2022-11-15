@@ -46,11 +46,13 @@ export class Manager {
         if (Manager.currentScene) {
             Manager.app.stage.removeChild(Manager.currentScene);
             Manager.currentScene.destroy();
+            newScene.destroyHtmlUi();
         }
 
         // Add the new one
         Manager.currentScene = newScene;
         Manager.app.stage.addChild(Manager.currentScene);
+        newScene.initHtmlUi();
     }
 
     // This update will be called by a pixi ticker and tell the scene that a tick happened
@@ -108,4 +110,6 @@ export class Manager {
 // Also, this could be in its own file...
 export interface IScene extends DisplayObject {
     update(deltaMS: number): void;
+    initHtmlUi(): void
+    destroyHtmlUi(): void
 }

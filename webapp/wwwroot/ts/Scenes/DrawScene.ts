@@ -12,7 +12,6 @@ import { Relation } from "../model/Relation";
 
 export class DrawScene extends Container implements IScene {
 
-    // @ts-ignore
     viewport: Viewport;
     minimap: Minimap;
     draw: Draw;
@@ -24,7 +23,37 @@ export class DrawScene extends Container implements IScene {
         super();
 
         this.draw = new Draw(schema);
+
+        this.viewport = new Viewport({
+            screenHeight: Manager.height,
+            screenWidth:  Manager.width,
+            worldHeight:  Manager.height * Draw.zoomOut,
+            worldWidth:   Manager.width * Draw.zoomOut,
+
+            interaction: Manager.getInteractionManager()
+        });
+        this.addChild(this.viewport);
         this.initViewport();
+
+        this.minimap = new Minimap()
+        this.minimap.init(
+            this.getWorld().height, 
+            this.getWorld().width, 
+            Draw.fontCharSizeWidth, 
+            Draw.fontCharSizeHeight, 
+            new Rectangle(
+                Manager.width - 180 - 20,
+                20,
+                180,
+                120,
+            ),
+            (x: number, y: number) => { 
+                console.log("minimap navigation");
+                this.viewport.moveCenter(x, y);
+                this.minimap.update(this.draw.getVisibleTables(), this.getScreen()) 
+            }
+        );
+        this.addChild(this.minimap.container);
 
         this.interactive = true;
         this.on('mousemove', (e: InteractionEvent) => { 
@@ -39,6 +68,7 @@ export class DrawScene extends Container implements IScene {
             this.bottomBar.pointermove(x, y, this.getScreen());
         });
         this.addChild(this.bottomBar.getContainer());
+        this.renderScreen(true);
     }
 
     initHtmlUi(): void {
@@ -185,21 +215,6 @@ export class DrawScene extends Container implements IScene {
 
     
     initViewport(enableDrag: boolean = true) {
-        if (this.viewport) {
-            this.removeChild(this.viewport);
-            this.viewport.destroy()
-        }
-        this.viewport = new Viewport({
-            screenHeight: Manager.height,
-            screenWidth:  Manager.width,
-            worldHeight:  Manager.height * Draw.zoomOut,
-            worldWidth:   Manager.width * Draw.zoomOut,
-
-            interaction: Manager.getInteractionManager()
-        });
-        this.addChild(this.viewport);
-
-
         // activate plugins
         this.viewport
             .drag({ pressDrag: enableDrag }).clamp({ 
@@ -213,30 +228,6 @@ export class DrawScene extends Container implements IScene {
                 minScale: 1/Draw.zoomOut
             });
 
-        if (this.minimap?.container) {
-            this.removeChild(this.minimap.container);
-            this.minimap.container.destroy()
-        }
-        this.minimap = new Minimap()
-        this.minimap.init(
-            this.getWorld().height, 
-            this.getWorld().width, 
-            Draw.fontCharSizeWidth, 
-            Draw.fontCharSizeHeight, 
-            new Rectangle(
-                Manager.width - 180 - 20,
-                20,
-                180,
-                120,
-            ),
-            (x: number, y: number) => { 
-                console.log("minimap navigation");
-                this.viewport.moveCenter(x, y);
-                this.minimap.update(this.draw.getVisibleTables(), this.getScreen()) 
-            }
-        );
-        this.addChild(this.minimap.container);
-
         // make zooming update minimap
         this.viewport.on('wheel', () => {
             console.log("wheel")
@@ -249,7 +240,6 @@ export class DrawScene extends Container implements IScene {
             this.cullViewport();
             this.minimap.update(this.draw.getVisibleTables(), this.getScreen());
         })
-        this.renderScreen(true);
     }
 
     
@@ -434,8 +424,6 @@ export class DrawScene extends Container implements IScene {
     handleToolChange(toolname: string) {
         let previousTool = this.draw.activeTool;
         this.draw.activeTool = toolname;
-        console.log("previousTool", previousTool)
-        console.log("this.draw.activeTool", this.draw.activeTool)
 
         let resumeSelect = () => {
             let mouseMoveFunc = (e: PIXI.InteractionEvent, table: Table, tablePivotX: number, tablePivotY: number) => {

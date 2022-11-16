@@ -7,13 +7,24 @@ export class Table {
     head: string;
     tableRows: TableRow[];
     color: number = 0x008000;
-    isHoverSource = false;
-    isHoverTarget = false;
     
-    constructor(table: { rect: Rectangle, head: string, tableRows: TableRow[] }) {
+    //* This constuctor exists for cloning, you probably want to use Table.init() */
+    private constructor(table: { id: string, rect: Rectangle, head: string, tableRows: TableRow[], color: number }) {
+        this.id = table.id;
         this.rect = table.rect;
         this.head = table.head;
         this.tableRows = table.tableRows;
+        this.color = table.color;
+    }
+    
+    static init(rect: Rectangle, head: string, tableRows: TableRow[]) {
+        return new Table({
+            id: crypto.randomUUID(),
+            rect: rect,
+            head: head,
+            tableRows: tableRows,
+            color: 0x008000
+         });
     }
 
     getColumnWidths() {
@@ -25,7 +36,7 @@ export class Table {
 
         let pad = 3;  // padding plus one non-writable wall
         return [
-            this.getCornerRect().width - ((longestDatatypeLenght + pad) + (longestAttributeLenght + pad)), 
+            this.getContainingRect().width - 1 - ((longestDatatypeLenght + pad) + (longestAttributeLenght + pad)), 
             longestDatatypeLenght + pad, 
             longestAttributeLenght + pad
         ];
@@ -45,18 +56,18 @@ export class Table {
         return this.rect;
     }
 
-    getCornerRect() {
-        return new Rectangle(this.rect.x, this.rect.y, this.rect.width - 1, this.rect.height - 1);
-    }
-
-    copy(): Table {
-        
-        let copy1 = new Table(JSON.parse(JSON.stringify(this)));
+    copy(keepOriginalId: boolean): Table {
+        let tableRows = [];
+        for (const row of this.tableRows) {
+            tableRows.push(row.clone())
+        }
         let copy = new Table(
             {
+                id: keepOriginalId ? this.id : crypto.randomUUID(),
                 rect: new Rectangle(this.rect.x, this.rect.y, this.rect.width, this.rect.height),
                 head: this.head,
-                tableRows: this.tableRows
+                tableRows: tableRows,
+                color: this.color
             }
         );
         return copy;

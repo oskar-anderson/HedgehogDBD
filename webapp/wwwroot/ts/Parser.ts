@@ -15,8 +15,6 @@ export class Parser {
         let rows = schema.split('\n');
         let width = Math.max(...(rows.map(el => el.length)));
         let height = rows.length;
-        console.log("xMax: " + width);
-        console.log("yMax: " + height);
 
         let board: string[] = new Array(width * height);
         board.fill(" ");
@@ -26,62 +24,63 @@ export class Parser {
                 board[y * width + x] = row[x];
             }
         }
-        console.log(board);
 
-        let tables: Table[] = [];
+        let tablesRects: Rectangle[] = [];
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
                 let tile = board[y * width + x];
                 if (tile === "+" && 
-                    ! tables.some(
+                    ! tablesRects.some(
                         function(table) { 
-                            return table.getContainingRect().contains(x, y);
+                            return table.contains(x, y);
                         }
                     )
                 ) {
-                    // @ts-ignore
-                    let possibleTable = new Table({ rect: new Rectangle(x, y, 0, 0), head: "", tableRows: [] });
+                    let possibleTable = new Rectangle(x, y, 0, 0);
                     for (let a = 0; 
                         a < width - x
                         && ["-", "+"].includes(board[y * width + x + a]); 
                         a++) {
                         if (x + a + 1 < width && board[y * width + x + a + 1] === " ") {
-                            possibleTable.rect.width = a + 1;
+                            possibleTable.width = a + 1;
                             break;
                         }
-                    }possibleTable.rect
+                    }possibleTable
                     for (let a = 0; 
-                        possibleTable.rect.width != 0 
+                        possibleTable.width != 0 
                         && a < height - y
                         && ["|", "+"].includes(board[(y + a) * width + x]); 
                         a++) {
                         if (y + a + 1 < height && board[(y + a + 1) * width + x] === " ") {
-                            possibleTable.rect.height = a + 1;
+                            possibleTable.height = a + 1;
                             break;
                         }
                     }
-                    if (possibleTable.rect.width != 0 && possibleTable.rect.height != 0) {
-                        tables.push(possibleTable)
+                    if (possibleTable.width != 0 && possibleTable.height != 0) {
+                        tablesRects.push(possibleTable)
                     }
                 }
             }
         }
 
-        for (let table of tables) {
+        let tables = [];
+        for (let rect of tablesRects) {
             let tableSpec = board.slice(
-                (table.rect.y + 1) * width + table.rect.left + 1, 
-                (table.rect.y + 1) * width + table.rect.right - 2)
+                (rect.y + 1) * width + rect.left + 1, 
+                (rect.y + 1) * width + rect.right - 2)
                 .join("").trim();
-            table.head = tableSpec.split(":")[0];
-            for (let cy = table.rect.y + 3; cy < table.rect.bottom - 1; cy++) {
+            let head = tableSpec.split(":")[0];
+            let tableRows = []
+            for (let cy = rect.y + 3; cy < rect.bottom - 1; cy++) {
                 let row = board.slice(
-                    (cy) * width + table.rect.left + 1, 
-                    (cy) * width + table.rect.right - 2)
+                    (cy) * width + rect.left + 1, 
+                    (cy) * width + rect.right - 2)
                     .join("").trim();
                 let columns = row.split("|").map(function(item) { return item.trim(); });
                 let attributeList = columns[2].split(',').map(x => x.trim());
-                table.tableRows.push(new TableRow(columns[0], columns[1], attributeList));
+                tableRows.push(TableRow.init(columns[0], columns[1], attributeList));
             }
+            tables.push(Table.init(rect, head, tableRows));
         }
 
         let relations: Relation[] = [];

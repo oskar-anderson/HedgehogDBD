@@ -16,6 +16,8 @@
         "lib": [
             "dom",
             "esnext",
+            // Needed to allows iterating document.querySelectorAll('.foo') 
+            "dom.iterable"  
         ]
     },
     "exclude": [

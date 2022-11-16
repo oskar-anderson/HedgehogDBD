@@ -12,6 +12,7 @@ import { Relation } from "../model/Relation";
 import { DrawChar } from "../model/DrawChar";
 import { LoaderScene } from "./LoaderScene";
 import { TableScene } from "./TableScene";
+import { Parser } from "../Parser";
 
 export class DrawScene extends Container implements IScene {
 
@@ -32,9 +33,11 @@ export class DrawScene extends Container implements IScene {
             worldHeight:  Manager.height * Draw.zoomOut,
             worldWidth:   Manager.width * Draw.zoomOut,
         });
+        this.viewport.setZoom(this.draw.transferData?.viewportScaleX ?? 1)
+        this.viewport.left = this.draw.transferData?.viewportLeft ?? 0
+        this.viewport.top = this.draw.transferData?.viewportTop ?? 0
         this.addChild(this.viewport);
         this.initViewport(this.draw.activeTool === "pan");
-        this.handleToolChange(this.draw.activeTool)
 
         this.minimap = new Minimap()
         this.minimap.init(
@@ -69,84 +72,82 @@ export class DrawScene extends Container implements IScene {
             this.bottomBar.pointermove(x, y, this.getScreen());
         });
         this.addChild(this.bottomBar.getContainer());
+        this.toolActivate(this.draw.activeTool);
         this.renderScreen(true);
     }
 
     initHtmlUi(): void {
         let header = `
-        <header style="width: 100%;">
-            <div class="bar" style="display: flex;">
-                <button class="tool-select" data-tooltype="pan">Pan</button>
-                <button class="tool-select" data-tooltype="select">Move table</button>
-                <button class="tool-select" data-tooltype="editTable">Edit table</button>
-                <button class="tool-select" data-tooltype="newTable">New Table</button>
-                <button class="tool-select" data-tooltype="newRelation">New Relation</button>
+        <header style="display: flex; align-items:center; padding: 2px 0">
+            <span style="display: flex; justify-content: center; width: 4em">Tools</span>
+            <div class="bar btn-group btn-group-toggle">
+                <button class="tool-select btn btn-light ${this.draw.activeTool === "pan" ? "active" : ""}" data-tooltype="pan">Pan</button>
+                <button class="tool-select btn btn-light ${this.draw.activeTool === "select" ? "active" : ""}" data-tooltype="select">Move table</button>
+                <button class="tool-select btn btn-light ${this.draw.activeTool === "editTable" ? "active" : ""}" data-tooltype="editTable">Edit table</button>
+                <button class="tool-select btn btn-light ${this.draw.activeTool === "newTable" ? "active" : ""}" data-tooltype="newTable">New table</button>
+                <button class="tool-select btn btn-light ${this.draw.activeTool === "newRelation" ? "active" : ""}" data-tooltype="newRelation">New relation</button>
             </div>
         </header>
         `;
         document.querySelector(".tool-select-container")!.innerHTML = header;
-        document.querySelectorAll('.tool-select').forEach(
-            x => x.addEventListener('click', () => {
-                let selectedTool = (x as HTMLElement).dataset.tooltype!;
-                console.log(selectedTool);
+        let toolElements = document.querySelectorAll('.tool-select')
+        for (const toolEl of toolElements) {
+            toolEl.addEventListener('click', () => {
+                let selectedTool = (toolEl as HTMLElement).dataset.tooltype!;
+                document.querySelectorAll(".tool-select").forEach(x => x.classList.remove("active"));
+                toolEl.classList.toggle("active");
                 this.handleToolChange(selectedTool)
-        }));
-
+            });
+        }
+            
         let topMenuActions = `
-        <header style="width: 100%;">
-            <div class="bar" style="display: flex;">
+        <div>
 
-                <!-- File -->
-                <span type="button" class="dropdown-head" data-bs-toggle="dropdown">
-                    File
-                </span>
-                <ul class="dropdown-menu">
-                    <li id="save-as-txt">
+            <!-- File -->
+            <header style="display: flex; align-items: center; padding: 2px 0;">
+                <span style="display: flex; justify-content: center; width: 4em">File</span>
+                <div class="bar">
+                    <button id="save-as-txt" class="btn btn-light">
                         <svg id="saveButton" fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path class="icon" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg>
-                        Download
-                    </li>
+                        Export TXT
+                    </button>
                     
                     <!-- https://www.svgrepo.com/svg/357887/image-download -->
-                    <li id="save-as-png">
+                    <button id="save-as-png" class="btn btn-light">
                         <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.71,6.29a1,1,0,0,0-1.42,0L20,7.59V2a1,1,0,0,0-2,0V7.59l-1.29-1.3a1,1,0,0,0-1.42,1.42l3,3a1,1,0,0,0,.33.21.94.94,0,0,0,.76,0,1,1,0,0,0,.33-.21l3-3A1,1,0,0,0,22.71,6.29ZM19,13a1,1,0,0,0-1,1v.38L16.52,12.9a2.79,2.79,0,0,0-3.93,0l-.7.7L9.41,11.12a2.85,2.85,0,0,0-3.93,0L4,12.6V7A1,1,0,0,1,5,6h8a1,1,0,0,0,0-2H5A3,3,0,0,0,2,7V19a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V14A1,1,0,0,0,19,13ZM5,20a1,1,0,0,1-1-1V15.43l2.9-2.9a.79.79,0,0,1,1.09,0l3.17,3.17,0,0L15.46,20Zm13-1a.89.89,0,0,1-.18.53L13.31,15l.7-.7a.77.77,0,0,1,1.1,0L18,17.21Z"/></svg>
-                        Save as PNG
-                    </li>
+                        Export PNG
+                    </button>
                     
                     <!-- https://www.svgrepo.com/svg/357606/copy -->
-                    <li id="save-to-clipboard">
+                    <button id="save-to-clipboard" class="btn btn-light">
                         <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21,8.94a1.31,1.31,0,0,0-.06-.27l0-.09a1.07,1.07,0,0,0-.19-.28h0l-6-6h0a1.07,1.07,0,0,0-.28-.19.32.32,0,0,0-.09,0A.88.88,0,0,0,14.05,2H10A3,3,0,0,0,7,5V6H6A3,3,0,0,0,3,9V19a3,3,0,0,0,3,3h8a3,3,0,0,0,3-3V18h1a3,3,0,0,0,3-3V9S21,9,21,8.94ZM15,5.41,17.59,8H16a1,1,0,0,1-1-1ZM15,19a1,1,0,0,1-1,1H6a1,1,0,0,1-1-1V9A1,1,0,0,1,6,8H7v7a3,3,0,0,0,3,3h5Zm4-4a1,1,0,0,1-1,1H10a1,1,0,0,1-1-1V5a1,1,0,0,1,1-1h3V7a3,3,0,0,0,3,3h3Z"/></svg>
-                        Copy to Clipboard
-                    </li>
-
-                    <hr>
+                        Export clipboard
+                    </button>
                     
-                    <li>
+                    <button id="import-btn" class="btn btn-light">
                         <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path class="icon" d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"></path></svg>
-                        Upload
-                    </li>
+                        Import
+                    </button>
 
-                </ul>
+                </div>
+            </header>
 
-
-                <!-- Edit -->
-                <span type="button" class="dropdown-head" data-bs-toggle="dropdown">
-                    Edit
-                </span>
-                <ul class="dropdown-menu">
-                    <li id="undo">
+            <!-- Edit -->
+            <header style="display: flex; align-items: center; padding: 2px 0;">
+                <span style="display: flex; justify-content: center; width: 4em">Edit</span>
+                <div class="bar">
+                    <button id="undo" class="btn btn-light">
                         <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path class="icon inactive" d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"></path></svg>
                         Undo
-                    </li>
+                    </button>
 
-                    <li id="redo">
+                    <button id="redo" class="btn btn-light">
                         <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path class="icon inactive" d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z"></path></svg>
                         Redo
-                    </li>
-
-                    <hr>
-                </ul>
-            </div>
-        </header>
+                    </button>
+                </div>
+            </header>
+        </div>
         `;
         document.querySelector(".top-menu-action-container")!.innerHTML = topMenuActions;
         document.querySelector('#undo')!.addEventListener('click', () => {
@@ -170,6 +171,10 @@ export class DrawScene extends Container implements IScene {
         document.querySelector('#save-as-txt')!.addEventListener('click', () => {
             console.log("save-as-txt event");
             this.saveAsTxt();
+        });
+        document.querySelector('#import-btn')!.addEventListener('click', () => {
+            console.log("import event");
+            this.import();
         });
     }
     destroyHtmlUi(): void {
@@ -214,6 +219,26 @@ export class DrawScene extends Container implements IScene {
         document.body.removeChild(element);
     }
 
+    import() {
+        let reader = new FileReader();
+        reader.onload = function(event: ProgressEvent) {
+            // Both of these work: 
+            // * this.result
+            // * (event.target as FileReader).result
+            let file = this.result as string;
+            Manager.changeScene(new DrawScene(new Parser().parse(file)))
+        }
+        let startReadingFile = (thisElement: HTMLInputElement) => {
+            let inputFile = thisElement.files![0];
+            reader.readAsText(inputFile);
+        }
+        let input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.txt';
+        input.addEventListener("change", () => startReadingFile(input));
+        input.click();
+    }
+
     
     initViewport(enableDrag: boolean) {
         // activate plugins
@@ -229,17 +254,10 @@ export class DrawScene extends Container implements IScene {
                 minScale: 1/Draw.zoomOut
             });
 
-        // make zooming update minimap
-        this.viewport.on('wheel', () => {
-            console.log("wheel")
-            this.minimap.update(this.draw.getVisibleTables(), this.getScreen());
-        });
-
         // make panning update minimap camera indicator location
         this.viewport.on('moved', () => {
             console.log("moved")
             this.cullViewport();
-            this.minimap.update(this.draw.getVisibleTables(), this.getScreen());
         })
     }
 
@@ -298,7 +316,7 @@ export class DrawScene extends Container implements IScene {
     }
 
     
-    renderScreen(isForceScreenReset = true) {
+    renderScreen(isForceScreenReset: boolean) {
         let charGridSize = this.getWorldCharGrid();
         for (let y = 0; y < charGridSize.height; y++) {
             for (let x = 0; x < charGridSize.width; x++) {
@@ -306,12 +324,7 @@ export class DrawScene extends Container implements IScene {
             }
         }
         let tables = this.draw.getVisibleTables();
-        console.log(JSON.parse(JSON.stringify(tables)));
         for (const table of tables) {
-            if (table.head.trim() === "order_items") {
-                console.log("order_items")
-                console.log(table)
-            }
             this.setWorldTable(table);
         }
         for (const relation of this.draw.schema.relations) {
@@ -438,9 +451,33 @@ export class DrawScene extends Container implements IScene {
     handleToolChange(toolname: string) {
         let previousTool = this.draw.activeTool;
         this.draw.activeTool = toolname;
-        console.log("previousTool", previousTool)
-        console.log("this.draw.activeTool", this.draw.activeTool)
+        this.toolDisable(previousTool);
+        this.toolActivate(this.draw.activeTool);
+    }
 
+    toolDisable(previousTool: string) {
+        this.draw.selectedTable = null;
+        this.renderScreen(false)
+        switch(previousTool) {
+            case "pan":
+                // pausePanning
+                this.initViewport(false); // viewport is still needed for minimap updating
+                break;
+            case "select":
+                // pauseSelect
+                this.viewport.removeAllListeners('mousedown');
+                this.viewport.removeAllListeners('mouseup');
+                this.viewport.removeAllListeners('mousemove');
+                this.viewport.removeAllListeners('mouseout');
+                break;
+            case "editTable":
+                this.viewport.removeAllListeners('mousedown');
+                break;
+        }
+    }
+
+    
+    toolActivate(tool: string) {
         let resumeSelect = () => {
             let mouseMoveFunc = (e: PIXI.InteractionEvent, table: Table, tablePivotX: number, tablePivotY: number) => {
                 console.log(`mousemove`);
@@ -539,30 +576,18 @@ export class DrawScene extends Container implements IScene {
                 for (let table of this.draw.schema.tables) {
                     if (table.getContainingRect().contains(charGridX, charGridY)) {
                         this.draw.selectedTable = table;
+                        this.draw.transferData = { 
+                            viewportLeft: this.viewport.left, 
+                            viewportTop: this.viewport.top, 
+                            viewportScaleX: this.viewport.scale.x, 
+                            viewportScaleY: this.viewport.scale.y, 
+                        }
                         Manager.changeScene(new TableScene(this.draw))
                     }
                 }
             })
         }
-        
-        switch(previousTool) {
-            case "pan":
-                // pausePanning
-                this.initViewport(false); // viewport is still needed for minimap updating
-                break;
-            case "select":
-                // pauseSelect
-                this.viewport.removeAllListeners('mousedown');
-                this.viewport.removeAllListeners('mouseup');
-                this.viewport.removeAllListeners('mousemove');
-                this.viewport.removeAllListeners('mouseout');
-                break;
-            case "editTable":
-                this.viewport.removeAllListeners('mousedown');
-                break;
-        }
-        
-        switch(this.draw.activeTool) {
+        switch(tool) {
             case "pan":
                 // resumePanning
                 this.initViewport(true)
@@ -577,6 +602,6 @@ export class DrawScene extends Container implements IScene {
     }
 
     public update(deltaMS: number): void {
-
+        this.minimap.update(this.draw.getVisibleTables(), this.getScreen());
     }
 }

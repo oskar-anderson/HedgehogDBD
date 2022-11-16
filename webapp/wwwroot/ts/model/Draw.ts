@@ -14,6 +14,7 @@ export class Draw {
     selectedTable: Table | null = null
     schema: Schema;
     activeTool: string = "pan";
+    transferData: { viewportLeft: number, viewportTop: number, viewportScaleX: number, viewportScaleY: number } | null = null
     
     constructor(schema: Schema) {
         this.schema = schema;

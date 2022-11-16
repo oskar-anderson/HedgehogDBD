@@ -102,10 +102,6 @@ export class Manager {
         }, 'image/png');
     }
 
-    public static getInteractionManager() {
-        return this.app.renderer.plugins.interaction
-    }
-
     /* More code of your Manager.ts like `changeScene` and `update`*/
 }
 

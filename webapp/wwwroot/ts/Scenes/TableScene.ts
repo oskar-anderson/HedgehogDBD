@@ -21,23 +21,23 @@ export class TableScene extends Container implements IScene {
     initHtmlUi(): void {
 
         document.querySelector(".table-edit-container")!.innerHTML = `
-            <div>
-                <h4>Selected ${this.draw.selectedTable?.head}</h4>
-                <ul>
-                    <li>
-                        list item
-                    </li>
-                </ul>
-            </div>
             <div class="modal" tabindex="-1">
                 <div class="modal-dialog">
                     <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Modal title</h5>
+                        <h5 class="modal-title">Table "${this.draw.selectedTable?.head}"</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <p>Modal body text goes here.</p>
+                        <ul>
+                            <li>
+                                list item 1
+                            </li>
+                            <li>
+                                list item 2
+                            </li>
+                        </ul>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -56,6 +56,7 @@ export class TableScene extends Container implements IScene {
             Manager.changeScene(new DrawScene(this.draw))
         })
     }
+    
     destroyHtmlUi(): void {
         document.querySelector(".table-edit-container")!.innerHTML = ``;
     }

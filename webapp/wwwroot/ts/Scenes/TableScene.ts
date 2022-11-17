@@ -4,6 +4,8 @@ import { Draw } from "../model/Draw";
 import { Modal } from 'bootstrap';
 import { DrawScene } from "./DrawScene";
 import * as nunjucks from "nunjucks";
+import { CommandModifyTable, CommandModifyTableArgs } from "../commands/appCommands/CommandModifyTable";
+import { Table } from "../model/Table";
 
 export class TableScene extends Container implements IScene {
 
@@ -12,7 +14,7 @@ export class TableScene extends Container implements IScene {
     constructor(draw: Draw) {
         super();
         this.draw = draw;
-        this.draw.tableBeingEdited = draw.selectedTable!.copy(true);
+        this.draw.tableBeingEdited = Table.initClone(draw.selectedTable!);
     }
 
     update(deltaMS: number): void {
@@ -98,7 +100,13 @@ export class TableScene extends Container implements IScene {
             console.log("save-changes!");
             let oldTableElementIndex = this.draw.schema.tables.findIndex(x => x.id === this.draw.tableBeingEdited!.id)!;
             this.draw.selectedTable = this.draw.tableBeingEdited!;
-            this.draw.schema.tables[oldTableElementIndex] = this.draw.tableBeingEdited!;
+            this.draw.history.execute(new CommandModifyTable(
+                this.draw, 
+                new CommandModifyTableArgs(
+                    this.draw.schema.tables[oldTableElementIndex], 
+                    this.draw.tableBeingEdited!
+                )
+            ));
             console.log(this.draw.selectedTable);
             console.log(this.draw.schema.tables);
             modal.dispose();

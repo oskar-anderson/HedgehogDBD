@@ -53,10 +53,10 @@ export class Minimap {
             entity.lineStyle(1, 0x000, 1);
             entity.beginFill(0x008000, 1);
             entity.drawRect(
-                entitie.getBodyRect().x * this.fontWidth / this.worldWidth * this.minimapRect.width, 
-                entitie.getBodyRect().y * this.fontHeight / this.worldHeight * this.minimapRect.height, 
-                entitie.getBodyRect().width * this.fontWidth / this.worldWidth * this.minimapRect.width, 
-                entitie.getBodyRect().height * this.fontHeight / this.worldHeight * this.minimapRect.height
+                entitie.getContainingRect().x * this.fontWidth / this.worldWidth * this.minimapRect.width, 
+                entitie.getContainingRect().y * this.fontHeight / this.worldHeight * this.minimapRect.height, 
+                entitie.getContainingRect().width * this.fontWidth / this.worldWidth * this.minimapRect.width, 
+                entitie.getContainingRect().height * this.fontHeight / this.worldHeight * this.minimapRect.height
             );
             entity.endFill();
             this.container.addChild(entity);

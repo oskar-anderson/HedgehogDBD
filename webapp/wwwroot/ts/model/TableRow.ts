@@ -18,12 +18,12 @@ export class TableRow {
         });
     }
 
-    clone(): TableRow {
+    static initClone(tableRow: TableRow): TableRow {
         let copy = new TableRow(
             {
-                name: this.name,
-                datatype: this.datatype,
-                attributes: this.attributes
+                name: tableRow.name,
+                datatype: tableRow.datatype,
+                attributes: tableRow.attributes
             }
         );
         return copy;

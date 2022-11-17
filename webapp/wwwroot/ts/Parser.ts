@@ -80,15 +80,16 @@ export class Parser {
                 let attributeList = columns[2].split(',').map(x => x.trim());
                 tableRows.push(TableRow.init(columns[0], columns[1], attributeList));
             }
-            tables.push(Table.init(rect, head, tableRows));
+            tables.push(Table.init(new Point(rect.x, rect.y), head, tableRows));
         }
 
         let relations: Relation[] = [];
         for (let table of tables) {
-            let outer = (new MyRect(table.rect.x - 1, table.rect.y - 1, table.rect.width + 2, table.rect.height + 2)).ToPoints();
-            let edgePoints = outer.filter(point => ! table.rect.contains(point.x, point.y))
+            let tableRect = table.getContainingRect();
+            let outer = (new MyRect(tableRect.x - 1, tableRect.y - 1, tableRect.width + 2, tableRect.height + 2)).ToPoints();
+            let edgePoints = outer.filter(point => ! tableRect.contains(point.x, point.y))
             for (const edgePoint of edgePoints) {
-                if (! new Rectangle(0, 0, width, height).contains(edgePoint.x, edgePoint.y)) continue
+                if (! new Rectangle(0, 0, width, height).contains(edgePoint.x, edgePoint.y)) continue;
                 let edgeChar = board[edgePoint.y * width + edgePoint.x];
                 if (! ["!", "?", "m"].includes(edgeChar)) continue;
                 if (relations.some(relation => 
@@ -111,10 +112,10 @@ export class Parser {
                     }
                 };
                 let direction = "";
-                direction += table.rect.contains(edgePoint.x - 1, edgePoint.y) ? "right" : "";
-                direction += table.rect.contains(edgePoint.x + 1, edgePoint.y) ? "left" : "";
-                direction += table.rect.contains(edgePoint.x, edgePoint.y - 1) ? "down" : "";
-                direction += table.rect.contains(edgePoint.x, edgePoint.y + 1) ? "up" : "";
+                direction += tableRect.contains(edgePoint.x - 1, edgePoint.y) ? "right" : "";
+                direction += tableRect.contains(edgePoint.x + 1, edgePoint.y) ? "left" : "";
+                direction += tableRect.contains(edgePoint.x, edgePoint.y - 1) ? "down" : "";
+                direction += tableRect.contains(edgePoint.x, edgePoint.y + 1) ? "up" : "";
                 // console.log(edgePoint, edgeChar, direction);
                 let pointToCheck = getNext(edgePoint, direction)
                 
@@ -140,12 +141,13 @@ export class Parser {
                         case "?":
                         case "m":
                             pointToCheck = getNext(pointToCheck, direction);
-                            for (const table of tables) {
-                                if (table.rect.contains(pointToCheck.x, pointToCheck.y)) {
-                                    targetTable = table;
+                            for (const table2 of tables) {
+                                let table2Rect = table2.getContainingRect();
+                                if (table2Rect.contains(pointToCheck.x, pointToCheck.y)) {
+                                    targetTable = table2;
                                 }
                             }
-                            if (targetTable === null) throw Error(`Cannot parse input! No table at: '${pointToCheck}', symbol: '${char}'`);
+                            if (targetTable === null) throw Error(`Cannot parse input! No table at: '${pointToCheck}', symbol: '${board[pointToCheck.y * width + pointToCheck.x]}'`);
                             isRelationBuildingDone = true;
                             break;
                         default:

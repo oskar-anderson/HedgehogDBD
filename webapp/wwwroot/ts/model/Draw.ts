@@ -26,6 +26,6 @@ export class Draw {
     }
 
     getVisibleTables() {
-        return this.schema.tables.filter(x => x.id !== this.hover?.hoverDragTableSource?.id)
+        return this.schema.tables.filter(x => x.id !== this.hover?.hoverTableSource?.id)
     }
 }

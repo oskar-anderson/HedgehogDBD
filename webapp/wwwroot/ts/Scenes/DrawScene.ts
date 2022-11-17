@@ -374,8 +374,9 @@ export class DrawScene extends Container implements IScene {
     }
 
     setWorldTable(table: Table) {
-        for (let x = table.rect.x; x < table.rect.right; x++) {
-            for (let y = table.rect.y; y < table.rect.bottom; y++) {
+        let tableRect = table.getContainingRect();
+        for (let x = tableRect.x; x < tableRect.right; x++) {
+            for (let y = tableRect.y; y < tableRect.bottom; y++) {
                 this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].char = ' ';
                 this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].color = this.draw.selectedTable?.id === table.id ? 0x800080 : 0x008000;
             }
@@ -388,11 +389,11 @@ export class DrawScene extends Container implements IScene {
         let rectNameRow = new Rectangle(worldCharGridRect.x, worldCharGridRect.y + 2, firstColumnWidth, worldCharGridRect.height - 1 - 2);
         let rectTypeRow = new Rectangle(worldCharGridRect.x + firstColumnWidth, worldCharGridRect.y + 2, secondColumnWidth, worldCharGridRect.height - 1 - 2);
         let rectAttributeRow = new Rectangle(worldCharGridRect.x + firstColumnWidth + secondColumnWidth, worldCharGridRect.y + 2, thirdColumnWidth, worldCharGridRect.height - 1 - 2);
-        console.log(table.head)
-        console.log(rectHead)
-        console.log(rectNameRow)
-        console.log(rectTypeRow)
-        console.log(rectAttributeRow)
+        // console.log(table.head)
+        // console.log(rectHead)
+        // console.log(rectNameRow)
+        // console.log(rectTypeRow)
+        // console.log(rectAttributeRow)
         let parts = ['+', '-', '+', '|', 'X', '|', '+', '-', '+'];
         this.paintWorld9PatchSafe(rectHead, parts);
         this.paintWorld9PatchSafe(rectNameRow, parts);
@@ -497,9 +498,9 @@ export class DrawScene extends Container implements IScene {
         let charGridY = Math.floor(y / Draw.fontCharSizeHeight);
         let newX = charGridX + this.draw.hover.hoverTablePivotX;
         let newY = charGridY + this.draw.hover.hoverTablePivotY;
-        if (this.draw.hover.hoverDragTable!.rect.x === newX && this.draw.hover.hoverDragTable!.rect.y === newY) return;
-        this.draw.hover.hoverDragTable!.rect.x = newX;
-        this.draw.hover.hoverDragTable!.rect.y = newY;
+        if (this.draw.hover.hoverTable!.position.x === newX && this.draw.hover.hoverTable!.position.y === newY) return;
+        this.draw.hover.hoverTable!.position.x = newX;
+        this.draw.hover.hoverTable!.position.y = newY;
         this.renderScreen(false)
     };
 
@@ -518,15 +519,16 @@ export class DrawScene extends Container implements IScene {
         let charGridY = Math.floor(y / Draw.fontCharSizeHeight);
         for (let table of this.draw.schema.tables) {
             if (table.getContainingRect().contains(charGridX, charGridY)) {
-                let hover = table.copy(false);
+                let hover = Table.initClone(table);
+                hover.initNewId();
                 this.draw.selectedTable = hover;
-                this.draw.hover = new TableHoverPreview(hover, table, table.rect.x - charGridX, table.rect.y - charGridY);
+                this.draw.hover = new TableHoverPreview(hover, table, table.position.x - charGridX, table.position.y - charGridY);
                 this.viewport.on('mousemove', this.selectToolMouseMove);
                 this.viewport.on('mouseout', this.selectToolMouseOut);
             }
         }
         if (this.draw.hover !== null) {
-            this.draw.schema.tables.push(this.draw.hover.hoverDragTable);
+            this.draw.schema.tables.push(this.draw.hover.hoverTable);
             this.renderScreen(false);
         }
     }
@@ -534,19 +536,21 @@ export class DrawScene extends Container implements IScene {
     selectToolMouseUp = (e: PIXI.InteractionEvent) => {  // same as addEventListener except type can be specified inside parameter
         console.log("mouseup");
         let isGoodPlaceForTableFunc = () => {
-            return this.draw.hover !== null ? 
-                this.draw.schema.tables
-                    .filter(x => x.id !== this.draw.hover!.hoverDragTable?.id && x.id !== this.draw.hover!.hoverDragTableSource?.id)
-                    .every(x => !x.rect.intersects(this.draw.hover!.hoverDragTable.rect))
-                    : false
+            if (this.draw.hover !== null) {
+                let hoverRect = this.draw.hover.hoverTable.getContainingRect();
+                return this.draw.schema.tables
+                    .filter(x => x.id !== this.draw.hover!.hoverTable?.id && x.id !== this.draw.hover!.hoverTableSource?.id)
+                    .every(x => !x.getContainingRect().intersects(hoverRect))
+            }
+            return false
         }
-        this.draw.schema.tables = this.draw.schema.tables.filter(x => x.id !== this.draw.hover?.hoverDragTable?.id);
+        this.draw.schema.tables = this.draw.schema.tables.filter(x => x.id !== this.draw.hover?.hoverTable?.id);
         let isGoodPlaceForTable = isGoodPlaceForTableFunc();
         console.log(`isGoodPlaceForTable: ${isGoodPlaceForTable}`);
         if (isGoodPlaceForTable) {
-            let hoverSource = this.draw.hover!.hoverDragTableSource;
-            let xDiff = this.draw.hover!.hoverDragTable.rect.x - hoverSource.rect.x;
-            let yDiff = this.draw.hover!.hoverDragTable.rect.y - hoverSource.rect.y;
+            let hoverSource = this.draw.hover!.hoverTableSource;
+            let xDiff = this.draw.hover!.hoverTable.position.x - hoverSource.position.x;
+            let yDiff = this.draw.hover!.hoverTable.position.y - hoverSource.position.y;
             
             this.draw.history.execute(new CommandMoveTableRelative(
                 this.draw, {

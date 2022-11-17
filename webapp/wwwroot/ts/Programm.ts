@@ -1,7 +1,6 @@
 import { Manager } from "./Manager";
 import { LoaderScene } from "./Scenes/LoaderScene";
 import { Draw } from "./model/Draw";
-import 'reflect-metadata';
 
 export class Programm {
 

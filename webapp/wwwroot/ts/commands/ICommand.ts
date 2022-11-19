@@ -1,5 +1,8 @@
+import { Draw } from "../model/Draw";
+
 export interface ICommand<T> {
-    getArgs(): any
-    redo(): void
+    context: Draw;
+    args: T;
+    redo(): void; 
     undo(): void
 }

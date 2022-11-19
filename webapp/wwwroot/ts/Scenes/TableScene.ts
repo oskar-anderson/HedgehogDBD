@@ -21,7 +21,7 @@ export class TableScene extends Container implements IScene {
 
     }
 
-    initHtmlUi(): void {
+    init(): void {
         let template = `
         <div>
             <style>
@@ -102,10 +102,10 @@ export class TableScene extends Container implements IScene {
             this.draw.selectedTable = this.draw.tableBeingEdited!;
             this.draw.history.execute(new CommandModifyTable(
                 this.draw, 
-                new CommandModifyTableArgs(
-                    this.draw.schema.tables[oldTableElementIndex], 
-                    this.draw.tableBeingEdited!
-                )
+                {
+                    oldTableJson: JSON.stringify(this.draw.schema.tables[oldTableElementIndex]), 
+                    newTableJson: JSON.stringify(this.draw.tableBeingEdited!)
+                }
             ));
             console.log(this.draw.selectedTable);
             console.log(this.draw.schema.tables);
@@ -122,7 +122,7 @@ export class TableScene extends Container implements IScene {
                 [this.draw.tableBeingEdited!.tableRows[index], this.draw.tableBeingEdited!.tableRows[index - 1]] = 
                     [this.draw.tableBeingEdited!.tableRows[index - 1], this.draw.tableBeingEdited!.tableRows[index]];
                 modal.dispose();
-                this.initHtmlUi();
+                this.init();
             })
         }
         for (const downBtn of downBtns) {
@@ -132,7 +132,7 @@ export class TableScene extends Container implements IScene {
                 [this.draw.tableBeingEdited!.tableRows[index], this.draw.tableBeingEdited!.tableRows[index + 1]] = 
                     [this.draw.tableBeingEdited!.tableRows[index + 1], this.draw.tableBeingEdited!.tableRows[index]];
                 modal.dispose();
-                this.initHtmlUi();
+                this.init();
             })
         }
         for (const deleteBtn of deleteBtns) {
@@ -140,7 +140,7 @@ export class TableScene extends Container implements IScene {
                 let index = Number((e.target as HTMLElement).parentElement!.parentElement!.dataset.index!);
                 this.draw.tableBeingEdited!.tableRows.splice(index, 1);
                 modal.dispose();
-                this.initHtmlUi();
+                this.init();
             })
         }
     }

@@ -6,14 +6,15 @@ export class BottomBar {
     screenCursorLocationIndicator: BitmapText;
     worldCursorLocationIndicator: BitmapText;
     worldCharGridCursorLocationIndicator: BitmapText;
+    screenScaleIndicator: BitmapText;
 
-    constructor(screen: Rectangle) {
+    constructor() {
         this.screenCursorLocationIndicator = new BitmapText("",
         {
             fontName: "Consolas",
             tint: 0xffffff
         });
-        this.screenCursorLocationIndicator.x = 10;
+        this.screenCursorLocationIndicator.x = 0;
         this.screenCursorLocationIndicator.y = Manager.height - 1 * Draw.fontCharSizeHeight;
 
 
@@ -33,8 +34,16 @@ export class BottomBar {
         this.worldCharGridCursorLocationIndicator.x = 320;
         this.worldCharGridCursorLocationIndicator.y = Manager.height - 1 * Draw.fontCharSizeHeight;
 
+        this.screenScaleIndicator = new BitmapText("",
+        {
+            fontName: "Consolas",
+            tint: 0xffffff
+        });
+        this.screenScaleIndicator.x = 480;
+        this.screenScaleIndicator.y = Manager.height - 1 * Draw.fontCharSizeHeight;
 
-        this.pointermove(0, 0, screen);
+
+        this.pointermove(0, 0, 0, 0, 0, 0, 1);
     }
 
     getContainer() {
@@ -48,12 +57,14 @@ export class BottomBar {
         container.addChild(this.screenCursorLocationIndicator);
         container.addChild(this.worldCursorLocationIndicator);
         container.addChild(this.worldCharGridCursorLocationIndicator);
+        container.addChild(this.screenScaleIndicator);
         return container;
     }
 
-    pointermove(x: number, y: number, screen: Rectangle) {
-        this.screenCursorLocationIndicator.text = `Sx: ${x}, Sy: ${y}`;
-        this.worldCursorLocationIndicator.text = `Wx: ${screen.x + x}, Wy: ${screen.y + y}`;
-        this.worldCharGridCursorLocationIndicator.text = `WCx: ${Math.floor((screen.x + x) / Draw.fontCharSizeWidth)}, WCy: ${Math.floor((screen.y + y) / Draw.fontCharSizeHeight)}`;
+    pointermove(sx: number, sy: number, wx: number, wy: number, WCx: number, WCy: number, scale: number) {
+        this.screenCursorLocationIndicator.text = `Sx: ${sx}, Sy: ${sy}`;
+        this.worldCursorLocationIndicator.text = `Wx: ${wx}, Wy: ${wy}`;
+        this.worldCharGridCursorLocationIndicator.text = `WCx: ${WCx}, WCy: ${WCy}`;
+        this.screenScaleIndicator.text = `Scale: ${scale}`;
     }
 }

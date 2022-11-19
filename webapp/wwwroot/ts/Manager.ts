@@ -1,6 +1,11 @@
-import { Application, DisplayObject } from "pixi.js";
+import { extensions, InteractionManager, Application, DisplayObject, Renderer } from "pixi.js";
+import { EventSystem } from '@pixi/events';
 
 export class Manager {
+    static getRenderer () {
+        return this.app.renderer;
+    }
+    
     private constructor() { }
 
     private static app: Application;
@@ -23,6 +28,7 @@ export class Manager {
         Manager._width = width;
         Manager._height = height;
 
+        extensions.remove(InteractionManager);
         Manager.app = new Application({
             resolution: window.devicePixelRatio || 1,
             autoDensity: true,
@@ -30,10 +36,16 @@ export class Manager {
             width: width,
             height: height
         });
+        const { renderer } = Manager.app;        // InteractionManager with EventSystem
+        renderer.addSystem(EventSystem, 'events');
+
         document.querySelector('.canvas-container')!.appendChild(this.app.view);
         document.querySelector('.canvas-container')!.addEventListener('contextmenu', (e) => {
             e.preventDefault();
           });
+        document.body.addEventListener("scroll", (e) => {
+            e.preventDefault();
+        });
         Manager.app.ticker.add((time) => Manager.update());  // I HATE the "frame passed" approach. I would rather use `Manager.app.ticker.deltaMS`
 
         // listen for the browser telling us that the screen size changed
@@ -55,7 +67,7 @@ export class Manager {
         // Add the new one
         Manager.currentScene = newScene;
         Manager.app.stage.addChild(Manager.currentScene);
-        newScene.initHtmlUi();
+        newScene.init();
     }
 
     // This update will be called by a pixi ticker and tell the scene that a tick happened
@@ -109,6 +121,6 @@ export class Manager {
 // Also, this could be in its own file...
 export interface IScene extends DisplayObject {
     update(deltaMS: number): void;
-    initHtmlUi(): void
+    init(): void
     destroyHtmlUi(): void
 }

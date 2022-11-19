@@ -10,10 +10,6 @@ export class CommandMoveTableRelative implements ICommand<CommandMoveTableRelati
         this.args = args;
     }
 
-    getArgs() {
-        return this.args;
-    }
-
     redo() {
         let table = this.context.schema.tables.find(x => x.id === this.args.id)!;
         table.position.x += this.args.x;
@@ -27,14 +23,6 @@ export class CommandMoveTableRelative implements ICommand<CommandMoveTableRelati
     }
 }
 
-export class CommandMoveTableRelativeArgs {
-    id: string;
-    x: number;
-    y: number;
-
-    constructor(id: string, x: number, y: number) {
-        this.id = id;
-        this.x = x;
-        this.y = y;
-    }
+export interface CommandMoveTableRelativeArgs {
+    id: string; x: number; y: number;
 }

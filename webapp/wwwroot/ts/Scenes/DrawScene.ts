@@ -13,7 +13,8 @@ import { DrawChar } from "../model/DrawChar";
 import { LoaderScene } from "./LoaderScene";
 import { TableScene } from "./TableScene";
 import { Parser } from "../Parser";
-import { TableHoverPreview } from "../model/tableHoverPreview";
+import { TableHoverPreview } from "../model/TableHoverPreview";
+
 
 export class DrawScene extends Container implements IScene {
 
@@ -33,6 +34,10 @@ export class DrawScene extends Container implements IScene {
             worldHeight:  Manager.height * Draw.zoomOut,
             worldWidth:   Manager.width * Draw.zoomOut,
         });
+        
+        // either of these is supposed to prevent event occuring outside canvas element, but they do not seem to work
+        // this.viewport.options.divWheel = document.querySelector("canvas")!; 
+        // this.viewport.options.interaction = Manager.getRenderer().plugins.interaction
         this.viewport.setZoom(this.draw.transferData?.viewportScaleX ?? 1)
         this.viewport.left = this.draw.transferData?.viewportLeft ?? 0
         this.viewport.top = this.draw.transferData?.viewportTop ?? 0
@@ -61,7 +66,8 @@ export class DrawScene extends Container implements IScene {
 
         this.interactive = true;
         this.viewport.on('mousemove', (e: InteractionEvent) => { 
-            if (! new Rectangle(0, 0, Manager.width, Manager.height).contains(e.data.global.x, e.data.global.y)) return;  // remove outside events. PIXI is stupid.
+            // this is neccessary when using InteractionManager 
+            // if (! new Rectangle(0, 0, Manager.width, Manager.height).contains(e.data.global.x, e.data.global.y)) return;  // remove outside events. PIXI is stupid.
             // no idea why y is someinteger.1999969482422 decimal number 
             this.draw.mouseScreenPosition = new Point(Math.floor(e.data.global.x), Math.floor(e.data.global.y))
         });
@@ -72,14 +78,14 @@ export class DrawScene extends Container implements IScene {
             this.draw.isMouseLeftDown = false;
         });
 
-        this.bottomBar = new BottomBar(this.getScreen());
+        this.bottomBar = new BottomBar();
         this.addChild(this.bottomBar.getContainer());
         this.toolActivate(this.draw.activeTool);
         this.renderScreen(true);
         console.log(this.draw.activeTool)
     }
 
-    initHtmlUi(): void {
+    init(): void {
         let header = `
         <header style="display: flex; align-items:center; padding: 2px 0">
             <span style="display: flex; justify-content: center; width: 4em">Tools</span>
@@ -257,7 +263,12 @@ export class DrawScene extends Container implements IScene {
                 minScale: 1/Draw.zoomOut
             });
 
-        // make panning update minimap camera indicator location
+
+        this.viewport.on('wheel', (e) => {
+            console.log("wheel")
+            console.log(e.target ? "Federated" : "viewport")
+            console.log(e)
+        })
         this.viewport.on('moved', () => {
             console.log("moved")
             this.cullViewport();
@@ -313,8 +324,13 @@ export class DrawScene extends Container implements IScene {
             screen.height + Draw.fontCharSizeHeight
             );
         for (const bitmapText of this.viewport.children) {
-            bitmapText.visible = extraScreen.contains(bitmapText.x, bitmapText.y);
+            if (! extraScreen.contains(bitmapText.x, bitmapText.y)) {
+                bitmapText.visible = false;
+            } else {
+                bitmapText.visible = (bitmapText as PIXI.BitmapText).text !== " "; 
             bitmapText.visible = (bitmapText as PIXI.BitmapText).text !== " "; 
+                bitmapText.visible = (bitmapText as PIXI.BitmapText).text !== " "; 
+            }
         }
     }
 
@@ -588,7 +604,15 @@ export class DrawScene extends Container implements IScene {
 
     public update(deltaMS: number): void {
         this.minimap.update(this.draw.getVisibleTables(), this.getScreen());
-        this.bottomBar.pointermove(this.draw.mouseScreenPosition.x, this.draw.mouseScreenPosition.y, this.getScreen());
+        this.bottomBar.pointermove(
+            this.draw.mouseScreenPosition.x, 
+            this.draw.mouseScreenPosition.y, 
+            Math.floor((this.getScreen().x + this.draw.mouseScreenPosition.x) * this.viewport.scale.x),
+            Math.floor((this.getScreen().y + this.draw.mouseScreenPosition.y) * this.viewport.scale.y),
+            Math.floor((this.getScreen().x + this.draw.mouseScreenPosition.x) * this.viewport.scale.x / Draw.fontCharSizeWidth),
+            Math.floor((this.getScreen().y + this.draw.mouseScreenPosition.y) * this.viewport.scale.y / Draw.fontCharSizeHeight),
+            Number((this.viewport.scale.y).toFixed(2))  // x and y is the same
+        );
         switch (this.draw.activeTool) {
             case "editTable":
                 if (! this.draw.isMouseLeftDown) break;

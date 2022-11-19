@@ -3,7 +3,7 @@ import { Table } from "./Table";
 import { History } from "../commands/History";
 import { Schema } from "./Schema";
 import { DrawChar } from "./DrawChar";
-import { TableHoverPreview } from "./tableHoverPreview";
+import { TableHoverPreview } from "./TableHoverPreview";
 
 export class Draw {
     history = new History();

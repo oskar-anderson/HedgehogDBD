@@ -1,9 +1,10 @@
 {
     "compilerOptions": {
         "module": "esnext",
-        "target": "es2017",
+        "target": "es2015",
         "noImplicitAny": true,
         "noImplicitThis": true,
+        "outDir": "./dist/",
         "sourceMap": false,
         "strict": true,
         "noUnusedLocals": false,

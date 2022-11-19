@@ -30,12 +30,7 @@ export class CommandModifyTable implements ICommand<CommandModifyTableArgs> {
     }
 }
 
-export class CommandModifyTableArgs {
+export interface CommandModifyTableArgs {
     oldTableJson: string;
     newTableJson: string;
-
-    constructor(oldTableJson: Table, newTableJson: Table) {
-        this.oldTableJson = JSON.stringify(oldTableJson);
-        this.newTableJson = JSON.stringify(newTableJson);
-    }
 }

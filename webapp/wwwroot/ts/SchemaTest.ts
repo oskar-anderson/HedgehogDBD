@@ -1,4 +1,3 @@
-import { Environment } from "./Environment";
 import { Parser } from "./Parser";
 
 export class SchemaTest {
@@ -8,8 +7,8 @@ export class SchemaTest {
     }
 
     static async parseTest1() {
+        // only works when called from wwwroot/pages/*
         let text2 = await(await fetch('./../wwwroot/data/SchemaTest1.txt')).text();
-        // let text = await(await fetch(Environment.getOrigin() + '/wwwroot/data/SchemaTest1.txt')).text();
         return new Parser().parse(text2);
     }
 

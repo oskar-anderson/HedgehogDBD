@@ -6,14 +6,14 @@ import { Draw } from "../model/Draw";
 import * as PIXI from "pixi.js";
 import { BottomBar } from "../components/BottomBar";
 import { Table } from "../model/Table";
-import { CommandMoveTableRelative } from "../commands/appCommands/CommandMoveTableRelative";
-import { Schema } from "../model/Schema";
 import { Relation } from "../model/Relation";
 import { DrawChar } from "../model/DrawChar";
-import { LoaderScene } from "./LoaderScene";
-import { TableScene } from "./TableScene";
 import { Parser } from "../Parser";
-import { TableHoverPreview } from "../model/TableHoverPreview";
+import { PanTool } from "../tools/PanTool";
+import { EditTableTool } from "../tools/EditTableTool";
+import { SelectTool } from "../tools/SelectTool";
+import { CreateTableTool } from "../tools/CreateTableTool";
+import { RelationEditTool } from "../tools/RelationEditTool";
 
 
 export class DrawScene extends Container implements IScene {
@@ -28,26 +28,18 @@ export class DrawScene extends Container implements IScene {
 
         this.draw = draw;
 
-        this.viewport = new Viewport({
-            screenHeight: Manager.height,
-            screenWidth:  Manager.width,
-            worldHeight:  Manager.height * Draw.zoomOut,
-            worldWidth:   Manager.width * Draw.zoomOut,
-        });
-        
-        // either of these is supposed to prevent event occuring outside canvas element, but they do not seem to work
-        // this.viewport.options.divWheel = document.querySelector("canvas")!; 
-        // this.viewport.options.interaction = Manager.getRenderer().plugins.interaction
-        this.viewport.setZoom(this.draw.transferData?.viewportScaleX ?? 1)
-        this.viewport.left = this.draw.transferData?.viewportLeft ?? 0
-        this.viewport.top = this.draw.transferData?.viewportTop ?? 0
-        this.initViewport();
+        this.viewport = this.initViewport();
         this.addChild(this.viewport);
+        if (this.draw.activeTool === null) {
+            this.draw.activeTool = new PanTool(this.viewport);
+            this.draw.activeTool.init();
+        }
+        
 
         this.minimap = new Minimap()
         this.minimap.init(
-            this.getWorld().height, 
-            this.getWorld().width, 
+            this.draw.getWorld().height, 
+            this.draw.getWorld().width, 
             Draw.fontCharSizeWidth, 
             Draw.fontCharSizeHeight, 
             new Rectangle(
@@ -59,17 +51,17 @@ export class DrawScene extends Container implements IScene {
             (x: number, y: number) => { 
                 console.log("minimap navigation");
                 this.viewport.moveCenter(x, y);
-                this.minimap.update(this.draw.getVisibleTables(), this.getScreen()) 
+                this.minimap.update(this.draw.getVisibleTables(), this.draw.getScreen()) 
             }
         );
         this.addChild(this.minimap.container);
 
         this.interactive = true;
-        this.viewport.on('mousemove', (e: InteractionEvent) => { 
+        this.on('mousemove', (e: InteractionEvent) => { 
             // this is neccessary when using InteractionManager 
             // if (! new Rectangle(0, 0, Manager.width, Manager.height).contains(e.data.global.x, e.data.global.y)) return;  // remove outside events. PIXI is stupid.
             // no idea why y is someinteger.1999969482422 decimal number 
-            this.draw.mouseScreenPosition = new Point(Math.floor(e.data.global.x), Math.floor(e.data.global.y))
+            this.draw.mouseScreenPositionNext = new Point(Math.floor(e.data.global.x), Math.floor(e.data.global.y))
         });
         this.on('mousedown', (e: InteractionEvent) => { 
             this.draw.isMouseLeftDown = true;
@@ -80,9 +72,7 @@ export class DrawScene extends Container implements IScene {
 
         this.bottomBar = new BottomBar();
         this.addChild(this.bottomBar.getContainer());
-        this.toolActivate(this.draw.activeTool);
         this.renderScreen(true);
-        console.log(this.draw.activeTool)
     }
 
     init(): void {
@@ -90,11 +80,11 @@ export class DrawScene extends Container implements IScene {
         <header style="display: flex; align-items:center; padding: 2px 0">
             <span style="display: flex; justify-content: center; width: 4em">Tools</span>
             <div class="bar btn-group btn-group-toggle">
-                <button class="tool-select btn btn-light ${this.draw.activeTool === "pan" ? "active" : ""}" data-tooltype="pan">Pan</button>
-                <button class="tool-select btn btn-light ${this.draw.activeTool === "select" ? "active" : ""}" data-tooltype="select">Move table</button>
-                <button class="tool-select btn btn-light ${this.draw.activeTool === "editTable" ? "active" : ""}" data-tooltype="editTable">Edit table</button>
-                <button class="tool-select btn btn-light ${this.draw.activeTool === "newTable" ? "active" : ""}" data-tooltype="newTable">New table</button>
-                <button class="tool-select btn btn-light ${this.draw.activeTool === "newRelation" ? "active" : ""}" data-tooltype="newRelation">New relation</button>
+                <button class="tool-select btn btn-light ${this.draw.activeTool instanceof PanTool ? "active" : ""}" data-tooltype="pan">Pan</button>
+                <button class="tool-select btn btn-light ${this.draw.activeTool instanceof SelectTool ? "active" : ""}" data-tooltype="select">Move table</button>
+                <button class="tool-select btn btn-light ${this.draw.activeTool instanceof EditTableTool ? "active" : ""}" data-tooltype="editTable">Edit table</button>
+                <button class="tool-select btn btn-light ${this.draw.activeTool instanceof CreateTableTool ? "active" : ""}" data-tooltype="newTable">New table</button>
+                <button class="tool-select btn btn-light ${this.draw.activeTool instanceof RelationEditTool ? "active" : ""}" data-tooltype="editRelation">Edit relation</button>
             </div>
         </header>
         `;
@@ -105,7 +95,7 @@ export class DrawScene extends Container implements IScene {
                 let selectedTool = (toolEl as HTMLElement).dataset.tooltype!;
                 document.querySelectorAll(".tool-select").forEach(x => x.classList.remove("active"));
                 toolEl.classList.toggle("active");
-                this.handleToolChange(selectedTool)
+                this.toolActivate(selectedTool);
             });
         }
             
@@ -196,7 +186,7 @@ export class DrawScene extends Container implements IScene {
     }
 
     getSaveContent() {
-        let charGridSize = this.getWorldCharGrid();
+        let charGridSize = this.draw.getWorldCharGrid();
         let sb = [];
         for (let y = 0; y < charGridSize.height; y++) {
             for (let x = 0; x < charGridSize.width; x++) {
@@ -250,73 +240,62 @@ export class DrawScene extends Container implements IScene {
 
     
     initViewport() {
+        let viewport = new Viewport({
+            screenHeight: Manager.height,
+            screenWidth:  Manager.width,
+            worldHeight:  Manager.height * Draw.zoomOut,
+            worldWidth:   Manager.width * Draw.zoomOut,
+        });
+
+        // either of these is supposed to prevent event occuring outside canvas element, but they do not seem to work
+        // this.viewport.options.divWheel = document.querySelector("canvas")!; 
+        // this.viewport.options.interaction = Manager.getRenderer().plugins.interaction
+        viewport.setZoom(this.draw.viewportDTO?.viewportScale ?? 1)
+        viewport.left = this.draw.viewportDTO?.viewportLeft ?? 0
+        viewport.top = this.draw.viewportDTO?.viewportTop ?? 0
+        this.draw.setViewport(viewport);
+   
+
         // activate plugins
-        this.viewport
-            .drag().clamp({ 
+        viewport
+            .drag({ wheel: false }).clamp({ 
                 left:   0,
                 top:    0,
                 right:  Manager.width * Draw.zoomOut,
                 bottom: Manager.height * Draw.zoomOut,
-            })
-            .wheel().clampZoom({ 
-                maxScale: Draw.zoomIn, 
-                minScale: 1/Draw.zoomOut
             });
+        if (this.draw.activeTool !== null) {
+            viewport.plugins.get("drag")!.pause();
+        }
 
+        viewport.on('wheel', (e) => {
+            let wheelDirection = e.deltaY > 0 ? +1 : -1;
+            let possibleZoomLevels = [1/Draw.zoomOut, 0.4096, 0.512, 0.64, 0.8, 1, 1.25, 1.5625, Draw.zoomIn];
+            let index =  possibleZoomLevels.indexOf(this.draw.currentZoomScale) + wheelDirection;
+            let newScale = possibleZoomLevels[Math.max(0, Math.min(index, possibleZoomLevels.length - 1))]
+            this.draw.currentZoomScale = newScale;
+            let mouseWorldPosition = this.draw.getMouseWorldPosition();
+            this.draw.setScale(this.viewport, newScale);
+            let mouseWorldPositionNew = this.draw.getMouseWorldPosition();
+            let translation = new Point(
+                mouseWorldPositionNew.x - mouseWorldPosition.x,
+                mouseWorldPositionNew.y - mouseWorldPosition.y,
+            );
+            viewport.left -= translation.x;
+            viewport.top -= translation.y;
+            this.draw.setViewport(viewport);
 
-        this.viewport.on('wheel', (e) => {
-            console.log("wheel")
-            console.log(e.target ? "Federated" : "viewport")
-            console.log(e)
+            this.cullViewport();
         })
-        this.viewport.on('moved', () => {
+        viewport.on('moved', () => {
             console.log("moved")
             this.cullViewport();
         })
+        return viewport;
     }
 
-    
-    getWorld() {
-        return new Rectangle(
-            0,
-            0,
-            this.viewport.worldWidth,
-            this.viewport.worldHeight
-        );
-    }
-
-    getScreen() {
-        return new Rectangle(
-            Math.floor(this.viewport.left), // positive number
-            Math.floor(this.viewport.top), // positive number
-            this.viewport.screenWidth / this.viewport.scale.x,
-            this.viewport.screenHeight / this.viewport.scale.y
-        );
-    }
-    
-    getScreenCharGrid() {
-        let screenSize = this.getScreen();
-        return new Rectangle(
-            Math.floor(screenSize.x / Draw.fontCharSizeWidth),
-            Math.floor(screenSize.y / Draw.fontCharSizeHeight),
-            Math.ceil(screenSize.width / Draw.fontCharSizeWidth),
-            Math.ceil(screenSize.height / Draw.fontCharSizeHeight), 
-            );
-    }
-
-    getWorldCharGrid() {
-        let worldSize = this.getWorld();
-        return new Rectangle(
-            0,
-            0,
-            Math.ceil(worldSize.width / Draw.fontCharSizeWidth),
-            Math.ceil(worldSize.height / Draw.fontCharSizeHeight), 
-        );
-    }
-
-    
     cullViewport() {
-        let screen = this.getScreen();
+        let screen = this.draw.getScreen();
         let extraScreen = new Rectangle(
             screen.x - Draw.fontCharSizeWidth, 
             screen.y - Draw.fontCharSizeHeight, 
@@ -336,7 +315,7 @@ export class DrawScene extends Container implements IScene {
 
     
     renderScreen(isForceScreenReset: boolean) {
-        let charGridSize = this.getWorldCharGrid();
+        let charGridSize = this.draw.getWorldCharGrid();
         for (let y = 0; y < charGridSize.height; y++) {
             for (let x = 0; x < charGridSize.width; x++) {
                 this.draw.worldDrawArea[y * charGridSize.width + x] = new DrawChar(' ', 0x008000);
@@ -349,10 +328,9 @@ export class DrawScene extends Container implements IScene {
         for (const relation of this.draw.schema.relations) {
             this.setWorldRelation(relation);
         }
-        this.minimap.update(tables, this.getScreen());
 
-        let screenCharGrid = this.getWorldCharGrid();
-        let worldCharGridSize = this.getWorldCharGrid();
+        let screenCharGrid = this.draw.getWorldCharGrid();
+        let worldCharGridSize = this.draw.getWorldCharGrid();
         if (isForceScreenReset) {
             this.viewport.removeChildren();
         }
@@ -380,12 +358,12 @@ export class DrawScene extends Container implements IScene {
     }
 
     getWorldPointCanvasIndex(x: number, y: number) {
-        return y * this.getWorldCharGrid().width + x;
+        return y * this.draw.getWorldCharGrid().width + x;
     }
 
     setWorldRelation(relation: Relation) {
         for (const point of relation.points) {
-            this.draw.worldDrawArea[point.point.y * this.getWorldCharGrid().width + point.point.x].char = point.char;
+            this.draw.worldDrawArea[point.point.y * this.draw.getWorldCharGrid().width + point.point.x].char = point.char;
         }
     }
 
@@ -452,7 +430,7 @@ export class DrawScene extends Container implements IScene {
     paintWorld9PatchSafe(rect: Rectangle, _9patch: string[]) {
         let [tl, t, tr, ml, _, mr, bl, b, br] = _9patch;  // skip middle
         let paintWorldPointToScreenSafe = (x: number, y: number, char: string) => {
-            if (! this.getWorldCharGrid().contains(x, y)) { return; }
+            if (! this.draw.getWorldCharGrid().contains(x, y)) { return; }
             this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].char = char;
         }
         let paintWorldRectToScreenSafe = (rect: Rectangle, fillchar: string) => {
@@ -472,173 +450,52 @@ export class DrawScene extends Container implements IScene {
         paintWorldRectToScreenSafe(new Rectangle(rect.right, rect.bottom, 1, 1), br);
     }
 
-
-    handleToolChange(toolname: string) {
-        let previousTool = this.draw.activeTool;
-        this.draw.activeTool = toolname;
-        console.log(previousTool);
-        console.log(toolname);
-        this.toolDisable(previousTool);
-        this.toolActivate(this.draw.activeTool);
-    }
-
-    toolDisable(previousTool: string) {
-        this.draw.selectedTable = null;
-        this.renderScreen(false)
-        // disable Panning 
-        // @ts-ignore
-        this.viewport.plugins.get("drag")!.options.pressDrag = false;
-        switch(previousTool) {
-            case "pan":
-                break;
-            case "select":
-                // pauseSelect
-                this.viewport.removeListener('mousedown', this.mouseDown);
-                this.viewport.removeListener('mouseup', this.selectToolMouseUp);
-                this.viewport.removeListener('mousemove', this.selectToolMouseMove);
-                this.viewport.removeListener('mouseout', this.selectToolMouseOut);
-                break;
-            case "editTable":
-                break;
-        }
-    }
-
-
-    selectToolMouseMove = (e: PIXI.InteractionEvent) => {
-        console.log(`mousemove`);
-        console.log(JSON.parse(JSON.stringify(e.data.global)));
-        if (! this.draw.hover) return;
-        let x = this.getScreen().x + e.data.global.x / this.viewport.scale.x;
-        let y = this.getScreen().y + e.data.global.y / this.viewport.scale.y;
-        let charGridX = Math.floor(x / Draw.fontCharSizeWidth);
-        let charGridY = Math.floor(y / Draw.fontCharSizeHeight);
-        let newX = charGridX + this.draw.hover.hoverTablePivotX;
-        let newY = charGridY + this.draw.hover.hoverTablePivotY;
-        if (this.draw.hover.hoverTable!.position.x === newX && this.draw.hover.hoverTable!.position.y === newY) return;
-        this.draw.hover.hoverTable!.position.x = newX;
-        this.draw.hover.hoverTable!.position.y = newY;
-        this.renderScreen(false)
-    };
-
-    selectToolMouseOut = () => {
-        console.log("mouseout");
-        this.viewport.removeListener('mousemove', this.selectToolMouseMove);
-        this.viewport.removeListener('mouseout', this.selectToolMouseOut);  
-    }
-
-    mouseDown = (e: PIXI.InteractionEvent) => {  // same as addEventListener except type can be specified inside parameter
-        console.log("mousedown");
-        console.log(JSON.parse(JSON.stringify(e.data.global)));
-        let x = this.getScreen().x + e.data.global.x / this.viewport.scale.x;
-        let y = this.getScreen().y + e.data.global.y / this.viewport.scale.y;
-        let charGridX = Math.floor(x / Draw.fontCharSizeWidth);
-        let charGridY = Math.floor(y / Draw.fontCharSizeHeight);
-        for (let table of this.draw.schema.tables) {
-            if (table.getContainingRect().contains(charGridX, charGridY)) {
-                let hover = Table.initClone(table);
-                hover.initNewId();
-                this.draw.selectedTable = hover;
-                this.draw.hover = new TableHoverPreview(hover, table, table.position.x - charGridX, table.position.y - charGridY);
-                this.viewport.on('mousemove', this.selectToolMouseMove);
-                this.viewport.on('mouseout', this.selectToolMouseOut);
-            }
-        }
-        if (this.draw.hover !== null) {
-            this.draw.schema.tables.push(this.draw.hover.hoverTable);
-            this.renderScreen(false);
-        }
-    }
-
-    selectToolMouseUp = (e: PIXI.InteractionEvent) => {  // same as addEventListener except type can be specified inside parameter
-        console.log("mouseup");
-        let isGoodPlaceForTableFunc = () => {
-            if (this.draw.hover !== null) {
-                let hoverRect = this.draw.hover.hoverTable.getContainingRect();
-                return this.draw.schema.tables
-                    .filter(x => x.id !== this.draw.hover!.hoverTable?.id && x.id !== this.draw.hover!.hoverTableSource?.id)
-                    .every(x => !x.getContainingRect().intersects(hoverRect))
-            }
-            return false
-        }
-        this.draw.schema.tables = this.draw.schema.tables.filter(x => x.id !== this.draw.hover?.hoverTable?.id);
-        let isGoodPlaceForTable = isGoodPlaceForTableFunc();
-        console.log(`isGoodPlaceForTable: ${isGoodPlaceForTable}`);
-        if (isGoodPlaceForTable) {
-            let hoverSource = this.draw.hover!.hoverTableSource;
-            let xDiff = this.draw.hover!.hoverTable.position.x - hoverSource.position.x;
-            let yDiff = this.draw.hover!.hoverTable.position.y - hoverSource.position.y;
-            
-            this.draw.history.execute(new CommandMoveTableRelative(
-                this.draw, {
-                    id: hoverSource.id,
-                    x: xDiff, 
-                    y: yDiff
-                })
-            );
-        }
-        this.draw.hover = null;
-        this.draw.selectedTable = null;
-
-        this.renderScreen(false);
-        this.viewport.removeListener('mousemove', this.selectToolMouseMove);
-        this.viewport.removeListener('mouseout', this.selectToolMouseOut);  
-    }
-    
-
     toolActivate(tool: string) {
+        if (this.draw.activeTool) {
+            this.draw.activeTool.exit();
+        }
+        console.log(this.draw.activeTool);
+        console.log(tool);
         switch(tool) {
             case "pan":
-                // enable Panning 
-                // @ts-ignore
-                this.viewport.plugins.get("drag")!.options.pressDrag = true;
+                this.draw.activeTool = new PanTool(this.viewport);
                 break;
             case "select":
-                // pointerdown unlike mousedown captures right click as well
-                this.viewport.on('mousedown', this.mouseDown)
-                this.viewport.on('mouseup', this.selectToolMouseUp)
+                this.draw.activeTool = new SelectTool(this.draw);
                 break;
             case "editTable":
+                this.draw.activeTool = new EditTableTool(this.draw);
                 break;
+            case "newTable":
+                this.draw.activeTool = new CreateTableTool(this.draw);
+                break;
+            case "editRelation":
+                this.draw.activeTool = new RelationEditTool();
+                break;
+            default:
+                throw Error(`toolActivate. Tool: '${tool}' does not exist!`);
         }
+        this.draw.activeTool?.init();
+        this.renderScreen(false);
     }
 
     public update(deltaMS: number): void {
-        this.minimap.update(this.draw.getVisibleTables(), this.getScreen());
+        this.draw.mouseScreenPosition = new Point(this.draw.mouseScreenPositionNext.x, this.draw.mouseScreenPositionNext.y);
+        this.draw.setViewport(this.viewport);
+        this.minimap.update(this.draw.getVisibleTables(), this.draw.getScreen());
         this.bottomBar.pointermove(
             this.draw.mouseScreenPosition.x, 
             this.draw.mouseScreenPosition.y, 
-            Math.floor((this.getScreen().x + this.draw.mouseScreenPosition.x) * this.viewport.scale.x),
-            Math.floor((this.getScreen().y + this.draw.mouseScreenPosition.y) * this.viewport.scale.y),
-            Math.floor((this.getScreen().x + this.draw.mouseScreenPosition.x) * this.viewport.scale.x / Draw.fontCharSizeWidth),
-            Math.floor((this.getScreen().y + this.draw.mouseScreenPosition.y) * this.viewport.scale.y / Draw.fontCharSizeHeight),
-            Number((this.viewport.scale.y).toFixed(2))  // x and y is the same
+            this.draw.getMouseWorldPosition().x,
+            this.draw.getMouseWorldPosition().y,
+            Math.floor((this.draw.getScreen().x + this.draw.mouseScreenPosition.x / this.draw.getScale()) / Draw.fontCharSizeWidth),
+            Math.floor((this.draw.getScreen().y + this.draw.mouseScreenPosition.y / this.draw.getScale()) / Draw.fontCharSizeHeight),
+            Number((this.draw.getScale()).toFixed(2))  // x and y is the same
         );
-        switch (this.draw.activeTool) {
-            case "editTable":
-                if (! this.draw.isMouseLeftDown) break;
-                console.log("update editTable")
-                this.draw.isMouseLeftDown = false;
-                let x = this.getScreen().x + this.draw.mouseScreenPosition.x / this.viewport.scale.x;
-                let y = this.getScreen().y + this.draw.mouseScreenPosition.y / this.viewport.scale.y;
-                let charGridX = Math.floor(x / Draw.fontCharSizeWidth);
-                let charGridY = Math.floor(y / Draw.fontCharSizeHeight);
-                console.log("this.draw.mouseWorldPosition.x: ", this.draw.mouseScreenPosition.x, ", this.draw.mouseWorldPosition.y: ", this.draw.mouseScreenPosition.y)
-                console.log("charGridX: ", charGridX, ", charGridY: ", charGridY)
-                for (let table of this.draw.schema.tables) {
-                    if (table.getContainingRect().contains(charGridX, charGridY)) {
-                        this.draw.selectedTable = table;
-                        this.draw.transferData = { 
-                            viewportLeft: this.viewport.left, 
-                            viewportTop: this.viewport.top, 
-                            viewportScaleX: this.viewport.scale.x, 
-                            viewportScaleY: this.viewport.scale.y, 
-                        }
-                        Manager.changeScene(new TableScene(this.draw))
-                    }
-                }
-                break;
-            default:
-                break;
+        this.draw.activeTool?.update();
+        if (this.draw.activeTool?.getIsDirty()) {
+            console.log("renderScreen")
+            this.renderScreen(false);
         }
     }
 }

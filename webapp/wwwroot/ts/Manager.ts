@@ -5,7 +5,7 @@ export class Manager {
     static getRenderer () {
         return this.app.renderer;
     }
-    
+
     private constructor() { }
 
     private static app: Application;
@@ -40,12 +40,8 @@ export class Manager {
         renderer.addSystem(EventSystem, 'events');
 
         document.querySelector('.canvas-container')!.appendChild(this.app.view);
-        document.querySelector('.canvas-container')!.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-          });
-        document.body.addEventListener("scroll", (e) => {
-            e.preventDefault();
-        });
+        document.querySelector('canvas')!.addEventListener('contextmenu', (e) => { e.preventDefault(); });
+        
         Manager.app.ticker.add((time) => Manager.update());  // I HATE the "frame passed" approach. I would rather use `Manager.app.ticker.deltaMS`
 
         // listen for the browser telling us that the screen size changed

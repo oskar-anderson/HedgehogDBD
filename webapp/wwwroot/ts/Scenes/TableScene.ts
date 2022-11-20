@@ -11,10 +11,10 @@ export class TableScene extends Container implements IScene {
 
     draw: Draw;
 
-    constructor(draw: Draw) {
+    constructor(draw: Draw, selectedTable: Table) {
         super();
         this.draw = draw;
-        this.draw.tableBeingEdited = Table.initClone(draw.selectedTable!);
+        this.draw.tableBeingEdited = Table.initClone(selectedTable!);
     }
 
     update(deltaMS: number): void {
@@ -107,8 +107,6 @@ export class TableScene extends Container implements IScene {
                     newTableJson: JSON.stringify(this.draw.tableBeingEdited!)
                 }
             ));
-            console.log(this.draw.selectedTable);
-            console.log(this.draw.schema.tables);
             modal.dispose();
             Manager.changeScene(new DrawScene(this.draw))
         })

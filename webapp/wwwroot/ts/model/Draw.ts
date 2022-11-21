@@ -17,7 +17,6 @@ export class Draw {
     static zoomIn = 2;
     currentZoomScale = 1;
     selectedTable: Table | null = null
-    tableBeingEdited: Table | null = null
     schema: Schema;
 
     mouseScreenPosition: Point = new Point(0, 0);
@@ -100,8 +99,8 @@ export class Draw {
     }
 
     clampRect(outer: Rectangle, inner: Rectangle) {
-        let newX = Math.max(0, Math.min(outer.width - inner.width, inner.x));
-        let newY = Math.max(0, Math.min(outer.height - inner.height, inner.y));
+        let newX = Math.max(outer.x, Math.min(outer.width - inner.width, inner.x));
+        let newY = Math.max(outer.y, Math.min(outer.height - inner.height, inner.y));
         return new Point(newX, newY);
     }
 }

@@ -4,6 +4,7 @@ import { CommandMoveTableRelative } from "../commands/appCommands/CommandMoveTab
 import { Table } from "../model/Table";
 import { TableHoverPreview } from "../model/TableHoverPreview";
 import { ITool } from "./ITool";
+import { MyRect } from "../MyRect";
 
 export class SelectTool implements ITool {
 

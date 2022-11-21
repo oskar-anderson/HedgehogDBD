@@ -1,4 +1,5 @@
 import { Point, Rectangle } from "pixi.js";
+import { MyRect } from "../MyRect";
 import { TableRow } from "./TableRow";
 
 export class Table {
@@ -71,7 +72,7 @@ export class Table {
         + Math.max(...(this.tableRows.map(el => el.datatype.length))) + 3 + 
         Math.max(...(this.tableRows.map(el => el.attributes.join(", ").length))) + 2;
         let nameWidth = 2 + this.head.length + 2;
-        return new Rectangle(
+        return new MyRect(
             this.position.x, 
             this.position.y, 
             Math.max(columnWidth, nameWidth), 

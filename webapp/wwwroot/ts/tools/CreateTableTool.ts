@@ -1,8 +1,9 @@
-import { Point } from "pixi.js";
+import { Point, Rectangle } from "pixi.js";
 import { CommandCreateTable } from "../commands/appCommands/CommandCreateTable";
 import { Draw } from "../model/Draw";
 import { Table } from "../model/Table";
 import { TableRow } from "../model/TableRow";
+import { MyRect } from "../MyRect";
 import { ITool } from "./ITool";
 
 export class CreateTableTool implements ITool {
@@ -42,7 +43,7 @@ export class CreateTableTool implements ITool {
         this.hover = Table.init(
             this.draw.getMouseCharGridPosition(),
             "NewTable",
-            [ TableRow.init("Id", "VARCHAR", [""])]
+            [ TableRow.init("Id", "VARCHAR", ["PK"])]
         );
         this.hover.position = this.draw.clampRect(this.draw.getWorldCharGrid(), this.hover.getContainingRect());
         this.draw.selectedTable = this.hover;
@@ -52,12 +53,14 @@ export class CreateTableTool implements ITool {
 
     mouseMove = () => {
         if (this.hover === null) return;
-        let mouseCharGrid = this.draw.getMouseCharGridPosition();
-        let newX = Math.max(0, Math.min(this.draw.getWorldCharGrid().width - this.hover.getContainingRect().width, mouseCharGrid.x));
-        let newY = Math.max(0, Math.min(this.draw.getWorldCharGrid().height - this.hover.getContainingRect().height, mouseCharGrid.y));
-        this.isDirty = !(this.hover!.position.x === newX && this.hover!.position.y === newY);
-        this.hover!.position.x = newX;
-        this.hover!.position.y = newY;
+        let newPos = this.draw.clampRect(
+            this.draw.getWorldCharGrid(), 
+            MyRect.init(
+                this.draw.getMouseCharGridPosition(), 
+                this.hover.getContainingRect().getBr()
+            ));
+        this.isDirty = !(JSON.stringify(this.hover!.position) === JSON.stringify(newPos));
+        this.hover.position = newPos;
         
         if (this.draw.isMouseLeftDown) {
             this.createTable();

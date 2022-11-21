@@ -51,7 +51,9 @@ export class DrawScene extends Container implements IScene {
             (x: number, y: number) => { 
                 console.log("minimap navigation");
                 this.viewport.moveCenter(x, y);
-                this.minimap.update(this.draw.getVisibleTables(), this.draw.getScreen()) 
+                this.draw.setViewport(this.viewport);
+                this.minimap.update(this.draw.getVisibleTables(), this.draw.getScreen());
+                this.renderScreen(false);
             }
         );
         this.addChild(this.minimap.container);

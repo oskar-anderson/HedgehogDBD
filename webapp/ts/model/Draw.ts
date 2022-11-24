@@ -13,8 +13,6 @@ export class Draw {
     worldDrawArea: DrawChar[] = [];
     static fontCharSizeWidth = 7;
     static fontCharSizeHeight = 14;
-    static zoomOut = 3;
-    static zoomIn = 2;
     currentZoomScale = 1;
     selectedTable: Table | null = null
     schema: Schema;

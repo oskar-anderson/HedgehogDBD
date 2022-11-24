@@ -242,11 +242,13 @@ export class DrawScene extends Container implements IScene {
 
     
     initViewport() {
+        let worldWidth = 3240;
+        let worldHeight = 2160;
         let viewport = new Viewport({
             screenHeight: Manager.height,
             screenWidth:  Manager.width,
-            worldHeight:  Manager.height * Draw.zoomOut,
-            worldWidth:   Manager.width * Draw.zoomOut,
+            worldHeight:  worldHeight,
+            worldWidth:   worldWidth,
         });
 
         // either of these is supposed to prevent event occuring outside canvas element, but they do not seem to work
@@ -263,8 +265,8 @@ export class DrawScene extends Container implements IScene {
             .drag({ wheel: false }).clamp({ 
                 left:   0,
                 top:    0,
-                right:  Manager.width * Draw.zoomOut,
-                bottom: Manager.height * Draw.zoomOut,
+                right:  worldWidth,
+                bottom: worldHeight,
             });
         if (this.draw.activeTool !== null) {
             viewport.plugins.get("drag")!.pause();
@@ -272,7 +274,7 @@ export class DrawScene extends Container implements IScene {
 
         viewport.on('wheel', (e) => {
             let wheelDirection = e.deltaY > 0 ? +1 : -1;
-            let possibleZoomLevels = [1/Draw.zoomOut, 0.4096, 0.512, 0.64, 0.8, 1, 1.25, 1.5625, Draw.zoomIn];
+            let possibleZoomLevels = [1/3, 0.4096, 0.512, 0.64, 0.8, 1, 1.25, 1.5625, 2];
             let index =  possibleZoomLevels.indexOf(this.draw.currentZoomScale) + wheelDirection;
             let newScale = possibleZoomLevels[Math.max(0, Math.min(index, possibleZoomLevels.length - 1))]
             this.draw.currentZoomScale = newScale;

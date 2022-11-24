@@ -37,10 +37,9 @@
 </body>
 <script type="module" >
     import * as ModuleProgramm from "../wwwroot/js/Programm.js";
-    import * as ModuleSchemaTest from "../wwwroot/js/SchemaTest.js";
     import * as ModuleParser from "../wwwroot/js/Parser.js";
 
-    let text = await(await fetch('./../wwwroot/data/SchemaTest1.txt')).text();
+    let text = await(await fetch('../wwwroot/data/SchemaTest1.txt')).text();
     let draw = new ModuleParser.Parser().parse(text);
     console.log(draw.schema);
 

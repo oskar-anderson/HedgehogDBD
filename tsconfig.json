@@ -4,7 +4,6 @@
         "target": "es2015",
         "noImplicitAny": true,
         "noImplicitThis": true,
-        "outDir": "./dist/",
         "sourceMap": false,
         "strict": true,
         "noUnusedLocals": false,
@@ -13,7 +12,6 @@
         "experimentalDecorators": true,
         "removeComments": true,
         "moduleResolution": "node",
-        "rootDir": "webapp/wwwroot/ts",
         "lib": [
             "dom",
             "esnext",

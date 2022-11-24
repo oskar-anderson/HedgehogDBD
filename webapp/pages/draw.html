@@ -36,11 +36,12 @@
     </div>
 </body>
 <script type="module" >
-    import * as ModuleProgramm from "../wwwroot/js-src/Programm.js";
-    import * as ModuleSchemaTest from "../wwwroot/js-src/SchemaTest.js";
-    import * as ModuleParser from "../wwwroot/js-src/Parser.js";
+    import * as ModuleProgramm from "../wwwroot/js/Programm.js";
+    import * as ModuleSchemaTest from "../wwwroot/js/SchemaTest.js";
+    import * as ModuleParser from "../wwwroot/js/Parser.js";
 
-    let draw = await ModuleSchemaTest.SchemaTest.parseTest1();
+    let text = await(await fetch('./../wwwroot/data/SchemaTest1.txt')).text();
+    let draw = new ModuleParser.Parser().parse(text);
     console.log(draw.schema);
 
     ModuleProgramm.Programm.main(draw);

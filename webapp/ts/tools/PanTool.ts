@@ -1,5 +1,5 @@
 import { Viewport } from "pixi-viewport";
-import { ITool } from "./ITool";
+import { ITool, IToolNames } from "./ITool";
 
 export class PanTool implements ITool {
     
@@ -8,12 +8,16 @@ export class PanTool implements ITool {
         this.viewport = viewport;
     }
 
+    getName(): IToolNames {
+        return IToolNames.pan;
+    }
+
     init() {
         this.viewport.plugins.get("drag")!.resume();
     }
 
     update() {
-
+        
     }
 
     exit() {

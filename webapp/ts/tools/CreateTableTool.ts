@@ -4,7 +4,7 @@ import { Draw } from "../model/Draw";
 import { Table } from "../model/Table";
 import { TableRow } from "../model/TableRow";
 import { MyRect } from "../MyRect";
-import { ITool } from "./ITool";
+import { ITool, IToolNames } from "./ITool";
 
 export class CreateTableTool implements ITool {
 
@@ -14,6 +14,10 @@ export class CreateTableTool implements ITool {
     status = "addHover";
     constructor(draw: Draw) {
         this.draw = draw;
+    }
+
+    getName(): IToolNames {
+        return IToolNames.newTable;
     }
 
     init(): void {

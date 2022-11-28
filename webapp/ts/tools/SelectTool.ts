@@ -3,7 +3,7 @@ import { InteractionEvent, interactiveTarget } from "pixi.js";
 import { CommandMoveTableRelative } from "../commands/appCommands/CommandMoveTableRelative";
 import { Table } from "../model/Table";
 import { TableHoverPreview } from "../model/TableHoverPreview";
-import { ITool } from "./ITool";
+import { ITool, IToolNames } from "./ITool";
 import { MyRect } from "../MyRect";
 
 export class SelectTool implements ITool {
@@ -14,6 +14,10 @@ export class SelectTool implements ITool {
     status: string = "mouseDown"
     constructor(draw: Draw) {
         this.draw = draw;
+    }
+
+    getName(): IToolNames {
+        return IToolNames.select;
     }
 
     init() {

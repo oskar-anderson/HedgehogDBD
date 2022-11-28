@@ -1,9 +1,13 @@
-import { ITool } from "./ITool";
+import { ITool, IToolNames } from "./ITool";
 
 export class RelationEditTool implements ITool {
 
     constructor() {
 
+    }
+    
+    getName(): IToolNames {
+        return IToolNames.editRelation;
     }
 
     init(): void {

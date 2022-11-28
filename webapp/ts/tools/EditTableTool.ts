@@ -1,7 +1,7 @@
 import { Manager } from "../Manager";
 import { Draw } from "../model/Draw";
 import { TableScene } from "../Scenes/TableScene";
-import { ITool } from "./ITool";
+import { ITool, IToolNames } from "./ITool";
 
 export class EditTableTool implements ITool {
     
@@ -10,9 +10,14 @@ export class EditTableTool implements ITool {
         this.draw = draw;
     }
 
+    getName(): IToolNames {
+        return IToolNames.editTable;
+    }
+
     init(): void {
 
     }
+
     update(): void {
         if (! this.draw.isMouseLeftDown) return;
         this.draw.isMouseLeftDown = false;

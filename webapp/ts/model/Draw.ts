@@ -4,8 +4,6 @@ import { History } from "../commands/History";
 import { Schema } from "./Schema";
 import { DrawChar } from "./DrawChar";
 import { ITool } from "../tools/ITool";
-import { PanTool } from "../tools/PanTool";
-import { Manager } from "../Manager";
 import { Viewport } from "pixi-viewport";
 
 export class Draw {

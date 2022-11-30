@@ -1,5 +1,6 @@
 {
-  "main": "webapp/main.js", "_": "this is needed for electron", 
+  "main": "webapp/main.js",
+  "_": "this is needed for electron",
   "scripts": {
     "build": "npx webpack",
     "package-win": "electron-packager . RasterModeler19 --overwrite --asar=true --platform=win32 --arch=ia32 --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"RasterModeler\"",
@@ -18,13 +19,21 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
+    "@codemirror/lang-javascript": "^6.1.1",
     "@pixi/events": "^6.5.8",
     "@pixi/math-extras": "^6.5.8",
     "@types/nunjucks": "^3.2.1",
     "bootstrap": "^5.2.2",
+    "codejar": "^3.6.0",
+    "codemirror": "^6.0.1",
+    "css-loader": "^6.7.2",
+    "highlight.js": "^11.7.0",
     "lodash": "^4.17.21",
+    "monaco-editor": "^0.34.1",
+    "monaco-editor-webpack-plugin": "^7.0.1",
     "nunjucks": "^3.2.3",
     "pixi-viewport": "^4.36.0",
-    "pixi.js": "^6.5.6"
+    "pixi.js": "^6.5.6",
+    "style-loader": "^3.3.1"
   }
 }

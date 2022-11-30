@@ -81,7 +81,6 @@ export class DrawScene extends Container implements IScene {
         (document.querySelector(".canvas-container")! as HTMLElement).style.display = "block";
         let header = `
         <header style="display: flex; align-items:center; padding: 2px 0">
-            <button type="button" class="go-scripting btn btn-secondary">Go Scripting</button>
             <span style="display: flex; justify-content: center; width: 4em">Tools</span>
             <div class="bar btn-group btn-group-toggle">
                 <button class="tool-select btn btn-light ${this.draw.activeTool instanceof PanTool ? "active" : ""}" data-tooltype="${IToolNames.pan}">Pan</button>
@@ -91,22 +90,7 @@ export class DrawScene extends Container implements IScene {
                 <button class="tool-select btn btn-light ${this.draw.activeTool instanceof RelationEditTool ? "active" : ""}" data-tooltype="${IToolNames.editRelation}">Edit relation</button>
             </div>
         </header>
-        `;
-        document.querySelector(".tool-select-container")!.innerHTML = header;
-        let toolElements = document.querySelectorAll('.tool-select')
-        for (const toolEl of toolElements) {
-            toolEl.addEventListener('click', () => {
-                let selectedTool = (toolEl as HTMLElement).dataset.tooltype! as IToolNames;
-                document.querySelectorAll(".tool-select").forEach(x => x.classList.remove("active"));
-                toolEl.classList.toggle("active");
-                IToolManager.toolActivate(this.draw, selectedTool, { viewport: this.viewport });
-                this.renderScreen(false);
-            });
-        }
-        document.querySelector('.go-scripting')?.addEventListener('click', () => {
-            Manager.changeScene(new ScriptingScene(this.draw));
-        })
-            
+        `;   
         let topMenuActions = `
         <div>
 
@@ -156,7 +140,25 @@ export class DrawScene extends Container implements IScene {
             </header>
         </div>
         `;
-        document.querySelector(".top-menu-action-container")!.innerHTML = topMenuActions;
+        let actions = `
+            <header style="display: flex; align-items:center; padding: 2px 0">
+                <span style="display: flex; justify-content: center; width: 4em">Actions</span>
+                <div class="bar btn-group btn-group-toggle">
+                    <button type="button" class="scripting btn btn-light">Go Scripting</button>
+                </div>
+            </header>
+        `;
+        document.querySelector(".top-menu-action-container")!.innerHTML =  topMenuActions + header + actions;
+        let toolElements = document.querySelectorAll('.tool-select')
+        for (const toolEl of toolElements) {
+            toolEl.addEventListener('click', () => {
+                let selectedTool = (toolEl as HTMLElement).dataset.tooltype! as IToolNames;
+                document.querySelectorAll(".tool-select").forEach(x => x.classList.remove("active"));
+                toolEl.classList.toggle("active");
+                IToolManager.toolActivate(this.draw, selectedTool, { viewport: this.viewport });
+                this.renderScreen(false);
+            });
+        }
         document.querySelector('#undo')!.addEventListener('click', () => {
             console.log("undo event");
             this.draw.history.undo(this.draw);
@@ -183,9 +185,16 @@ export class DrawScene extends Container implements IScene {
             console.log("import event");
             this.import();
         });
+        document.querySelector('.scripting')?.addEventListener('click', () => {
+            this.draw.viewportDTO = { 
+                viewportLeft: this.draw.getScreen().x, 
+                viewportTop: this.draw.getScreen().y, 
+                viewportScale: this.draw.getScale(), 
+            }
+            Manager.changeScene(new ScriptingScene(this.draw));
+        })
     }
     destroyHtmlUi(): void {
-        document.querySelector(".tool-select-container")!.innerHTML = "";
         document.querySelector(".top-menu-action-container")!.innerHTML = "";
         (document.querySelector(".canvas-container")! as HTMLElement).style.display = "none";
     }

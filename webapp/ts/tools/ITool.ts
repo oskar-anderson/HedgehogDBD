@@ -50,6 +50,6 @@ export class IToolManager {
             default:
                 throw Error(`toolActivate. Tool: '${tool}' does not exist!`);
         }
-        draw.activeTool?.init();
+        draw.activeTool!.init();
     }
 }

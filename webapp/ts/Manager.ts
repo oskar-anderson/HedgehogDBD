@@ -41,6 +41,8 @@ export class Manager {
 
         document.querySelector('.canvas-container')!.appendChild(this.app.view);
         document.querySelector('canvas')!.addEventListener('contextmenu', (e) => { e.preventDefault(); });
+        document.querySelector('canvas')!.addEventListener('wheel', function(event) { event.preventDefault(); });
+
         
         Manager.app.ticker.add((time) => Manager.update());  // I HATE the "frame passed" approach. I would rather use `Manager.app.ticker.deltaMS`
 

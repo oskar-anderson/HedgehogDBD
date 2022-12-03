@@ -16,6 +16,18 @@ export class LocalStorageData {
         }
         return new LocalStorageData(JSON.parse(result).scripts ?? []);
     }
+
+    addScript(script: Script) {
+        this.scripts.push(script);
+        this.setStorage();
+    }
+
+    removeScript(script: Script) {
+        this.scripts.splice(
+            this.scripts.findIndex(x => JSON.stringify(x) === JSON.stringify(script)), 
+            1);
+        this.setStorage();
+    }
 }
 
 export class Script {

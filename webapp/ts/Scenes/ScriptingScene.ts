@@ -20,7 +20,7 @@ export class ScriptingScene extends Container implements IScene {
         
     }
 
-    init(): void {
+    async init(): Promise<void> {
         let actions = `
             <header style="display: flex; align-items:center; padding: 2px 0">
                 <span style="display: flex; justify-content: center; width: 4em">Actions</span>
@@ -80,14 +80,14 @@ export class ScriptingScene extends Container implements IScene {
         let localStorageScripts = LocalStorageData.getStorage();
         let html = nunjucks.renderString(actions, { 
             builtinScripts: [ 
-                { name: "List all tables", content: "" + 
-`
-for (let table of tables) {
-    console.log(table.head);
-}
-`.trim()
+                { 
+                    name: "List all tables",
+                    content:  await fetch('../wwwroot/scripts/listAllTables.js').then(x => x.text())
                 }, 
-                { name: "Script2", content: "console.log(2);" }
+                { 
+                    name: "SQL Create tables",
+                    content: await fetch('../wwwroot/scripts/createTablesSQL.js').then(x => x.text())
+                }
             ],
             localStorageScripts: localStorageScripts.scripts
         });
@@ -127,7 +127,7 @@ for (let table of tables) {
 
         let modalActivators = document.querySelectorAll('.script-modal') as NodeListOf<HTMLElement>;
         for (const modalActivator of modalActivators) {
-            modalActivator.addEventListener('click', (e) => {
+            modalActivator.addEventListener('click', async (e) => {
                 let script = new Script(modalActivator.dataset.name!, modalActivator.dataset.content!);
                 let modalTemplate = `
                     <div class="modal-content">
@@ -136,7 +136,7 @@ for (let table of tables) {
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <pre class="colored-code" data-lang="javascript">{{ content }}</pre>
+                            <pre class="colored-code" data-lang="javascript">{{ content | safe }}</pre>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -149,15 +149,17 @@ for (let table of tables) {
                         </div>
                     </div>
                 `;
+
+                // highlighting replaces regular space with nbsp;
+                let html = (await monaco.editor.colorize(script.content, "javascript", { })).replaceAll("\u00a0", " ");
+                console.log(html);
                 let modal = new Modal('#basic-modal', {});
                 let modalHtml = nunjucks.renderString(modalTemplate, { 
-                    content: script.content,
+                    content: html,
                     name: script.name,
                     isLocalStorageScript: modalActivator.dataset.islocalstoragescript === "Y",
                 });
                 document.querySelector('#basic-modal')!.querySelector('.modal-dialog')!.innerHTML = modalHtml;
-                // highlighting would be nice, but it replaces regular space with nbsp; and that makes coping harder
-                // monaco.editor.colorizeElement(document.querySelector(".colored-code")!, { mimeType: "javascript"});
                 document.querySelector('#modal-copy-to-clipboard-btn')?.addEventListener('click', (e) => {
                     navigator.clipboard.writeText(script.content);
                     modal.hide();

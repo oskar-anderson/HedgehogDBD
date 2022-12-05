@@ -6,6 +6,7 @@ import { DrawScene } from "./DrawScene";
 import { Modal } from "bootstrap";
 import * as monaco from 'monaco-editor';
 import { LocalStorageData, Script } from "../model/LocalStorageData";
+import dayjs from "dayjs";  // used in scripts
 
 export class ScriptingScene extends Container implements IScene {
 
@@ -135,8 +136,8 @@ export class ScriptingScene extends Container implements IScene {
                             <p class="modal-title">{{ name }}</p>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
-                            <pre class="colored-code" data-lang="javascript">{{ content | safe }}</pre>
+                        <div class="modal-body colored-code" style="max-height: 76vh; overflow: auto">
+                            <pre>{{ content | safe }}</pre>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -218,10 +219,10 @@ export class ScriptingScene extends Container implements IScene {
             }
             let errorMsg = "";
             try {
-                Function("tables", `
+                Function("tables", "dayjs", `
                 "use strict"; 
                 ${value}
-            `)(this.draw.schema.tables);
+            `)(this.draw.schema.tables, dayjs);
             } catch (error: any) {
                 errorMsg =  `${error.name}: ${error.message}`;
             }

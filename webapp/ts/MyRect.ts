@@ -27,4 +27,18 @@ export class MyRect extends Rectangle {
         }
         return rectAsPoints;
     }
+
+    GetRelationAttachmentPoints(container: Rectangle | null) {
+        let hPad = 2;
+        let vPad = 1;
+        let possibleEnds = 
+            new MyRect(this.x + hPad,       this.y - 1,     this.width - 2*hPad,    1).ToPoints().concat(
+            new MyRect(this.right,          this.y + vPad,  1,                      this.height - 2*vPad).ToPoints()).concat(
+            new MyRect(this.x + hPad,       this.bottom,    this.width - 2*hPad,    1).ToPoints()).concat(
+            new MyRect(this.x - 1,          this.y + vPad,  1,                      this.height - 2*vPad).ToPoints())
+        .filter((point) => { 
+            return ! this.contains(point.x, point.y) && (container === null || container.contains(point.x, point.y)); 
+        }); // N E S W non-corner tiles
+        return possibleEnds;
+    }
 }

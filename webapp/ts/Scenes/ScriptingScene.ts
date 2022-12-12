@@ -1,4 +1,5 @@
 import { Container } from "pixi.js";
+import * as PIXI from "pixi.js";
 import { IScene, Manager } from "../Manager";
 import { Draw } from "../model/Draw";
 import * as nunjucks from "nunjucks";
@@ -88,6 +89,17 @@ export class ScriptingScene extends Container implements IScene {
                 { 
                     name: "SQL Create tables",
                     content: await fetch('../wwwroot/scripts/createTablesSQL.js').then(x => x.text())
+                },
+                {
+                    name: "Save as TXT",
+                    content: 
+                        await fetch('../wwwroot/scripts/partials/getSaveContent.js').then(x => x.text()) + "\n" +
+                        await fetch('../wwwroot/scripts/saveAsTxt.js').then(x => x.text()) + "\n" +
+                        `saveAsTxt(${this.draw.getWorldCharGrid().width}, ${this.draw.getWorldCharGrid().height});`
+                },
+                {
+                    name: "Save as PNG",
+                    content: await fetch('../wwwroot/scripts/takeScreenshot.js').then(x => x.text())   
                 }
             ],
             localStorageScripts: localStorageScripts.scripts
@@ -210,19 +222,15 @@ export class ScriptingScene extends Container implements IScene {
             })
             modal.show();
         })
-        document.querySelector('.execute-btn')?.addEventListener('click', (e) => {
+        document.querySelector('.execute-btn')?.addEventListener('click', async (e) => {
             let value = editor.getValue();
             let oldConsoleLog = console.log;
             let result: string[] = [];
-            console.log = function(message) {
-                result.push(message);
-            }
+            console.log = function(message) { result.push(message); }
             let errorMsg = "";
             try {
-                Function("tables", "dayjs", `
-                "use strict"; 
-                ${value}
-            `)(this.draw.schema.tables, dayjs);
+                let fn = Function("schema", "dayjs", "PIXI", `"use strict"; ${value}`);
+                fn(this.draw.schema, dayjs, PIXI);
             } catch (error: any) {
                 errorMsg =  `${error.name}: ${error.message}`;
             }

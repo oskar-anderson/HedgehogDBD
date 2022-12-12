@@ -11,11 +11,16 @@ import { DrawChar } from "../model/DrawChar";
 import { Parser } from "../Parser";
 import { PanTool } from "../tools/PanTool";
 import { EditTableTool } from "../tools/EditTableTool";
-import { SelectTool } from "../tools/SelectTool";
+import { MoveTableTool } from "../tools/MoveTableTool";
 import { CreateTableTool } from "../tools/CreateTableTool";
 import { RelationEditTool } from "../tools/RelationEditTool";
 import { ScriptingScene } from "./ScriptingScene";
 import { IToolManager, IToolNames } from "../tools/ITool";
+import { MyRect } from "../MyRect";
+import AStarFinderCustom from "../path/AStarFinderCustom";
+import { WorldGrid } from "../path/WorldGrid";
+import { table } from "console";
+import { CostGrid } from "../model/CostGrid";
 
 
 export class DrawScene extends Container implements IScene {
@@ -84,7 +89,7 @@ export class DrawScene extends Container implements IScene {
             <span style="display: flex; justify-content: center; width: 4em">Tools</span>
             <div class="bar btn-group btn-group-toggle">
                 <button class="tool-select btn btn-light ${this.draw.activeTool instanceof PanTool ? "active" : ""}" data-tooltype="${IToolNames.pan}">Pan</button>
-                <button class="tool-select btn btn-light ${this.draw.activeTool instanceof SelectTool ? "active" : ""}" data-tooltype="${IToolNames.select}">Move table</button>
+                <button class="tool-select btn btn-light ${this.draw.activeTool instanceof MoveTableTool ? "active" : ""}" data-tooltype="${IToolNames.select}">Move table</button>
                 <button class="tool-select btn btn-light ${this.draw.activeTool instanceof EditTableTool ? "active" : ""}" data-tooltype="${IToolNames.editTable}">Edit table</button>
                 <button class="tool-select btn btn-light ${this.draw.activeTool instanceof CreateTableTool ? "active" : ""}" data-tooltype="${IToolNames.newTable}">New table</button>
                 <button class="tool-select btn btn-light ${this.draw.activeTool instanceof RelationEditTool ? "active" : ""}" data-tooltype="${IToolNames.editRelation}">Edit relation</button>
@@ -208,7 +213,7 @@ export class DrawScene extends Container implements IScene {
         let sb = [];
         for (let y = 0; y < charGridSize.height; y++) {
             for (let x = 0; x < charGridSize.width; x++) {
-                let letter = this.draw.worldDrawArea[y * charGridSize.width + x].char;
+                let letter = this.draw.schema.worldDrawArea[y * charGridSize.width + x].char;
                 sb.push(letter);
             }
             sb.push("\n");
@@ -336,16 +341,15 @@ export class DrawScene extends Container implements IScene {
         let charGridSize = this.draw.getWorldCharGrid();
         for (let y = 0; y < charGridSize.height; y++) {
             for (let x = 0; x < charGridSize.width; x++) {
-                this.draw.worldDrawArea[y * charGridSize.width + x] = new DrawChar(' ', 0x008000);
+                this.draw.schema.worldDrawArea[y * charGridSize.width + x] = new DrawChar(' ', 0x008000);
             }
         }
         let tables = this.draw.getVisibleTables();
         for (const table of tables) {
             this.setWorldTable(table);
         }
-        for (const relation of this.draw.schema.relations) {
-            this.setWorldRelation(relation);
-        }
+        this.setWorldRelation();
+        
 
         let screenCharGrid = this.draw.getWorldCharGrid();
         let worldCharGridSize = this.draw.getWorldCharGrid();
@@ -355,7 +359,7 @@ export class DrawScene extends Container implements IScene {
         for (let y = 0; y < screenCharGrid.height; y++) {
             for (let x = 0; x < screenCharGrid.width; x++) {
                 // console.log(`x: ${x}, y: ${y}, index: ${y * charGridSize.width + x}`);
-                let tile = this.draw.worldDrawArea[y * worldCharGridSize.width + x];
+                let tile = this.draw.schema.worldDrawArea[y * worldCharGridSize.width + x];
                 if (isForceScreenReset) {
                     let bitmapText = new PIXI.BitmapText(tile.char,
                         {
@@ -379,9 +383,69 @@ export class DrawScene extends Container implements IScene {
         return y * this.draw.getWorldCharGrid().width + x;
     }
 
-    setWorldRelation(relation: Relation) {
-        for (const point of relation.points) {
-            this.draw.worldDrawArea[point.point.y * this.draw.getWorldCharGrid().width + point.point.x].char = point.char;
+    setWorldRelation() {
+        let worldSize = this.draw.getWorldCharGrid();
+
+        let costGrid = new CostGrid(this.draw);
+        for (let table of this.draw.schema.tables) {
+            table.updateTableCost(costGrid, worldSize);
+        }
+        this.draw.schema.relations.filter((relation) => { return relation.isDirty }).forEach((relation) => relation.remove(this.draw))
+        this.draw.schema.relations = this.draw.schema.relations.filter((relation) => { return ! relation.isDirty });
+        
+        for (let relation of this.draw.schema.relations) {
+            relation.updateRelationsCost(costGrid, worldSize);
+        }
+
+        for (let fromTable of this.draw.schema.tables) {
+            let references = fromTable.getReferences(this.draw.schema.tables);
+            references = references.filter(reference => { 
+                let hasMatchingRelation = (this.draw.schema.relations.some((relation) => { 
+                    return relation.equals(fromTable, reference); 
+                }));
+                return !hasMatchingRelation;
+            });
+            for (let reference of references) {
+                console.log(`FROM: ${fromTable.head}, TO: ${reference.head}`)
+                let referenceRect =  reference.getContainingRect();
+                let referenceCenter = { 
+                    x: referenceRect.x + Math.floor(referenceRect.width / 2), 
+                    y: referenceRect.y + Math.floor(referenceRect.height / 2)
+                };
+                let grid = new WorldGrid(costGrid.flatten());
+                let closest: { x: number, y: number } | null = null;
+                for (let point of fromTable.getContainingRect().GetRelationAttachmentPoints(worldSize)) {
+                    if ((closest === null || 
+                        new AStarFinderCustom().heuristic(closest, referenceCenter) > 
+                        new AStarFinderCustom().heuristic(point, referenceCenter))
+                    ) {
+                        closest = point;
+                    }
+                }
+                if (closest === null) {
+                    continue;
+                }
+                let possibleEnds = referenceRect.GetRelationAttachmentPoints(worldSize);
+                if (reference.head === fromTable.head) {
+                    possibleEnds = possibleEnds.filter((end) => { return new AStarFinderCustom().heuristic(closest!, end) === 10 });
+                }
+                if (possibleEnds.length === 0) {
+                    continue;
+                }
+                let path = new AStarFinderCustom().findPath(closest, referenceCenter, possibleEnds, grid);
+                console.log(path)
+                let points = path.map((point) => { return { point: new Point(point.x, point.y), char: "*" }; })
+                let relation = new Relation(points, fromTable, reference)
+                relation.updateRelationsCost(costGrid, worldSize);
+                this.draw.schema.relations.push(relation);
+            }
+        }
+
+        console.log(this.draw.schema.relations);
+        for (const relation of this.draw.schema.relations) {
+            for (const point of relation.points) {
+                this.draw.schema.worldDrawArea[point.point.y * this.draw.getWorldCharGrid().width + point.point.x].char = "*";
+            }
         }
     }
 
@@ -389,8 +453,8 @@ export class DrawScene extends Container implements IScene {
         let tableRect = table.getContainingRect();
         for (let x = tableRect.x; x < tableRect.right; x++) {
             for (let y = tableRect.y; y < tableRect.bottom; y++) {
-                this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].char = ' ';
-                this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].color = this.draw.selectedTable?.id === table.id ? 0x800080 : 0x008000;
+                this.draw.schema.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].char = ' ';
+                this.draw.schema.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].color = this.draw.selectedTable?.equals(table) ? 0x800080 : 0x008000;
             }
         }
         let worldCharGridRect = table.getContainingRect();
@@ -415,7 +479,7 @@ export class DrawScene extends Container implements IScene {
         for (let x = rectHeadInner.x; x <= rectHeadInner.right; x++) {
             for (let y = rectHeadInner.y; y <= rectHeadInner.bottom; y++) {
                 let tile = table.head[x - rectHeadInner.x] ?? ' ';
-                this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].char = tile;
+                this.draw.schema.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].char = tile;
             }
         }
         let rectNameRowInner = new Rectangle(rectNameRow.left + 2, rectNameRow.top + 1, rectNameRow.width - 4, rectNameRow.height - 2)
@@ -423,7 +487,7 @@ export class DrawScene extends Container implements IScene {
             for (let y = rectNameRowInner.y; y <= rectNameRowInner.bottom; y++) {
                 let row = table.tableRows[y - rectNameRowInner.y];
                 let tile = row.name[x - rectNameRowInner.x] ?? ' ';
-                this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].char = tile;
+                this.draw.schema.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].char = tile;
             }
         }
         let rectTypeRowInner = new Rectangle(rectTypeRow.left + 2, rectTypeRow.top + 1, rectTypeRow.width - 4, rectTypeRow.height - 2);
@@ -431,7 +495,7 @@ export class DrawScene extends Container implements IScene {
             for (let y = rectTypeRowInner.y; y <= rectTypeRowInner.bottom; y++) {
                 let row = table.tableRows[y - rectTypeRowInner.y];
                 let tile = row.datatype[x - rectTypeRowInner.x] ?? ' ';
-                this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].char = tile;
+                this.draw.schema.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].char = tile;
             }
         }
         let rectSpecialRowInner = new Rectangle(rectAttributeRow.left + 2, rectAttributeRow.top + 1, rectAttributeRow.width - 4, rectAttributeRow.height - 2);
@@ -439,7 +503,7 @@ export class DrawScene extends Container implements IScene {
             for (let y = rectSpecialRowInner.y; y <= rectSpecialRowInner.bottom; y++) {
                 let row = table.tableRows[y - rectSpecialRowInner.y];
                 let tile = row.attributes.join(", ")[x - rectSpecialRowInner.x] ?? ' ';
-                this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].char = tile;
+                this.draw.schema.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].char = tile;
             }
         }
     }
@@ -449,7 +513,7 @@ export class DrawScene extends Container implements IScene {
         let [tl, t, tr, ml, _, mr, bl, b, br] = _9patch;  // skip middle
         let paintWorldPointToScreenSafe = (x: number, y: number, char: string) => {
             if (! this.draw.getWorldCharGrid().contains(x, y)) { return; }
-            this.draw.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].char = char;
+            this.draw.schema.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].char = char;
         }
         let paintWorldRectToScreenSafe = (rect: Rectangle, fillchar: string) => {
             for (let y = rect.y; y < rect.bottom; y++) {

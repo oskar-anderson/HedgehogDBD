@@ -76,7 +76,7 @@ export class CreateTableTool implements ITool {
             if (this.hover !== null) {
                 let hoverRect = this.hover.getContainingRect();
                 return this.draw.getVisibleTables()
-                    .filter(x => x.id !== this.hover!.id)
+                    .filter(x => ! x.equals(this.hover!))
                     .every(x => !x.getContainingRect().intersects(hoverRect))
             }
             return false

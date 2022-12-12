@@ -18,14 +18,14 @@ export class CommandModifyTable implements ICommand<CommandModifyTableArgs> {
     redo() {
         let newTable = Table.initClone(JSON.parse(this.args.newTableJson));
         let oldTable = Table.initClone(JSON.parse(this.args.oldTableJson));
-        let index = this.context.schema.tables.findIndex(x => x.id === oldTable.id)!;
+        let index = this.context.schema.tables.findIndex(x => x.equals(oldTable))!;
         this.context.schema.tables[index] = newTable;
     }
 
     undo()  {
         let newTable = Table.initClone(JSON.parse(this.args.newTableJson));
         let oldTable = Table.initClone(JSON.parse(this.args.oldTableJson));
-        let index = this.context.schema.tables.findIndex(x => x.id === newTable.id)!;
+        let index = this.context.schema.tables.findIndex(x => x.equals(newTable));
         this.context.schema.tables[index] = oldTable;
     }
 }

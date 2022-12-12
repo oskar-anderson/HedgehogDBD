@@ -118,16 +118,17 @@ export class TableScene extends Container implements IScene {
         })
         document.querySelector("#modal-save-changes")!.addEventListener("click", () => {
             console.log("save-changes!");
-            let oldTableElementIndex = this.draw.schema.tables.findIndex(x => x.id === this.tableBeingEdited!.id)!;
+            let oldTable = this.draw.schema.tables.find(x => x.equals(this.tableBeingEdited))!;
             this.draw.selectedTable = this.tableBeingEdited!;
             this.draw.history.execute(new CommandModifyTable(
                 this.draw, 
                 {
-                    oldTableJson: JSON.stringify(this.draw.schema.tables[oldTableElementIndex]), 
+                    oldTableJson: JSON.stringify(oldTable), 
                     newTableJson: JSON.stringify(this.tableBeingEdited!)
                 }
             ));
             modal.dispose();
+            this.draw.schema.relations.forEach(relation => relation.isDirty = true);
             Manager.changeScene(new DrawScene(this.draw))
         })
 
@@ -202,11 +203,12 @@ export class TableScene extends Container implements IScene {
                     this.draw, 
                     {
                         tableJson: JSON.stringify(this.tableBeingEdited!),
-                        listIndex: this.draw.schema.tables.findIndex(x => x.id === this.tableBeingEdited!.id)
+                        listIndex: this.draw.schema.tables.findIndex(x => x.equals(this.tableBeingEdited))
                     }
                 )
             )
             modal.dispose();
+            this.draw.schema.relations.forEach(relation => relation.isDirty = true);
             Manager.changeScene(new DrawScene(this.draw))
         });
     }

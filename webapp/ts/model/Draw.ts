@@ -2,13 +2,12 @@ import { Point, Rectangle } from "pixi.js";
 import { Table } from "./Table";
 import { History } from "../commands/History";
 import { Schema } from "./Schema";
-import { DrawChar } from "./DrawChar";
 import { ITool } from "../tools/ITool";
 import { Viewport } from "pixi-viewport";
+import { MyRect } from "../MyRect";
 
 export class Draw {
     history = new History();
-    worldDrawArea: DrawChar[] = [];
     static fontCharSizeWidth = 7;
     static fontCharSizeHeight = 14;
     currentZoomScale = 1;
@@ -56,8 +55,8 @@ export class Draw {
 
     
     setViewport(viewport: Viewport) {
-        this.world = new Rectangle(0, 0, viewport.worldWidth, viewport.worldHeight)
-        this.screen = new Rectangle(
+        this.world = new MyRect(0, 0, viewport.worldWidth, viewport.worldHeight)
+        this.screen = new MyRect(
             Math.floor(viewport.left), // positive number
             Math.floor(viewport.top), // positive number
             viewport.screenWidth / viewport.scale.x,
@@ -86,7 +85,7 @@ export class Draw {
 
     getWorldCharGrid() {
         let worldSize = this.getWorld();
-        return new Rectangle(
+        return new MyRect(
             0,
             0,
             Math.ceil(worldSize.width / Draw.fontCharSizeWidth),

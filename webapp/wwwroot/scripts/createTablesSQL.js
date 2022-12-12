@@ -1,6 +1,6 @@
 let databaseName = `database_${dayjs().format('YYYYMMDDHHmm')}`;
 console.log(`CREATE SCHEMA IF NOT EXISTS ${databaseName};`)
-for (let table of tables) {
+for (let table of schema.tables) {
     let rows = [];
     for (let row of table.tableRows) {
         let datatype = row.datatype.slice(-1) === "?" ? `${row.datatype.slice(0, -1)} NOT NULL` : row.datatype;
@@ -17,7 +17,7 @@ for (let table of tables) {
             continue;
         }
         let fkTableName = matches[0][1];
-        let fkPkField = tables.find(table => table.head === fkTableName).tableRows.find(row => row.attributes.includes('PK')).name;
+        let fkPkField = schema.tables.find(table => table.head === fkTableName).tableRows.find(row => row.attributes.includes('PK')).name;
         rows.push(`CONSTRAINT FK_${table.head}__${row.name}__${fkTableName}__${fkPkField} FOREIGN KEY (${row.name}) REFERENCES ${fkTableName}(${fkPkField})`);
     }
     console.log(

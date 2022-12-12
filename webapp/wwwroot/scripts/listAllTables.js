@@ -1,3 +1,3 @@
-for (let table of tables) {
+for (let table of schema.tables) {
     console.log(table.head);
 }

@@ -5,6 +5,7 @@ module.exports = {
     entry: {
         Parser: './webapp/ts/Parser.ts',
         Programm: './webapp/ts/Programm.ts',
+        PathTest: './webapp/ts/PathTest.ts',
     },
     target: "web",
     mode: 'development',

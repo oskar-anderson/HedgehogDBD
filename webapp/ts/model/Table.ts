@@ -1,5 +1,8 @@
 import { Point, Rectangle } from "pixi.js";
 import { MyRect } from "../MyRect";
+import { CostGrid, CostGridTileTypes } from "./CostGrid";
+import { Draw } from "./Draw";
+import { Relation } from "./Relation";
 import { TableRow } from "./TableRow";
 
 export class Table {
@@ -51,6 +54,10 @@ export class Table {
         this.id = crypto.randomUUID();
     }
 
+    equals(other: Table) {
+        return this.id === other.id;
+    }
+
 
     getColumnWidths() {
         let datatypeRows = this.tableRows.map(x => x.datatype);
@@ -78,5 +85,39 @@ export class Table {
             Math.max(columnWidth, nameWidth), 
             4 + this.tableRows.length
         );
+    }
+
+    getReferences(tables: Table[]) {
+        let references = [];
+        for (let tableRow of this.tableRows) {
+            let matches = [...tableRow.attributes.join('').matchAll(/FK\("(\w+)"\)/g)];
+            if (matches.length !== 1 || matches[0].length !== 2) {
+                continue;
+            }
+            let fkTableName = matches[0][1];
+            let targetTable = tables.find(table => table.head === fkTableName);
+            if (! targetTable) { continue; }
+            references.push(targetTable)
+        }
+        return references;
+    }
+
+    updateTableCost(costGrid: CostGrid, worldSize: MyRect) {
+        let tableRect = this.getContainingRect();
+        let tableRectPaddingInnerRect = new MyRect(tableRect.x - 1, tableRect.y - 1, tableRect.width + 2, tableRect.height + 2);
+        let tableRectPaddingOuterRect = new MyRect(tableRect.x - 2, tableRect.y - 2, tableRect.width + 4, tableRect.height + 4);
+        let tableRectPaddingInnerPoints = tableRectPaddingInnerRect.ToPoints()
+            .filter((point) => 
+                ! tableRect.contains(point.x, point.y) && 
+                worldSize.contains(point.x, point.y)
+            );
+        let tableRectPaddingOuterPoints = tableRectPaddingOuterRect.ToPoints()
+            .filter((point) => 
+                ! tableRectPaddingInnerRect.contains(point.x, point.y) && 
+                worldSize.contains(point.x, point.y)    
+            );
+        tableRect.ToPoints().forEach((point) => costGrid.value[point.y][point.x].push(CostGridTileTypes.WALL));
+        tableRectPaddingInnerPoints.forEach((point) => costGrid.value[point.y][point.x].push(CostGridTileTypes.PADDINGINNER));
+        tableRectPaddingOuterPoints.forEach((point) => costGrid.value[point.y][point.x].push(CostGridTileTypes.PADDINGOUTER));
     }
 }

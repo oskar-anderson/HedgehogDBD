@@ -24,10 +24,10 @@ export default class AStarFinderCustom {
                 b: {value: {x: number, y: number}, cost: number}
             ) => { return a.cost < b.cost ? -1 : 1 });   // lowest cost will pop first
         frontier.push({ value: start, cost: 0 });
-        let cameFrom: { [key: string]: { x: number, y: number} | null } = {};
-        let costSoFar: { [key: string]: number } = {};
-        cameFrom[grid.getPointId(start)] = null;
-        costSoFar[grid.getPointId(start)] = 0;
+        let cameFrom: Map<string, { x: number, y: number } | null> = new Map();
+        let costSoFar: Map<string, number> = new Map();
+        cameFrom.set(grid.getPointId(start), null);
+        costSoFar.set(grid.getPointId(start), 0);
         let end = null;
         while (! frontier.isEmpty()) {
             // console.log(frontier.toArray())
@@ -41,12 +41,12 @@ export default class AStarFinderCustom {
             }
 
             for (let next of grid.neighbors(current.x, current.y)) {
-                let newCost = costSoFar[grid.getPointId(current)] + grid.cost(current, next);
-                if (costSoFar[grid.getPointId(next)] === undefined || newCost < costSoFar[grid.getPointId(next)]) {
-                    costSoFar[grid.getPointId(next)] = newCost;
+                let newCost = costSoFar.get(grid.getPointId(current))! + grid.cost(current, next);
+                if (! costSoFar.has(grid.getPointId(next)) || newCost < costSoFar.get(grid.getPointId(next))!) {
+                    costSoFar.set(grid.getPointId(next), newCost);
                     let priority = newCost + this.heuristic(next, heuristicTarget);
                     frontier.push({ value: next, cost: priority });
-                    cameFrom[grid.getPointId(next)] = { x: current.x, y: current.y };
+                    cameFrom.set(grid.getPointId(next), { x: current.x, y: current.y });
                 }
             }
         }
@@ -56,10 +56,8 @@ export default class AStarFinderCustom {
             if (route.length === 0) {
                 route = [end!];
             }
-            let next = cameFrom[grid.getPointId(route[0])];
-            if (next === null) {
-                break;
-            }
+            let next = cameFrom.get(grid.getPointId(route[0]));
+            if (!next) { break; }
             route.unshift(next);
         }
 

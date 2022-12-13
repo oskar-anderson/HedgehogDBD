@@ -7,11 +7,9 @@ async function load() {
 
     return new Promise((resolve, reject) => {
         app.loader.onComplete.add(() => {
-            console.log("app.loader resolve");
             resolve();
         })
         app.loader.onError.add(() => {
-            console.log("app.loader onError");
             reject();
         })
         app.loader.load();
@@ -35,11 +33,9 @@ async function main() {
 
 
 function renderScreen() {
-    let worldCharGridSizeWidth = 463;
-    let worldCharGridSizeHeight = 155;
-    for (let y = 0; y < worldCharGridSizeHeight; y++) {
-        for (let x = 0; x < worldCharGridSizeWidth; x++) {
-            let tile = schema.worldDrawArea[y * worldCharGridSizeWidth + x];
+    for (let y = 0; y < WORLD_CHAR_HEIGHT; y++) {
+        for (let x = 0; x < WORLD_CHAR_WIDTH; x++) {
+            let tile = schema.worldDrawArea[y * WORLD_CHAR_WIDTH + x];
             if (tile.char === " ") { continue; }
             let bitmapText = new PIXI.BitmapText(tile.char,
                 {
@@ -53,5 +49,5 @@ function renderScreen() {
     }
 }
 
-console.log("This could take a while...");
+RESULT_LOG.push("This could take a while...");
 main();

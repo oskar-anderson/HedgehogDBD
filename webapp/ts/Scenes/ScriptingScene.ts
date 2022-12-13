@@ -92,10 +92,11 @@ export class ScriptingScene extends Container implements IScene {
                 },
                 {
                     name: "Save as TXT",
-                    content: 
-                        await fetch('../wwwroot/scripts/partials/getSaveContent.js').then(x => x.text()) + "\n" +
-                        await fetch('../wwwroot/scripts/saveAsTxt.js').then(x => x.text()) + "\n" +
-                        `saveAsTxt(${this.draw.getWorldCharGrid().width}, ${this.draw.getWorldCharGrid().height});`
+                    content: await fetch('../wwwroot/scripts/saveAsTxt.js').then(x => x.text())
+                },
+                {
+                    name: "Save to clipboard",
+                    content: await fetch('../wwwroot/scripts/saveToClipboard.js').then(x => x.text())   
                 },
                 {
                     name: "Save as PNG",
@@ -157,6 +158,7 @@ export class ScriptingScene extends Container implements IScene {
                                 <button id="modal-delete-script-btn" type="button" class="btn btn-danger">Delete</button>
                             {% endif %}
 
+                            <button id="modal-execute-btn" type="button" class="btn btn-primary">⚡ Execute</button>
                             <button id="modal-copy-to-clipboard-btn" type="button" class="btn btn-primary">Copy</button>
                             <button id="modal-copy-to-editor-btn" type="button" class="btn btn-primary">Paste to editor</button>
                         </div>
@@ -165,7 +167,6 @@ export class ScriptingScene extends Container implements IScene {
 
                 // highlighting replaces regular space with nbsp;
                 let html = (await monaco.editor.colorize(script.content, "javascript", { })).replaceAll("\u00a0", " ");
-                console.log(html);
                 let modal = new Modal('#basic-modal', {});
                 let modalHtml = nunjucks.renderString(modalTemplate, { 
                     content: html,
@@ -173,6 +174,10 @@ export class ScriptingScene extends Container implements IScene {
                     isLocalStorageScript: modalActivator.dataset.islocalstoragescript === "Y",
                 });
                 document.querySelector('#basic-modal')!.querySelector('.modal-dialog')!.innerHTML = modalHtml;
+                document.querySelector('#modal-execute-btn')?.addEventListener('click', (e) => {
+                    modal.hide();
+                    this.executeAndShowResult(script.content);
+                });
                 document.querySelector('#modal-copy-to-clipboard-btn')?.addEventListener('click', (e) => {
                     navigator.clipboard.writeText(script.content);
                     modal.hide();
@@ -222,51 +227,59 @@ export class ScriptingScene extends Container implements IScene {
             })
             modal.show();
         })
-        document.querySelector('.execute-btn')?.addEventListener('click', async (e) => {
-            let value = editor.getValue();
-            let oldConsoleLog = console.log;
-            let result: string[] = [];
-            console.log = function(message) { result.push(message); }
-            let errorMsg = "";
-            try {
-                let fn = Function("schema", "dayjs", "PIXI", `"use strict"; ${value}`);
-                fn(this.draw.schema, dayjs, PIXI);
-            } catch (error: any) {
-                errorMsg =  `${error.name}: ${error.message}`;
-            }
-            console.log = oldConsoleLog;
-            let modalTemplate = `
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <p class="modal-title">
-                        {% if not errorContent %}
-                            Results
-                        {% else %}
-                            Error
-                        {% endif %}
-                        </p>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        {% if not errorContent %}
-                            <pre>{{ successContent }}</pre>
-                        {% else %}
-                            <p style="color: red;">{{ errorContent }}</p>
-                        {% endif %}
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    </div>
+        document.querySelector('.execute-btn')?.addEventListener('click', (e) => this.executeAndShowResult(editor.getValue()));
+    }
+
+    async executeAndShowResult(value: string) {
+        let executeResult = ScriptingScene.execute(value, this.draw);
+        let errorMsg = executeResult.error;
+        let resultLog = executeResult.resultLog;
+        let modalTemplate = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <p class="modal-title">
+                    {% if not errorContent %}
+                        Results
+                    {% else %}
+                        Error
+                    {% endif %}
+                    </p>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-            `;
-            let modal = new Modal('#basic-modal', {});
-            let modalHtml = nunjucks.renderString(modalTemplate, {
-                successContent: result.join("\n"),
-                errorContent: errorMsg
-            });
-            document.querySelector('#basic-modal')!.querySelector('.modal-dialog')!.innerHTML = modalHtml;
-            modal.show();
+                <div class="modal-body">
+                    {% if not errorContent %}
+                        <pre>{{ successContent }}</pre>
+                    {% else %}
+                        <p style="color: red;">{{ errorContent }}</p>
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        `;
+        let modal = new Modal('#basic-modal', {});
+        let modalHtml = nunjucks.renderString(modalTemplate, {
+            successContent: resultLog.join("\n"),
+            errorContent: errorMsg
         });
+        document.querySelector('#basic-modal')!.querySelector('.modal-dialog')!.innerHTML = modalHtml;
+        modal.show();
+    }
+
+    static execute(value: string, draw: Draw) {
+        let resultLog: string[] = [];
+        let errorMsg = "";
+        try {
+            let fn = Function("WORLD_CHAR_WIDTH", "WORLD_CHAR_HEIGHT", "RESULT_LOG", "schema", "dayjs", "PIXI", `"use strict"; ${value}`);
+            fn(draw.getWorldCharGrid().width, draw.getWorldCharGrid().height, resultLog, draw.schema, dayjs, PIXI);
+        } catch (error: any) {
+            errorMsg = `${error.name}: ${error.message}`;
+        }
+        return {
+            error: errorMsg,
+            resultLog: resultLog
+        }
     }
 
     destroyHtmlUi(): void {

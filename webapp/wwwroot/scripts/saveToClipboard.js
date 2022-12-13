@@ -8,3 +8,10 @@ function getSaveContent(width, height) {
     }
     return sb.join("");
 }
+
+function main() {
+    navigator.clipboard.writeText(getSaveContent(WORLD_CHAR_WIDTH, WORLD_CHAR_HEIGHT));
+}
+
+main();
+RESULT_LOG.push("Copied to clipboard!");

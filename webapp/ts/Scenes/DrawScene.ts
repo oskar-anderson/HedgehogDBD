@@ -13,7 +13,6 @@ import { PanTool } from "../tools/PanTool";
 import { EditTableTool } from "../tools/EditTableTool";
 import { MoveTableTool } from "../tools/MoveTableTool";
 import { CreateTableTool } from "../tools/CreateTableTool";
-import { RelationEditTool } from "../tools/RelationEditTool";
 import { ScriptingScene } from "./ScriptingScene";
 import { IToolManager, IToolNames } from "../tools/ITool";
 import { MyRect } from "../MyRect";
@@ -92,7 +91,6 @@ export class DrawScene extends Container implements IScene {
                 <button class="tool-select btn btn-light ${this.draw.activeTool instanceof MoveTableTool ? "active" : ""}" data-tooltype="${IToolNames.select}">Move table</button>
                 <button class="tool-select btn btn-light ${this.draw.activeTool instanceof EditTableTool ? "active" : ""}" data-tooltype="${IToolNames.editTable}">Edit table</button>
                 <button class="tool-select btn btn-light ${this.draw.activeTool instanceof CreateTableTool ? "active" : ""}" data-tooltype="${IToolNames.newTable}">New table</button>
-                <button class="tool-select btn btn-light ${this.draw.activeTool instanceof RelationEditTool ? "active" : ""}" data-tooltype="${IToolNames.editRelation}">Edit relation</button>
             </div>
         </header>
         `;   
@@ -174,17 +172,17 @@ export class DrawScene extends Container implements IScene {
             this.draw.history.redo(this.draw);
             this.renderScreen(false);
         });
-        document.querySelector('#save-as-png')!.addEventListener('click', () => {
+        document.querySelector('#save-as-png')!.addEventListener('click', async () => {
             console.log("save-as-png event");
-            Manager.takeScreenshot(this.viewport);
+            ScriptingScene.execute(await fetch('../wwwroot/scripts/takeScreenshot.js').then(x => x.text()), this.draw)
         });
-        document.querySelector('#save-to-clipboard')!.addEventListener('click', () => {
+        document.querySelector('#save-to-clipboard')!.addEventListener('click', async () => {
             console.log("save-to-clipboard event");
-            this.saveToClipboard();
+            ScriptingScene.execute(await fetch('../wwwroot/scripts/saveToClipboard.js').then(x => x.text()), this.draw)
         });
-        document.querySelector('#save-as-txt')!.addEventListener('click', () => {
+        document.querySelector('#save-as-txt')!.addEventListener('click', async () => {
             console.log("save-as-txt event");
-            this.saveAsTxt();
+            ScriptingScene.execute(await fetch('../wwwroot/scripts/saveAsTxt.js').then(x => x.text()), this.draw)
         });
         document.querySelector('#import-btn')!.addEventListener('click', () => {
             console.log("import event");
@@ -202,43 +200,6 @@ export class DrawScene extends Container implements IScene {
     destroyHtmlUi(): void {
         document.querySelector(".top-menu-action-container")!.innerHTML = "";
         (document.querySelector(".canvas-container")! as HTMLElement).style.display = "none";
-    }
-
-    saveToClipboard() {
-        navigator.clipboard.writeText(this.getSaveContent());
-    }
-
-    getSaveContent() {
-        let charGridSize = this.draw.getWorldCharGrid();
-        let sb = [];
-        for (let y = 0; y < charGridSize.height; y++) {
-            for (let x = 0; x < charGridSize.width; x++) {
-                let letter = this.draw.schema.worldDrawArea[y * charGridSize.width + x].char;
-                sb.push(letter);
-            }
-            sb.push("\n");
-        }
-        return sb.join("");
-    }
-
-    saveAsTxt() {
-        let element = document.createElement('a');
-        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(this.getSaveContent()));
-        let date = new Date();
-        element.setAttribute('download', 
-            `RasterModeler_${
-                date.getFullYear() + "-" + 
-                date.getMonth().toString().padStart(2, '0') + "-" + 
-                date.getDay().toString().padStart(2, '0') + "_" + 
-                date.getDay().toString().padStart(2, '0') + "-" + 
-                date.getMinutes().toString().padStart(2, '0') + "-" + 
-                date.getSeconds().toString().padStart(2, '0') 
-            }.txt`);
-      
-        element.style.display = 'none';
-        document.body.appendChild(element);
-        element.click();
-        document.body.removeChild(element);
     }
 
     import() {

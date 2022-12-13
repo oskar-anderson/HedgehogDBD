@@ -1,3 +1,3 @@
 for (let table of schema.tables) {
-    console.log(table.head);
+    RESULT_LOG.push(table.head);
 }

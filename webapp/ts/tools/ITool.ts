@@ -3,7 +3,6 @@ import { Draw } from "../model/Draw";
 import { CreateTableTool } from "./CreateTableTool";
 import { EditTableTool } from "./EditTableTool";
 import { PanTool } from "./PanTool";
-import { RelationEditTool } from "./RelationEditTool";
 import { MoveTableTool } from "./MoveTableTool";
 
 export interface ITool {
@@ -19,7 +18,6 @@ export enum IToolNames {
     select = "select",
     editTable = "editTable",
     newTable = "newTable",
-    editRelation = "editRelation",
 }
 
 export class IToolManager {
@@ -41,9 +39,6 @@ export class IToolManager {
                 break;
             case IToolNames.newTable:
                 draw.activeTool = new CreateTableTool(draw);
-                break;
-            case IToolNames.editRelation:
-                draw.activeTool = new RelationEditTool();
                 break;
             default:
                 throw Error(`toolActivate. Tool: '${tool}' does not exist!`);

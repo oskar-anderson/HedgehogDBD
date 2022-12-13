@@ -55,7 +55,7 @@ export class Manager {
 
     // Call this function when you want to go to a new scene
     public static changeScene(newScene: IScene): void {
-        // Remove and destroy old scene... if we had one..
+        // Remove and destroy old scene
         if (Manager.currentScene) {
             Manager.app.stage.removeChild(Manager.currentScene);
             Manager.currentScene.destroy();
@@ -70,8 +70,6 @@ export class Manager {
 
     // This update will be called by a pixi ticker and tell the scene that a tick happened
     private static update(): void {
-        // Let the current scene know that we updated it...
-        // Just for funzies, sanity check that it exists first.
         if (Manager.currentScene) {
             Manager.currentScene.update(Manager.app.ticker.deltaMS);
         }
@@ -99,24 +97,8 @@ export class Manager {
         Manager.app.view.style.marginLeft = Manager.app.view.style.marginRight = `${horizontalMargin}px`;
         Manager.app.view.style.marginTop = Manager.app.view.style.marginBottom = `${verticalMargin}px`;
     }
-
-    
-    public static takeScreenshot(display: DisplayObject) {
-        Manager.app.renderer.plugins.extract.canvas(display).toBlob((b: Blob) => {
-            const a = document.createElement('a');
-            document.body.append(a);
-            a.download = 'screenshot';
-            a.href = URL.createObjectURL(b);
-            a.click();
-            a.remove();
-        }, 'image/png');
-    }
-
-    /* More code of your Manager.ts like `changeScene` and `update`*/
 }
 
-// This could have a lot more generic functions that you force all your scenes to have. Update is just an example.
-// Also, this could be in its own file...
 export interface IScene extends DisplayObject {
     update(deltaMS: number): void;
     init(): void

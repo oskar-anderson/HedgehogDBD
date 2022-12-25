@@ -62,7 +62,7 @@ export class CostGrid {
 export class CostGridTileTypes {
     static readonly WALL: CostGridTileTypes = new CostGridTileTypes(0);
     static readonly REGULAR: CostGridTileTypes = new CostGridTileTypes(1);
-    static readonly PADDINGINNER: CostGridTileTypes = new CostGridTileTypes(2);
+    static readonly PADDINGINNER: CostGridTileTypes = new CostGridTileTypes(4);
     static readonly PADDINGOUTER: CostGridTileTypes = new CostGridTileTypes(1);
     static readonly EXISTINGPATH: CostGridTileTypes = new CostGridTileTypes(30);
     static readonly EXISTINGPATHPADDING: CostGridTileTypes = new CostGridTileTypes(1);

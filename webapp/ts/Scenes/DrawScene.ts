@@ -20,6 +20,7 @@ import AStarFinderCustom from "../path/AStarFinderCustom";
 import { WorldGrid } from "../path/WorldGrid";
 import { table } from "console";
 import { CostGrid } from "../model/CostGrid";
+import { PriorityQueue } from "@datastructures-js/priority-queue";
 
 
 export class DrawScene extends Container implements IScene {
@@ -358,48 +359,62 @@ export class DrawScene extends Container implements IScene {
             relation.updateRelationsCost(costGrid, worldSize);
         }
 
+        let references = new PriorityQueue<{ 
+            value: { fromTable: Table, fromTablePointA: { x: number, y: number}, toTable: Table}, 
+            cost: number
+        }>((a: {cost: number}, b: {cost: number}) => { return a.cost < b.cost ? -1 : 1 });   // lowest cost will pop first
         for (let fromTable of this.draw.schema.tables) {
-            let references = fromTable.getReferences(this.draw.schema.tables);
-            references = references.filter(reference => { 
+            let fromTableReferences = fromTable.getReferences(this.draw.schema.tables);
+            fromTableReferences = fromTableReferences.filter(reference => { // filter out relations already drawn
                 let hasMatchingRelation = (this.draw.schema.relations.some((relation) => { 
                     return relation.equals(fromTable, reference); 
                 }));
                 return !hasMatchingRelation;
             });
-            for (let reference of references) {
-                console.log(`FROM: ${fromTable.head}, TO: ${reference.head}`)
-                let referenceRect =  reference.getContainingRect();
-                let referenceCenter = { 
-                    x: referenceRect.x + Math.floor(referenceRect.width / 2), 
-                    y: referenceRect.y + Math.floor(referenceRect.height / 2)
-                };
-                let grid = new WorldGrid(costGrid.flatten());
-                let closest: { x: number, y: number } | null = null;
+            for (const toTable of fromTableReferences) {
+                let referenceCenter =  toTable.getContainingRect().getFittingSquareTowardsPoint(fromTable.getContainingRect().getCenter()).getCenter();
+                let closestFromTablePoint: { x: number, y: number } | null = null;
                 for (let point of fromTable.getContainingRect().GetRelationAttachmentPoints(worldSize)) {
-                    if ((closest === null || 
-                        new AStarFinderCustom().heuristic(closest, referenceCenter) > 
-                        new AStarFinderCustom().heuristic(point, referenceCenter))
+                    if ((closestFromTablePoint === null || 
+                        AStarFinderCustom.euclidean(closestFromTablePoint, referenceCenter) > 
+                        AStarFinderCustom.euclidean(point, referenceCenter))
                     ) {
-                        closest = point;
+                        closestFromTablePoint = point;
                     }
                 }
-                if (closest === null) {
+                if (closestFromTablePoint === null) {
                     continue;
                 }
-                let possibleEnds = referenceRect.GetRelationAttachmentPoints(worldSize);
-                if (reference.head === fromTable.head) {
-                    possibleEnds = possibleEnds.filter((end) => { return new AStarFinderCustom().heuristic(closest!, end) === 10 });
-                }
-                if (possibleEnds.length === 0) {
-                    continue;
-                }
-                let path = new AStarFinderCustom().findPath(closest, referenceCenter, possibleEnds, grid);
-                console.log(path)
-                let points = path.map((point) => { return { point: new Point(point.x, point.y), char: "*" }; })
-                let relation = new Relation(points, fromTable, reference)
-                relation.updateRelationsCost(costGrid, worldSize);
-                this.draw.schema.relations.push(relation);
+                references.push({ 
+                    value: { 
+                        fromTable: fromTable,
+                        fromTablePointA: closestFromTablePoint,
+                        toTable:  toTable
+                    }, 
+                    cost: AStarFinderCustom.euclidean(closestFromTablePoint, referenceCenter)
+                });
             }
+        }
+
+        while (! references.isEmpty()) {
+            let reference = references.pop();
+            let fromTable = reference.value.fromTable;
+            let toTable = reference.value.toTable;
+            let startPoint = reference.value.fromTablePointA;
+            let heuristicEndPoint =  toTable.getContainingRect().getFittingSquareTowardsPoint(fromTable.getContainingRect().getCenter()).getCenter();
+            console.log(`FROM: ${fromTable.head}, TO: ${toTable.head}`)
+            console.log(`START: ${startPoint}, END: ${heuristicEndPoint}`)
+            let possibleEnds = toTable.getContainingRect().GetRelationAttachmentPoints(worldSize);
+            if (toTable.head === fromTable.head) {
+                possibleEnds = possibleEnds.filter((end) => { return AStarFinderCustom.euclidean(startPoint!, end) === 10 });
+            }
+            let grid = new WorldGrid(costGrid.flatten());
+            let path = new AStarFinderCustom(AStarFinderCustom.manhattan).findPath(startPoint, heuristicEndPoint, possibleEnds, grid);
+            console.log(path)
+            let points = path.map((point) => { return { point: new Point(point.x, point.y), char: "*" }; })
+            let relation = new Relation(points, fromTable, toTable)
+            relation.updateRelationsCost(costGrid, worldSize);
+            this.draw.schema.relations.push(relation);
         }
 
         console.log(this.draw.schema.relations);

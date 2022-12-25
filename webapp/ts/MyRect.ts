@@ -1,4 +1,5 @@
 import { Point, Rectangle } from "pixi.js";
+import { deflateRawSync } from "zlib";
 
 export class MyRect extends Rectangle {
 
@@ -40,5 +41,32 @@ export class MyRect extends Rectangle {
             return ! this.contains(point.x, point.y) && (container === null || container.contains(point.x, point.y)); 
         }); // N E S W non-corner tiles
         return possibleEnds;
+    }
+
+    getCenter() {
+        return new Point(this.x + Math.floor(this.width / 2), this.y + Math.floor(this.height / 2))
+    }
+    
+    getFittingSquareTowardsPoint(target: { x: number, y: number}) {
+        let smallestSide = this.width > this.height ? this.height : this.width;
+        let square = new MyRect(this.x, this.y, smallestSide, smallestSide);
+        let clamp = (number: number, min: number, max: number) => Math.max(min, Math.min(number, max));
+        let dx = target.x - this.getCenter().x;
+        let dy = target.y - this.getCenter().y;
+        while(
+            dx != 0 
+            && this.contains(square.x + 1 * clamp(dx, -1, 1), square.y) 
+            && this.contains(square.x + square.width + 1 * clamp(dx, -1, 1), square.y)) {
+            square.x = square.x + (dx > 0 ? 1 : -1);
+            dx = dx + (dx > 0 ? -1 : 1);
+        }
+        while(
+            dy != 0 
+            && this.contains(square.x, square.y + 1 * clamp(dy, -1, 1)) 
+            && this.contains(square.x, square.y + square.height + 1 * clamp(dy, -1, 1))) {
+            square.y = square.y + (dy > 0 ? 1 : -1);
+            dy = dy + (dy > 0 ? -1 : 1);
+        }
+        return square;
     }
 }

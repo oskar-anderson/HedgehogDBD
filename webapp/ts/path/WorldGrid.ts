@@ -29,13 +29,21 @@ export class WorldGrid {
     }
 
     neighbors(x: number, y: number): { x: number, y: number }[] {
-        let neighbors = [ {x: x+1, y}, {x:x-1, y}, {x:x, y: y-1}, {x:x, y: y+1} ]; // E W N S
-        let result = neighbors.filter((item) => this.inBounds(item));
-        result = result.filter((item) => this.passable(item));
-        return result;
+        return [ 
+            {x: x+1, y: y}, 
+            {x: x-1, y: y}, 
+            {x: x, y: y-1}, 
+            {x: x, y: y+1}  // E W N S
+        ]
+            .filter((item) => this.inBounds(item))
+            .filter((item) => this.passable(item));
     }
 
-    cost(from: { x: number, y: number}, to: { x: number, y: number}): number {
-        return this.nodes[this.getPointId(to)];
+    getNeighborCost(orig: { x: number, y: number}, neighbor: { x: number, y: number}): number {
+        let cost = this.nodes[this.getPointId(neighbor)];
+        let nudge = 0; // manhattan diagonal path nudge
+        if ((orig.x + orig.y) % 2 == 0 && neighbor.x != orig.x) { nudge = 1 }
+        if ((orig.x + orig.y) % 2 == 1 && neighbor.y != orig.y) { nudge = 1 }
+        return cost + 0.0000001 * nudge; 
     }
 }

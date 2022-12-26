@@ -434,9 +434,10 @@ export class DrawScene extends Container implements IScene {
             }
         }
         let worldCharGridRect = table.getContainingRect();
-        let firstColumnWidth = table.getColumnWidths()[0];
-        let secondColumnWidth = table.getColumnWidths()[1];
-        let thirdColumnWidth = table.getColumnWidths()[2];
+        let columnWidths = table.getColumnWidths();
+        let firstColumnWidth = columnWidths[0];
+        let secondColumnWidth = columnWidths[1];
+        let thirdColumnWidth = columnWidths[2];
         let rectHead = new Rectangle(worldCharGridRect.x, worldCharGridRect.y, worldCharGridRect.width - 1, 2);
         let rectNameRow = new Rectangle(worldCharGridRect.x, worldCharGridRect.y + 2, firstColumnWidth, worldCharGridRect.height - 1 - 2);
         let rectTypeRow = new Rectangle(worldCharGridRect.x + firstColumnWidth, worldCharGridRect.y + 2, secondColumnWidth, worldCharGridRect.height - 1 - 2);

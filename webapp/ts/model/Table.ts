@@ -61,10 +61,10 @@ export class Table {
 
     getColumnWidths() {
         let datatypeRows = this.tableRows.map(x => x.datatype);
-        let longestDatatypeLenght = Math.max(...(datatypeRows.map(el => el.length)));
+        let longestDatatypeLenght = datatypeRows.length !== 0 ? Math.max(...(datatypeRows.map(el => el.length))) : 0;
 
         let attributeRows = this.tableRows.map(x => x.attributes.join(", "));
-        let longestAttributeLenght = Math.max(...(attributeRows.map(el => el.length)));
+        let longestAttributeLenght = attributeRows.length !== 0 ? Math.max(...(attributeRows.map(el => el.length))) : 0;
 
         let pad = 3;  // padding plus one non-writable wall
         return [
@@ -76,8 +76,8 @@ export class Table {
 
     getContainingRect() {
         let columnWidth = 2 + Math.max(...(this.tableRows.map(el => el.name.length))) + 3 
-        + Math.max(...(this.tableRows.map(el => el.datatype.length))) + 3 + 
-        Math.max(...(this.tableRows.map(el => el.attributes.join(", ").length))) + 2;
+            + Math.max(...(this.tableRows.map(el => el.datatype.length))) + 3 + 
+            Math.max(...(this.tableRows.map(el => el.attributes.join(", ").length))) + 2;
         let nameWidth = 2 + this.head.length + 2;
         return new MyRect(
             this.position.x, 

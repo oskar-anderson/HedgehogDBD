@@ -1,4 +1,3 @@
-import { Point, Rectangle } from "pixi.js";
 import { CommandCreateTable } from "../commands/appCommands/CommandCreateTable";
 import { Draw } from "../model/Draw";
 import { Table } from "../model/Table";
@@ -83,7 +82,6 @@ export class CreateTableTool implements ITool {
         let rect = (event.currentTarget! as Element).getBoundingClientRect();
         let relativeX = Math.round(event.clientX - rect.x);
         let relativeY = Math.round(event.clientY - rect.y);
-        console.log(`event.clientX: ${relativeX}, event.clientY: ${relativeY}, event.detail: ${event.detail}, event.type: ${event.type}`);
         switch (event.type) {
             case "click": 
                 let mouseCharGrid = this.draw.getMouseCharGridPositionFromScreenPosition(relativeX, relativeY);

@@ -1,5 +1,5 @@
 import { Viewport } from "pixi-viewport";
-import { BitmapText, Container, Graphics, InteractionEvent, Loader, Point, Rectangle, Sprite } from "pixi.js";
+import { Container, InteractionEvent, Point, Rectangle } from "pixi.js";
 import { IScene, Manager } from "../Manager";
 import { Minimap } from "../components/Minimap";
 import { Draw } from "../model/Draw";
@@ -10,14 +10,12 @@ import { Relation } from "../model/Relation";
 import { DrawChar } from "../model/DrawChar";
 import { Parser } from "../Parser";
 import { PanTool } from "../tools/PanTool";
-import { SelectTableTool } from "../tools/MoveTableTool";
+import { SelectTableTool } from "../tools/SelectTableTool";
 import { CreateTableTool } from "../tools/CreateTableTool";
 import { ScriptingScene } from "./ScriptingScene";
 import { IToolManager, IToolNames } from "../tools/ITool";
-import { MyRect } from "../MyRect";
 import AStarFinderCustom from "../path/AStarFinderCustom";
 import { WorldGrid } from "../path/WorldGrid";
-import { table } from "console";
 import { CostGrid } from "../model/CostGrid";
 import { PriorityQueue } from "@datastructures-js/priority-queue";
 
@@ -88,6 +86,7 @@ export class DrawScene extends Container implements IScene {
         if (this.minimap.minimapRect.contains(relativeX, relativeY)) {
             return;
         }
+        console.log(`event.clientX: ${relativeX}, event.clientY: ${relativeY}, event.detail: ${event.detail}, event.type: ${event.type}`);
         this.draw.activeTool?.mouseEventHandler(event);
     }
 

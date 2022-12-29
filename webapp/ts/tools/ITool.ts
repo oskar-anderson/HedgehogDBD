@@ -2,7 +2,7 @@ import { Viewport } from "pixi-viewport";
 import { Draw } from "../model/Draw";
 import { CreateTableTool } from "./CreateTableTool";
 import { PanTool } from "./PanTool";
-import { SelectTableTool } from "./MoveTableTool";
+import { SelectTableTool } from "./SelectTableTool";
 
 export interface ITool {
     init(): void;

@@ -47,6 +47,10 @@ export class LoaderScene extends Container implements IScene {
 
         Loader.shared.load();
     }
+
+    mouseEventHandler(event: MouseEvent): void {
+        throw new Error("Method not implemented.");
+    }
     
     destroyHtmlUi(): void {
 

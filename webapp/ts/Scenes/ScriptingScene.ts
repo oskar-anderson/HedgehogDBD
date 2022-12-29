@@ -18,6 +18,10 @@ export class ScriptingScene extends Container implements IScene {
         this.draw = draw;
     }
 
+    mouseEventHandler(event: MouseEvent): void {
+        
+    }
+
     update(deltaMS: number): void {
         
     }

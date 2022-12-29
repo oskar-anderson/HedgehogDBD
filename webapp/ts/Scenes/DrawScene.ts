@@ -10,8 +10,7 @@ import { Relation } from "../model/Relation";
 import { DrawChar } from "../model/DrawChar";
 import { Parser } from "../Parser";
 import { PanTool } from "../tools/PanTool";
-import { EditTableTool } from "../tools/EditTableTool";
-import { MoveTableTool } from "../tools/MoveTableTool";
+import { SelectTableTool } from "../tools/MoveTableTool";
 import { CreateTableTool } from "../tools/CreateTableTool";
 import { ScriptingScene } from "./ScriptingScene";
 import { IToolManager, IToolNames } from "../tools/ITool";
@@ -57,7 +56,7 @@ export class DrawScene extends Container implements IScene {
                 this.viewport.moveCenter(x, y);
                 this.draw.setViewport(this.viewport);
                 this.minimap.update(this.draw.getVisibleTables(), this.draw.getScreen());
-                this.renderScreen(false);
+                this.cullViewport();
             }
         );
         this.addChild(this.minimap.container);
@@ -82,6 +81,16 @@ export class DrawScene extends Container implements IScene {
         this.renderScreen(true);
     }
 
+    mouseEventHandler(event: MouseEvent): void {
+        let rect = (event.currentTarget! as Element).getBoundingClientRect();
+        let relativeX = Math.round(event.clientX - rect.x);
+        let relativeY = Math.round(event.clientY - rect.y);
+        if (this.minimap.minimapRect.contains(relativeX, relativeY)) {
+            return;
+        }
+        this.draw.activeTool?.mouseEventHandler(event);
+    }
+
     init(): void {
         (document.querySelector(".canvas-container")! as HTMLElement).style.display = "block";
         let header = `
@@ -89,8 +98,7 @@ export class DrawScene extends Container implements IScene {
             <span style="display: flex; justify-content: center; width: 4em">Tools</span>
             <div class="bar btn-group btn-group-toggle">
                 <button class="tool-select btn btn-light ${this.draw.activeTool instanceof PanTool ? "active" : ""}" data-tooltype="${IToolNames.pan}">Pan</button>
-                <button class="tool-select btn btn-light ${this.draw.activeTool instanceof MoveTableTool ? "active" : ""}" data-tooltype="${IToolNames.select}">Move table</button>
-                <button class="tool-select btn btn-light ${this.draw.activeTool instanceof EditTableTool ? "active" : ""}" data-tooltype="${IToolNames.editTable}">Edit table</button>
+                <button class="tool-select btn btn-light ${this.draw.activeTool instanceof SelectTableTool ? "active" : ""}" data-tooltype="${IToolNames.select}">Select table</button>
                 <button class="tool-select btn btn-light ${this.draw.activeTool instanceof CreateTableTool ? "active" : ""}" data-tooltype="${IToolNames.newTable}">New table</button>
             </div>
         </header>
@@ -160,17 +168,19 @@ export class DrawScene extends Container implements IScene {
                 document.querySelectorAll(".tool-select").forEach(x => x.classList.remove("active"));
                 toolEl.classList.toggle("active");
                 IToolManager.toolActivate(this.draw, selectedTool, { viewport: this.viewport });
-                this.renderScreen(false);
+                this.renderScreen(false);  // clean up new table hover
             });
         }
         document.querySelector('#undo')!.addEventListener('click', () => {
             console.log("undo event");
             this.draw.history.undo(this.draw);
+            this.draw.schema.relations.forEach(relation => relation.isDirty = true);
             this.renderScreen(false);
         });
         document.querySelector('#redo')!.addEventListener('click', () => {
             console.log("redo event");
             this.draw.history.redo(this.draw);
+            this.draw.schema.relations.forEach(relation => relation.isDirty = true);
             this.renderScreen(false);
         });
         document.querySelector('#save-as-png')!.addEventListener('click', async () => {
@@ -402,22 +412,18 @@ export class DrawScene extends Container implements IScene {
             let toTable = reference.value.toTable;
             let startPoint = reference.value.fromTablePointA;
             let heuristicEndPoint =  toTable.getContainingRect().getFittingSquareTowardsPoint(fromTable.getContainingRect().getCenter()).getCenter();
-            console.log(`FROM: ${fromTable.head}, TO: ${toTable.head}`)
-            console.log(`START: ${startPoint}, END: ${heuristicEndPoint}`)
             let possibleEnds = toTable.getContainingRect().GetRelationAttachmentPoints(worldSize);
             if (toTable.head === fromTable.head) {
                 possibleEnds = possibleEnds.filter((end) => { return AStarFinderCustom.euclidean(startPoint!, end) === 10 });
             }
             let grid = new WorldGrid(costGrid.flatten());
             let path = new AStarFinderCustom(AStarFinderCustom.manhattan).findPath(startPoint, heuristicEndPoint, possibleEnds, grid);
-            console.log(path)
             let points = path.map((point) => { return { point: new Point(point.x, point.y), char: "*" }; })
             let relation = new Relation(points, fromTable, toTable)
             relation.updateRelationsCost(costGrid, worldSize);
             this.draw.schema.relations.push(relation);
         }
 
-        console.log(this.draw.schema.relations);
         for (const relation of this.draw.schema.relations) {
             for (const point of relation.points) {
                 this.draw.schema.worldDrawArea[point.point.y * this.draw.getWorldCharGrid().width + point.point.x].char = "*";

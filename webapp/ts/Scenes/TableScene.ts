@@ -20,6 +20,10 @@ export class TableScene extends Container implements IScene {
         this.tableBeingEdited = Table.initClone(selectedTable!);
     }
 
+    mouseEventHandler(event: MouseEvent): void {
+        throw new Error("Method not implemented.");
+    }
+
     update(deltaMS: number): void {
 
     }

@@ -30,12 +30,12 @@ export default class AStarFinderCustom {
             ((
                 a: {value: any, cost: number}, 
                 b: {value: any, cost: number}
-            ) => { return a.cost < b.cost ? -1 : 1 });   // lowest cost will pop first
-        frontier.push({ value: start, cost: 0 });
-        let cameFrom: Map<string, { x: number, y: number } | null> = new Map();
-        let costSoFar: Map<string, number> = new Map();
-        cameFrom.set(grid.getPointId(start), null);
-        costSoFar.set(grid.getPointId(start), 0);
+            ) => { return a.cost < b.cost ? -1 : 1 })   // lowest cost will pop first
+            .push({ value: start, cost: 0 });
+        let cameFrom: Map<string, { x: number, y: number } | null> = new Map()
+            .set(grid.getPointId(start), null);
+        let costSoFar: Map<string, number> = new Map()
+            .set(grid.getPointId(start), 0);
         let end = null;
         while (! frontier.isEmpty()) {
             let current = frontier.pop().value;
@@ -56,16 +56,13 @@ export default class AStarFinderCustom {
             }
         }
 
-        let route: { x: number, y: number }[] = [];
-        while (end !== null) {
-            if (route.length === 0) {
-                route = [end!];
-            }
+        if (end === null) { return []; }
+        let route: { x: number, y: number }[] = [end];
+        while (true) {
             let next = cameFrom.get(grid.getPointId(route[0]));
             if (!next) { break; }
             route.unshift(next);
         }
-
         return route;
     }
 }

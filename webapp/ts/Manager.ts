@@ -42,7 +42,9 @@ export class Manager {
         document.querySelector('.canvas-container')!.appendChild(this.app.view);
         document.querySelector('canvas')!.addEventListener('contextmenu', (e) => { e.preventDefault(); });
         document.querySelector('canvas')!.addEventListener('wheel', function(event) { event.preventDefault(); });
-
+        this.app.view.addEventListener("click", (event) => { console.log("click"); Manager.currentScene.mouseEventHandler(event) });
+        this.app.view.addEventListener("mousedown", (event) => { console.log("mousedown"); Manager.currentScene.mouseEventHandler(event) });
+        this.app.view.addEventListener("mouseup", (event) => { console.log("mouseup"); Manager.currentScene.mouseEventHandler(event) });
         
         Manager.app.ticker.add((time) => Manager.update());  // I HATE the "frame passed" approach. I would rather use `Manager.app.ticker.deltaMS`
 
@@ -103,4 +105,5 @@ export interface IScene extends DisplayObject {
     update(deltaMS: number): void;
     init(): void
     destroyHtmlUi(): void
+    mouseEventHandler(event: MouseEvent): void
 }

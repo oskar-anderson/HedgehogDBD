@@ -47,10 +47,20 @@ export class Draw {
 
     getMouseCharGridPosition() {
         let worldPos = this.getMouseWorldPosition();
+        return this.getMouseCharGridPositionFromWorldPosition(worldPos.x, worldPos.y);
+    }
+
+    getMouseCharGridPositionFromWorldPosition(x: number, y: number) {
         return new Point(
-            Math.floor(worldPos.x / Draw.fontCharSizeWidth),
-            Math.floor(worldPos.y / Draw.fontCharSizeHeight)
+            Math.floor(x / Draw.fontCharSizeWidth),
+            Math.floor(y / Draw.fontCharSizeHeight)
         )
+    }
+
+    getMouseCharGridPositionFromScreenPosition(x: number, y: number) {
+        let worldPointX = Math.floor(this.screen.x + x / this.screenScale);
+        let worldPointY = Math.floor(this.screen.y + y / this.screenScale);
+        return this.getMouseCharGridPositionFromWorldPosition(worldPointX, worldPointY)
     }
 
     

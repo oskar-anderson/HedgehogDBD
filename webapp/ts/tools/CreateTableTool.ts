@@ -11,7 +11,6 @@ export class CreateTableTool implements ITool {
     isDirty = false;
     draw: Draw;
     hover: Table | null = null;
-    status = "addHover";
     constructor(draw: Draw) {
         this.draw = draw;
     }
@@ -21,76 +20,51 @@ export class CreateTableTool implements ITool {
     }
 
     init(): void {
-
+        this.hover = Table.init(
+            this.draw.getMouseCharGridPosition(),
+            "NewTable",
+            [ TableRow.init("Id", "VARCHAR(255)", ["PK"])]
+        );
+        this.hover.position = this.draw.clampRect(this.draw.getWorldCharGrid(), this.hover.getContainingRect());
+        this.draw.selectedTable = this.hover;
+        this.draw.hover = this.hover;
     }
 
     update(): void {
-        let status = this.status;
-        if (status === "addHover") {
-            this.addHover();
-        } else if (status === "mouseMove") {
-            this.mouseMove();
-        }
+        let mouseCharGrid = this.draw.getMouseCharGridPosition();
+        this.mouseMove(mouseCharGrid.x, mouseCharGrid.y);
     }
 
     exit(): void {
-        this.draw.hover = null;
         this.draw.selectedTable = null;
-        this.draw.schema.tables.forEach(x => x.visible = true);
+        this.draw.hover = null;
     }
 
     getIsDirty(): boolean {
         return this.isDirty;
     }
 
-    addHover = () => {
-        this.hover = Table.init(
-            this.draw.getMouseCharGridPosition(),
-            "NewTable",
-            [ TableRow.init("Id", "VARCHAR", ["PK"])]
-        );
-        this.hover.position = this.draw.clampRect(this.draw.getWorldCharGrid(), this.hover.getContainingRect());
-        this.draw.selectedTable = this.hover;
-        this.draw.hover = this.hover;
-        this.status = 'mouseMove';
-    }
-
-    mouseMove = () => {
-        if (this.hover === null) return;
+    mouseMove(mouseCharGridX: number, mouseCharGridY: number) {
+        if (this.hover === null) throw new Error("Moving new table hover with hover being null!");
         let newPos = this.draw.clampRect(
             this.draw.getWorldCharGrid(), 
-            MyRect.init(
-                this.draw.getMouseCharGridPosition(), 
-                this.hover.getContainingRect().getBr()
+            new MyRect(
+                mouseCharGridX, 
+                mouseCharGridY, 
+                this.hover.getContainingRect().width,
+                this.hover.getContainingRect().height
             ));
-        this.isDirty = !(JSON.stringify(this.hover!.position) === JSON.stringify(newPos));
+        this.isDirty = ! (this.hover!.position.x === newPos.x && this.hover!.position.y === newPos.y);
         this.hover.position = newPos;
-        
-        if (this.draw.isMouseLeftDown) {
-            this.createTable();
-        }
     };
 
-    createTable = () => {
-        let isGoodPlaceForTableFunc = () => {
-            if (this.hover !== null) {
-                let hoverRect = this.hover.getContainingRect();
-                return this.draw.getVisibleTables()
-                    .filter(x => ! x.equals(this.hover!))
-                    .every(x => !x.getContainingRect().intersects(hoverRect))
-            }
-            return false
-        }
-        let isGoodPlaceForTable = isGoodPlaceForTableFunc();
-        console.log(`isGoodPlaceForTable: ${isGoodPlaceForTable}`);
-        let selectToolMouseUpDone = () => {
-            this.status = "addHover";
-            this.hover = null;
-            this.isDirty = true;
-            this.exit();
-        }
+    createTable(mouseCharGridX: number, mouseCharGridY: number) {
+        this.mouseMove(mouseCharGridX, mouseCharGridY);
+        let hoverRect = this.hover!.getContainingRect();
+        let isGoodPlaceForTable = this.draw.getVisibleTables()
+            .filter(x => ! x.equals(this.hover!))
+            .every(x => !x.getContainingRect().intersects(hoverRect));
         if (! isGoodPlaceForTable) {
-            selectToolMouseUpDone();
             return;
         }
 
@@ -101,6 +75,22 @@ export class CreateTableTool implements ITool {
                 tableJson: JSON.stringify(this.hover!)
             })
         );
-        selectToolMouseUpDone();
+        this.isDirty = true;
+        this.init();
+    }
+
+    mouseEventHandler(event: MouseEvent): void {
+        let rect = (event.currentTarget! as Element).getBoundingClientRect();
+        let relativeX = Math.round(event.clientX - rect.x);
+        let relativeY = Math.round(event.clientY - rect.y);
+        console.log(`event.clientX: ${relativeX}, event.clientY: ${relativeY}, event.detail: ${event.detail}, event.type: ${event.type}`);
+        switch (event.type) {
+            case "click": 
+                let mouseCharGrid = this.draw.getMouseCharGridPositionFromScreenPosition(relativeX, relativeY);
+                this.createTable(mouseCharGrid.x, mouseCharGrid.y);
+                break;
+            default:
+                break;
+        }
     }
 }

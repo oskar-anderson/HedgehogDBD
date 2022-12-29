@@ -7,18 +7,6 @@ export class MyRect extends Rectangle {
         super(x, y, width, height);
     }
 
-    static init(tr: Point, bl: Point) {
-        return new MyRect(tr.x, tr.y, bl.x, bl.y);
-    }
-
-    getBr() {
-        return new Point(this.width, this.height);
-    }
-
-    getTl() {
-        return new Point(this.width, this.height);
-    }
-
     public ToPoints() {
         let rectAsPoints = [];
         for (let y = this.y; y < this.bottom; y++) {
@@ -44,15 +32,15 @@ export class MyRect extends Rectangle {
     }
 
     getCenter() {
-        return new Point(this.x + Math.floor(this.width / 2), this.y + Math.floor(this.height / 2))
+        return new Point(this.x + this.width / 2, this.y + this.height / 2);
     }
     
     getFittingSquareTowardsPoint(target: { x: number, y: number}) {
         let smallestSide = this.width > this.height ? this.height : this.width;
         let square = new MyRect(this.x, this.y, smallestSide, smallestSide);
         let clamp = (number: number, min: number, max: number) => Math.max(min, Math.min(number, max));
-        let dx = target.x - this.getCenter().x;
-        let dy = target.y - this.getCenter().y;
+        let dx = target.x - this.x + this.width / 2;
+        let dy = target.y - this.y + this.height / 2;
         while(
             dx != 0 
             && this.contains(square.x + 1 * clamp(dx, -1, 1), square.y) 

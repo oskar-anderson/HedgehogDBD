@@ -27,4 +27,8 @@ export class PanTool implements ITool {
     getIsDirty(): boolean {
         return false;
     }
+
+    mouseEventHandler(event: MouseEvent): void {
+        
+    }
 }

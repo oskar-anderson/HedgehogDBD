@@ -90,14 +90,14 @@ export class Manager {
         const enlargedHeight = Math.floor(scale * Manager.height);
 
         // margins for centering our game
-        const horizontalMargin = (screenWidth - enlargedWidth) / 2;
-        const verticalMargin = (screenHeight - enlargedHeight) / 2;
+        // const horizontalMargin = (screenWidth - enlargedWidth) / 2;
+        // const verticalMargin = (screenHeight - enlargedHeight) / 2;
 
         // now we use css trickery to set the sizes and margins
         Manager.app.view.style.width = `${enlargedWidth}px`;
         Manager.app.view.style.height = `${enlargedHeight}px`;
-        Manager.app.view.style.marginLeft = Manager.app.view.style.marginRight = `${horizontalMargin}px`;
-        Manager.app.view.style.marginTop = Manager.app.view.style.marginBottom = `${verticalMargin}px`;
+        // Manager.app.view.style.marginLeft = Manager.app.view.style.marginRight = `${horizontalMargin}px`;
+        // Manager.app.view.style.marginTop = Manager.app.view.style.marginBottom = `${verticalMargin}px`;
     }
 }
 

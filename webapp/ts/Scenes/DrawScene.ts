@@ -18,6 +18,7 @@ import AStarFinderCustom from "../path/AStarFinderCustom";
 import { WorldGrid } from "../path/WorldGrid";
 import { CostGrid } from "../model/CostGrid";
 import { PriorityQueue } from "@datastructures-js/priority-queue";
+import { Schema } from "../model/Schema";
 
 
 export class DrawScene extends Container implements IScene {
@@ -91,75 +92,84 @@ export class DrawScene extends Container implements IScene {
     }
 
     init(): void {
-        (document.querySelector(".canvas-container")! as HTMLElement).style.display = "block";
-        let header = `
-        <header style="display: flex; align-items:center; padding: 2px 0">
-            <span style="display: flex; justify-content: center; width: 4em">Tools</span>
-            <div class="bar btn-group btn-group-toggle">
-                <button class="tool-select btn btn-light ${this.draw.activeTool instanceof PanTool ? "active" : ""}" data-tooltype="${IToolNames.pan}">Pan</button>
-                <button class="tool-select btn btn-light ${this.draw.activeTool instanceof SelectTableTool ? "active" : ""}" data-tooltype="${IToolNames.select}">Select table</button>
-                <button class="tool-select btn btn-light ${this.draw.activeTool instanceof CreateTableTool ? "active" : ""}" data-tooltype="${IToolNames.newTable}">New table</button>
-            </div>
-        </header>
-        `;   
+        (document.querySelector(".canvas-container")! as HTMLElement).style.visibility = "visible";
         let topMenuActions = `
         <div>
-
-            <!-- File -->
             <header style="display: flex; align-items: center; padding: 2px 0;">
-                <span style="display: flex; justify-content: center; width: 4em">File</span>
+                <span style="display: flex; justify-content: center; width: 4em">Actions</span>
                 <div class="bar">
-                    <button id="save-as-txt" class="btn btn-light">
-                        <svg id="saveButton" fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path class="icon" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg>
-                        Export TXT
-                    </button>
-                    
-                    <!-- https://www.svgrepo.com/svg/357887/image-download -->
-                    <button id="save-as-png" class="btn btn-light">
-                        <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.71,6.29a1,1,0,0,0-1.42,0L20,7.59V2a1,1,0,0,0-2,0V7.59l-1.29-1.3a1,1,0,0,0-1.42,1.42l3,3a1,1,0,0,0,.33.21.94.94,0,0,0,.76,0,1,1,0,0,0,.33-.21l3-3A1,1,0,0,0,22.71,6.29ZM19,13a1,1,0,0,0-1,1v.38L16.52,12.9a2.79,2.79,0,0,0-3.93,0l-.7.7L9.41,11.12a2.85,2.85,0,0,0-3.93,0L4,12.6V7A1,1,0,0,1,5,6h8a1,1,0,0,0,0-2H5A3,3,0,0,0,2,7V19a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V14A1,1,0,0,0,19,13ZM5,20a1,1,0,0,1-1-1V15.43l2.9-2.9a.79.79,0,0,1,1.09,0l3.17,3.17,0,0L15.46,20Zm13-1a.89.89,0,0,1-.18.53L13.31,15l.7-.7a.77.77,0,0,1,1.1,0L18,17.21Z"/></svg>
-                        Export PNG
-                    </button>
-                    
-                    <!-- https://www.svgrepo.com/svg/357606/copy -->
-                    <button id="save-to-clipboard" class="btn btn-light">
-                        <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21,8.94a1.31,1.31,0,0,0-.06-.27l0-.09a1.07,1.07,0,0,0-.19-.28h0l-6-6h0a1.07,1.07,0,0,0-.28-.19.32.32,0,0,0-.09,0A.88.88,0,0,0,14.05,2H10A3,3,0,0,0,7,5V6H6A3,3,0,0,0,3,9V19a3,3,0,0,0,3,3h8a3,3,0,0,0,3-3V18h1a3,3,0,0,0,3-3V9S21,9,21,8.94ZM15,5.41,17.59,8H16a1,1,0,0,1-1-1ZM15,19a1,1,0,0,1-1,1H6a1,1,0,0,1-1-1V9A1,1,0,0,1,6,8H7v7a3,3,0,0,0,3,3h5Zm4-4a1,1,0,0,1-1,1H10a1,1,0,0,1-1-1V5a1,1,0,0,1,1-1h3V7a3,3,0,0,0,3,3h3Z"/></svg>
-                        Export clipboard
-                    </button>
-                    
-                    <button id="import-btn" class="btn btn-light">
-                        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path class="icon" d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"></path></svg>
-                        Import
-                    </button>
 
-                </div>
-            </header>
+                    <button class="scripting btn btn-light" type="button">Scripting scene</button>
 
-            <!-- Edit -->
-            <header style="display: flex; align-items: center; padding: 2px 0;">
-                <span style="display: flex; justify-content: center; width: 4em">Edit</span>
-                <div class="bar">
-                    <button id="undo" class="btn btn-light">
-                        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path class="icon inactive" d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"></path></svg>
-                        Undo
-                    </button>
+                    <div class="bar btn-group btn-group-toggle">
 
-                    <button id="redo" class="btn btn-light">
-                        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path class="icon inactive" d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z"></path></svg>
-                        Redo
-                    </button>
+                        <!-- https://www.svgrepo.com/svg/376495/file-line -->
+                        <button id="new-schema" class="btn btn-light" title="New schema">
+                            <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 9v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8m6 6v-.172a2 2 0 0 0-.586-1.414l-3.828-3.828A2 2 0 0 0 14.172 3H14m6 6h-4a2 2 0 0 1-2-2V3"/></svg>
+                        </button>
+
+                        <button id="save-as-txt" class="btn btn-light" title="Export TXT">
+                            <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path class="icon" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg>
+                        </button>
+                        
+                        <!-- https://www.svgrepo.com/svg/357887/image-download -->
+                        <button id="save-as-png" class="btn btn-light" title="Export PNG">
+                            <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.71,6.29a1,1,0,0,0-1.42,0L20,7.59V2a1,1,0,0,0-2,0V7.59l-1.29-1.3a1,1,0,0,0-1.42,1.42l3,3a1,1,0,0,0,.33.21.94.94,0,0,0,.76,0,1,1,0,0,0,.33-.21l3-3A1,1,0,0,0,22.71,6.29ZM19,13a1,1,0,0,0-1,1v.38L16.52,12.9a2.79,2.79,0,0,0-3.93,0l-.7.7L9.41,11.12a2.85,2.85,0,0,0-3.93,0L4,12.6V7A1,1,0,0,1,5,6h8a1,1,0,0,0,0-2H5A3,3,0,0,0,2,7V19a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V14A1,1,0,0,0,19,13ZM5,20a1,1,0,0,1-1-1V15.43l2.9-2.9a.79.79,0,0,1,1.09,0l3.17,3.17,0,0L15.46,20Zm13-1a.89.89,0,0,1-.18.53L13.31,15l.7-.7a.77.77,0,0,1,1.1,0L18,17.21Z"/></svg>
+                        </button>
+                        
+                        <!-- https://www.svgrepo.com/svg/357606/copy -->
+                        <button id="save-to-clipboard" class="btn btn-light" title="Export clipboard">
+                            <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21,8.94a1.31,1.31,0,0,0-.06-.27l0-.09a1.07,1.07,0,0,0-.19-.28h0l-6-6h0a1.07,1.07,0,0,0-.28-.19.32.32,0,0,0-.09,0A.88.88,0,0,0,14.05,2H10A3,3,0,0,0,7,5V6H6A3,3,0,0,0,3,9V19a3,3,0,0,0,3,3h8a3,3,0,0,0,3-3V18h1a3,3,0,0,0,3-3V9S21,9,21,8.94ZM15,5.41,17.59,8H16a1,1,0,0,1-1-1ZM15,19a1,1,0,0,1-1,1H6a1,1,0,0,1-1-1V9A1,1,0,0,1,6,8H7v7a3,3,0,0,0,3,3h5Zm4-4a1,1,0,0,1-1,1H10a1,1,0,0,1-1-1V5a1,1,0,0,1,1-1h3V7a3,3,0,0,0,3,3h3Z"/></svg>
+                        </button>
+                        
+                        <button id="import-btn" class="btn btn-light" title="Import">
+                            <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path class="icon" d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"></path></svg>
+                        </button>
+                    </div>
+
+                    <div class="bar btn-group btn-group-toggle">
+                        <button id="undo" class="btn btn-light" title="Undo">
+                            <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path class="icon inactive" d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"></path></svg>
+                        </button>
+
+                        <button id="redo" class="btn btn-light" title="Redo">
+                            <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path class="icon inactive" d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z"></path></svg>
+                        </button>
+                    </div>
+                    
                 </div>
             </header>
         </div>
         `;
-        let actions = `
-            <header style="display: flex; align-items:center; padding: 2px 0">
-                <span style="display: flex; justify-content: center; width: 4em">Actions</span>
-                <div class="bar btn-group btn-group-toggle">
-                    <button type="button" class="scripting btn btn-light">Go Scripting</button>
-                </div>
-            </header>
+        let tools = `
+        <header style="display: flex; align-items:center; padding: 2px 0">
+            <span style="display: flex; justify-content: center; width: 4em">Tools</span>
+            <div class="bar btn-group btn-group-toggle">
+
+                <!-- https://www.svgrepo.com/svg/355159/pan -->
+                <button class="tool-select btn btn-light ${this.draw.activeTool instanceof PanTool ? "active" : ""}" data-tooltype="${IToolNames.pan}" title="Pan">
+                    <svg width="16px" height="16px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none">
+                        <path fill="#000000" d="M7.463.057A.748.748 0 007.22.22l-2 2a.75.75 0 001.06 1.06L7 2.56V7H2.56l.72-.72a.75.75 0 00-1.06-1.06l-2 2a.748.748 0 000 1.06l2 2a.75.75 0 101.06-1.06l-.72-.72H7v4.44l-.72-.72a.75.75 0 00-1.06 1.06l2 2a.748.748 0 001.06 0l2-2a.75.75 0 10-1.06-1.06l-.72.72V8.5h4.44l-.72.72a.75.75 0 101.06 1.06l2-2a.748.748 0 000-1.06l-2-2a.75.75 0 10-1.06 1.06l.72.72H8.5V2.56l.72.72a.75.75 0 101.06-1.06l-2-2a.748.748 0 00-.817-.163z"/>
+                    </svg>
+                </button>
+
+                <!-- https://www.svgrepo.com/svg/361459/cursor-arrow -->
+                <button class="tool-select btn btn-light ${this.draw.activeTool instanceof SelectTableTool ? "active" : ""}" data-tooltype="${IToolNames.select}" title="Select/Edit table">
+                    <svg width="16px" height="16px" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M3.29227 0.048984C3.47033 -0.032338 3.67946 -0.00228214 3.8274 0.125891L12.8587 7.95026C13.0134 8.08432 13.0708 8.29916 13.0035 8.49251C12.9362 8.68586 12.7578 8.81866 12.5533 8.82768L9.21887 8.97474L11.1504 13.2187C11.2648 13.47 11.1538 13.7664 10.9026 13.8808L8.75024 14.8613C8.499 14.9758 8.20255 14.8649 8.08802 14.6137L6.15339 10.3703L3.86279 12.7855C3.72196 12.934 3.50487 12.9817 3.31479 12.9059C3.1247 12.8301 3 12.6461 3 12.4414V0.503792C3 0.308048 3.11422 0.130306 3.29227 0.048984ZM4 1.59852V11.1877L5.93799 9.14425C6.05238 9.02363 6.21924 8.96776 6.38319 8.99516C6.54715 9.02256 6.68677 9.12965 6.75573 9.2809L8.79056 13.7441L10.0332 13.178L8.00195 8.71497C7.93313 8.56376 7.94391 8.38824 8.03072 8.24659C8.11753 8.10494 8.26903 8.01566 8.435 8.00834L11.2549 7.88397L4 1.59852Z" fill="#000000"/>
+                    </svg>
+                </button>
+
+                <!-- https://www.svgrepo.com/svg/377078/table-plus -->
+                <button class="tool-select btn btn-light ${this.draw.activeTool instanceof CreateTableTool ? "active" : ""}" data-tooltype="${IToolNames.newTable}" title="New table">
+                    <svg width="16px" height="16px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                        <path stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2M3 8v6m0-6h6m12 0v4m0-4H9m-6 6v4a2 2 0 0 0 2 2h4m-6-6h6m0-6v6m0 0h4a2 2 0 0 0 2-2V8m-6 6v6m0 0h2m7-5v3m0 0v3m0-3h3m-3 0h-3"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
         `;
-        document.querySelector(".top-menu-action-container")!.innerHTML =  topMenuActions + header + actions;
+        document.querySelector(".top-menu-action-container")!.innerHTML = topMenuActions + tools;
         let toolElements = document.querySelectorAll('.tool-select')
         for (const toolEl of toolElements) {
             toolEl.addEventListener('click', () => {
@@ -182,6 +192,9 @@ export class DrawScene extends Container implements IScene {
             this.draw.schema.relations.forEach(relation => relation.isDirty = true);
             this.renderScreen(false);
         });
+        document.querySelector('#new-schema')!.addEventListener('click', () => {
+            Manager.changeScene(new DrawScene(new Draw(new Schema([], []))));
+        })
         document.querySelector('#save-as-png')!.addEventListener('click', async () => {
             console.log("save-as-png event");
             ScriptingScene.execute(await fetch('../wwwroot/scripts/takeScreenshot.js').then(x => x.text()), this.draw)
@@ -209,7 +222,7 @@ export class DrawScene extends Container implements IScene {
     }
     destroyHtmlUi(): void {
         document.querySelector(".top-menu-action-container")!.innerHTML = "";
-        (document.querySelector(".canvas-container")! as HTMLElement).style.display = "none";
+        (document.querySelector(".canvas-container")! as HTMLElement).style.visibility = "hidden";
     }
 
     import() {
@@ -268,26 +281,29 @@ export class DrawScene extends Container implements IScene {
             let wheelDirection = e.deltaY > 0 ? +1 : -1;
             let possibleZoomLevels = [1/3, 0.4096, 0.512, 0.64, 0.8, 1, 1.25, 1.5625, 2];
             let index =  possibleZoomLevels.indexOf(this.draw.currentZoomScale) + wheelDirection;
-            let newScale = possibleZoomLevels[Math.max(0, Math.min(index, possibleZoomLevels.length - 1))]
-            this.draw.currentZoomScale = newScale;
-            let mouseWorldPosition = this.draw.getMouseWorldPosition();
-            this.draw.setScale(this.viewport, newScale);
-            let mouseWorldPositionNew = this.draw.getMouseWorldPosition();
-            let translation = new Point(
-                mouseWorldPositionNew.x - mouseWorldPosition.x,
-                mouseWorldPositionNew.y - mouseWorldPosition.y,
-            );
-            viewport.left -= translation.x;
-            viewport.top -= translation.y;
-            this.draw.setViewport(viewport);
-
-            this.cullViewport();
+            let newScale = possibleZoomLevels[Math.max(0, Math.min(index, possibleZoomLevels.length - 1))];
+            this.setZoom(viewport, newScale, this.draw.mouseScreenPosition);
+            // console.log(`viewport: scale: ${viewport.scale.x}, x: ${viewport.left}, y: ${viewport.top}, width: ${viewport.screenWidth  / viewport.scale.x}, height: ${viewport.screenHeight  / viewport.scale.y}`);
         })
         viewport.on('moved', () => {
             console.log("moved")
             this.cullViewport();
         })
         return viewport;
+    }
+
+    setZoom(viewport: Viewport, newScale: number, zoomScreenPoint: Point) {
+        let zoomWorldPoint = this.draw.getScreenToWorldPoint2(zoomScreenPoint);
+        this.draw.setScale(viewport, newScale);
+        let mouseWorldPositionNew = this.draw.getScreenToWorldPoint2(zoomScreenPoint);
+        let translation = new Point(
+            mouseWorldPositionNew.x - zoomWorldPoint.x,
+            mouseWorldPositionNew.y - zoomWorldPoint.y,
+        );
+        viewport.left -= translation.x;
+        viewport.top -= translation.y;
+        this.draw.setViewport(viewport);
+        this.cullViewport();
     }
 
     cullViewport() {
@@ -521,10 +537,10 @@ export class DrawScene extends Container implements IScene {
         this.bottomBar.pointermove(
             this.draw.mouseScreenPosition.x, 
             this.draw.mouseScreenPosition.y, 
-            this.draw.getMouseWorldPosition().x,
-            this.draw.getMouseWorldPosition().y,
-            Math.floor((this.draw.getScreen().x + this.draw.mouseScreenPosition.x / this.draw.getScale()) / Draw.fontCharSizeWidth),
-            Math.floor((this.draw.getScreen().y + this.draw.mouseScreenPosition.y / this.draw.getScale()) / Draw.fontCharSizeHeight),
+            this.draw.getScreenToWorldPoint2(this.draw.mouseScreenPosition).x,
+            this.draw.getScreenToWorldPoint2(this.draw.mouseScreenPosition).y,
+            this.draw.getScreenToCharGridPoint2(this.draw.mouseScreenPosition).x,
+            this.draw.getScreenToCharGridPoint2(this.draw.mouseScreenPosition).y,
             Number((this.draw.getScale()).toFixed(2))  // x and y is the same
         );
         this.draw.activeTool?.update();

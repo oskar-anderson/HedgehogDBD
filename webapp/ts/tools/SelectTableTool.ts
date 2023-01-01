@@ -11,7 +11,6 @@ export class SelectTableTool implements ITool {
     isDirty = false;
     draw: Draw;
     hover: TableHoverPreview | null = null;
-    isMouseDown = false;
     constructor(draw: Draw) {
         this.draw = draw;
     }
@@ -25,8 +24,8 @@ export class SelectTableTool implements ITool {
     }
 
     update() {
-        if (this.isMouseDown) {
-            let mouseCharGrid = this.draw.getMouseCharGridPosition();
+        if (this.hover !== null) {
+            let mouseCharGrid = this.draw.getScreenToCharGridPoint2(this.draw.mouseScreenPosition);
             this.updateHoverTablePosition(mouseCharGrid.x, mouseCharGrid.y);
         }
     }
@@ -41,18 +40,16 @@ export class SelectTableTool implements ITool {
         return this.isDirty;
     }
 
-    mouseDown = () => {
+    mouseDown(mouseCharGridX: number, mouseCharGridY: number) {
         this.isDirty = false;
-        let mouseCharGrid = this.draw.getMouseCharGridPosition();
         for (let table of this.draw.schema.tables) {
-            if (table.getContainingRect().contains(mouseCharGrid.x, mouseCharGrid.y)) {
+            if (table.getContainingRect().contains(mouseCharGridX, mouseCharGridY)) {
                 let hover = Table.initClone(table);
                 hover.initNewId();
                 this.draw.selectedTable = hover;
                 this.draw.hover = hover;
                 table.visible = false;
-                this.hover = new TableHoverPreview(hover, table, table.position.x - mouseCharGrid.x, table.position.y - mouseCharGrid.y);
-                this.isMouseDown = true;
+                this.hover = new TableHoverPreview(hover, table, table.position.x - mouseCharGridX, table.position.y - mouseCharGridY);
                 return;
             }
         }
@@ -81,7 +78,6 @@ export class SelectTableTool implements ITool {
         let isGoodPlaceForTable = isGoodPlaceForTableFunc();
         console.log(`isGoodPlaceForTable: ${isGoodPlaceForTable}`);
         let mouseUpDone = () => {
-            this.isMouseDown = false;
             this.hover = null;
             this.isDirty = true;
             this.exit();
@@ -109,20 +105,21 @@ export class SelectTableTool implements ITool {
         let rect = (event.currentTarget! as Element).getBoundingClientRect();
         let relativeX = Math.round(event.clientX - rect.x);
         let relativeY = Math.round(event.clientY - rect.y);
+        let mouseCharGrid = this.draw.getScreenToCharGridPoint(relativeX, relativeY);
+        console.log(`screen: ${this.draw.getScreen()}`)
+        console.log(`world: ${this.draw.getWorld()}`)
+        console.log(`chargrid: ${this.draw.getWorldCharGrid()}`)
         switch (event.type) {
             case "mousedown":
-                this.mouseDown();
+                this.mouseDown(mouseCharGrid.x, mouseCharGrid.y);
                 break;
             case "mouseup":
-                if (this.isMouseDown) {
-                    let mouseCharGrid = this.draw.getMouseCharGridPositionFromScreenPosition(relativeX, relativeY);
-                    console.log(`mouseCharGrid.x: ${mouseCharGrid.x}, mouseCharGrid.y: ${mouseCharGrid.y}`)
+                if (this.hover !== null) {
                     this.mouseEventUp(mouseCharGrid.x, mouseCharGrid.y);
                 }
                 break;
             case "click": 
                 if (event.detail === 2) {  // double click
-                    let mouseCharGrid = this.draw.getMouseCharGridPosition();
                     let selectedTable = this.draw.schema.tables.find(table => table.getContainingRect().contains(mouseCharGrid.x, mouseCharGrid.y))
                     if (! selectedTable) { break; }
                     this.draw.selectedTable = selectedTable;

@@ -38,31 +38,28 @@ export class Draw {
         return visibleTables;
     }
 
-    getMouseWorldPosition() {
+    getScreenToWorldPoint(x: number, y: number) {
         return new Point(
-            Math.floor(this.screen.x + this.mouseScreenPosition.x / this.screenScale),
-            Math.floor(this.screen.y + this.mouseScreenPosition.y / this.screenScale)
+            Math.floor(this.screen.x + x / this.screenScale),
+            Math.floor(this.screen.y + y / this.screenScale)
         )
     }
 
-    getMouseCharGridPosition() {
-        let worldPos = this.getMouseWorldPosition();
-        return this.getMouseCharGridPositionFromWorldPosition(worldPos.x, worldPos.y);
+    getScreenToWorldPoint2(point: Point) {
+        return this.getScreenToWorldPoint(point.x, point.y);
+    }
+    
+    getScreenToCharGridPoint(x: number, y: number) {
+        let world = this.getScreenToWorldPoint(x, y);
+        return new Point( 
+            Math.floor(world.x / Draw.fontCharSizeWidth),
+            Math.floor(world.y / Draw.fontCharSizeHeight)
+        );
     }
 
-    getMouseCharGridPositionFromWorldPosition(x: number, y: number) {
-        return new Point(
-            Math.floor(x / Draw.fontCharSizeWidth),
-            Math.floor(y / Draw.fontCharSizeHeight)
-        )
+    getScreenToCharGridPoint2(point: Point) {
+        return this.getScreenToCharGridPoint(point.x, point.y);
     }
-
-    getMouseCharGridPositionFromScreenPosition(x: number, y: number) {
-        let worldPointX = Math.floor(this.screen.x + x / this.screenScale);
-        let worldPointY = Math.floor(this.screen.y + y / this.screenScale);
-        return this.getMouseCharGridPositionFromWorldPosition(worldPointX, worldPointY)
-    }
-
     
     setViewport(viewport: Viewport) {
         this.world = new MyRect(0, 0, viewport.worldWidth, viewport.worldHeight)
@@ -78,6 +75,7 @@ export class Draw {
 
     setScale(viewport: Viewport, scale: number) {
         viewport.scale.set(scale);
+        this.currentZoomScale = scale;
         this.setViewport(viewport);
     }
 
@@ -101,11 +99,5 @@ export class Draw {
             Math.ceil(worldSize.width / Draw.fontCharSizeWidth),
             Math.ceil(worldSize.height / Draw.fontCharSizeHeight), 
         );
-    }
-
-    clampRect(outer: Rectangle, inner: Rectangle) {
-        let newX = Math.max(outer.x, Math.min(outer.width - inner.width, inner.x));
-        let newY = Math.max(outer.y, Math.min(outer.height - inner.height, inner.y));
-        return new Point(newX, newY);
     }
 }

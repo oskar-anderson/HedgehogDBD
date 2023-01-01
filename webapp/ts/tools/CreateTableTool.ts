@@ -1,3 +1,4 @@
+import { Point, Rectangle } from "pixi.js";
 import { CommandCreateTable } from "../commands/appCommands/CommandCreateTable";
 import { Draw } from "../model/Draw";
 import { Table } from "../model/Table";
@@ -20,17 +21,17 @@ export class CreateTableTool implements ITool {
 
     init(): void {
         this.hover = Table.init(
-            this.draw.getMouseCharGridPosition(),
+            new Point(0, 0),
             "NewTable",
             [ TableRow.init("Id", "VARCHAR(255)", ["PK"])]
         );
-        this.hover.position = this.draw.clampRect(this.draw.getWorldCharGrid(), this.hover.getContainingRect());
+        this.hover.position = this.getTablePosition(this.hover.getContainingRect());
         this.draw.selectedTable = this.hover;
         this.draw.hover = this.hover;
     }
 
     update(): void {
-        let mouseCharGrid = this.draw.getMouseCharGridPosition();
+        let mouseCharGrid = this.draw.getScreenToCharGridPoint2(this.draw.mouseScreenPosition);
         this.mouseMove(mouseCharGrid.x, mouseCharGrid.y);
     }
 
@@ -45,17 +46,22 @@ export class CreateTableTool implements ITool {
 
     mouseMove(mouseCharGridX: number, mouseCharGridY: number) {
         if (this.hover === null) throw new Error("Moving new table hover with hover being null!");
-        let newPos = this.draw.clampRect(
-            this.draw.getWorldCharGrid(), 
-            new MyRect(
-                mouseCharGridX, 
-                mouseCharGridY, 
-                this.hover.getContainingRect().width,
-                this.hover.getContainingRect().height
-            ));
+        let hoverRect = new MyRect(
+            mouseCharGridX, 
+            mouseCharGridY, 
+            this.hover.getContainingRect().width,
+            this.hover.getContainingRect().height
+        );
+        let newPos = this.getTablePosition(hoverRect);
         this.isDirty = ! (this.hover!.position.x === newPos.x && this.hover!.position.y === newPos.y);
         this.hover.position = newPos;
     };
+
+    getTablePosition(tableRect: Rectangle) {
+        let fit = this.draw.getWorldCharGrid().intersection(tableRect);
+        let newPos = new Point(fit.x - tableRect.width + fit.width, fit.y - tableRect.height + fit.height);
+        return newPos;
+    }
 
     createTable(mouseCharGridX: number, mouseCharGridY: number) {
         this.mouseMove(mouseCharGridX, mouseCharGridY);
@@ -84,7 +90,7 @@ export class CreateTableTool implements ITool {
         let relativeY = Math.round(event.clientY - rect.y);
         switch (event.type) {
             case "click": 
-                let mouseCharGrid = this.draw.getMouseCharGridPositionFromScreenPosition(relativeX, relativeY);
+                let mouseCharGrid = this.draw.getScreenToCharGridPoint(relativeX, relativeY);
                 this.createTable(mouseCharGrid.x, mouseCharGrid.y);
                 break;
             default:

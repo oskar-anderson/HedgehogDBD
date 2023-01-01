@@ -49,7 +49,7 @@ export default class AStarFinderCustom {
                 let startToNextCost = costSoFar.get(grid.getPointId(current))! + grid.getNeighborCost(current, next);
                 if (! costSoFar.has(grid.getPointId(next)) || startToNextCost < costSoFar.get(grid.getPointId(next))!) {
                     costSoFar.set(grid.getPointId(next), startToNextCost);
-                    let priority = startToNextCost + this.heuristic(current, next);
+                    let priority = startToNextCost + this.heuristic(next, heuristicTarget);
                     frontier.push({ value: next, cost: priority });
                     cameFrom.set(grid.getPointId(next), { x: current.x, y: current.y });
                 }

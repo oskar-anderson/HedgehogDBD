@@ -10,7 +10,7 @@ function getSaveContent(width, height) {
 }
 
 function main() {
-    navigator.clipboard.writeText(getSaveContent(WORLD_CHAR_WIDTH, WORLD_CHAR_HEIGHT));
+    navigator.clipboard.writeText(getSaveContent(schema.worldCharWidth, schema.worldCharHeight));
 }
 
 main();

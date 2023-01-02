@@ -33,10 +33,12 @@ export class LocalStorageData {
 export class Script {
 
     name: string;
-    content: string
+    content: string;
+    tags: string[] = [];
     
-    constructor(name: string, content: string) {
+    constructor(name: string, content: string, tags: string[]) {
         this.name = name;
         this.content = content;
+        this.tags = tags;
     }
 }

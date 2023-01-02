@@ -23,7 +23,7 @@ async function main() {
     app.renderer.plugins.extract.canvas(app.stage).toBlob((blob) => {
         const a = document.createElement('a');
         document.body.append(a);
-        a.download = 'screenshot';
+        a.download = `RasterModeler_${dayjs().format('YYYY-MM-DD-HH-mm-ss')}_screenshot`;
         a.href = URL.createObjectURL(blob);
         a.click();
         a.remove();
@@ -33,9 +33,9 @@ async function main() {
 
 
 function renderScreen() {
-    for (let y = 0; y < WORLD_CHAR_HEIGHT; y++) {
-        for (let x = 0; x < WORLD_CHAR_WIDTH; x++) {
-            let tile = schema.worldDrawArea[y * WORLD_CHAR_WIDTH + x];
+    for (let y = 0; y < schema.worldCharHeight; y++) {
+        for (let x = 0; x < schema.worldCharWidth; x++) {
+            let tile = schema.worldDrawArea[y * schema.worldCharWidth + x];
             if (tile.char === " ") { continue; }
             let bitmapText = new PIXI.BitmapText(tile.char,
                 {

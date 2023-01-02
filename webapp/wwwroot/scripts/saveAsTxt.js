@@ -19,5 +19,5 @@ function saveAsTxt(width, height) {
     document.body.removeChild(element);
 }
 
-saveAsTxt(WORLD_CHAR_WIDTH, WORLD_CHAR_HEIGHT);
+saveAsTxt(schema.worldCharWidth, schema.worldCharHeight);
 RESULT_LOG.push("File downloaded!");

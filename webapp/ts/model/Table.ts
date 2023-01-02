@@ -1,8 +1,6 @@
-import { Point, Rectangle } from "pixi.js";
+import { Point } from "pixi.js";
 import { MyRect } from "../MyRect";
 import { CostGrid, CostGridTileTypes } from "./CostGrid";
-import { Draw } from "./Draw";
-import { Relation } from "./Relation";
 import { TableRow } from "./TableRow";
 
 export class Table {

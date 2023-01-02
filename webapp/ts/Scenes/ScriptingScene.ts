@@ -8,6 +8,8 @@ import Modal from "bootstrap/js/dist/modal"; // import { Modal } from "boostrap"
 import * as monaco from 'monaco-editor';
 import { LocalStorageData, Script } from "../model/LocalStorageData";
 import dayjs from "dayjs";  // used in scripts
+import { TableDTO } from "../model/TableDTO";
+import { SchemaDTO } from "../model/SchemaDTO";
 
 export class ScriptingScene extends Container implements IScene {
 
@@ -27,43 +29,40 @@ export class ScriptingScene extends Container implements IScene {
     }
 
     async init(): Promise<void> {
+        let scriptEl = document.createElement('script');
+        scriptEl.setAttribute('src', 'https://utteranc.es/client.js');
+        scriptEl.setAttribute('crossorigin', 'anonymous');
+        scriptEl.setAttribute('async', 'true');
+        scriptEl.setAttribute('repo', 'oskar-anderson/RasterModeler');
+        scriptEl.setAttribute('issue-term', 'scripting-comments');
+        scriptEl.setAttribute('theme', 'github-light');
+        document.querySelector('.comment-container')!.appendChild(scriptEl);
         let topMenuActions = await fetch("./partial/navbar.html").then(x => x.text());
         document.querySelector(".top-menu-action-container")!.innerHTML = topMenuActions;
         document.querySelector(".nav-draw")?.addEventListener('click', () => {  // from partial
             Manager.changeScene(new DrawScene(this.draw));
         })
         let actions = `
-            <header style="display: flex; align-items:center; padding: 2px 0">
-                <button type="button" class="show-json btn btn-light">Show JSON</button>
-            </header>
             <div>
                 <div class="mt-4 mx-2">
                     <div class="h4">Scripts</div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="h5">
-                                Builtin
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <ul class="list-group">
+                                {% for script in builtinScripts %}
+                                    <li class="script-modal list-group-item d-flex justify-content-between" data-content="{{ builtinScriptsJson[loop.index0] }}">
+                                        <span>{{ script.name }}</span>
+                                        <div>
+                                        {% for tag in script.tags %}
+                                            <span class="badge bg-info rounded-pill">{{ tag }}</span>
+                                        {% endfor %}
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                                </ul>
                             </div>
-                            <ul class="list-group">
-                            {% for script in builtinScripts %}
-                                <li class="script-modal list-group-item" data-content="{{ script.content }}" data-name="{{ script.name }}" data-islocalstoragescript="N">
-                                    <span>{{ script.name }}</span>
-                                </li>
-                            {% endfor %}
-                            </ul>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="h5">
-                                LocalStorage
-                            </div>
-                            <ul class="list-group">
-                            {% for script in localStorageScripts %}
-                                <li class="script-modal list-group-item" data-content="{{ script.content }}" data-name="{{ script.name }}" data-islocalstoragescript="Y">
-                                    <span>{{ script.name }}</span>
-                                </li>
-                            {% endfor %}
-                            </ul>
-                        </div>  
                     </div>
                 </div>
 
@@ -72,6 +71,7 @@ export class ScriptingScene extends Container implements IScene {
                     <div>
                         <button type="button" class="save-btn btn btn-light">Save</button>
                         <button type="button" class="execute-btn btn btn-light">Execute</button>
+                        <button type="button" class="show-json btn btn-light">Show JSON</button>
                     </div>
                     
                     <div class="editor"></div>
@@ -85,30 +85,36 @@ export class ScriptingScene extends Container implements IScene {
         `;
 
         let localStorageScripts = LocalStorageData.getStorage();
+        let scripts = [ 
+            new Script(
+                "List tables", 
+                await fetch('../wwwroot/scripts/listAllTables.js').then(x => x.text()), 
+                ["builtin"]
+            ),
+            new Script(
+                "SQL CREATE",
+                await fetch('../wwwroot/scripts/createTablesSQL.js').then(x => x.text()),
+                ["builtin", "SQL"]
+            ),
+            new Script(
+                "Export TXT",
+                await fetch('../wwwroot/scripts/saveAsTxt.js').then(x => x.text()),
+                ["builtin"]
+            ),
+            new Script(
+                "Export clipboard",
+                await fetch('../wwwroot/scripts/saveToClipboard.js').then(x => x.text()),
+                ["builtin"]
+            ),
+            new Script(
+                "Export PNG",
+                await fetch('../wwwroot/scripts/takeScreenshot.js').then(x => x.text()),
+                ["builtin", "async"]
+            )
+        ].concat(localStorageScripts.scripts);
         let html = nunjucks.renderString(actions, { 
-            builtinScripts: [ 
-                { 
-                    name: "List all tables",
-                    content:  await fetch('../wwwroot/scripts/listAllTables.js').then(x => x.text())
-                }, 
-                { 
-                    name: "SQL Create tables",
-                    content: await fetch('../wwwroot/scripts/createTablesSQL.js').then(x => x.text())
-                },
-                {
-                    name: "Save as TXT",
-                    content: await fetch('../wwwroot/scripts/saveAsTxt.js').then(x => x.text())
-                },
-                {
-                    name: "Save to clipboard",
-                    content: await fetch('../wwwroot/scripts/saveToClipboard.js').then(x => x.text())   
-                },
-                {
-                    name: "Save as PNG",
-                    content: await fetch('../wwwroot/scripts/takeScreenshot.js').then(x => x.text())   
-                }
-            ],
-            localStorageScripts: localStorageScripts.scripts
+            builtinScripts: scripts,
+            builtinScriptsJson: scripts.map(x => JSON.stringify(x))
         });
         document.querySelector(".scripting-container")!.innerHTML = html;
         
@@ -120,7 +126,7 @@ export class ScriptingScene extends Container implements IScene {
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <pre class="colored-code" data-lang="javascript">{{ tables }}</pre>
+                        <pre class="colored-code" data-lang="javascript">{{ schema }}</pre>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -128,8 +134,14 @@ export class ScriptingScene extends Container implements IScene {
                 </div>
             `;
             let schemaJsonDataModal = new Modal('#basic-modal', {});
+            let schemaDTO = new SchemaDTO(
+                this.draw.schema.tables.map(x => new TableDTO({ head: x.head, tableRows: x.tableRows })),
+                [], // this.draw.schema.worldDrawArea  // cannot be displayed
+                this.draw.getWorldCharGrid().width,
+                this.draw.getWorldCharGrid().height
+            );
             let modalHtml = nunjucks.renderString(modalTemplate, { 
-                tables: JSON.stringify(this.draw.schema.tables, null, 4)
+                schema: JSON.stringify(schemaDTO, null, 4)
             });
             document.querySelector('#basic-modal')!.querySelector('.modal-dialog')!.innerHTML = modalHtml;
             monaco.editor.colorizeElement(document.querySelector(".colored-code")!, { mimeType: "javascript"});
@@ -139,12 +151,16 @@ export class ScriptingScene extends Container implements IScene {
             value: this.editorValue,
             language: 'javascript',
         });
-        window.addEventListener("resize", () => { editor.layout(); });
+        window.addEventListener("resize", () => { editor.layout({ width:  window.innerWidth - 20, height: 400 }) });
 
         let modalActivators = document.querySelectorAll('.script-modal') as NodeListOf<HTMLElement>;
         for (const modalActivator of modalActivators) {
             modalActivator.addEventListener('click', async (e) => {
-                let script = new Script(modalActivator.dataset.name!, modalActivator.dataset.content!);
+                let scriptJSON = JSON.parse(modalActivator.dataset.content!);
+                let name = scriptJSON.name;
+                let content = scriptJSON.content;
+                let tags = scriptJSON.tags as string[];
+                let script = new Script(name, content, tags);
                 let modalTemplate = `
                     <div class="modal-content">
                         <div class="modal-header">
@@ -172,7 +188,7 @@ export class ScriptingScene extends Container implements IScene {
                 let modalHtml = nunjucks.renderString(modalTemplate, { 
                     content: html,
                     name: script.name,
-                    isLocalStorageScript: modalActivator.dataset.islocalstoragescript === "Y",
+                    isLocalStorageScript: !tags.includes("builtin"),
                 });
                 document.querySelector('#basic-modal')!.querySelector('.modal-dialog')!.innerHTML = modalHtml;
                 document.querySelector('#modal-execute-btn')?.addEventListener('click', (e) => {
@@ -217,7 +233,7 @@ export class ScriptingScene extends Container implements IScene {
                 if (! name) {
                     return;
                 }
-                localStorageScripts.addScript(new Script(name, editor.getValue()));
+                localStorageScripts.addScript(new Script(name, editor.getValue(), []));
                 modal.hide();
                 this.editorValue = editor.getValue();
                 this.init();
@@ -267,9 +283,15 @@ export class ScriptingScene extends Container implements IScene {
     static execute(value: string, draw: Draw) {
         let resultLog: string[] = [];
         let errorMsg = "";
+        let schemaDTO = new SchemaDTO(
+            draw.schema.tables.map(x => new TableDTO({ head: x.head, tableRows: x.tableRows })),
+            draw.schema.worldDrawArea,
+            draw.getWorldCharGrid().width,
+            draw.getWorldCharGrid().height
+            );
         try {
-            let fn = Function("WORLD_CHAR_WIDTH", "WORLD_CHAR_HEIGHT", "RESULT_LOG", "schema", "dayjs", "PIXI", `"use strict"; ${value}`);
-            fn(draw.getWorldCharGrid().width, draw.getWorldCharGrid().height, resultLog, draw.schema, dayjs, PIXI);
+            let fn = Function("RESULT_LOG", "schema", "dayjs", "PIXI", `"use strict"; ${value}`);
+            fn(resultLog, schemaDTO, dayjs, PIXI);
         } catch (error: any) {
             errorMsg = `${error.name}: ${error.message}`;
         }
@@ -282,6 +304,7 @@ export class ScriptingScene extends Container implements IScene {
     destroyHtmlUi(): void {
         document.querySelector(".scripting-container")!.innerHTML = "";
         document.querySelector(".top-menu-action-container")!.innerHTML = "";
+        document.querySelector('.comment-container')!.innerHTML = "";
     }
     
 }

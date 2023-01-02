@@ -42,7 +42,8 @@ export class LoaderScene extends Container implements IScene {
             this.loaderBarFill.scale.x = progressRatio;
         });
         Loader.shared.onComplete.once((loader) => { 
-            Manager.changeScene(new DrawScene(this.draw));
+            let scene = new DrawScene(this.draw)
+            Manager.changeScene(scene);
         });
 
         Loader.shared.load();

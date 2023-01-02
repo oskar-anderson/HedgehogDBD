@@ -4,7 +4,7 @@ import { IScene, Manager } from "../Manager";
 import { Draw } from "../model/Draw";
 import * as nunjucks from "nunjucks";
 import { DrawScene } from "./DrawScene";
-import { Modal } from "bootstrap";
+import Modal from "bootstrap/js/dist/modal"; // import { Modal } from "boostrap"; // this causes bootstrap collapse to not work in pure HTML, do not use
 import * as monaco from 'monaco-editor';
 import { LocalStorageData, Script } from "../model/LocalStorageData";
 import dayjs from "dayjs";  // used in scripts
@@ -27,13 +27,14 @@ export class ScriptingScene extends Container implements IScene {
     }
 
     async init(): Promise<void> {
+        let topMenuActions = await fetch("./partial/navbar.html").then(x => x.text());
+        document.querySelector(".top-menu-action-container")!.innerHTML = topMenuActions;
+        document.querySelector(".nav-draw")?.addEventListener('click', () => {  // from partial
+            Manager.changeScene(new DrawScene(this.draw));
+        })
         let actions = `
             <header style="display: flex; align-items:center; padding: 2px 0">
-                <span style="display: flex; justify-content: center; width: 4em">Actions</span>
-                <div class="bar btn-group btn-group-toggle">
-                    <button type="button" class="modalling btn btn-light">Go Modalling</button>
-                    <button type="button" class="show-json btn btn-light">Show JSON</button>
-                </div>
+                <button type="button" class="show-json btn btn-light">Show JSON</button>
             </header>
             <div>
                 <div class="mt-4 mx-2">
@@ -134,9 +135,6 @@ export class ScriptingScene extends Container implements IScene {
             monaco.editor.colorizeElement(document.querySelector(".colored-code")!, { mimeType: "javascript"});
             schemaJsonDataModal.show();
         })
-        document.querySelector('.modalling')?.addEventListener('click', () => {
-            Manager.changeScene(new DrawScene(this.draw))
-        })
         let editor = monaco.editor.create(document.querySelector('.editor')!, {
             value: this.editorValue,
             language: 'javascript',
@@ -163,7 +161,6 @@ export class ScriptingScene extends Container implements IScene {
                             {% endif %}
 
                             <button id="modal-execute-btn" type="button" class="btn btn-primary">⚡ Execute</button>
-                            <button id="modal-copy-to-clipboard-btn" type="button" class="btn btn-primary">Copy</button>
                             <button id="modal-copy-to-editor-btn" type="button" class="btn btn-primary">Paste to editor</button>
                         </div>
                     </div>
@@ -181,10 +178,6 @@ export class ScriptingScene extends Container implements IScene {
                 document.querySelector('#modal-execute-btn')?.addEventListener('click', (e) => {
                     modal.hide();
                     this.executeAndShowResult(script.content);
-                });
-                document.querySelector('#modal-copy-to-clipboard-btn')?.addEventListener('click', (e) => {
-                    navigator.clipboard.writeText(script.content);
-                    modal.hide();
                 });
                 document.querySelector('#modal-copy-to-editor-btn')?.addEventListener('click', (e) => {
                     editor.setValue(script.content);
@@ -288,6 +281,7 @@ export class ScriptingScene extends Container implements IScene {
 
     destroyHtmlUi(): void {
         document.querySelector(".scripting-container")!.innerHTML = "";
+        document.querySelector(".top-menu-action-container")!.innerHTML = "";
     }
     
 }

@@ -6,6 +6,7 @@ export class Programm {
 
     static main(draw: Draw): void {
         Manager.initialize(1080, 720, 0xe6e6e6);
-        Manager.changeScene(new LoaderScene(draw));
+        let scene = new LoaderScene(draw);
+        Manager.changeScene(scene);
     }
 }

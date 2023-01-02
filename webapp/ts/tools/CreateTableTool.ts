@@ -40,10 +40,6 @@ export class CreateTableTool implements ITool {
         this.draw.hover = null;
     }
 
-    getIsDirty(): boolean {
-        return this.isDirty;
-    }
-
     mouseMove(mouseCharGridX: number, mouseCharGridY: number) {
         if (this.hover === null) throw new Error("Moving new table hover with hover being null!");
         let hoverRect = new MyRect(

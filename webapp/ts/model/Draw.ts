@@ -10,17 +10,11 @@ export class Draw {
     history = new History();
     static fontCharSizeWidth = 7;
     static fontCharSizeHeight = 14;
-    currentZoomScale = 1;
     selectedTable: Table | null = null
     schema: Schema;
-
     mouseScreenPosition: Point = new Point(0, 0);
-    mouseScreenPositionNext: Point = new Point(0, 0);
-    isMouseLeftDown: boolean = false;
-
     hover: Table | null = null;
     activeTool: ITool | null = null;
-    viewportDTO: { viewportLeft: number, viewportTop: number, viewportScale: number, } | null = null
     
     private world = new Rectangle();  // call setViewport before using
     private screen = new Rectangle();  // call setViewport before using
@@ -75,7 +69,7 @@ export class Draw {
 
     setScale(viewport: Viewport, scale: number) {
         viewport.scale.set(scale);
-        this.currentZoomScale = scale;
+        this.screenScale = scale;
         this.setViewport(viewport);
     }
 

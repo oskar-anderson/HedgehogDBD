@@ -36,10 +36,6 @@ export class SelectTableTool implements ITool {
         this.draw.schema.tables.forEach(x => x.visible = true);
     }
 
-    getIsDirty(): boolean {
-        return this.isDirty;
-    }
-
     mouseDown(mouseCharGridX: number, mouseCharGridY: number) {
         this.isDirty = false;
         for (let table of this.draw.schema.tables) {
@@ -76,7 +72,6 @@ export class SelectTableTool implements ITool {
             return false
         }
         let isGoodPlaceForTable = isGoodPlaceForTableFunc();
-        console.log(`isGoodPlaceForTable: ${isGoodPlaceForTable}`);
         let mouseUpDone = () => {
             this.hover = null;
             this.isDirty = true;
@@ -106,9 +101,6 @@ export class SelectTableTool implements ITool {
         let relativeX = Math.round(event.clientX - rect.x);
         let relativeY = Math.round(event.clientY - rect.y);
         let mouseCharGrid = this.draw.getScreenToCharGridPoint(relativeX, relativeY);
-        console.log(`screen: ${this.draw.getScreen()}`)
-        console.log(`world: ${this.draw.getWorld()}`)
-        console.log(`chargrid: ${this.draw.getWorldCharGrid()}`)
         switch (event.type) {
             case "mousedown":
                 this.mouseDown(mouseCharGrid.x, mouseCharGrid.y);
@@ -123,11 +115,6 @@ export class SelectTableTool implements ITool {
                     let selectedTable = this.draw.schema.tables.find(table => table.getContainingRect().contains(mouseCharGrid.x, mouseCharGrid.y))
                     if (! selectedTable) { break; }
                     this.draw.selectedTable = selectedTable;
-                    this.draw.viewportDTO = { 
-                        viewportLeft: this.draw.getScreen().x, 
-                        viewportTop: this.draw.getScreen().y, 
-                        viewportScale: this.draw.getScale(), 
-                    }
                     Manager.changeScene(new TableScene(this.draw, this.draw.selectedTable));
                 }
                 break;

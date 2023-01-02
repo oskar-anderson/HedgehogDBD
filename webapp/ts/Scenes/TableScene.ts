@@ -1,10 +1,10 @@
 import { Container } from "pixi.js";
 import { IScene, Manager } from "../Manager";
 import { Draw } from "../model/Draw";
-import { Modal } from 'bootstrap';
+import Modal from "bootstrap/js/dist/modal";
 import { DrawScene } from "./DrawScene";
 import * as nunjucks from "nunjucks";
-import { CommandModifyTable, CommandModifyTableArgs } from "../commands/appCommands/CommandModifyTable";
+import { CommandModifyTable } from "../commands/appCommands/CommandModifyTable";
 import { Table } from "../model/Table";
 import { CommandDeleteTable } from "../commands/appCommands/CommandDeleteTable";
 import { TableRow } from "../model/TableRow";

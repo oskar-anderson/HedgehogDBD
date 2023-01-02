@@ -8,7 +8,7 @@ export interface ITool {
     init(): void;
     update(): void;
     exit(): void;
-    getIsDirty(): boolean;
+    isDirty: boolean;
     getName(): IToolNames;
     mouseEventHandler(event: MouseEvent): void
 }

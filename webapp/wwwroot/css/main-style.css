@@ -1,5 +1,11 @@
 @import url(https://fonts.googleapis.com/css?family=Share+Tech+Mono);
 
+:root {
+    --bs-btn-color: #fff;
+    --bs-btn-hover-bg: #fff4;
+    --bs-btn-active-bg: #fff4;
+}
+
 .dropdown-menu {
     --bs-dropdown-border-radius: 0.1875em;
     --bs-dropdown-padding-y: 0.2rem;
@@ -32,8 +38,6 @@ h2 { font-size: 1.25em; }
 h3, h4, h5, h6 { font-size: 1.333em; }
 
 pre { font-family: "Courier New"; }
- 
-body { background-color: #000000; color: #9da9af; }
 
 p { padding: 10px 0px 5px 0px; }
 

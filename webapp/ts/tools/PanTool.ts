@@ -4,6 +4,7 @@ import { ITool, IToolNames } from "./ITool";
 export class PanTool implements ITool {
     
     viewport: Viewport;
+    isDirty = false;
     constructor(viewport: Viewport) {
         this.viewport = viewport;
     }
@@ -22,10 +23,6 @@ export class PanTool implements ITool {
 
     exit() {
         this.viewport.plugins.get("drag")!.pause();
-    }
-    
-    getIsDirty(): boolean {
-        return false;
     }
 
     mouseEventHandler(event: MouseEvent): void {

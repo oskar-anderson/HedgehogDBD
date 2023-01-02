@@ -79,8 +79,9 @@ export class Manager {
 
     public static resize(): void {
         // current screen size
-        const screenWidth = Math.min(document.documentElement.clientWidth, Manager.width || 0);
-        const screenHeight = Math.min(document.documentElement.clientHeight, Manager.height || 0);
+        let side = document.querySelector('.canvas-side')?.clientWidth ?? 0;
+        const screenWidth = Math.min(document.documentElement.clientWidth - side, Manager.width || 0);
+        const screenHeight = Math.min(document.documentElement.clientHeight - side, Manager.height || 0);
 
         // uniform scale for our game
         const scale = Math.min(screenWidth / Manager.width, screenHeight / Manager.height);

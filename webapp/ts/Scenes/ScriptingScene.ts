@@ -92,6 +92,11 @@ export class ScriptingScene extends Container implements IScene {
                 ["builtin"]
             ),
             new Script(
+                "List tables and rows",
+                await fetch('../wwwroot/scripts/listAllTableRows.js').then(x => x.text()),
+                ['builtin', 'CSV']
+            ),
+            new Script(
                 "SQL CREATE",
                 await fetch('../wwwroot/scripts/createTablesSQL.js').then(x => x.text()),
                 ["builtin", "SQL"]

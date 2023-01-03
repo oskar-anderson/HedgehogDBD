@@ -1,4 +1,4 @@
-import { extensions, InteractionManager, Application, DisplayObject, Renderer } from "pixi.js";
+import { extensions, InteractionManager, Application, DisplayObject } from "pixi.js";
 import { EventSystem } from '@pixi/events';
 
 export class Manager {
@@ -30,8 +30,6 @@ export class Manager {
 
         extensions.remove(InteractionManager);
         Manager.app = new Application({
-            resolution: window.devicePixelRatio || 1,
-            autoDensity: true,
             backgroundColor: background,
             width: width,
             height: height

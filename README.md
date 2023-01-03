@@ -11,5 +11,5 @@ Webapp for ERD schema creation. Uses PixiJS library to allow text based schema f
 
 ### Local installation:
 1. `npm run build`
-2. Create a server. You can use Live Server plugin for Visual Studio Code.
-3. Visit http://127.0.0.1:5500/webapp/pages/draw.html
+2. `python pyServer.py`
+3. Visit http://127.0.0.1:1337/webapp/pages/draw.html

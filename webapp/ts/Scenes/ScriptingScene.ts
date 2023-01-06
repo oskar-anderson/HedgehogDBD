@@ -29,14 +29,25 @@ export class ScriptingScene extends Container implements IScene {
     }
 
     async init(): Promise<void> {
-        let scriptEl = document.createElement('script');
-        scriptEl.setAttribute('src', 'https://utteranc.es/client.js');
-        scriptEl.setAttribute('crossorigin', 'anonymous');
-        scriptEl.setAttribute('async', 'true');
-        scriptEl.setAttribute('repo', 'oskar-anderson/RasterModeler');
-        scriptEl.setAttribute('issue-term', 'scripting-comments');
-        scriptEl.setAttribute('theme', 'github-light');
-        document.querySelector('.comment-container')!.appendChild(scriptEl);
+        let giscusHTML = `
+        <script src="https://giscus.app/client.js"
+                data-repo="oskar-anderson/RasterModeler"
+                data-repo-id="R_kgDOISKZkQ"
+                data-category-id="DIC_kwDOISKZkc4CTY-q"
+                data-mapping="specific"
+                data-term="Comments - Scripting"
+                data-strict="0"
+                data-reactions-enabled="0"
+                data-emit-metadata="0"
+                data-input-position="top"
+                data-theme="preferred_color_scheme"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+        `;
+        let scriptFrag = document.createRange().createContextualFragment(giscusHTML);
+        document.querySelector('.comment-container')!.appendChild(scriptFrag);
         let topMenuActions = await fetch("./partial/navbar.html").then(x => x.text());
         document.querySelector(".top-menu-action-container")!.innerHTML = topMenuActions;
         document.querySelector(".nav-draw")?.addEventListener('click', () => {  // from partial

@@ -11,7 +11,7 @@ module.exports = {
     devtool: 'inline-source-map',
     module: {
         rules: [
-            {  // monoko editor weirdness
+            {  // Monaco editor weirdness
 				test: /\.css$/,
 				use: ['style-loader', 'css-loader']
 			},

@@ -1,18 +1,11 @@
 {
-  "main": "webapp/main.js",
-  "_": "this is needed for electron",
   "scripts": {
-    "build": "npx webpack",
-    "package-win": "electron-packager . RasterModeler19 --overwrite --asar=true --platform=win32 --arch=ia32 --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"RasterModeler\"",
-    "package-linux": "electron-packager . RasterModeler --overwrite --asar=true --platform=linux --arch=x64 --prune=true --out=release-builds"
+    "build": "npx webpack"
   },
   "devDependencies": {
     "@types/bootstrap": "^5.2.6",
     "@types/node": "^18.11.9",
     "babel-register": "^6.26.0",
-    "electron": "^21.3.0",
-    "electron-packager": "^17.1.1",
-    "glob": "^8.0.3",
     "ts-loader": "^9.4.1",
     "typescript": "^4.8.4",
     "webpack": "^5.74.0",
@@ -26,7 +19,6 @@
     "bootstrap": "^5.2.2",
     "css-loader": "^6.7.2",
     "dayjs": "^1.11.6",
-    "lodash": "^4.17.21",
     "monaco-editor": "^0.34.1",
     "monaco-editor-webpack-plugin": "^7.0.1",
     "nunjucks": "^3.2.3",

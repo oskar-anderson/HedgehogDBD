@@ -14,7 +14,7 @@ Webapp for ERD schema creation. Uses PixiJS library to allow text based schema f
 2. `python pyServer.py`
 3. Visit http://127.0.0.1:1337/webapp/pages/draw.html
 
-### Todo:
+## Todo:
 * Script tagging and filtering
 * Add hidden semantic description field on table row fields to allow better documentation generation. Saving has to be reworked to include extra values on top of the schema
 * More scripts (documentation, code generation, ORM)

@@ -20,7 +20,7 @@ export class CommandCreateTable implements ICommand<CommandCreateTableArgs> {
         this.context.schema.tables.push(newTable);
     }
 
-    undo()  {
+    undo() {
         this.context.schema.tables.pop();
     }
 }

@@ -22,7 +22,7 @@ export class CommandModifyTable implements ICommand<CommandModifyTableArgs> {
         this.context.schema.tables[index] = newTable;
     }
 
-    undo()  {
+    undo() {
         let newTable = Table.initClone(JSON.parse(this.args.newTableJson));
         let oldTable = Table.initClone(JSON.parse(this.args.oldTableJson));
         let index = this.context.schema.tables.findIndex(x => x.equals(newTable));

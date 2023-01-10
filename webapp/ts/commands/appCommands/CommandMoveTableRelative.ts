@@ -16,7 +16,7 @@ export class CommandMoveTableRelative implements ICommand<CommandMoveTableRelati
         table.position.y += this.args.y;
     }
 
-    undo()  {
+    undo() {
         let table = this.context.schema.tables.find(x => x.id === this.args.id)!;
         table.position.x -= this.args.x;
         table.position.y -= this.args.y;

@@ -84,7 +84,7 @@ export class DrawScene extends Container implements IScene {
 
     async init(): Promise<void> {
         (document.querySelector(".canvas-visibility-container")! as HTMLElement).style.display = "block";
-        let topMenuActions = await fetch("./partial/navbar.html").then(x => x.text());
+        let topMenuActions = await fetch("./partial/navbar.html", {cache: "no-cache"}).then(x => x.text());
         let tools = `
         <header style="display: flex; align-items:center; flex-direction: column;">
 
@@ -149,15 +149,15 @@ export class DrawScene extends Container implements IScene {
         })
         document.querySelector('#save-as-png')!.addEventListener('click', async () => {
             console.log("save-as-png event");
-            ScriptingScene.execute(await fetch('../wwwroot/scripts/takeScreenshot.js').then(x => x.text()), this.draw)
+            ScriptingScene.executeWithLog(await fetch('../wwwroot/scripts/takeScreenshot.js', {cache: "no-cache"}).then(x => x.text()), this.draw)
         });
         document.querySelector('#save-to-clipboard')!.addEventListener('click', async () => {
             console.log("save-to-clipboard event");
-            ScriptingScene.execute(await fetch('../wwwroot/scripts/saveToClipboard.js').then(x => x.text()), this.draw)
+            ScriptingScene.executeWithLog(await fetch('../wwwroot/scripts/saveToClipboard.js', {cache: "no-cache"}).then(x => x.text()), this.draw)
         });
         document.querySelector('#save-as-txt')!.addEventListener('click', async () => {
             console.log("save-as-txt event");
-            ScriptingScene.execute(await fetch('../wwwroot/scripts/saveAsTxt.js').then(x => x.text()), this.draw)
+            ScriptingScene.executeWithLog(await fetch('../wwwroot/scripts/saveAsTxt.js', {cache: "no-cache"}).then(x => x.text()), this.draw)
         });
         document.querySelector('#import-btn')!.addEventListener('click', () => {
             console.log("import event");
@@ -173,13 +173,10 @@ export class DrawScene extends Container implements IScene {
         (document.querySelector(".canvas-visibility-container")! as HTMLElement).style.display = "none";
     }
 
-    import() {
+    async import() {
         let reader = new FileReader();
-        reader.onload = function(event: ProgressEvent) {
-            // Both of these work: 
-            // * this.result
-            // * (event.target as FileReader).result
-            let file = this.result as string;
+        reader.onload = async (event: ProgressEvent) => {
+            let file = (event.target as FileReader).result as string;
             Manager.changeScene(new DrawScene(new Parser().parse(file)))
         }
         let startReadingFile = (thisElement: HTMLInputElement) => {

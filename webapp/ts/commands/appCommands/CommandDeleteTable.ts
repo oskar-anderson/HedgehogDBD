@@ -19,7 +19,7 @@ export class CommandDeleteTable implements ICommand<CommandDeleteTableArgs> {
         this.context.schema.tables.splice(this.args.listIndex, 1);
     }
 
-    undo()  {
+    undo() {
         let newTable = Table.initClone(JSON.parse(this.args.tableJson));
         this.context.schema.tables.splice(this.args.listIndex, 0, newTable);
     }

@@ -1,8 +1,8 @@
 import { Draw } from "../model/Draw";
+import { CommandMoveTableRelative } from "./appCommands/CommandMoveTableRelative";
+import { CommandModifyTable } from "./appCommands/CommandModifyTable";
 import { CommandCreateTable } from "./appCommands/CommandCreateTable";
 import { CommandDeleteTable } from "./appCommands/CommandDeleteTable";
-import { CommandModifyTable } from "./appCommands/CommandModifyTable";
-import { CommandMoveTableRelative } from "./appCommands/CommandMoveTableRelative";
 import { ICommand } from "./ICommand";
 
 

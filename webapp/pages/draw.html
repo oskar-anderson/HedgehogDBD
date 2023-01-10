@@ -58,10 +58,8 @@
     import * as ModuleProgramm from "../wwwroot/js/Programm.js";
     import * as ModuleParser from "../wwwroot/js/Parser.js";
 
-    let text = await(await fetch('../wwwroot/data/SchemaTest1.txt')).text();
+    let text = await(await fetch('../wwwroot/data/SchemaTest1.txt', {cache: "no-cache"})).text();
     let draw = new ModuleParser.Parser().parse(text);
-    console.log(draw.schema);
-
     ModuleProgramm.Programm.main(draw);
 </script>
 

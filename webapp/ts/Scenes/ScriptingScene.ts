@@ -48,7 +48,8 @@ export class ScriptingScene extends Container implements IScene {
         `;
         let scriptFrag = document.createRange().createContextualFragment(giscusHTML);
         document.querySelector('.comment-container')!.appendChild(scriptFrag);
-        let topMenuActions = await fetch("./partial/navbar.html").then(x => x.text());
+        // no-cache is needed to override Chrome default request header so cache would not be used
+        let topMenuActions = await fetch("./partial/navbar.html", {cache: "no-cache"}).then(x => x.text());
         document.querySelector(".top-menu-action-container")!.innerHTML = topMenuActions;
         document.querySelector(".nav-draw")?.addEventListener('click', () => {  // from partial
             Manager.changeScene(new DrawScene(this.draw));
@@ -96,36 +97,41 @@ export class ScriptingScene extends Container implements IScene {
         `;
 
         let localStorageScripts = LocalStorageData.getStorage();
-        let scripts = [ 
+        let scripts = [
             new Script(
                 "List tables", 
-                await fetch('../wwwroot/scripts/listAllTables.js').then(x => x.text()), 
+                await fetch('../wwwroot/scripts/listAllTables.js', {cache: "no-cache"}).then(x => x.text()), 
                 ["builtin"]
             ),
             new Script(
                 "List tables and rows",
-                await fetch('../wwwroot/scripts/listAllTableRows.js').then(x => x.text()),
+                await fetch('../wwwroot/scripts/listAllTableRows.js', {cache: "no-cache"}).then(x => x.text()),
                 ['builtin', 'CSV']
             ),
             new Script(
                 "SQL CREATE",
-                await fetch('../wwwroot/scripts/createTablesSQL.js').then(x => x.text()),
+                await fetch('../wwwroot/scripts/createTablesSQL.js', {cache: "no-cache"}).then(x => x.text()),
                 ["builtin", "SQL"]
             ),
             new Script(
                 "Export TXT",
-                await fetch('../wwwroot/scripts/saveAsTxt.js').then(x => x.text()),
+                await fetch('../wwwroot/scripts/saveAsTxt.js', {cache: "no-cache"}).then(x => x.text()),
                 ["builtin"]
             ),
             new Script(
                 "Export clipboard",
-                await fetch('../wwwroot/scripts/saveToClipboard.js').then(x => x.text()),
+                await fetch('../wwwroot/scripts/saveToClipboard.js', {cache: "no-cache"}).then(x => x.text()),
                 ["builtin"]
             ),
             new Script(
                 "Export PNG",
-                await fetch('../wwwroot/scripts/takeScreenshot.js').then(x => x.text()),
+                await fetch('../wwwroot/scripts/takeScreenshot.js', {cache: "no-cache"}).then(x => x.text()),
                 ["builtin", "async"]
+            ),
+            new Script(
+                "Shared scripts lib",
+                await fetch('../wwwroot/scripts/_SHARED.js', {cache: "no-cache"}).then(x => x.text()),
+                ["builtin", "special"]
             )
         ].concat(localStorageScripts.scripts);
         let html = nunjucks.renderString(actions, { 
@@ -150,12 +156,7 @@ export class ScriptingScene extends Container implements IScene {
                 </div>
             `;
             let schemaJsonDataModal = new Modal('#basic-modal', {});
-            let schemaDTO = new SchemaDTO(
-                this.draw.schema.tables.map(x => new TableDTO({ head: x.head, tableRows: x.tableRows })),
-                [], // this.draw.schema.worldDrawArea  // cannot be displayed
-                this.draw.getWorldCharGrid().width,
-                this.draw.getWorldCharGrid().height
-            );
+            let schemaDTO = SchemaDTO.initJsonDisplayable(this.draw);
             let modalHtml = nunjucks.renderString(modalTemplate, { 
                 schema: JSON.stringify(schemaDTO, null, 4)
             });
@@ -260,7 +261,7 @@ export class ScriptingScene extends Container implements IScene {
     }
 
     async executeAndShowResult(value: string) {
-        let executeResult = ScriptingScene.execute(value, this.draw);
+        let executeResult = await ScriptingScene.executeWithLog(value, this.draw);
         let errorMsg = executeResult.error;
         let resultLog = executeResult.resultLog;
         let modalTemplate = `
@@ -296,17 +297,14 @@ export class ScriptingScene extends Container implements IScene {
         modal.show();
     }
 
-    static execute(value: string, draw: Draw) {
+    static async executeWithLog(value: string, draw: Draw) {
         let resultLog: string[] = [];
         let errorMsg = "";
-        let schemaDTO = new SchemaDTO(
-            draw.schema.tables.map(x => new TableDTO({ head: x.head, tableRows: x.tableRows })),
-            draw.schema.worldDrawArea,
-            draw.getWorldCharGrid().width,
-            draw.getWorldCharGrid().height
-            );
+        let SHARED = await fetch('../wwwroot/scripts/_SHARED.js', {cache: "no-cache"}).then(x => x.text());
+        let fnBody = `"use strict";\n${SHARED}\n${value}`;
+        let schemaDTO = SchemaDTO.init(draw);
         try {
-            let fn = Function("RESULT_LOG", "schema", "dayjs", "PIXI", `"use strict"; ${value}`);
+            let fn = Function("RESULT_LOG", "schema", "dayjs", "PIXI", `"use strict";\n${SHARED}\n${fnBody}`);
             fn(resultLog, schemaDTO, dayjs, PIXI);
         } catch (error: any) {
             errorMsg = `${error.name}: ${error.message}`;
@@ -315,6 +313,14 @@ export class ScriptingScene extends Container implements IScene {
             error: errorMsg,
             resultLog: resultLog
         }
+    }
+
+    static async executeAndReturn(value: string, draw: Draw) {
+        let SHARED = await fetch('../wwwroot/scripts/_SHARED.js',  {cache: "no-cache"}).then(x => x.text());
+        let fnBody = `"use strict";\n${SHARED}\n${value}`;
+        let schemaDTO = SchemaDTO.init(draw);
+        let fn = Function("schema", fnBody);
+        return fn(schemaDTO);
     }
 
     destroyHtmlUi(): void {

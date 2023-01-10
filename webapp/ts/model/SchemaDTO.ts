@@ -1,3 +1,4 @@
+import { Draw } from "./Draw";
 import { DrawChar } from "./DrawChar";
 import { TableDTO } from "./TableDTO";
 
@@ -14,4 +15,23 @@ export class SchemaDTO {
         this.worldCharWidth = worldCharWidth;
         this.worldCharHeight = worldCharHeight;
     }
+
+    static init(draw: Draw) {
+        return new SchemaDTO(
+            draw.schema.tables.map(x => new TableDTO({ head: x.head, tableRows: x.tableRows })),
+            draw.schema.worldDrawArea,
+            draw.getWorldCharGrid().width,
+            draw.getWorldCharGrid().height
+        );
+    }
+
+    static initJsonDisplayable(draw: Draw) {
+        return new SchemaDTO(
+            draw.schema.tables.map(x => new TableDTO({ head: x.head, tableRows: x.tableRows })),
+            [],  // draw.schema.worldDrawArea  // cannot be displayed
+            draw.getWorldCharGrid().width,
+            draw.getWorldCharGrid().height
+        );
+    }
+
 }

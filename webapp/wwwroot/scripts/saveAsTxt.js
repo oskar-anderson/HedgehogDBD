@@ -1,17 +1,6 @@
-function getSaveContent(width, height) {
-    let sb = [];
-    for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-            sb.push(schema.worldDrawArea[y * width + x].char);
-        }
-        sb.push("\n");
-    }
-    return sb.join("");
-}
-
-function saveAsTxt(width, height) {
+function saveAsTxt() {
     let element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(getSaveContent(width, height)));
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(SHARED.getSchemaContent()));
     element.setAttribute('download', `RasterModeler_${dayjs().format('YYYY-MM-DD_HH-mm-ss')}.txt`);
     element.style.display = 'none';
     document.body.appendChild(element);
@@ -19,5 +8,5 @@ function saveAsTxt(width, height) {
     document.body.removeChild(element);
 }
 
-saveAsTxt(schema.worldCharWidth, schema.worldCharHeight);
+saveAsTxt();
 RESULT_LOG.push("File downloaded!");

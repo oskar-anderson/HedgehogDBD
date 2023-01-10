@@ -18,4 +18,3 @@ Webapp for ERD schema creation. Uses PixiJS library to allow text based schema f
 * Script tagging and filtering
 * Add hidden semantic description field on table row fields to allow better documentation generation. Saving has to be reworked to include extra values on top of the schema
 * More scripts (documentation, code generation, ORM)
-* Change Scene folder name to lowercase scene without breaking webpack. Commit 88 💩

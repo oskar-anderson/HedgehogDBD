@@ -1,6 +1,4 @@
-const app = new PIXI.Application({
-    backgroundColor: 0xe6e6e6
-});
+const app = new PIXI.Application();
 
 async function load() {
     app.loader.add('../wwwroot/font/ps2p/consolas-14-xml-white-text-with-alpha-padding0-spacing1.fnt');
@@ -33,6 +31,13 @@ async function main() {
 
 
 function renderScreen() {
+    /* // uncomment code block for white background color, otherwise background is transparent
+    let graphics = new PIXI.Graphics(); 
+    graphics.beginFill(0xffffff);
+    graphics.drawRect(0, 0, schema.worldCharWidth * 7, schema.worldCharHeight * 14);
+    graphics.endFill();
+    app.stage.addChild(graphics); 
+    */
     for (let y = 0; y < schema.worldCharHeight; y++) {
         for (let x = 0; x < schema.worldCharWidth; x++) {
             let tile = schema.worldDrawArea[y * schema.worldCharWidth + x];

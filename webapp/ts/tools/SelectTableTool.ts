@@ -4,7 +4,7 @@ import { Table } from "../model/Table";
 import { TableHoverPreview } from "../model/TableHoverPreview";
 import { ITool, IToolNames } from "./ITool";
 import { Manager } from "../Manager";
-import { TableScene } from "../scenes/TableScene";
+import { TableScene } from "../Scenes/TableScene";
 
 export class SelectTableTool implements ITool {
 

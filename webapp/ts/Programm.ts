@@ -1,5 +1,5 @@
 import { Manager } from "./Manager";
-import { LoaderScene } from "./scenes/LoaderScene";
+import { LoaderScene } from "./Scenes/LoaderScene";
 import { Draw } from "./model/Draw";
 import { Rectangle, Point } from "pixi.js";
 import { Schema } from "./model/Schema";

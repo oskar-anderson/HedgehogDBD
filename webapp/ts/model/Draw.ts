@@ -4,7 +4,7 @@ import { History } from "../commands/History";
 import { Schema } from "./Schema";
 import { ITool } from "../tools/ITool";
 import { Viewport } from "pixi-viewport";
-import { MyRect } from "../MyRect";
+import { MyRect } from "./MyRect";
 
 export class Draw {
     history = new History();

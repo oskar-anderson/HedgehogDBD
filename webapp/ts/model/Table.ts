@@ -1,5 +1,5 @@
 import { Point } from "pixi.js";
-import { MyRect } from "../MyRect";
+import { MyRect } from "./MyRect";
 import { CostGrid, CostGridTileTypes } from "./CostGrid";
 import { TableRow } from "./TableRow";
 

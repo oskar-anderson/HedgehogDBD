@@ -56,10 +56,9 @@
 </body>
 <script type="module" >
     import * as ModuleProgramm from "../wwwroot/js/Programm.js";
-    import * as ModuleParser from "../wwwroot/js/Parser.js";
 
     let text = await(await fetch('../wwwroot/data/SchemaTest1.txt', {cache: "no-cache"})).text();
-    let draw = new ModuleParser.Parser().parse(text);
+    let draw = ModuleProgramm.Programm.parse(text);
     ModuleProgramm.Programm.main(draw);
 </script>
 

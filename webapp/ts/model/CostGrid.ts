@@ -1,4 +1,4 @@
-import { MyRect } from "../MyRect";
+import { MyRect } from "./MyRect";
 import { Draw } from "./Draw";
 
 export class CostGrid {

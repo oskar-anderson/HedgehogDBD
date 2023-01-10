@@ -193,8 +193,10 @@ export class ScriptingScene extends Container implements IScene {
                                 <button id="modal-delete-script-btn" type="button" class="btn btn-danger">Delete</button>
                             {% endif %}
 
-                            <button id="modal-execute-btn" type="button" class="btn btn-primary">⚡ Execute</button>
-                            <button id="modal-copy-to-editor-btn" type="button" class="btn btn-primary">Paste to editor</button>
+                            {% if 'special' not in tags %}
+                                <button id="modal-execute-btn" type="button" class="btn btn-primary">⚡ Execute</button>
+                                <button id="modal-copy-to-editor-btn" type="button" class="btn btn-primary">Paste to editor</button>
+                            {% endif %}
                         </div>
                     </div>
                 `;
@@ -205,6 +207,7 @@ export class ScriptingScene extends Container implements IScene {
                 let modalHtml = nunjucks.renderString(modalTemplate, { 
                     content: html,
                     name: script.name,
+                    tags: script.tags,
                     isLocalStorageScript: !tags.includes("builtin"),
                 });
                 document.querySelector('#basic-modal')!.querySelector('.modal-dialog')!.innerHTML = modalHtml;
@@ -304,7 +307,7 @@ export class ScriptingScene extends Container implements IScene {
         let fnBody = `"use strict";\n${SHARED}\n${value}`;
         let schemaDTO = SchemaDTO.init(draw);
         try {
-            let fn = Function("RESULT_LOG", "schema", "dayjs", "PIXI", `"use strict";\n${SHARED}\n${fnBody}`);
+            let fn = Function("RESULT_LOG", "schema", "dayjs", "PIXI", fnBody);
             fn(resultLog, schemaDTO, dayjs, PIXI);
         } catch (error: any) {
             errorMsg = `${error.name}: ${error.message}`;

@@ -8,7 +8,6 @@ import { BottomBar } from "../components/BottomBar";
 import { Table } from "../model/Table";
 import { Relation } from "../model/Relation";
 import { DrawChar } from "../model/DrawChar";
-import { Parser } from "../Parser";
 import { PanTool } from "../tools/PanTool";
 import { SelectTableTool } from "../tools/SelectTableTool";
 import { CreateTableTool } from "../tools/CreateTableTool";
@@ -19,6 +18,7 @@ import { WorldGrid } from "../path/WorldGrid";
 import { CostGrid } from "../model/CostGrid";
 import { PriorityQueue } from "@datastructures-js/priority-queue";
 import { Schema } from "../model/Schema";
+import { Programm } from "../Programm";
 
 
 export class DrawScene extends Container implements IScene {
@@ -177,7 +177,7 @@ export class DrawScene extends Container implements IScene {
         let reader = new FileReader();
         reader.onload = async (event: ProgressEvent) => {
             let file = (event.target as FileReader).result as string;
-            Manager.changeScene(new DrawScene(new Parser().parse(file)))
+            Manager.changeScene(new DrawScene(Programm.parse(file)))
         }
         let startReadingFile = (thisElement: HTMLInputElement) => {
             let inputFile = thisElement.files![0];

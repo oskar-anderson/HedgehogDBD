@@ -3,7 +3,7 @@ import { CommandCreateTable } from "../commands/appCommands/CommandCreateTable";
 import { Draw } from "../model/Draw";
 import { Table } from "../model/Table";
 import { TableRow } from "../model/TableRow";
-import { MyRect } from "../MyRect";
+import { MyRect } from "../model/MyRect";
 import { ITool, IToolNames } from "./ITool";
 
 export class CreateTableTool implements ITool {

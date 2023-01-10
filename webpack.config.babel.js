@@ -3,7 +3,6 @@ const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 module.exports = {
     entry: {
-        Parser: './webapp/ts/Parser.ts',
         Programm: './webapp/ts/Programm.ts'
     },
     target: "web",

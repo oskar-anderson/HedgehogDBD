@@ -21,7 +21,7 @@ export class ScriptingScene extends Container implements IScene {
     }
 
     mouseEventHandler(event: MouseEvent): void {
-        
+        // VSCode is broken git change gutter is broken in this file. why ???
     }
 
     update(deltaMS: number): void {

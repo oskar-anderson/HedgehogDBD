@@ -22,8 +22,8 @@ export class CreateTableTool implements ITool {
     init(): void {
         this.hover = Table.init(
             new Point(0, 0),
-            "NewTable",
-            [ TableRow.init("Id", "VARCHAR(255)", ["PK"])]
+            "new_table",
+            [ TableRow.init("id", "VARCHAR(255)", ["PK"])]
         );
         this.hover.position = this.getTablePosition(this.hover.getContainingRect());
         this.draw.selectedTable = this.hover;

@@ -131,7 +131,7 @@ export class ScriptingScene extends Container implements IScene {
             new Script(
                 "Shared scripts lib",
                 await fetch('../wwwroot/scripts/_SHARED.js', {cache: "no-cache"}).then(x => x.text()),
-                ["builtin", "special"]
+                ["builtin", "readonly"]
             )
         ].concat(localStorageScripts.scripts);
         let html = nunjucks.renderString(actions, { 
@@ -193,7 +193,7 @@ export class ScriptingScene extends Container implements IScene {
                                 <button id="modal-delete-script-btn" type="button" class="btn btn-danger">Delete</button>
                             {% endif %}
 
-                            {% if 'special' not in tags %}
+                            {% if 'readonly' not in tags %}
                                 <button id="modal-execute-btn" type="button" class="btn btn-primary">⚡ Execute</button>
                                 <button id="modal-copy-to-editor-btn" type="button" class="btn btn-primary">Paste to editor</button>
                             {% endif %}

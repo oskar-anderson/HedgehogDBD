@@ -73,10 +73,10 @@ export class TableScene extends Container implements IScene {
                                 <input class="input-name" type="text" value="{{ row.name }}">
                             </td>
                             <td>
-                                <input class="input-datatype" style="width: 120px" type="text" value="{{ row.datatype }}">
+                                <input class="input-datatype" list="mysql-data-types" style="width: 120px" value="{{ row.datatype }}">
                             </td>
                             <td>
-                                <input class="input-attributes" type="text" value="{{ row.attributes | join(", ") }}">
+                                <input class="input-attributes" list="attribute-suggestions" type="text" value="{{ row.attributes | join(", ") }}">
                             </td>
                             <td>
                                 <button class="row-insert-btn btn btn-primary">Insert</button>
@@ -96,6 +96,20 @@ export class TableScene extends Container implements IScene {
                             </tr>
                         {% endif %}
                         {% endfor %}
+                        <datalist id="mysql-data-types">
+                            <option value="VARCHAR(255)">
+                            <option value="VARCHAR(255)?">
+                            <option value="INT">
+                            <option value="INT?">
+                            <option value="FLOAT(14,2)">
+                            <option value="FLOAT(14,2)?">
+                            <option value="BOOLEAN">
+                            <option value="BOOLEAN?">
+                        </datalist>
+                        <datalist id="attribute-suggestions">
+                            <option value="PK">
+                            <option value='FK("TableName")'>
+                        </datalist> 
                         </table>
                     </div>
                     <div class="modal-footer" style="justify-content: space-between;">

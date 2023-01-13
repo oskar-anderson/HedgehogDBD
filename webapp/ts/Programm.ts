@@ -32,29 +32,23 @@ export class Programm {
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
                 let tile = board[y * width + x];
-                if (tile === "+" && 
-                    ! tablesRects.some(
-                        function(table) { 
-                            return table.contains(x, y);
-                        }
-                    )
-                ) {
+                if (tile === "+" && ! tablesRects.some(table => table.contains(x, y))) {
                     let possibleTable = new Rectangle(x, y, 0, 0);
                     for (let a = 0; 
                         a < width - x
                         && ["-", "+"].includes(board[y * width + x + a]); 
                         a++) {
-                        if (x + a + 1 < width && board[y * width + x + a + 1] === " ") {
+                        if (x + a + 1 === width || (x + a + 1 < width && board[y * width + x + a + 1] === " ")) {
                             possibleTable.width = a + 1;
                             break;
                         }
-                    }possibleTable
+                    }
                     for (let a = 0; 
                         possibleTable.width != 0 
                         && a < height - y
                         && ["|", "+"].includes(board[(y + a) * width + x]); 
                         a++) {
-                        if (y + a + 1 < height && board[(y + a + 1) * width + x] === " ") {
+                        if (y + a + 1 === height || (y + a + 1 < height && board[(y + a + 1) * width + x] === " ")) {
                             possibleTable.height = a + 1;
                             break;
                         }

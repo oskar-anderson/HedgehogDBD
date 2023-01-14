@@ -38,7 +38,8 @@ export class Programm {
                         a < width - x
                         && ["-", "+"].includes(board[y * width + x + a]); 
                         a++) {
-                        if (x + a + 1 === width || (x + a + 1 < width && board[y * width + x + a + 1] === " ")) {
+                        if (x + a + 1 === width && board[y * width + x + a + 1] === "+" ||
+                            (x + a + 1 < width && board[y * width + x + a + 1] === " ")) {
                             possibleTable.width = a + 1;
                             break;
                         }
@@ -48,7 +49,8 @@ export class Programm {
                         && a < height - y
                         && ["|", "+"].includes(board[(y + a) * width + x]); 
                         a++) {
-                        if (y + a + 1 === height || (y + a + 1 < height && board[(y + a + 1) * width + x] === " ")) {
+                        if (y + a + 1 === height && board[(y + a + 1) * width + x] === "+" || 
+                            (y + a + 1 < height && board[(y + a + 1) * width + x] === " ")) {
                             possibleTable.height = a + 1;
                             break;
                         }

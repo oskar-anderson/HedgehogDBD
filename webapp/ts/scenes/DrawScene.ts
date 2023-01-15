@@ -223,7 +223,7 @@ export class DrawScene extends Container implements IScene {
         }
 
         viewport.on('wheel', (e) => {
-            let wheelDirection = e.deltaY > 0 ? +1 : -1;
+            let wheelDirection = e.deltaY > 0 ? -1 : +1;
             let possibleZoomLevels = [1/3, 0.4096, 0.512, 0.64, 0.8, 1, 1.25, 1.5625, 2];
             let index =  possibleZoomLevels.indexOf(this.draw.getScale()) + wheelDirection;
             let newScale = possibleZoomLevels[Math.max(0, Math.min(index, possibleZoomLevels.length - 1))];

@@ -230,8 +230,10 @@ export class DrawScene extends Container implements IScene {
             this.setZoom(viewport, newScale, this.draw.mouseScreenPosition);
             // console.log(`viewport: scale: ${viewport.scale.x}, x: ${viewport.left}, y: ${viewport.top}, width: ${viewport.screenWidth  / viewport.scale.x}, height: ${viewport.screenHeight  / viewport.scale.y}`);
         })
-        viewport.on('moved', () => {
+        viewport.on('moved', (e) => {  
+            // TODO! Fix viewport hitarea not being updated for last frame on fast panning
             console.log("moved")
+            // console.log(`x: ${e.viewport.hitArea.x}, y: ${e.viewport.hitArea.y}`)
             this.cullViewport();
         })
         return viewport;
@@ -276,10 +278,7 @@ export class DrawScene extends Container implements IScene {
                 this.draw.schema.worldDrawArea[y * charGridSize.width + x] = new DrawChar(' ', 0x008000);
             }
         }
-        let tables = this.draw.getVisibleTables();
-        for (const table of tables) {
-            this.setWorldTable(table);
-        }
+        this.setWorldTables();
         this.setWorldRelation();
         
 
@@ -390,14 +389,19 @@ export class DrawScene extends Container implements IScene {
         }
     }
 
-    setWorldTable(table: Table) {
-        let tableRect = table.getContainingRect();
+    setWorldTables() {
+        let tableRect = this.draw.selectedTable?.getContainingRect() ?? new Rectangle();
         for (let x = tableRect.x; x < tableRect.right; x++) {
             for (let y = tableRect.y; y < tableRect.bottom; y++) {
-                this.draw.schema.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].char = ' ';
-                this.draw.schema.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].color = this.draw.selectedTable?.equals(table) ? 0x800080 : 0x008000;
+                this.draw.schema.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].color = 0x800080;
             }
         }
+        for (const table of this.draw.getVisibleTables()) {
+            this.setWorldTable(table);
+        }
+    }
+
+    setWorldTable(table: Table) {
         let worldCharGridRect = table.getContainingRect();
         let columnWidths = table.getColumnWidths();
         let firstColumnWidth = columnWidths[0];

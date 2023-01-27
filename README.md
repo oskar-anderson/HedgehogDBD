@@ -1,7 +1,8 @@
 # RasterModeler
-Open source text based ERD schema drawing tool with scripting support.
 
-[🔥 Live 🔥](https://oskar-anderson.github.io/RasterModeler/pages/draw.html)
+Open source text based ERD schema drawing tool with scripting support. Start modeling in your browser [here](https://oskar-anderson.github.io/RasterModeler/pages/draw.html) 📐
+
+![Demo video](https://youtu.be/Qnqnqw68eeo)
   
 
 ## About:

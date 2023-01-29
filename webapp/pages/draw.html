@@ -19,12 +19,12 @@
             color: #000;
         }
 
-        .canvas-container {
-            display: flex;
-            justify-content: center;
-        }
         .editor {
             height: 400px;
+        }
+
+        .canvas-container canvas {
+            display: block;
         }
 
         .giscus {
@@ -42,12 +42,38 @@
     <div class="top-menu-action-container"></div>
     <div class="table-edit-container"></div>
     <div class="scripting-container"></div>
-    <div class="canvas-visibility-container" style="min-width: max-content; background-color: #848484;">
-        <div style="display: flex; justify-content: center; height: 720px;">
-            <div class="canvas-side" style="display: flex;">
+    <div class="canvas-visibility-container">
+        <div style="display: flex; width: 100vw; height: 720px;">
+            <div class="canvas-side" style="display: flex; margin-left: 6px;">
+                <div style="background-color: #efeff2;">
+                    <span>Bird's Eye</span>
+                    <div style="display: flex;">
+                        <span>Zoom:</span>
+                        <select name="zoom-font-size" class="zoom-font-size" autocomplete="off" style="margin-left: 6px;">
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="14" selected>14</option>
+                            <option value="16">16</option>
+                            <option value="18">18</option>
+                            <option value="20">20</option>
+                            <option value="22">22</option>
+                            <option value="24">24</option>
+                        </select>
+                    </div>
+                    <div class="canvas-side-minimap" style="margin-top: 6px;">
+                    </div>
+                    <div class="debug-info" style="margin-top: 6px;">
+                    </div>
+                </div>
+                <div class="canvas-side-tools" style="background-color: #f5f5f7">
 
+                </div>
             </div>
-            <div class="canvas-container">
+            <div class="canvas-container" style="overflow: auto; width: 100vw;">
 
             </div>
         </div>

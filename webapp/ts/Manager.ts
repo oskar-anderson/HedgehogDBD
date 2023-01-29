@@ -1,5 +1,6 @@
 import { extensions, InteractionManager, Application, DisplayObject } from "pixi.js";
 import { EventSystem } from '@pixi/events';
+import { MyRect } from "./model/MyRect";
 
 export class Manager {
     static getRenderer () {
@@ -11,22 +12,25 @@ export class Manager {
     private static app: Application;
     private static currentScene: IScene;
 
-    private static _width: number;
-    private static _height: number;
-
-
-    public static get width(): number {
-        return Manager._width;
+    public static getScreen() {
+        return new MyRect(
+            document.querySelector(".canvas-container")!.scrollLeft,
+            document.querySelector(".canvas-container")!.scrollTop,
+            document.querySelector(".canvas-container")!.getBoundingClientRect().width, 
+            document.querySelector(".canvas-container")!.getBoundingClientRect().height
+        );
     }
-    public static get height(): number {
-        return Manager._height;
+
+    public static scrollTo(worldX: number, worldY: number) {
+        document.querySelector(".canvas-container")!.scrollTo(worldX, worldY);
+    }
+
+    public static scrollBy(worldX: number, worldY: number) {
+        document.querySelector(".canvas-container")!.scrollBy(worldX, worldY);
     }
 
 
     public static initialize(width: number, height: number, background: number): void {
-
-        Manager._width = width;
-        Manager._height = height;
 
         extensions.remove(InteractionManager);
         Manager.app = new Application({

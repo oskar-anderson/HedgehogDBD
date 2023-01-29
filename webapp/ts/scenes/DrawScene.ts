@@ -1,14 +1,10 @@
-import { Viewport } from "pixi-viewport";
 import { Container, InteractionEvent, Point, Rectangle } from "pixi.js";
 import { IScene, Manager } from "../Manager";
-import { Minimap } from "../components/Minimap";
 import { Draw } from "../model/Draw";
 import * as PIXI from "pixi.js";
-import { BottomBar } from "../components/BottomBar";
 import { Table } from "../model/Table";
 import { Relation } from "../model/Relation";
 import { DrawChar } from "../model/DrawChar";
-import { PanTool } from "../tools/PanTool";
 import { SelectTableTool } from "../tools/SelectTableTool";
 import { CreateTableTool } from "../tools/CreateTableTool";
 import { ScriptingScene } from "./ScriptingScene";
@@ -19,67 +15,56 @@ import { CostGrid } from "../model/CostGrid";
 import { PriorityQueue } from "@datastructures-js/priority-queue";
 import { Schema } from "../model/Schema";
 import { Programm } from "../Programm";
+import { Minimap } from "../components/Minimap";
+import { MyRect } from "../model/MyRect";
 
 
 export class DrawScene extends Container implements IScene {
 
-    viewport: Viewport;
-    minimap: Minimap;
+    canvasView: Container;
     draw: Draw;
-    bottomBar: BottomBar;
+    minimap: Minimap;
     
     constructor(draw: Draw) {
         super();
         this.draw = draw;
 
-        this.viewport = this.initViewport();
-        this.addChild(this.viewport);
-        IToolManager.toolActivate(this.draw, this.draw.activeTool?.getName() ?? IToolNames.pan, { viewport: this.viewport });
-        
+        this.canvasView = new PIXI.Container();
+        this.canvasView.hitArea = this.draw.getWorld();  // needed for events
+        this.canvasView.interactive = true;                         // needed for events
+        this.addChild(this.canvasView);
 
-        this.minimap = new Minimap()
+        IToolManager.toolActivate(this.draw, this.draw.activeTool.getName());
+        
+        this.minimap = new Minimap(this.draw, new Rectangle(0, 0, 180, 120))
         this.minimap.init(
-            this.draw.getWorld().height, 
-            this.draw.getWorld().width, 
-            Draw.fontCharSizeWidth, 
-            Draw.fontCharSizeHeight, 
-            new Rectangle(
-                Manager.width - 180 - 20,
-                20,
-                180,
-                120,
-            ),
             (x: number, y: number) => { 
-                console.log("minimap navigation");
-                this.viewport.moveCenter(x, y);
-                this.draw.setViewport(this.viewport);
-                this.minimap.update(this.draw.getVisibleTables(), this.draw.getScreen());
+                console.log(`minimap navigation (x: ${x}, y: ${y})`);
+                Manager.scrollTo(
+                    x - Math.ceil(Manager.getScreen().width / 2), 
+                    y - Math.ceil(Manager.getScreen().height / 2)
+                );
                 this.cullViewport();
+                this.minimap.update(this.draw.getVisibleTables(), Manager.getScreen());
             }
         );
-        this.addChild(this.minimap.container);
+        document.querySelector(".canvas-side-minimap")!.innerHTML = "";
+        document.querySelector(".canvas-side-minimap")!.appendChild(this.minimap.app.view);
 
         this.interactive = true;
         this.on('mousemove', (e: InteractionEvent) => { 
             // this is neccessary when using InteractionManager 
             // if (! new Rectangle(0, 0, Manager.width, Manager.height).contains(e.data.global.x, e.data.global.y)) return;  // remove outside events. PIXI is stupid.
             // no idea why y is someinteger.1999969482422 decimal number 
-            this.draw.mouseScreenPosition = new Point(Math.floor(e.data.global.x), Math.floor(e.data.global.y))
+            this.draw.mouseScreenPosition = new Point(Math.floor(e.data.global.x - Manager.getScreen().x), Math.floor(e.data.global.y - Manager.getScreen().y));
         });
-
-        this.bottomBar = new BottomBar();
-        this.addChild(this.bottomBar.getContainer());
     }
 
     mouseEventHandler(event: MouseEvent): void {
         let rect = (event.currentTarget! as Element).getBoundingClientRect();
-        let relativeX = Math.round(event.clientX - rect.x);
-        let relativeY = Math.round(event.clientY - rect.y);
-        if (this.minimap.minimapRect.contains(relativeX, relativeY)) {
-            return;
-        }
-        // console.log(`event.clientX: ${relativeX}, event.clientY: ${relativeY}, event.detail: ${event.detail}, event.type: ${event.type}`);
-        this.draw.activeTool?.mouseEventHandler(event);
+        let worldX = Math.round(event.clientX - rect.x);
+        let worldY = Math.round(event.clientY - rect.y);
+        this.draw.activeTool.mouseEventHandler(event);
     }
 
     async init(): Promise<void> {
@@ -87,14 +72,6 @@ export class DrawScene extends Container implements IScene {
         let topMenuActions = await fetch("./partial/navbar.html", {cache: "no-cache"}).then(x => x.text());
         let tools = `
         <header style="display: flex; align-items:center; flex-direction: column;">
-
-
-            <!-- https://www.svgrepo.com/svg/355159/pan -->
-            <button class="tool-select btn btn-light ${this.draw.activeTool instanceof PanTool ? "active" : ""}" data-tooltype="${IToolNames.pan}" title="Pan">
-                <svg width="16px" height="16px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none">
-                    <path fill="#000000" d="M7.463.057A.748.748 0 007.22.22l-2 2a.75.75 0 001.06 1.06L7 2.56V7H2.56l.72-.72a.75.75 0 00-1.06-1.06l-2 2a.748.748 0 000 1.06l2 2a.75.75 0 101.06-1.06l-.72-.72H7v4.44l-.72-.72a.75.75 0 00-1.06 1.06l2 2a.748.748 0 001.06 0l2-2a.75.75 0 10-1.06-1.06l-.72.72V8.5h4.44l-.72.72a.75.75 0 101.06 1.06l2-2a.748.748 0 000-1.06l-2-2a.75.75 0 10-1.06 1.06l.72.72H8.5V2.56l.72.72a.75.75 0 101.06-1.06l-2-2a.748.748 0 00-.817-.163z"/>
-                </svg>
-            </button>
 
             <!-- https://www.svgrepo.com/svg/361459/cursor-arrow -->
             <button class="tool-select btn btn-light ${this.draw.activeTool instanceof SelectTableTool ? "active" : ""}" data-tooltype="${IToolNames.select}" title="Select/Edit table">
@@ -121,14 +98,33 @@ export class DrawScene extends Container implements IScene {
         </header>
         `;
         document.querySelector(".top-menu-action-container")!.innerHTML = topMenuActions;
-        document.querySelector(".canvas-side")!.innerHTML = tools;
+        document.querySelector(".canvas-side-tools")!.innerHTML = tools;
+        document.querySelector(".zoom-font-size")!.addEventListener("change", (e) => {
+            let size = Number.parseInt((e.target as HTMLSelectElement).value);
+            let centerScreenOriginalXPercent = Manager.getScreen().getCenter().x / this.draw.getWorld().width;
+            let centerScreenOriginalYPercent = Manager.getScreen().getCenter().y / this.draw.getWorld().height;
+            let widthCharGridOriginal = this.draw.getWorldCharGrid().width;
+            let heightCharGridOriginal = this.draw.getWorldCharGrid().height;
+            this.draw.selectedFontSize = Draw.fontSizes.find(x => x.size === size)!;
+            let widthWorldResize = widthCharGridOriginal * this.draw.selectedFontSize.width;
+            let heightWorldResize = heightCharGridOriginal * this.draw.selectedFontSize.height;
+            Manager.getRenderer().resize(widthWorldResize, heightWorldResize);
+            this.draw.setWorld(new MyRect(0, 0, widthWorldResize, heightWorldResize))
+            let centerScreenResizeXPercent = Manager.getScreen().getCenter().x / this.draw.getWorld().width;
+            let centerScreenResizeYPercent = Manager.getScreen().getCenter().y / this.draw.getWorld().height;
+            Manager.scrollTo(
+                Manager.getScreen().x + this.draw.getWorld().width * (centerScreenOriginalXPercent - centerScreenResizeXPercent),
+                Manager.getScreen().y + this.draw.getWorld().height * (centerScreenOriginalYPercent - centerScreenResizeYPercent),
+            );
+            this.renderScreen(true);
+        }) 
         let toolElements = document.querySelectorAll('.tool-select')
         for (const toolEl of toolElements) {
             toolEl.addEventListener('click', () => {
                 let selectedTool = (toolEl as HTMLElement).dataset.tooltype! as IToolNames;
                 document.querySelectorAll(".tool-select").forEach(x => x.classList.remove("active"));
                 toolEl.classList.toggle("active");
-                IToolManager.toolActivate(this.draw, selectedTool, { viewport: this.viewport });
+                IToolManager.toolActivate(this.draw, selectedTool);
                 this.renderScreen(false);  // clean up new table hover
             });
         }
@@ -145,7 +141,7 @@ export class DrawScene extends Container implements IScene {
             this.renderScreen(false);
         });
         document.querySelector('#new-schema')!.addEventListener('click', () => {
-            Manager.changeScene(new DrawScene(new Draw(new Schema([], []))));
+            Manager.changeScene(new DrawScene(new Draw(new Schema([], []), this.draw.getWorld(), this.draw.getScreenPosition())));
         })
         document.querySelector('#save-as-png')!.addEventListener('click', async () => {
             console.log("save-as-png event");
@@ -190,83 +186,10 @@ export class DrawScene extends Container implements IScene {
         input.click();
     }
 
-    
-    initViewport() {
-        let worldWidth = 3240;
-        let worldHeight = 2160;
-        let viewport = new Viewport({
-            screenHeight: Manager.height,
-            screenWidth:  Manager.width,
-            worldHeight:  worldHeight,
-            worldWidth:   worldWidth,
-        });
-
-        // either of these is supposed to prevent event occuring outside canvas element, but they do not seem to work
-        // this.viewport.options.divWheel = document.querySelector("canvas")!; 
-        // this.viewport.options.interaction = Manager.getRenderer().plugins.interaction
-        viewport.setZoom(this.draw.getScale());
-        viewport.left = this.draw.getScreen().x;
-        viewport.top = this.draw.getScreen().y;
-        this.draw.setViewport(viewport);
-   
-
-        // activate plugins
-        viewport
-            .drag({ wheel: false }).clamp({ 
-                left:   0,
-                top:    0,
-                right:  worldWidth,
-                bottom: worldHeight,
-            });
-        if (this.draw.activeTool !== null) {
-            viewport.plugins.get("drag")!.pause();
-        }
-
-        viewport.on('wheel', (e) => {
-            let wheelDirection = e.deltaY > 0 ? -1 : +1;
-            let possibleZoomLevels = [1/3, 0.4096, 0.512, 0.64, 0.8, 1, 1.25, 1.5625, 2];
-            let index =  possibleZoomLevels.indexOf(this.draw.getScale()) + wheelDirection;
-            let newScale = possibleZoomLevels[Math.max(0, Math.min(index, possibleZoomLevels.length - 1))];
-            this.setZoom(viewport, newScale, this.draw.mouseScreenPosition);
-            // console.log(`viewport: scale: ${viewport.scale.x}, x: ${viewport.left}, y: ${viewport.top}, width: ${viewport.screenWidth  / viewport.scale.x}, height: ${viewport.screenHeight  / viewport.scale.y}`);
-        })
-        viewport.on('moved', (e) => {  
-            // TODO! Fix viewport hitarea not being updated for last frame on fast panning
-            console.log("moved")
-            // console.log(`x: ${e.viewport.hitArea.x}, y: ${e.viewport.hitArea.y}`)
-            this.cullViewport();
-        })
-        return viewport;
-    }
-
-    setZoom(viewport: Viewport, newScale: number, zoomScreenPoint: Point) {
-        let zoomWorldPoint = this.draw.getScreenToWorldPoint2(zoomScreenPoint);
-        this.draw.setScale(viewport, newScale);
-        let mouseWorldPositionNew = this.draw.getScreenToWorldPoint2(zoomScreenPoint);
-        let translation = new Point(
-            mouseWorldPositionNew.x - zoomWorldPoint.x,
-            mouseWorldPositionNew.y - zoomWorldPoint.y,
-        );
-        viewport.left -= translation.x;
-        viewport.top -= translation.y;
-        this.draw.setViewport(viewport);
-        this.cullViewport();
-    }
 
     cullViewport() {
-        let screen = this.draw.getScreen();
-        let extraScreen = new Rectangle(
-            screen.x - Draw.fontCharSizeWidth, 
-            screen.y - Draw.fontCharSizeHeight, 
-            screen.width + Draw.fontCharSizeWidth, 
-            screen.height + Draw.fontCharSizeHeight
-            );
-        for (const bitmapText of this.viewport.children) {
-            if (! extraScreen.contains(bitmapText.x, bitmapText.y)) {
-                bitmapText.visible = false;
-            } else {
-                bitmapText.visible = (bitmapText as PIXI.BitmapText).text !== " "; 
-            }
+        for (const bitmapText of this.canvasView.children) {
+            bitmapText.visible = (bitmapText as PIXI.BitmapText).text !== " "; 
         }
     }
 
@@ -275,7 +198,7 @@ export class DrawScene extends Container implements IScene {
         let charGridSize = this.draw.getWorldCharGrid();
         for (let y = 0; y < charGridSize.height; y++) {
             for (let x = 0; x < charGridSize.width; x++) {
-                this.draw.schema.worldDrawArea[y * charGridSize.width + x] = new DrawChar(' ', 0x008000);
+                this.draw.schema.worldDrawArea[y * charGridSize.width + x] = new DrawChar(' ', 0x000000);
             }
         }
         this.setWorldTables();
@@ -285,7 +208,7 @@ export class DrawScene extends Container implements IScene {
         let screenCharGrid = this.draw.getWorldCharGrid();
         let worldCharGridSize = this.draw.getWorldCharGrid();
         if (isForceScreenReset) {
-            this.viewport.removeChildren();
+            this.canvasView.removeChildren();
         }
         for (let y = 0; y < screenCharGrid.height; y++) {
             for (let x = 0; x < screenCharGrid.width; x++) {
@@ -295,14 +218,15 @@ export class DrawScene extends Container implements IScene {
                     let bitmapText = new PIXI.BitmapText(tile.char,
                         {
                             fontName: "Consolas",
-                            tint: tile.color
+                            fontSize: this.draw.selectedFontSize.size,
+                            tint: tile.color,
                         });
-                    bitmapText.x = x * Draw.fontCharSizeWidth;
-                    bitmapText.y = y * Draw.fontCharSizeHeight;
-                    this.viewport.addChild(bitmapText)
+                    bitmapText.x = x * this.draw.selectedFontSize.width;
+                    bitmapText.y = y * this.draw.selectedFontSize.height;
+                    this.canvasView.addChild(bitmapText)
                 } else {
-                    (this.viewport.children[y * screenCharGrid.width + x] as PIXI.Text).text = tile.char;
-                    (this.viewport.children[y * screenCharGrid.width + x] as PIXI.Text).tint = tile.color;
+                    (this.canvasView.children[y * screenCharGrid.width + x] as PIXI.Text).text = tile.char;
+                    (this.canvasView.children[y * screenCharGrid.width + x] as PIXI.Text).tint = tile.color;
                 }
             }
         }
@@ -479,21 +403,23 @@ export class DrawScene extends Container implements IScene {
     }
 
     public update(deltaMS: number): void {
-        this.draw.setViewport(this.viewport);
-        this.minimap.update(this.draw.getVisibleTables(), this.draw.getScreen());
-        this.bottomBar.pointermove(
-            this.draw.mouseScreenPosition.x, 
-            this.draw.mouseScreenPosition.y, 
-            this.draw.getScreenToWorldPoint2(this.draw.mouseScreenPosition).x,
-            this.draw.getScreenToWorldPoint2(this.draw.mouseScreenPosition).y,
-            this.draw.getScreenToCharGridPoint2(this.draw.mouseScreenPosition).x,
-            this.draw.getScreenToCharGridPoint2(this.draw.mouseScreenPosition).y,
-            Number((this.draw.getScale()).toFixed(2))  // x and y is the same
-        );
-        this.draw.activeTool?.update();
-        if (this.draw.activeTool?.isDirty) {
+        let screen = Manager.getScreen();
+        this.draw.setScreen(new Point(screen.x, screen.y));
+        this.minimap.update(this.draw.getVisibleTables(), screen);
+        document.querySelector(".debug-info")!.innerHTML = `
+            <div>
+                Sx: ${this.draw.mouseScreenPosition.x}, Sy: ${this.draw.mouseScreenPosition.y}
+            </div>
+            <div>
+                Wx: ${this.draw.getScreenToWorldPoint2(this.draw.mouseScreenPosition).x}, Wy: ${this.draw.getScreenToWorldPoint2(this.draw.mouseScreenPosition).y}
+            </div>
+            <div>
+                WCx: ${this.draw.getScreenToCharGridPoint2(this.draw.mouseScreenPosition).x}, WCy: ${this.draw.getScreenToCharGridPoint2(this.draw.mouseScreenPosition).y}
+            </div>
+        `;
+        this.draw.activeTool.update();
+        if (this.draw.activeTool.isDirty) {
             this.draw.activeTool.isDirty = false;
-            console.log("renderScreen")
             this.renderScreen(false);
         }
     }

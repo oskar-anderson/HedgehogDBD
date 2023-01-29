@@ -1,47 +1,45 @@
 import * as PIXI from "pixi.js";
 import { Rectangle } from "pixi.js";
 import { Table } from "../model/Table";
-import { Viewport } from "pixi-viewport";
+import { Draw } from "../model/Draw";
+import { EventSystem } from "@pixi/events";
 
 export class Minimap {
 
     container: PIXI.Container = new PIXI.Container();
     // @ts-ignore: Object is possibly 'null'.
-    background: PIXI.Graphics;
-    worldHeight: number = 0;
-    worldWidth: number = 0;
-    minimapRect = new Rectangle();
-    fontWidth: number = 0;
-    fontHeight: number = 0;
-    // @ts-ignore: Object is possibly 'null'.
-    viewPort: Viewport = null
-    areEventListenersActive: boolean = true;
+    background: PIXI.Container;
+    draw: Draw;
+    rect = new Rectangle();
+    app: PIXI.Application
 
-    constructor() {
-
+    constructor(draw: Draw, minimapRect: Rectangle) {
+        this.draw = draw;
+        this.app = new PIXI.Application({
+            width: minimapRect.width,
+            height: minimapRect.height
+        });
+        this.rect = minimapRect;
+        // extensions.remove(InteractionManager);
+        const { renderer } = this.app;        // InteractionManager with EventSystem
+        renderer.addSystem(EventSystem, 'events');
     }
 
-    init(worldHeight: number, worldWidth: number, fontWidth: number, fontHeight: number, minimapRect: Rectangle, minimapNavigationCallback: (x: number, y: number) => void) {
-        this.worldHeight = worldHeight;
-        this.worldWidth = worldWidth;
-        this.fontWidth = fontWidth;
-        this.fontHeight = fontHeight;
-        this.minimapRect = minimapRect;
+    init(minimapNavigationCallback: (x: number, y: number) => void) {
         this.container = new PIXI.Container();
         this.background = this.initBackground();
         this.container.addChild(this.background);
-        this.container.x = this.minimapRect.x;
-        this.container.y = this.minimapRect.y;
+        this.container.x = this.rect.x;
+        this.container.y = this.rect.y;
         this.container.interactive = true;
         this.container.addListener('click', async (e: any) => {
-            if (! this.areEventListenersActive) { return }
-            let minimapX = e.data.global.x - this.minimapRect.x;
-            let minimapY = e.data.global.y - this.minimapRect.y;
-            let worldX = Math.floor(minimapX / this.minimapRect.width * worldWidth);
-            let worldY = Math.floor(minimapY / this.minimapRect.height * worldHeight);
+            let minimapX = e.data.global.x - this.rect.x;
+            let minimapY = e.data.global.y - this.rect.y;
+            let worldX = Math.floor(minimapX / this.rect.width * this.draw.getWorld().width);
+            let worldY = Math.floor(minimapY / this.rect.height * this.draw.getWorld().height);
             minimapNavigationCallback(worldX, worldY);
         })
-        return this.container;
+        this.app.stage.addChild(this.container)
       }
     
     update(entities: Table[], screen: Rectangle) {
@@ -53,10 +51,10 @@ export class Minimap {
             entity.lineStyle(1, 0x000, 1);
             entity.beginFill(0x008000, 1);
             entity.drawRect(
-                entitie.getContainingRect().x * this.fontWidth / this.worldWidth * this.minimapRect.width, 
-                entitie.getContainingRect().y * this.fontHeight / this.worldHeight * this.minimapRect.height, 
-                entitie.getContainingRect().width * this.fontWidth / this.worldWidth * this.minimapRect.width, 
-                entitie.getContainingRect().height * this.fontHeight / this.worldHeight * this.minimapRect.height
+                entitie.getContainingRect().x * this.draw.selectedFontSize.width / this.draw.getWorld().width * this.rect.width, 
+                entitie.getContainingRect().y * this.draw.selectedFontSize.height / this.draw.getWorld().height * this.rect.height, 
+                entitie.getContainingRect().width * this.draw.selectedFontSize.width / this.draw.getWorld().width * this.rect.width, 
+                entitie.getContainingRect().height * this.draw.selectedFontSize.height / this.draw.getWorld().height * this.rect.height
             );
             entity.endFill();
             this.container.addChild(entity);
@@ -64,19 +62,19 @@ export class Minimap {
         let screenBorder = new PIXI.Graphics();
         screenBorder.lineStyle(1, 0xffdc40, 1)
         screenBorder.drawRect(
-            screen.x / this.worldWidth * this.minimapRect.width, 
-            screen.y / this.worldHeight * this.minimapRect.height, 
-            screen.width / this.worldWidth * this.minimapRect.width, 
-            screen.height / this.worldHeight * this.minimapRect.height
+            screen.x / this.draw.getWorld().width * this.rect.width, 
+            screen.y / this.draw.getWorld().height * this.rect.height, 
+            screen.width / this.draw.getWorld().width * this.rect.width, 
+            screen.height / this.draw.getWorld().height * this.rect.height
         );
         this.container.addChild(screenBorder);
     }
 
-    private initBackground() {
+    private initBackground(): PIXI.Container {
         let background = new PIXI.Graphics();
         background.lineStyle(2, 0x000, 1);
-        background.beginFill(0x3a3a3a, 1);
-        background.drawRect(0, 0, this.minimapRect.width, this.minimapRect.height);
+        background.beginFill(0xffffff, 1);
+        background.drawRect(0, 0, this.rect.width, this.rect.height);
         background.endFill();
         return background;
     }

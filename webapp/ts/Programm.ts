@@ -5,11 +5,12 @@ import { Rectangle, Point } from "pixi.js";
 import { Schema } from "./model/Schema";
 import { Table } from "./model/Table";
 import { TableRow } from "./model/TableRow";
+import { MyRect } from "./model/MyRect";
 
 export class Programm {
 
     static main(draw: Draw): void {
-        Manager.initialize(1080, 720, 0xe6e6e6);
+        Manager.initialize(draw.getWorld().width, draw.getWorld().height, 0xffffff);
         let scene = new LoaderScene(draw);
         Manager.changeScene(scene);
     }
@@ -82,6 +83,6 @@ export class Programm {
             tables.push(Table.init(new Point(rect.x, rect.y), head, tableRows));
         }
 
-        return new Draw(new Schema(tables, []));
+        return new Draw(new Schema(tables, []), new MyRect(0, 0, 3240, 2160), new Point(0, 0));
     }
 }

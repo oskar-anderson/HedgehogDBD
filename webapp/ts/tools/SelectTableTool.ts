@@ -98,9 +98,9 @@ export class SelectTableTool implements ITool {
 
     mouseEventHandler(event: MouseEvent): void {
         let rect = (event.currentTarget! as Element).getBoundingClientRect();
-        let relativeX = Math.round(event.clientX - rect.x);
-        let relativeY = Math.round(event.clientY - rect.y);
-        let mouseCharGrid = this.draw.getScreenToCharGridPoint(relativeX, relativeY);
+        let worldX = Math.round(event.clientX - rect.x);
+        let worldY = Math.round(event.clientY - rect.y);
+        let mouseCharGrid = this.draw.getWorldToCharGridPoint(worldX, worldY);
         switch (event.type) {
             case "mousedown":
                 this.mouseDown(mouseCharGrid.x, mouseCharGrid.y);

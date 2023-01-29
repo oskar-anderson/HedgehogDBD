@@ -1,1 +1,0 @@
-Graph 35+ pix - bad, | is offset

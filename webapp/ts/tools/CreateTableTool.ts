@@ -69,8 +69,6 @@ export class CreateTableTool implements ITool {
             return;
         }
 
-        console.log("CREATE TABLE");
-        console.log(this.hover);
         this.draw.history.execute(new CommandCreateTable(
             this.draw, {
                 tableJson: JSON.stringify(this.hover!)
@@ -82,11 +80,11 @@ export class CreateTableTool implements ITool {
 
     mouseEventHandler(event: MouseEvent): void {
         let rect = (event.currentTarget! as Element).getBoundingClientRect();
-        let relativeX = Math.round(event.clientX - rect.x);
-        let relativeY = Math.round(event.clientY - rect.y);
+        let worldX = Math.round(event.clientX - rect.x);
+        let worldY = Math.round(event.clientY - rect.y);
         switch (event.type) {
             case "click": 
-                let mouseCharGrid = this.draw.getScreenToCharGridPoint(relativeX, relativeY);
+                let mouseCharGrid = this.draw.getWorldToCharGridPoint(worldX, worldY);
                 this.createTable(mouseCharGrid.x, mouseCharGrid.y);
                 break;
             default:

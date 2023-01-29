@@ -15,8 +15,8 @@ export class LoaderScene extends Container implements IScene {
     constructor(draw: Draw) {
         super();
         this.draw = draw;
-
-        const loaderBarWidth = Manager.width * 0.8;
+        Manager.scrollTo(0, 0);
+        const loaderBarWidth = Manager.getScreen().width * 0.8;
 
         this.loaderBarFill = new Graphics();
         this.loaderBarFill.beginFill(0x008800, 1)
@@ -31,11 +31,22 @@ export class LoaderScene extends Container implements IScene {
         this.loaderBar = new Container();
         this.loaderBar.addChild(this.loaderBarFill);
         this.loaderBar.addChild(this.loaderBarBorded);
-        this.loaderBar.position.x = (Manager.width - this.loaderBar.width) / 2;
-        this.loaderBar.position.y = (Manager.height - this.loaderBar.height) / 2;
+        this.loaderBar.position.x = (Manager.getScreen().width - this.loaderBar.width) / 2;
+        this.loaderBar.position.y = (Manager.getScreen().height - this.loaderBar.height) / 2;
         this.addChild(this.loaderBar);
 
-        Loader.shared.add('../wwwroot/font/ps2p/consolas-14-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add('../wwwroot/font/consolas/consolas-7-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add('../wwwroot/font/consolas/consolas-8-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add('../wwwroot/font/consolas/consolas-9-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add('../wwwroot/font/consolas/consolas-10-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add('../wwwroot/font/consolas/consolas-11-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add('../wwwroot/font/consolas/consolas-12-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add('../wwwroot/font/consolas/consolas-14-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add('../wwwroot/font/consolas/consolas-16-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add('../wwwroot/font/consolas/consolas-18-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add('../wwwroot/font/consolas/consolas-20-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add('../wwwroot/font/consolas/consolas-22-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add('../wwwroot/font/consolas/consolas-24-xml-white-text-with-alpha-padding0-spacing1.fnt');
         
         Loader.shared.onProgress.add((loader) => {
             let progressRatio = loader.progress / 100;

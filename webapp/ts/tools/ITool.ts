@@ -1,7 +1,5 @@
-import { Viewport } from "pixi-viewport";
 import { Draw } from "../model/Draw";
 import { CreateTableTool } from "./CreateTableTool";
-import { PanTool } from "./PanTool";
 import { SelectTableTool } from "./SelectTableTool";
 
 export interface ITool {
@@ -14,7 +12,6 @@ export interface ITool {
 }
 
 export enum IToolNames {
-    pan = "pan",
     select = "select",
     newTable = "newTable",
 }
@@ -22,14 +19,11 @@ export enum IToolNames {
 export class IToolManager {
 
 
-    static toolActivate(draw: Draw, tool: IToolNames, options: { viewport: Viewport }) {
+    static toolActivate(draw: Draw, tool: IToolNames) {
         if (draw.activeTool) {
             draw.activeTool.exit();
         }
         switch(tool) {
-            case IToolNames.pan:
-                draw.activeTool = new PanTool(options.viewport);
-                break;
             case IToolNames.select:
                 draw.activeTool = new SelectTableTool(draw);
                 break;

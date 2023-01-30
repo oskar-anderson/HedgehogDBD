@@ -16,7 +16,7 @@ export class Programm {
     }
 
     static parse(schema: string): Draw {
-        let rows = schema.split('\n');
+        let rows = schema.split(new RegExp('\r?\n'));
         let width = Math.max(...(rows.map(el => el.length)));
         let height = rows.length;
 
@@ -36,22 +36,28 @@ export class Programm {
                 if (tile === "+" && ! tablesRects.some(table => table.contains(x, y))) {
                     let possibleTable = new Rectangle(x, y, 0, 0);
                     for (let a = 0; 
-                        a < width - x
+                        x + a < width 
                         && ["-", "+"].includes(board[y * width + x + a]); 
                         a++) {
-                        if (x + a + 1 === width && board[y * width + x + a + 1] === "+" ||
-                            (x + a + 1 < width && board[y * width + x + a + 1] === " ")) {
+                        if (x + a + 2 === width && board[y * width + x + a + 1] === "+") {
+                            possibleTable.width = a + 2;
+                            break;
+                        }
+                        if ((x + a + 1 < width && board[y * width + x + a + 1] === " ")) {
                             possibleTable.width = a + 1;
                             break;
                         }
                     }
                     for (let a = 0; 
                         possibleTable.width != 0 
-                        && a < height - y
+                        && y + a < height
                         && ["|", "+"].includes(board[(y + a) * width + x]); 
                         a++) {
-                        if (y + a + 1 === height && board[(y + a + 1) * width + x] === "+" || 
-                            (y + a + 1 < height && board[(y + a + 1) * width + x] === " ")) {
+                        if (y + a + 2 === height && board[(y + a + 1) * width + x] === "+") {
+                            possibleTable.height = a + 2;
+                            break;
+                        }
+                        if (y + a + 1 < height && board[(y + a + 1) * width + x] === " ") {
                             possibleTable.height = a + 1;
                             break;
                         }

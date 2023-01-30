@@ -7,7 +7,7 @@ Webapp for text based ERD schema creation. The app allows users to create JavaSc
 
 ### Main drawing view
 Everything needed to visualise database tables. Create/read/update/delete tables, export schema as PNG or TXT, import TXT schemas, change zoom level or navigate schema. Also supports undo/redo functionalty.
-![Drawing view](./doc/img/drawing_view.png)
+![Drawing view](./doc/img/drawing_view_2.png)
 
 
 ### Scripting editor view

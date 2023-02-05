@@ -6,7 +6,7 @@ Open source text based ERD schema drawing tool with scripting support. Start mod
 Webapp for text based ERD schema creation. The app allows users to create JavaScript scripts and execute them based on the schema. Contains built-in scripts and user created scripts shared as comments.
 
 ### Main drawing view
-Everything needed to visualise database tables. Create/read/update/delete tables, export schema as PNG or TXT, import TXT schemas, change zoom level or navigate schema. Also supports undo/redo functionalty.
+Everything needed to visualise database tables. Create/read/update/delete tables, export schema as PNG or TXT, import TXT schemas, change zoom level or navigate schema. Also supports undo/redo functionality.
 ![Drawing view](./doc/img/drawing_view_2.png)
 
 

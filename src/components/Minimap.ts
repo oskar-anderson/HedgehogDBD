@@ -3,18 +3,17 @@ import { Rectangle } from "pixi.js";
 import { Table } from "../model/Table";
 import { Draw } from "../model/Draw";
 import { EventSystem } from "@pixi/events";
+import { Manager } from "../Manager";
 
 export class Minimap {
 
     container: PIXI.Container = new PIXI.Container();
     // @ts-ignore: Object is possibly 'null'.
     background: PIXI.Container;
-    draw: Draw;
     rect = new Rectangle();
     app: PIXI.Application
 
-    constructor(draw: Draw, minimapRect: Rectangle) {
-        this.draw = draw;
+    constructor(minimapRect: Rectangle) {
         this.app = new PIXI.Application({
             width: minimapRect.width,
             height: minimapRect.height
@@ -26,6 +25,7 @@ export class Minimap {
     }
 
     init(minimapNavigationCallback: (x: number, y: number) => void) {
+        const draw = Manager.getInstance().draw;
         this.container = new PIXI.Container();
         this.background = this.initBackground();
         this.container.addChild(this.background);
@@ -35,14 +35,15 @@ export class Minimap {
         this.container.addListener('click', async (e: any) => {
             let minimapX = e.data.global.x - this.rect.x;
             let minimapY = e.data.global.y - this.rect.y;
-            let worldX = Math.floor(minimapX / this.rect.width * this.draw.getWorld().width);
-            let worldY = Math.floor(minimapY / this.rect.height * this.draw.getWorld().height);
+            let worldX = Math.floor(minimapX / this.rect.width * draw.getWorld().width);
+            let worldY = Math.floor(minimapY / this.rect.height * draw.getWorld().height);
             minimapNavigationCallback(worldX, worldY);
         })
         this.app.stage.addChild(this.container)
       }
     
     update(entities: Table[], screen: Rectangle) {
+        const draw = Manager.getInstance().draw;
         this.container.removeChildren();
         this.background = this.initBackground();
         this.container.addChild(this.background);
@@ -51,10 +52,10 @@ export class Minimap {
             entity.lineStyle(1, 0x000, 1);
             entity.beginFill(0x008000, 1);
             entity.drawRect(
-                entitie.getContainingRect().x * this.draw.selectedFontSize.width / this.draw.getWorld().width * this.rect.width, 
-                entitie.getContainingRect().y * this.draw.selectedFontSize.height / this.draw.getWorld().height * this.rect.height, 
-                entitie.getContainingRect().width * this.draw.selectedFontSize.width / this.draw.getWorld().width * this.rect.width, 
-                entitie.getContainingRect().height * this.draw.selectedFontSize.height / this.draw.getWorld().height * this.rect.height
+                entitie.getContainingRect().x * draw.selectedFontSize.width / draw.getWorld().width * this.rect.width, 
+                entitie.getContainingRect().y * draw.selectedFontSize.height / draw.getWorld().height * this.rect.height, 
+                entitie.getContainingRect().width * draw.selectedFontSize.width / draw.getWorld().width * this.rect.width, 
+                entitie.getContainingRect().height * draw.selectedFontSize.height / draw.getWorld().height * this.rect.height
             );
             entity.endFill();
             this.container.addChild(entity);
@@ -62,10 +63,10 @@ export class Minimap {
         let screenBorder = new PIXI.Graphics();
         screenBorder.lineStyle(1, 0xffdc40, 1)
         screenBorder.drawRect(
-            screen.x / this.draw.getWorld().width * this.rect.width, 
-            screen.y / this.draw.getWorld().height * this.rect.height, 
-            screen.width / this.draw.getWorld().width * this.rect.width, 
-            screen.height / this.draw.getWorld().height * this.rect.height
+            screen.x / draw.getWorld().width * this.rect.width, 
+            screen.y / draw.getWorld().height * this.rect.height, 
+            screen.width / draw.getWorld().width * this.rect.width, 
+            screen.height / draw.getWorld().height * this.rect.height
         );
         this.container.addChild(screenBorder);
     }

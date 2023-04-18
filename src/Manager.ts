@@ -1,7 +1,5 @@
 import { extensions, InteractionManager, Application, DisplayObject } from "pixi.js";
 import { EventSystem } from '@pixi/events';
-import { MyRect } from "./model/MyRect";
-import { useAppStateManagement } from "./Store";
 import { AppState } from "./components/MainContent";
 import { Draw } from "./model/Draw";
 
@@ -9,9 +7,8 @@ export class Manager {
 
     private app: Application;
     private currentScene: IScene | null = null;
-    public updateFunc: (deltaMs: number) => void = () => { };
     public draw: Draw;
-    private canvasContainerRef: React.RefObject<HTMLDivElement>;
+    private setAppState: React.Dispatch<React.SetStateAction<AppState>>
 
     private static instance: Manager;
 
@@ -22,50 +19,45 @@ export class Manager {
         return this.instance;
     }
 
-    public static constructInstance(width: number, height: number, background: number, draw: Draw): void {
-        const { canvasContainerRef } = useAppStateManagement();
-        this.instance = new Manager(width, height, background, canvasContainerRef, draw);
+    public static constructInstance(
+        width: number, 
+        height: number, 
+        background: number, 
+        draw: Draw, 
+        setAppState: React.Dispatch<React.SetStateAction<AppState>>,
+        ): void {
+        this.instance = new Manager(width, height, background, draw, setAppState);
+
     }
 
-    private constructor(width: number, height: number, background: number, canvasContainerRef: React.RefObject<HTMLDivElement>, draw: Draw) {
+    private constructor(width: number, height: number, background: number, draw: Draw,
+        setAppState: React.Dispatch<React.SetStateAction<AppState>>,
+        ) {
+        this.setAppState = setAppState;
         this.draw = draw;
-        this.canvasContainerRef = canvasContainerRef;
+        extensions.remove(InteractionManager);
         this.app = new Application({
             backgroundColor: background,
             width: width,
             height: height
         });
-        extensions.remove(InteractionManager);
         this.app.renderer.addSystem(EventSystem, 'events');        // InteractionManager with EventSystem
 
         this.app.view.addEventListener('contextmenu', (e) => { e.preventDefault(); });
-        this.app.view.addEventListener('wheel', function(event) { event.preventDefault(); });
-
-        this.app.ticker.add((time) => { this.update() });
-        canvasContainerRef.current?.appendChild(this.app.view);
-    }
-
-    public getScreen() {
-        const { scrollLeft, scrollTop, getBoundingClientRect } = this.canvasContainerRef.current!;
-        return new MyRect(scrollLeft, scrollTop, getBoundingClientRect().width, getBoundingClientRect().height);
-    }
-
-    public scrollTo(worldX: number, worldY: number) {
-        this.canvasContainerRef.current!.scrollTo(worldX, worldY);
-    }
-
-    public scrollBy(worldX: number, worldY: number) {
-        this.canvasContainerRef.current!.scrollBy(worldX, worldY);
+        this.app.view.addEventListener('wheel', (e) => { e.preventDefault(); });
     }
 
     public getRenderer() {
         return this.app.renderer;
     }
 
+    public getView() {
+        return this.app.view;
+    }
+
     // Call this function when you want to go to a new scene
     public changeScene(newScene: IScene): void {
-        const { setAppState, setIsTopToolbarVisible } = useAppStateManagement();
-        setIsTopToolbarVisible(false);
+        console.log(`changeScene: ${this.currentScene === null ? "null" : AppState[this.currentScene.getState()]} -> ${AppState[newScene.getState()]}`);
 
         // Remove and destroy old scene
         if (this.currentScene) {
@@ -74,25 +66,16 @@ export class Manager {
         }
 
         // Add the new one
+        this.setAppState(newScene.getState());
         this.currentScene = newScene;
         this.app.stage.addChild(this.currentScene);
-        newScene.init();
-        setAppState(newScene.getState())
     }
 
     public getScene() {
         return this.currentScene;
     }
-
-    // This update will be called by a pixi ticker and tell the scene that a tick happened
-    public update(): void {
-        this.updateFunc(this.app.ticker.deltaMS)
-    }
 }
 
 export interface IScene extends DisplayObject {
-    update(deltaMS: number): void;
-    init(): void
-    mouseEventHandler(event: MouseEvent): void
     getState(): AppState
 }

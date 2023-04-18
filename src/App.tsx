@@ -1,17 +1,7 @@
-import { createElement, useEffect, useRef, useState, createContext, useContext, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import { Draw } from "./model/Draw";
-import { Rectangle, Point } from "pixi.js";
-import { Schema } from "./model/Schema";
-import { Table } from "./model/Table";
-import { TableRow } from "./model/TableRow";
-import { MyRect } from "./model/MyRect";
-import './App.css'
-import { Manager } from './Manager';
-import { LoaderScene } from './scenes/LoaderScene';
 import RasterModelerFormat from './RasterModelerFormat';
-import CanvasSide from './components/mainContentChildren/drawingChildren/CanvasSide';
-import { AppStateManagementContext, useAppStateManagement, useAppStateManagementDefault } from './Store';
-import TopToolbarAction from './components/TopToolbarAction';
+import { AppStateManagementContext, useAppStateManagementDefault } from './Store';
 import MainContent from './components/MainContent';
 
 
@@ -30,7 +20,6 @@ function App() {
   }, [])
 
   const appStateManagementValue = useAppStateManagementDefault();
-  useAppStateManagement();
 
   if (! draw) {
     return (<div>Loading...</div>);

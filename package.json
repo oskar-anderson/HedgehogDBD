@@ -1,8 +1,4 @@
 {
-  "name": "react-app",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -12,9 +8,9 @@
     "@datastructures-js/priority-queue": "^6.1.4",
     "@pixi/events": "^6.5.8",
     "@pixi/math-extras": "^6.5.8",
+    "dayjs": "^1.11.6",
     "monaco-editor": "^0.34.1",
     "pixi.js": "^6.5.6",
-    "dayjs": "^1.11.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -23,6 +19,7 @@
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react": "^3.1.0",
     "typescript": "^4.9.3",
-    "vite": "^4.1.0"
+    "vite": "^4.1.0",
+    "vite-plugin-monaco-editor": "^1.1.0"
   }
 }

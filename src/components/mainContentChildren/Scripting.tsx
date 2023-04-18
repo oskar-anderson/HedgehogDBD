@@ -18,37 +18,37 @@ export default function scripting() {
             const fetchedScripts = [
                 new Script(
                     "List tables", 
-                    await fetch('../wwwroot/scripts/listAllTables.js', {cache: "no-cache"}).then(x => x.text()), 
+                    await fetch('src/wwwroot/scripts/listAllTables.js', {cache: "no-cache"}).then(x => x.text()), 
                     ["builtin"]
                 ),
                 new Script(
                     "List tables and rows",
-                    await fetch('../wwwroot/scripts/listAllTableRows.js', {cache: "no-cache"}).then(x => x.text()),
+                    await fetch('src/wwwroot/scripts/listAllTableRows.js', {cache: "no-cache"}).then(x => x.text()),
                     ['builtin', 'CSV']
                 ),
                 new Script(
                     "SQL CREATE",
-                    await fetch('../wwwroot/scripts/createTablesSQL.js', {cache: "no-cache"}).then(x => x.text()),
+                    await fetch('src/wwwroot/scripts/createTablesSQL.js', {cache: "no-cache"}).then(x => x.text()),
                     ["builtin", "SQL"]
                 ),
                 new Script(
                     "Export TXT",
-                    await fetch('../wwwroot/scripts/saveAsTxt.js', {cache: "no-cache"}).then(x => x.text()),
+                    await fetch('src/wwwroot/scripts/saveAsTxt.js', {cache: "no-cache"}).then(x => x.text()),
                     ["builtin"]
                 ),
                 new Script(
                     "Export clipboard",
-                    await fetch('../wwwroot/scripts/saveToClipboard.js', {cache: "no-cache"}).then(x => x.text()),
+                    await fetch('src/wwwroot/scripts/saveToClipboard.js', {cache: "no-cache"}).then(x => x.text()),
                     ["builtin"]
                 ),
                 new Script(
                     "Export PNG",
-                    await fetch('../wwwroot/scripts/takeScreenshot.js', {cache: "no-cache"}).then(x => x.text()),
+                    await fetch('src/wwwroot/scripts/takeScreenshot.js', {cache: "no-cache"}).then(x => x.text()),
                     ["builtin", "async"]
                 ),
                 new Script(
                     "Shared scripts lib",
-                    await fetch('../wwwroot/scripts/_SHARED.js', {cache: "no-cache"}).then(x => x.text()),
+                    await fetch('src/wwwroot/scripts/_SHARED.js', {cache: "no-cache"}).then(x => x.text()),
                     ["builtin", "readonly"]
                 )
             ];
@@ -146,13 +146,13 @@ export default function scripting() {
                                 <div className="col-sm-12">
                                     <ul className="list-group">
                                         {
-                                            scripts.map(script => (
-                                                <li onClick={() => onClickScriptListItem(script)} className="script-modal list-group-item d-flex justify-content-between" data-content="{{ builtinScriptsJson[loop.index0] }}">
+                                            scripts.map((script, i) => (
+                                                <li key={i} onClick={() => onClickScriptListItem(script)} className="script-modal list-group-item d-flex justify-content-between" data-content="{{ builtinScriptsJson[loop.index0] }}">
                                                     <span>{script.name}</span>
                                                     <div>
                                                         {
-                                                            script.tags.map(tag => (
-                                                                <span className="badge bg-info rounded-pill">{tag}</span>
+                                                            script.tags.map((tag, j) => (
+                                                                <span key={j} className="badge bg-info rounded-pill">{tag}</span>
                                                             ))
                                                         }
                                                     </div>

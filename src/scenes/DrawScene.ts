@@ -5,19 +5,12 @@ import * as PIXI from "pixi.js";
 import { Table } from "../model/Table";
 import { Relation } from "../model/Relation";
 import { DrawChar } from "../model/DrawChar";
-import { SelectTableTool } from "../tools/SelectTableTool";
-import { CreateTableTool } from "../tools/CreateTableTool";
-import { ScriptingScene } from "./ScriptingScene";
-import { IToolManager, IToolNames } from "../tools/ITool";
+import { IToolManager } from "../tools/ITool";
 import AStarFinderCustom from "../path/AStarFinderCustom";
 import { WorldGrid } from "../path/WorldGrid";
 import { CostGrid } from "../model/CostGrid";
 import { PriorityQueue } from "@datastructures-js/priority-queue";
-import { Schema } from "../model/Schema";
 import RasterModelerFormat from "../RasterModelerFormat";
-import { Minimap } from "../components/Minimap";
-import { MyRect } from "../model/MyRect";
-import { useAppStateManagement } from "../Store";
 import { AppState } from "../components/MainContent";
 
 
@@ -25,7 +18,6 @@ export class DrawScene extends Container implements IScene {
 
     canvasView: Container;
     draw: Draw;
-    minimap: Minimap;
     
     constructor() {
         super();
@@ -33,51 +25,24 @@ export class DrawScene extends Container implements IScene {
 
         this.canvasView = new PIXI.Container();
         this.canvasView.hitArea = this.draw.getWorld();  // needed for events
-        this.canvasView.interactive = true;                         // needed for events
+        this.canvasView.interactive = true;              // needed for events
         this.addChild(this.canvasView);
 
         IToolManager.toolActivate(this.draw, this.draw.activeTool.getName());
-        
-        this.minimap = new Minimap(this.draw, new Rectangle(0, 0, 180, 120))
-        this.minimap.init(
-            (x: number, y: number) => { 
-                console.log(`minimap navigation (x: ${x}, y: ${y})`);
-                Manager.getInstance().scrollTo(
-                    x - Math.ceil(Manager.getInstance().getScreen().width / 2), 
-                    y - Math.ceil(Manager.getInstance().getScreen().height / 2)
-                );
-                this.cullViewport();
-                this.minimap.update(this.draw.getVisibleTables(), Manager.getInstance().getScreen());
-            }
-        );
-        const { canvasSideMinimapContainerRef } = useAppStateManagement();
-        canvasSideMinimapContainerRef.current!.innerHTML = "";
-        canvasSideMinimapContainerRef.current!.appendChild(this.minimap.app.view);
 
         this.interactive = true;
         this.on('mousemove', (e: InteractionEvent) => { 
             // this is neccessary when using InteractionManager 
             // if (! new Rectangle(0, 0, Manager.width, Manager.height).contains(e.data.global.x, e.data.global.y)) return;  // remove outside events. PIXI is stupid.
             // no idea why y is someinteger.1999969482422 decimal number 
-            this.draw.mouseScreenPosition = new Point(Math.floor(e.data.global.x - Manager.getInstance().getScreen().x), Math.floor(e.data.global.y - Manager.getInstance().getScreen().y));
+            // this.draw.mouseScreenPosition = new Point(Math.floor(e.data.global.x - Manager.getInstance().getScreen().x), Math.floor(e.data.global.y - Manager.getInstance().getScreen().y));
         });
+
+        this.renderScreen(true);
     }
 
     getState(): AppState {
         return AppState.DrawScene
-    }
-
-    mouseEventHandler(event: MouseEvent): void {
-        let rect = (event.currentTarget! as Element).getBoundingClientRect();
-        let worldX = Math.round(event.clientX - rect.x);
-        let worldY = Math.round(event.clientY - rect.y);
-        this.draw.activeTool.mouseEventHandler(event);
-    }
-
-    init() {
-        const { setIsTopToolbarVisible } = useAppStateManagement();
-        setIsTopToolbarVisible(true);
-        this.renderScreen(true);
     }
 
     async import() {
@@ -98,8 +63,8 @@ export class DrawScene extends Container implements IScene {
     }
 
 
-    cullViewport() {
-        for (const bitmapText of this.canvasView.children) {
+    static cullViewport(container: Container<PIXI.DisplayObject>) {
+        for (const bitmapText of container.children) {
             bitmapText.visible = (bitmapText as PIXI.BitmapText).text !== " "; 
         }
     }
@@ -141,7 +106,7 @@ export class DrawScene extends Container implements IScene {
                 }
             }
         }
-        this.cullViewport();
+        DrawScene.cullViewport(this.canvasView);
     }
 
     getWorldPointCanvasIndex(x: number, y: number) {
@@ -311,16 +276,5 @@ export class DrawScene extends Container implements IScene {
         paintWorldRectToScreenSafe(new Rectangle(rect.left, rect.bottom, 1, 1), bl);
         paintWorldRectToScreenSafe(new Rectangle(rect.x + 1, rect.bottom, rect.width - 1, 1), b);
         paintWorldRectToScreenSafe(new Rectangle(rect.right, rect.bottom, 1, 1), br);
-    }
-
-    public update(deltaMS: number): void {
-        let screen = Manager.getInstance().getScreen();
-        this.draw.setScreen(new Point(screen.x, screen.y));
-        this.minimap.update(this.draw.getVisibleTables(), screen);
-        this.draw.activeTool.update();
-        if (this.draw.activeTool.isDirty) {
-            this.draw.activeTool.isDirty = false;
-            this.renderScreen(false);
-        }
     }
 }

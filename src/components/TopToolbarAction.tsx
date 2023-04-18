@@ -23,11 +23,11 @@ export default function TopToolbarAction() {
     }
 
     const changeSceneToScripting = async () => {
-        if (Manager.getInstance().getScene()?.getState() === AppState.ScriptingScene) { return; }
+        if (Manager.getInstance().getScene()!.getState() === AppState.ScriptingScene) { return; }
         Manager.getInstance().changeScene(new ScriptingScene());
     }
     const changeSceneToDraw = async () => {
-        if (Manager.getInstance().getScene()?.getState() === AppState.DrawScene) { return; }
+        if (Manager.getInstance().getScene()!.getState() === AppState.DrawScene) { return; }
         Manager.getInstance().changeScene(new DrawScene());
     }
 

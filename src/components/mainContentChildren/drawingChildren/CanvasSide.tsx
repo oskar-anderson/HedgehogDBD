@@ -1,20 +1,35 @@
-import { ChangeEvent, useState } from "react";
+import { Container, DisplayObject } from "pixi.js";
+import { ChangeEvent, RefObject, useEffect, useRef, useState } from "react";
 import { Manager } from "../../../Manager";
 import { Draw } from "../../../model/Draw";
 import { MyRect } from "../../../model/MyRect";
 import { DrawScene } from "../../../scenes/DrawScene";
 import { useAppStateManagement } from "../../../Store";
 import { IToolManager, IToolNames } from "../../../tools/ITool";
+import { Minimap } from "../../Minimap";
+import { DrawingUtil } from "../Drawing";
 
 
-function CanvasSide() {
+interface CanvasSideProps {
+    canvasContainerRef: React.RefObject<HTMLDivElement>
+    minimap: Minimap
+}
+
+
+function CanvasSide({ canvasContainerRef, minimap }: CanvasSideProps) {
+    const minimapContainerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        minimapContainerRef.current!.appendChild(minimap.app.view);
+    }, [])
+
     const draw = Manager.getInstance().draw;
     const { highlightActiveSideToolbarTool, setHighlightActiveSideToolbarTool } = useAppStateManagement();
 
     const setZoomFontSize = (e: ChangeEvent) => {
         let size = Number.parseInt((e.target as HTMLSelectElement).value);
-        let centerScreenOriginalXPercent = Manager.getInstance().getScreen().getCenter().x / draw.getWorld().width;
-        let centerScreenOriginalYPercent = Manager.getInstance().getScreen().getCenter().y / draw.getWorld().height;
+        let centerScreenOriginalXPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().x / draw.getWorld().width;
+        let centerScreenOriginalYPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().y / draw.getWorld().height;
         let widthCharGridOriginal = draw.getWorldCharGrid().width;
         let heightCharGridOriginal = draw.getWorldCharGrid().height;
         draw.selectedFontSize = Draw.fontSizes.find(x => x.size === size)!;
@@ -22,11 +37,11 @@ function CanvasSide() {
         let heightWorldResize = heightCharGridOriginal * draw.selectedFontSize.height;
         Manager.getInstance().getRenderer().resize(widthWorldResize, heightWorldResize);
         draw.setWorld(new MyRect(0, 0, widthWorldResize, heightWorldResize))
-        let centerScreenResizeXPercent = Manager.getInstance().getScreen().getCenter().x / draw.getWorld().width;
-        let centerScreenResizeYPercent = Manager.getInstance().getScreen().getCenter().y / draw.getWorld().height;
-        Manager.getInstance().scrollTo(
-            Manager.getInstance().getScreen().x + draw.getWorld().width * (centerScreenOriginalXPercent - centerScreenResizeXPercent),
-            Manager.getInstance().getScreen().y + draw.getWorld().height * (centerScreenOriginalYPercent - centerScreenResizeYPercent),
+        let centerScreenResizeXPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().x / draw.getWorld().width;
+        let centerScreenResizeYPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().y / draw.getWorld().height;
+        canvasContainerRef.current!.scrollTo(
+            DrawingUtil.getScreen(canvasContainerRef).x + draw.getWorld().width * (centerScreenOriginalXPercent - centerScreenResizeXPercent),
+            DrawingUtil.getScreen(canvasContainerRef).y + draw.getWorld().height * (centerScreenOriginalYPercent - centerScreenResizeYPercent)
         );
         (Manager.getInstance().getScene() as DrawScene).renderScreen(true);
     }
@@ -50,21 +65,20 @@ function CanvasSide() {
         (Manager.getInstance().getScene() as DrawScene).renderScreen(false);
     }
 
-
     return (
         <div className="canvas-side" style={{ display: 'flex', marginLeft: '6px' }}>
             <div style={{ backgroundColor: '#efeff2' }}>
                 <span>Bird's Eye</span>
                 <div style={{ display: 'flex' }}>
                     <span>Zoom:</span>
-                    <select name="zoom-font-size" onChange={ (e) => setZoomFontSize(e) } className="zoom-font-size" autoComplete="off" style={{ marginLeft: '6px' }}>
+                    <select defaultValue={14} name="zoom-font-size" onChange={ (e) => setZoomFontSize(e) } className="zoom-font-size" autoComplete="off" style={{ marginLeft: '6px' }}>
                         <option value={7}>7</option>
                         <option value={8}>8</option>
                         <option value={9}>9</option>
                         <option value={10}>10</option>
                         <option value={11}>11</option>
                         <option value={12}>12</option>
-                        <option value={14} selected>14</option>
+                        <option value={14}>14</option>
                         <option value={16}>16</option>
                         <option value={18}>18</option>
                         <option value={20}>20</option>
@@ -72,20 +86,20 @@ function CanvasSide() {
                         <option value={24}>24</option>
                     </select>
                 </div>
-                <div className="canvas-side-minimap" style={{ marginTop: '6px' }}></div>
+                <div className="canvas-side-minimap" ref={minimapContainerRef} style={{ marginTop: '6px' }}></div>
             </div>
             <div className="canvas-side-tools" style={{ backgroundColor: '#f5f5f7' }}>
                 <header style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
 
                     <button onClick={ () => onToolSelectClick(IToolNames.select) } className={`tool-select btn btn-light ${highlightActiveSideToolbarTool === IToolNames.select ? 'active' : ''}`} title="Select/Edit table">
                         <svg width="16px" height="16px" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M3.29227 0.048984C3.47033 -0.032338 3.67946 -0.00228214 3.8274 0.125891L12.8587 7.95026C13.0134 8.08432 13.0708 8.29916 13.0035 8.49251C12.9362 8.68586 12.7578 8.81866 12.5533 8.82768L9.21887 8.97474L11.1504 13.2187C11.2648 13.47 11.1538 13.7664 10.9026 13.8808L8.75024 14.8613C8.499 14.9758 8.20255 14.8649 8.08802 14.6137L6.15339 10.3703L3.86279 12.7855C3.72196 12.934 3.50487 12.9817 3.31479 12.9059C3.1247 12.8301 3 12.6461 3 12.4414V0.503792C3 0.308048 3.11422 0.130306 3.29227 0.048984ZM4 1.59852V11.1877L5.93799 9.14425C6.05238 9.02363 6.21924 8.96776 6.38319 8.99516C6.54715 9.02256 6.68677 9.12965 6.75573 9.2809L8.79056 13.7441L10.0332 13.178L8.00195 8.71497C7.93313 8.56376 7.94391 8.38824 8.03072 8.24659C8.11753 8.10494 8.26903 8.01566 8.435 8.00834L11.2549 7.88397L4 1.59852Z" fill="#000000" />
+                            <path fillRule="evenodd" clipRule="evenodd" d="M3.29227 0.048984C3.47033 -0.032338 3.67946 -0.00228214 3.8274 0.125891L12.8587 7.95026C13.0134 8.08432 13.0708 8.29916 13.0035 8.49251C12.9362 8.68586 12.7578 8.81866 12.5533 8.82768L9.21887 8.97474L11.1504 13.2187C11.2648 13.47 11.1538 13.7664 10.9026 13.8808L8.75024 14.8613C8.499 14.9758 8.20255 14.8649 8.08802 14.6137L6.15339 10.3703L3.86279 12.7855C3.72196 12.934 3.50487 12.9817 3.31479 12.9059C3.1247 12.8301 3 12.6461 3 12.4414V0.503792C3 0.308048 3.11422 0.130306 3.29227 0.048984ZM4 1.59852V11.1877L5.93799 9.14425C6.05238 9.02363 6.21924 8.96776 6.38319 8.99516C6.54715 9.02256 6.68677 9.12965 6.75573 9.2809L8.79056 13.7441L10.0332 13.178L8.00195 8.71497C7.93313 8.56376 7.94391 8.38824 8.03072 8.24659C8.11753 8.10494 8.26903 8.01566 8.435 8.00834L11.2549 7.88397L4 1.59852Z" fill="#000000" />
                         </svg>
                     </button>
 
                     <button onClick={ () => onToolSelectClick(IToolNames.newTable) } className={`tool-select btn btn-light ${highlightActiveSideToolbarTool === IToolNames.newTable ? 'active' : ''}`} title="New table">
                         <svg width="16px" height="16px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
-                            <path stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2M3 8v6m0-6h6m12 0v4m0-4H9m-6 6v4a2 2 0 0 0 2 2h4m-6-6h6m0-6v6m0 0h4a2 2 0 0 0 2-2V8m-6 6v6m0 0h2m7-5v3m0 0v3m0-3h3m-3 0h-3" />
+                            <path stroke="#000000" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2M3 8v6m0-6h6m12 0v4m0-4H9m-6 6v4a2 2 0 0 0 2 2h4m-6-6h6m0-6v6m0 0h4a2 2 0 0 0 2-2V8m-6 6v6m0 0h2m7-5v3m0 0v3m0-3h3m-3 0h-3" />
                         </svg>
                     </button>
 

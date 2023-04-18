@@ -7,7 +7,7 @@ import TopToolbarAction from "./TopToolbarAction";
 import { Draw } from "../model/Draw";
 import { Manager } from "../Manager";
 import { LoaderScene } from "../scenes/LoaderScene";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { LocalStorageData, Script } from "../model/LocalStorageData";
 import { TableScene } from "../scenes/TableScene";
 
@@ -25,30 +25,34 @@ export enum AppState {
 
 export default function mainComponent({ draw }: MainComponentProps) {
     const { appState, setAppState } = useAppStateManagement();
-
-    console.log("mainComponent")
-
+    const canvasContainerRef = useRef<HTMLDivElement>(null);
+    useAppStateManagement()
     useEffect(() => {
         console.log("mainComponent useEffect")
         Manager.constructInstance(
             draw.getWorld().width,
             draw.getWorld().height,
             0xffffff,
-            draw
+            draw,
+            setAppState,
         );
-        let scene = new LoaderScene();
+        canvasContainerRef.current!.appendChild(Manager.getInstance().getView());
+        let scene = new LoaderScene(canvasContainerRef.current!.offsetWidth, canvasContainerRef.current!.offsetHeight);
         Manager.getInstance().changeScene(scene);
     }, [])
 
+    const optionalTopToolbar = (appState === AppState.DrawScene || appState === AppState.ScriptingScene) ? <TopToolbarAction /> : null
 
     return (
         <>
             <div className="top-menu-action-container" >
-                {useAppStateManagement().isTopToolbarVisible || <TopToolbarAction />}
+                { optionalTopToolbar }
             </div>
 
-
-
+            { appState === AppState.LoaderScene && <Loading canvasContainerRef={canvasContainerRef}/> }
+            { appState === AppState.DrawScene && <Drawing/> }
+            { appState === AppState.ScriptingScene && <Scripting/> }
+            { appState === AppState.TableScene && <Table/> }
         </>
     );
 }

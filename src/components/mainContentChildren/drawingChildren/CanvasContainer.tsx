@@ -1,11 +1,12 @@
-import { useAppStateManagement } from "../../../Store"
 
+interface CanvasContainerProps {
+    canvasContainerRef: React.RefObject<HTMLDivElement>
+}
 
-export default function CanvasContainer() {
-    const { canvasContainerRef } = useAppStateManagement();
+export default function CanvasContainer( {canvasContainerRef}: CanvasContainerProps) {
     return (
         <div 
-            ref={canvasContainerRef} 
+            ref={canvasContainerRef}
             className="canvas-container" 
             style={{ overflow: 'auto', width: '100vw' }}
         >

@@ -71,10 +71,11 @@ export default function table() {
     }
 
     const insertNewRow = (event: FormEvent<HTMLButtonElement>, index: number) => {
+        if (index === -1) { index = trackedRowData.length}
         const [rowName, setRowName] = useState("");
         const [rowDatatype, setRowDatatype] = useState("");
         const [rowAttributes, setRowAttributes] = useState("");
-        const newTrackedRows = [...trackedRowData].splice(index,  0, {
+        const newTrackedRows = [...trackedRowData].splice(index, 0, {
             rowName: rowName, setRowName: setRowName,
             rowDatatype: rowDatatype, setRowDatatype: setRowDatatype,
             rowAttributes: rowAttributes, setRowAttributes: setRowAttributes,
@@ -134,39 +135,33 @@ export default function table() {
                             </tr>
                             { 
                                 trackedRowData.map((row, index) => (
-                                    <>
-                                        <tr data-index="{{ loop.index0 }}">
-                                            <td>
-                                                <input className="input-name" onChange={(e) => changeRowNameField(e, index)} type="text" value="{{ row.name }}" />
-                                            </td>
-                                            <td>
-                                                <input className="input-datatype" onChange={(e) => changeRowDatatypeField(e, index) } list="mysql-data-types" style={{width: "120px" }} value={ row.rowDatatype } />
-                                            </td>
-                                            <td>
-                                                <input className="input-attributes" onChange={(e) => changeRowAttributesField(e, index) } list="attribute-suggestions" type="text" value={ row.rowAttributes } />
-                                            </td>
-                                            <td>
-                                                <button className="row-insert-btn btn btn-primary" onClick={(e) => insertNewRow(e, index) }>Insert</button>
-                                                <button className="row-up-btn btn btn-primary" onClick={(e) => moveRowUp(index) }>Up</button>
-                                                <button className="row-down-btn btn btn-primary" onClick={(e) => moveRowDown(index) }>Down</button>
-                                                <button className="row-delete-btn btn btn-danger" onClick={(e) => deleteRow(index) }>Delete</button>
-                                            </td>
-                                        </tr>
-                                        {
-                                            (index === trackedRowData.length - 1) && (
-                                                <tr data-index="{{ loop.index0 + 1 }}">
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td>
-                                                        <button className="row-insert-btn btn btn-primary" onClick={(e) => insertNewRow(e, index) }>Insert</button>
-                                                    </td>
-                                                </tr>
-                                            )
-                                        }
-                                    </>
+                                    <tr key={index} data-index="{{ loop.index0 }}">
+                                        <td>
+                                            <input className="input-name" onChange={(e) => changeRowNameField(e, index)} type="text" value={ row.rowName } />
+                                        </td>
+                                        <td>
+                                            <input className="input-datatype" onChange={(e) => changeRowDatatypeField(e, index) } list="mysql-data-types" style={{width: "120px" }} value={ row.rowDatatype } />
+                                        </td>
+                                        <td>
+                                            <input className="input-attributes" onChange={(e) => changeRowAttributesField(e, index) } list="attribute-suggestions" type="text" value={ row.rowAttributes } />
+                                        </td>
+                                        <td>
+                                            <button className="row-insert-btn btn btn-primary" onClick={(e) => insertNewRow(e, index) }>Insert</button>
+                                            <button className="row-up-btn btn btn-primary" onClick={(e) => moveRowUp(index) }>Up</button>
+                                            <button className="row-down-btn btn btn-primary" onClick={(e) => moveRowDown(index) }>Down</button>
+                                            <button className="row-delete-btn btn btn-danger" onClick={(e) => deleteRow(index) }>Delete</button>
+                                        </td>
+                                    </tr>
                                 ))
                             }
+                            <tr data-index="{{ loop.index0 + 1 }}">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <button className="row-insert-btn btn btn-primary" onClick={(e) => insertNewRow(e, -1) }>Insert</button>
+                                </td>
+                            </tr>
                             <datalist id="mysql-data-types">
                                 <option value="VARCHAR(255)" />
                                 <option value="VARCHAR(255)?" />

@@ -30,14 +30,6 @@ export class DrawScene extends Container implements IScene {
 
         IToolManager.toolActivate(this.draw, this.draw.activeTool.getName());
 
-        this.interactive = true;
-        this.on('mousemove', (e: InteractionEvent) => { 
-            // this is neccessary when using InteractionManager 
-            // if (! new Rectangle(0, 0, Manager.width, Manager.height).contains(e.data.global.x, e.data.global.y)) return;  // remove outside events. PIXI is stupid.
-            // no idea why y is someinteger.1999969482422 decimal number 
-            // this.draw.mouseScreenPosition = new Point(Math.floor(e.data.global.x - Manager.getInstance().getScreen().x), Math.floor(e.data.global.y - Manager.getInstance().getScreen().y));
-        });
-
         this.renderScreen(true);
     }
 

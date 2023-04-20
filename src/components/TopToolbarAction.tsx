@@ -11,7 +11,7 @@ export default function TopToolbarAction() {
 
     const newSchema = () => {
         const oldDraw = Manager.getInstance().draw;
-        Manager.getInstance().draw = new Draw(new Schema([], []), oldDraw.getWorld(), oldDraw.getScreenPosition());
+        Manager.getInstance().draw = new Draw(new Schema([]), oldDraw.getWorld());
     }
 
     const saveAsPng = async () => {

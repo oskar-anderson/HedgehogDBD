@@ -5,6 +5,8 @@ import { TableHoverPreview } from "../model/TableHoverPreview";
 import { ITool, IToolNames } from "./ITool";
 import { Manager } from "../Manager";
 import { TableScene } from "../scenes/TableScene";
+import CustomMouseEvent from "../model/MouseEvent";
+import { Point } from "pixi.js";
 
 export class SelectTableTool implements ITool {
 
@@ -24,9 +26,9 @@ export class SelectTableTool implements ITool {
 
     }
 
-    update() {
+    update(screenX: number, screenY: number, worldX: number, worldY: number) {
         if (this.hover !== null) {
-            let mouseCharGrid = this.draw.getScreenToCharGridPoint2(this.draw.mouseScreenPosition);
+            let mouseCharGrid = this.draw.getWorldToCharGridPoint(worldX, worldY);
             this.updateHoverTablePosition(mouseCharGrid.x, mouseCharGrid.y);
         }
     }
@@ -97,11 +99,8 @@ export class SelectTableTool implements ITool {
         mouseUpDone();
     }
 
-    mouseEventHandler(event: MouseEvent): void {
-        let rect = (event.currentTarget! as Element).getBoundingClientRect();
-        let worldX = Math.round(event.clientX - rect.x);
-        let worldY = Math.round(event.clientY - rect.y);
-        let mouseCharGrid = this.draw.getWorldToCharGridPoint(worldX, worldY);
+    mouseEventHandler(event: CustomMouseEvent): void {
+        let mouseCharGrid = this.draw.getWorldToCharGridPoint(event.worldX, event.worldY);
         switch (event.type) {
             case "mousedown":
                 this.mouseDown(mouseCharGrid.x, mouseCharGrid.y);

@@ -12,11 +12,22 @@ import { DrawingUtil } from "../Drawing";
 
 interface CanvasSideProps {
     canvasContainerRef: React.RefObject<HTMLDivElement>
-    minimap: Minimap
+    minimap: Minimap,
+    screenX: number,
+    screenY: number
+    worldX: number,
+    worldY: number
+    worldCharX: number,
+    worldCharY: number
 }
 
 
-function CanvasSide({ canvasContainerRef, minimap }: CanvasSideProps) {
+function CanvasSide({ 
+    canvasContainerRef, minimap,
+    screenX, screenY,
+    worldX, worldY,
+    worldCharX, worldCharY 
+}: CanvasSideProps) {
     const minimapContainerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -87,6 +98,17 @@ function CanvasSide({ canvasContainerRef, minimap }: CanvasSideProps) {
                     </select>
                 </div>
                 <div className="canvas-side-minimap" ref={minimapContainerRef} style={{ marginTop: '6px' }}></div>
+                <span>Reset browser zoom to 100% (ctrl + 0) if image is blurry</span>
+                screenX, screenY,
+                <div>
+                    Sx: {screenX}, Sy: {screenY}
+                </div>
+                <div>
+                    Wx: {worldX}, Wy: {worldY}
+                </div>
+                <div>
+                    WCx: {worldCharX}, WCy: {worldCharY}
+                </div>
             </div>
             <div className="canvas-side-tools" style={{ backgroundColor: '#f5f5f7' }}>
                 <header style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>

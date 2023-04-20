@@ -25,18 +25,15 @@ export class Draw {
     selectedFontSize: { size: number, width: number, height: number} = Draw.fontSizes.find((x => x.size === 14))!;
     selectedTable: Table | null = null
     schema: Schema;
-    mouseScreenPosition: Point = new Point(0, 0);
     hover: Table | null = null;
     activeTool: ITool;
     
     private world: MyRect;
-    private screenPosition: Point;
 
-    constructor(schema: Schema, world: MyRect, screenPosition: Point) {
+    constructor(schema: Schema, world: MyRect) {
         this.schema = schema;
         this.activeTool = new SelectTableTool(this);
         this.world = world
-        this.screenPosition = screenPosition
     }
 
     getVisibleTables() {
@@ -47,39 +44,8 @@ export class Draw {
         return visibleTables;
     }
 
-    getScreenToWorldPoint(x: number, y: number) {
-        return new Point(
-            Math.floor(this.screenPosition.x + x),
-            Math.floor(this.screenPosition.y + y)
-        )
-    }
-
-    getScreenToWorldPoint2(point: Point) {
-        return this.getScreenToWorldPoint(point.x, point.y);
-    }
-    
-    getScreenToCharGridPoint(x: number, y: number): Point {
-        let world = this.getScreenToWorldPoint(x, y);
-        return this.getWorldToCharGridPoint2(world);
-    }
-
-    getScreenToCharGridPoint2(point: Point) {
-        return this.getScreenToCharGridPoint(point.x, point.y);
-    }
-
-    setScreen(screen: Point) {
-        this.screenPosition = new Point(
-            Math.floor(screen.x), // positive number
-            Math.floor(screen.y)  // positive number
-        );
-    }
-
     setWorld(world: MyRect) {
         this.world = new MyRect(world.x, world.y, world.width, world.height)
-    }
-    
-    getScreenPosition() {
-        return this.screenPosition;
     }
 
     getWorld() {

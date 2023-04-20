@@ -1,4 +1,5 @@
-import { extensions, InteractionManager, Application, DisplayObject } from "pixi.js";
+
+import { extensions, InteractionManager, Application, DisplayObject, settings, PRECISION, SCALE_MODES } from "pixi.js";
 import { EventSystem } from '@pixi/events';
 import { AppState } from "./components/MainContent";
 import { Draw } from "./model/Draw";
@@ -39,12 +40,12 @@ export class Manager {
         this.app = new Application({
             backgroundColor: background,
             width: width,
-            height: height
+            height: height,
         });
         this.app.renderer.addSystem(EventSystem, 'events');        // InteractionManager with EventSystem
 
-        this.app.view.addEventListener('contextmenu', (e) => { e.preventDefault(); });
-        this.app.view.addEventListener('wheel', (e) => { e.preventDefault(); });
+        // this.app.view.addEventListener('contextmenu', (e) => { e.preventDefault(); });
+        // this.app.view.addEventListener('wheel', (e) => { e.preventDefault(); });
     }
 
     public getRenderer() {

@@ -81,8 +81,22 @@ class RasterModelerFormat {
             }
             tables.push(Table.init(new Point(rect.x, rect.y), head, tableRows));
         }
-      
-        return new Draw(new Schema(tables, []), new MyRect(0, 0, 3240, 2160), new Point(0, 0));
+
+        return new Draw(
+            new Schema(tables), 
+            new MyRect(0, 0, 3240, 2160)
+        );
+        /*
+        const defaultFontSize = Draw.fontSizes.find(x => x.size === 14)!;
+        return new Draw(
+            new Schema(tables), 
+            new MyRect(
+                0, 0, 
+                Math.floor(3240 / defaultFontSize.width) * defaultFontSize.width, 
+                Math.floor(2160 / defaultFontSize.height) * defaultFontSize.height
+            )
+        );
+        */
     }
 }
 

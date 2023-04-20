@@ -5,6 +5,7 @@ import { Table } from "../model/Table";
 import { TableRow } from "../model/TableRow";
 import { MyRect } from "../model/MyRect";
 import { ITool, IToolNames } from "./ITool";
+import CustomMouseEvent from "../model/MouseEvent";
 
 export class CreateTableTool implements ITool {
 
@@ -25,13 +26,12 @@ export class CreateTableTool implements ITool {
             "new_table",
             [ TableRow.init("id", "VARCHAR(255)", ["PK"])]
         );
-        this.hover.position = this.getTablePosition(this.hover.getContainingRect());
         this.draw.selectedTable = this.hover;
         this.draw.hover = this.hover;
     }
 
-    update(): void {
-        let mouseCharGrid = this.draw.getScreenToCharGridPoint2(this.draw.mouseScreenPosition);
+    update(screenX: number, screenY: number, worldX: number, worldY: number): void {
+        let mouseCharGrid = this.draw.getWorldToCharGridPoint(worldX, worldY);
         this.mouseMove(mouseCharGrid.x, mouseCharGrid.y);
     }
 
@@ -42,20 +42,15 @@ export class CreateTableTool implements ITool {
 
     mouseMove(mouseCharGridX: number, mouseCharGridY: number) {
         if (this.hover === null) throw new Error("Moving new table hover with hover being null!");
-        let hoverRect = new MyRect(
-            mouseCharGridX, 
-            mouseCharGridY, 
-            this.hover.getContainingRect().width,
-            this.hover.getContainingRect().height
-        );
-        let newPos = this.getTablePosition(hoverRect);
+        let newPos = this.getPositionInBounds(mouseCharGridX, mouseCharGridY, this.hover.getContainingRect().width, this.hover.getContainingRect().height);
         this.isDirty = ! (this.hover!.position.x === newPos.x && this.hover!.position.y === newPos.y);
         this.hover.position = newPos;
     };
 
-    getTablePosition(tableRect: Rectangle) {
-        let fit = this.draw.getWorldCharGrid().intersection(tableRect);
-        let newPos = new Point(fit.x - tableRect.width + fit.width, fit.y - tableRect.height + fit.height);
+    getPositionInBounds(x: number, y: number, width: number, height: number) {
+        const drawableArea = this.draw.getWorldCharGrid();
+        let fit = drawableArea.intersection(new MyRect(x, y, width, height));
+        let newPos = new Point(fit.x - width + fit.width, fit.y - height + fit.height);
         return newPos;
     }
 
@@ -78,13 +73,10 @@ export class CreateTableTool implements ITool {
         this.init();
     }
 
-    mouseEventHandler(event: MouseEvent): void {
-        let rect = (event.currentTarget! as Element).getBoundingClientRect();
-        let worldX = Math.round(event.clientX - rect.x);
-        let worldY = Math.round(event.clientY - rect.y);
+    mouseEventHandler(event: CustomMouseEvent): void {
         switch (event.type) {
             case "click": 
-                let mouseCharGrid = this.draw.getWorldToCharGridPoint(worldX, worldY);
+                let mouseCharGrid = this.draw.getWorldToCharGridPoint(event.worldX, event.worldY);
                 this.createTable(mouseCharGrid.x, mouseCharGrid.y);
                 break;
             default:

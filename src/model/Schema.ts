@@ -6,9 +6,8 @@ export class Schema {
 
     worldDrawArea: DrawChar[] = [];
     tables: Table[];
-    relations: Relation[];
-    constructor(tables: Table[], relations: Relation[]) {
+    relations: Relation[] = [];
+    constructor(tables: Table[]) {
         this.tables = tables;
-        this.relations = relations;
     }
 }

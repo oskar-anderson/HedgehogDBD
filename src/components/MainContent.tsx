@@ -26,9 +26,9 @@ export enum AppState {
 export default function mainComponent({ draw }: MainComponentProps) {
     const { appState, setAppState } = useAppStateManagement();
     const canvasContainerRef = useRef<HTMLDivElement>(null);
+
     useAppStateManagement()
     useEffect(() => {
-        console.log("mainComponent useEffect")
         Manager.constructInstance(
             draw.getWorld().width,
             draw.getWorld().height,
@@ -37,7 +37,7 @@ export default function mainComponent({ draw }: MainComponentProps) {
             setAppState,
         );
         canvasContainerRef.current!.appendChild(Manager.getInstance().getView());
-        let scene = new LoaderScene(canvasContainerRef.current!.offsetWidth, canvasContainerRef.current!.offsetHeight);
+        let scene = new LoaderScene(canvasContainerRef.current!.offsetWidth, 720);
         Manager.getInstance().changeScene(scene);
     }, [])
 
@@ -49,7 +49,7 @@ export default function mainComponent({ draw }: MainComponentProps) {
                 { optionalTopToolbar }
             </div>
 
-            { appState === AppState.LoaderScene && <Loading canvasContainerRef={canvasContainerRef}/> }
+            { appState === AppState.LoaderScene && <Loading canvasContainerRef={canvasContainerRef} /> }
             { appState === AppState.DrawScene && <Drawing/> }
             { appState === AppState.ScriptingScene && <Scripting/> }
             { appState === AppState.TableScene && <Table/> }

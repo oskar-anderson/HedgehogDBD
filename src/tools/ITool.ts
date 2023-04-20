@@ -1,14 +1,15 @@
 import { Draw } from "../model/Draw";
+import CustomMouseEvent from "../model/MouseEvent";
 import { CreateTableTool } from "./CreateTableTool";
 import { SelectTableTool } from "./SelectTableTool";
 
 export interface ITool {
     init(): void;
-    update(): void;
+    update(screenX: number, screenY: number, worldX: number, worldY: number): void;
     exit(): void;
     isDirty: boolean;
     getName(): IToolNames;
-    mouseEventHandler(event: MouseEvent): void
+    mouseEventHandler(event: CustomMouseEvent): void
 }
 
 export enum IToolNames {

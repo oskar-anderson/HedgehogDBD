@@ -1,3 +1,7 @@
+import { useEffect } from "react";
+import { Manager } from "../../Manager";
+import { useAppStateManagement } from "../../Store";
+import { AppState } from "../MainContent";
 import CanvasContainer from "./drawingChildren/CanvasContainer";
 import CanvasSide from "./drawingChildren/CanvasSide";
 
@@ -8,6 +12,20 @@ interface LoadingProps {
 
 
 export default function Loading({canvasContainerRef} : LoadingProps) {
+    const { setAppState } = useAppStateManagement();
+
+    useEffect(() => {
+        // this is kinda stupid but it will mean that the canvas has no knowledge of react and setState.
+        const interval = setInterval(() => {
+            const scene = Manager.getInstance().getScene();
+            if (scene !== null && scene.getState() !== AppState.LoaderScene) {
+                setAppState(scene.getState());
+            }
+        }, 1000 / 60)
+        
+        return () => { clearInterval(interval) }
+    })
+
     return (
         <>
             <div style={{ display: 'flex', width: '100vw', height: '720px' }}>

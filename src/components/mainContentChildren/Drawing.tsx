@@ -7,6 +7,8 @@ import { Manager } from "../../Manager";
 import { Minimap } from "../Minimap";
 import { DrawScene } from "../../scenes/DrawScene";
 import { MyRect } from "../../model/MyRect";
+import { AppState } from "../MainContent";
+import { useAppStateManagement } from "../../Store";
 
 
 export class DrawingUtil {
@@ -17,39 +19,54 @@ export class DrawingUtil {
 }
 
 export default function drawing() {
-    const canvasContainerRef = useRef<HTMLDivElement>(null);
+    console.log("drawing")
     const minimap = new Minimap(new Rectangle(0, 0, 180, 120));
-    const [screenX, setScreenX] = useState(0);
-    const [screenY, setScreenY] = useState(0);
-
-    const [worldX, setWorldX] = useState(0);
-    const [worldY, setWorldY] = useState(0);
-
-    const [worldCharX, setWorldCharX] = useState(0);
-    const [worldCharY, setWorldCharY] = useState(0);
-
-    minimap.init(
-        (x: number, y: number) => {
-            console.log(`minimap navigation (x: ${x}, y: ${y})`);
-            canvasContainerRef.current?.scrollTo(
-                x - Math.ceil(canvasContainerRef.current!.offsetWidth / 2),
-                y - Math.ceil(canvasContainerRef.current!.offsetHeight / 2)
-            );
-            DrawScene.cullViewport((Manager.getInstance().getScene() as DrawScene).canvasView);
-            minimap.update(Manager.getInstance().draw.getVisibleTables(), DrawingUtil.getScreen(canvasContainerRef));
-        }
-    );
+    const canvasContainerRef = useRef<HTMLDivElement>(null);
+    const debugInfoContainer = useRef<HTMLDivElement>(null);
+    const { setAppState } = useAppStateManagement();
 
     useEffect(() => {
-        const interval = setInterval(() => {
+        canvasContainerRef.current!.appendChild(Manager.getInstance().getView());
+    }, []);
+
+    useEffect(() => {
+        minimap.init(
+            (x: number, y: number) => {
+                console.log(`minimap navigation (x: ${x}, y: ${y})`);
+                canvasContainerRef.current?.scrollTo(
+                    x - Math.ceil(canvasContainerRef.current!.offsetWidth / 2),
+                    y - Math.ceil(canvasContainerRef.current!.offsetHeight / 2)
+                );
+                DrawScene.cullViewport((Manager.getInstance().getScene() as DrawScene).canvasView);
+                minimap.update(Manager.getInstance().draw.getVisibleTables(), DrawingUtil.getScreen(canvasContainerRef));
+            }
+        );
+        
+        const minimapUpdateInterval = setInterval(() => {
             const draw = Manager.getInstance().draw;
+            if (canvasContainerRef.current == null) {
+                console.log("Element canvasContainer not found! Stopped updating minimap!");
+                clearInterval(minimapUpdateInterval)
+                return;
+            }
             let screen = DrawingUtil.getScreen(canvasContainerRef);
             minimap.update(draw.getVisibleTables(), screen);
-        }, 1 / 30);
-        canvasContainerRef.current!.appendChild(Manager.getInstance().getView());
-
-        return () => { clearInterval(interval); }
+        }, 1000 / 30);
+        
+        return () => { clearInterval(minimapUpdateInterval) }
     }, [])
+
+    useEffect(() => {
+        // this is kinda stupid but it will mean that the canvas has no knowledge of react and setState.
+        const appStateHasChangedCheckInterval = setInterval(() => {
+            const scene = Manager.getInstance().getScene();
+            if (scene !== null && scene.getState() !== AppState.DrawScene) {
+                setAppState(scene.getState());
+            }
+        }, 1000 / 60)
+        
+        return () => { clearInterval(appStateHasChangedCheckInterval); }
+    }, []);
 
 
     return (
@@ -58,14 +75,11 @@ export default function drawing() {
                 <CanvasSide 
                     canvasContainerRef={canvasContainerRef}
                     minimap={minimap} 
-                    screenX={screenX} screenY={screenY}
-                    worldX={worldX} worldY={worldY}
-                    worldCharX={worldCharX} worldCharY={worldCharY}
+                    debugInfoContainer={debugInfoContainer}
                 />
-                <CanvasContainer canvasContainerScrollableRef={canvasContainerRef} 
-                    setScreenX={setScreenX} setScreenY={setScreenY} 
-                    setWorldX={setWorldX} setWorldY={setWorldY}
-                    setWorldCharX={setWorldCharX} setWorldCharY={setWorldCharY}
+                <CanvasContainer
+                    canvasContainerScrollableRef={canvasContainerRef}
+                    debugInfoContainer={debugInfoContainer}
                 />
             </div>
 

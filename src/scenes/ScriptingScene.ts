@@ -9,7 +9,6 @@ import { AppState } from "../components/MainContent";
 
 export class ScriptingScene extends Container implements IScene {
 
-    editorValue: string = "";
     constructor() {
         super();
     }

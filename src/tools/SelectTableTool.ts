@@ -115,7 +115,7 @@ export class SelectTableTool implements ITool {
                     let selectedTable = this.draw.schema.tables.find(table => table.getContainingRect().contains(mouseCharGrid.x, mouseCharGrid.y))
                     if (! selectedTable) { break; }
                     this.draw.selectedTable = selectedTable;
-                    Manager.getInstance().changeScene(new TableScene(this.draw.selectedTable));
+                    Manager.getInstance().changeScene(new TableScene());
                 }
                 break;
             default:

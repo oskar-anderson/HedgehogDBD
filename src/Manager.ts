@@ -9,7 +9,6 @@ export class Manager {
     private app: Application;
     private currentScene: IScene | null = null;
     public draw: Draw;
-    private setAppState: React.Dispatch<React.SetStateAction<AppState>>
 
     private static instance: Manager;
 
@@ -25,16 +24,13 @@ export class Manager {
         height: number, 
         background: number, 
         draw: Draw, 
-        setAppState: React.Dispatch<React.SetStateAction<AppState>>,
         ): void {
-        this.instance = new Manager(width, height, background, draw, setAppState);
+        this.instance = new Manager(width, height, background, draw);
 
     }
 
-    private constructor(width: number, height: number, background: number, draw: Draw,
-        setAppState: React.Dispatch<React.SetStateAction<AppState>>,
+    private constructor(width: number, height: number, background: number, draw: Draw
         ) {
-        this.setAppState = setAppState;
         this.draw = draw;
         extensions.remove(InteractionManager);
         this.app = new Application({
@@ -56,6 +52,10 @@ export class Manager {
         return this.app.view;
     }
 
+    public getApp() {
+        return this.app;
+    }
+
     // Call this function when you want to go to a new scene
     public changeScene(newScene: IScene): void {
         console.log(`changeScene: ${this.currentScene === null ? "null" : AppState[this.currentScene.getState()]} -> ${AppState[newScene.getState()]}`);
@@ -67,12 +67,11 @@ export class Manager {
         }
 
         // Add the new one
-        this.setAppState(newScene.getState());
         this.currentScene = newScene;
         this.app.stage.addChild(this.currentScene);
     }
 
-    public getScene() {
+    public getScene(): IScene | null {
         return this.currentScene;
     }
 }

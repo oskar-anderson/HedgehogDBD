@@ -27,14 +27,12 @@ export default function mainComponent({ draw }: MainComponentProps) {
     const { appState, setAppState } = useAppStateManagement();
     const canvasContainerRef = useRef<HTMLDivElement>(null);
 
-    useAppStateManagement()
     useEffect(() => {
         Manager.constructInstance(
             draw.getWorld().width,
             draw.getWorld().height,
             0xffffff,
-            draw,
-            setAppState,
+            draw
         );
         canvasContainerRef.current!.appendChild(Manager.getInstance().getView());
         let scene = new LoaderScene(canvasContainerRef.current!.offsetWidth, 720);

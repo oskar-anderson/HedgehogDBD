@@ -1,10 +1,9 @@
-import { Container, DisplayObject } from "pixi.js";
+import { Container, DisplayObject, Rectangle } from "pixi.js";
 import { ChangeEvent, RefObject, useEffect, useRef, useState } from "react";
 import { Manager } from "../../../Manager";
 import { Draw } from "../../../model/Draw";
 import { MyRect } from "../../../model/MyRect";
 import { DrawScene } from "../../../scenes/DrawScene";
-import { useAppStateManagement } from "../../../Store";
 import { IToolManager, IToolNames } from "../../../tools/ITool";
 import { Minimap } from "../../Minimap";
 import { DrawingUtil } from "../Drawing";
@@ -13,31 +12,25 @@ import { DrawingUtil } from "../Drawing";
 interface CanvasSideProps {
     canvasContainerRef: React.RefObject<HTMLDivElement>
     minimap: Minimap,
-    screenX: number,
-    screenY: number
-    worldX: number,
-    worldY: number
-    worldCharX: number,
-    worldCharY: number
+    debugInfoContainer: React.RefObject<HTMLDivElement>
 }
 
 
 function CanvasSide({ 
-    canvasContainerRef, minimap,
-    screenX, screenY,
-    worldX, worldY,
-    worldCharX, worldCharY 
+    canvasContainerRef, minimap, debugInfoContainer
 }: CanvasSideProps) {
     const minimapContainerRef = useRef<HTMLDivElement>(null);
+    console.log("CanvasSide")
 
     useEffect(() => {
         minimapContainerRef.current!.appendChild(minimap.app.view);
     }, [])
 
     const draw = Manager.getInstance().draw;
-    const { highlightActiveSideToolbarTool, setHighlightActiveSideToolbarTool } = useAppStateManagement();
+    const [highlightActiveSideToolbarTool, setHighlightActiveSideToolbarTool] = useState(IToolNames.select);
 
-    const setZoomFontSize = (e: ChangeEvent) => {
+
+    const setZoomFontSize = (e: ChangeEvent): void => {
         let size = Number.parseInt((e.target as HTMLSelectElement).value);
         let centerScreenOriginalXPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().x / draw.getWorld().width;
         let centerScreenOriginalYPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().y / draw.getWorld().height;
@@ -57,20 +50,19 @@ function CanvasSide({
         (Manager.getInstance().getScene() as DrawScene).renderScreen(true);
     }
 
-    const onToolSelectClick = (selectedTool: IToolNames) => {
-        document.querySelectorAll(".tool-select").forEach(x => x.classList.remove("active"));
+    const onToolSelectClick = (selectedTool: IToolNames): void => {
         setHighlightActiveSideToolbarTool(selectedTool);
         IToolManager.toolActivate(draw, selectedTool);
         (Manager.getInstance().getScene() as DrawScene).renderScreen(false);  // clean up new table hover
     };
 
-    const undo = () => {
+    const undo = (): void  => {
         draw.history.undo(draw);
         draw.schema.relations.forEach(relation => relation.isDirty = true);
         (Manager.getInstance().getScene() as DrawScene).renderScreen(false);
     }
 
-    const redo = () => {
+    const redo = (): void => {
         draw.history.redo(draw);
         draw.schema.relations.forEach(relation => relation.isDirty = true);
         (Manager.getInstance().getScene() as DrawScene).renderScreen(false);
@@ -99,15 +91,8 @@ function CanvasSide({
                 </div>
                 <div className="canvas-side-minimap" ref={minimapContainerRef} style={{ marginTop: '6px' }}></div>
                 <span>Reset browser zoom to 100% (ctrl + 0) if image is blurry</span>
-                screenX, screenY,
-                <div>
-                    Sx: {screenX}, Sy: {screenY}
-                </div>
-                <div>
-                    Wx: {worldX}, Wy: {worldY}
-                </div>
-                <div>
-                    WCx: {worldCharX}, WCy: {worldCharY}
+                <div ref={debugInfoContainer}>
+
                 </div>
             </div>
             <div className="canvas-side-tools" style={{ backgroundColor: '#f5f5f7' }}>

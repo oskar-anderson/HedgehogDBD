@@ -7,24 +7,18 @@ import Drawing, { DrawingUtil } from "../Drawing";
 
 interface CanvasContainerProps {
     canvasContainerScrollableRef: React.RefObject<HTMLDivElement>
-    setScreenX: React.Dispatch<React.SetStateAction<number>>,
-    setScreenY: React.Dispatch<React.SetStateAction<number>>,
-    setWorldX: React.Dispatch<React.SetStateAction<number>>,
-    setWorldY: React.Dispatch<React.SetStateAction<number>>,
-    setWorldCharX: React.Dispatch<React.SetStateAction<number>>,
-    setWorldCharY: React.Dispatch<React.SetStateAction<number>>,
+    debugInfoContainer: React.RefObject<HTMLDivElement>
 }
 
 export default function CanvasContainer({ 
-    canvasContainerScrollableRef, 
-    setScreenX,
-    setScreenY,
-    setWorldX,
-    setWorldY,
-    setWorldCharX,
-    setWorldCharY }: CanvasContainerProps) {
+    canvasContainerScrollableRef,
+    debugInfoContainer 
+}: CanvasContainerProps) {
+
+    console.log("CanvasContainer")
 
     useEffect(() => {
+        console.log("CanvasContainer useEffect")
         const drawScene = (Manager.getInstance().getScene() as DrawScene);
 
         const mapMouseEvent = (event: MouseEvent): CustomMouseEvent => {
@@ -41,13 +35,19 @@ export default function CanvasContainer({
         const mouseButtonEvent = (event: MouseEvent) => { drawScene.draw.activeTool.mouseEventHandler(mapMouseEvent(event)) };
         const mouseMoveEvent = (event: MouseEvent) => {
             const mouseEvent = mapMouseEvent(event);
-            setScreenX(mouseEvent.screenX);
-            setScreenY(mouseEvent.screenY);
-            setWorldX(mouseEvent.worldX);
-            setWorldY(mouseEvent.worldY);
             const charGridPoint = drawScene.draw.getWorldToCharGridPoint(mouseEvent.worldX, mouseEvent.worldY);
-            setWorldCharX(charGridPoint.x);
-            setWorldCharY(charGridPoint.y);
+            // using useState would cause a lot of rerenders and make the app unresponsive
+            debugInfoContainer.current!.innerHTML = `
+            <div>
+                Sx: ${mouseEvent.screenX}, Sy: ${mouseEvent.screenY}
+            </div>
+            <div>
+                Wx: ${mouseEvent.worldX}, Wy: ${mouseEvent.worldY}
+            </div>
+            <div>
+                WCx: ${charGridPoint.x}, WCy: ${charGridPoint.y}
+            </div>
+            `;
             drawScene.draw.activeTool.update(mouseEvent.screenX, mouseEvent.screenY, mouseEvent.worldX, mouseEvent.worldY);
             if (drawScene.draw.activeTool.isDirty) {
                 drawScene.draw.activeTool.isDirty = false;

@@ -54,7 +54,7 @@ export default function scripting() {
                     ["builtin"]
                 ),
                 new Script(
-                    "Export PNG",
+                    "Export image",
                     await fetch('src/wwwroot/scripts/takeScreenshot.js', {cache: "no-cache"}).then(x => x.text()),
                     ["builtin", "async"]
                 ),

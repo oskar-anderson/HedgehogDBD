@@ -25,13 +25,13 @@ export default function modelJsonDisplayModal({ setJsonDisplayModelState }: Mode
         <div className="modal-content">
             <div className="modal-header">
                 <p className="modal-title">Schema JSON</p>
-                <button type="button" className="btn-close" onClick={() => { setJsonDisplayModelState(false) }} data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" className="btn-close" onClick={() => { setJsonDisplayModelState(false) }} aria-label="Close"></button>
             </div>
             <div className="modal-body">
-                <pre className="colored-code" data-lang="javascript">{content}</pre>
+                <pre className="colored-code" data-lang="javascript" dangerouslySetInnerHTML={{__html: content}}></pre>
             </div>
             <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => { setJsonDisplayModelState(false) }} data-bs-dismiss="modal">Close</button>
+                <button type="button" className="btn btn-secondary" onClick={() => { setJsonDisplayModelState(false) }}>Close</button>
             </div>
         </div>
     )

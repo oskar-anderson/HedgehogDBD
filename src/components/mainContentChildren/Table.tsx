@@ -127,56 +127,60 @@ export default function table() {
                     </div>
                     <div className="modal-body">
                         <table>
-                            <tr>
-                                <th>Name</th>
-                                <th style={{ width: "120px" }}>Datatype</th>
-                                <th>Attributes</th>
-                                <th>Actions</th>
-                            </tr>
-                            { 
-                                trackedRowData.map((row, index) => (
-                                    <tr key={index} data-index="{{ loop.index0 }}">
-                                        <td>
-                                            <input className="input-name" onChange={(e) => changeRowNameField(e, index)} type="text" value={ row.rowName } />
-                                        </td>
-                                        <td>
-                                            <input className="input-datatype" onChange={(e) => changeRowDatatypeField(e, index) } list="mysql-data-types" style={{width: "120px" }} value={ row.rowDatatype } />
-                                        </td>
-                                        <td>
-                                            <input className="input-attributes" onChange={(e) => changeRowAttributesField(e, index) } list="attribute-suggestions" type="text" value={ row.rowAttributes } />
-                                        </td>
-                                        <td>
-                                            <button className="row-insert-btn btn btn-primary" onClick={(e) => insertNewRow(e, index) }>Insert</button>
-                                            <button className="row-up-btn btn btn-primary" onClick={(e) => moveRowUp(index) }>Up</button>
-                                            <button className="row-down-btn btn btn-primary" onClick={(e) => moveRowDown(index) }>Down</button>
-                                            <button className="row-delete-btn btn btn-danger" onClick={(e) => deleteRow(index) }>Delete</button>
-                                        </td>
-                                    </tr>
-                                ))
-                            }
-                            <tr data-index="{{ loop.index0 + 1 }}">
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    <button className="row-insert-btn btn btn-primary" onClick={(e) => insertNewRow(e, -1) }>Insert</button>
-                                </td>
-                            </tr>
-                            <datalist id="mysql-data-types">
-                                <option value="VARCHAR(255)" />
-                                <option value="VARCHAR(255)?" />
-                                <option value="INT" />
-                                <option value="INT?" />
-                                <option value="FLOAT(14,2)" />
-                                <option value="FLOAT(14,2)?" />
-                                <option value="BOOLEAN" />
-                                <option value="BOOLEAN?" />
-                            </datalist>
-                            <datalist id="attribute-suggestions">
-                                <option value="PK" />
-                                <option value='FK("TableName")' />
-                            </datalist> 
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th style={{ width: "120px" }}>Datatype</th>
+                                    <th>Attributes</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                { 
+                                    trackedRowData.map((row, index) => (
+                                        <tr key={index} data-index="{{ loop.index0 }}">
+                                            <td>
+                                                <input className="input-name" onChange={(e) => changeRowNameField(e, index)} type="text" value={ row.rowName } />
+                                            </td>
+                                            <td>
+                                                <input className="input-datatype" onChange={(e) => changeRowDatatypeField(e, index) } list="mysql-data-types" style={{width: "120px" }} value={ row.rowDatatype } />
+                                            </td>
+                                            <td>
+                                                <input className="input-attributes" onChange={(e) => changeRowAttributesField(e, index) } list="attribute-suggestions" type="text" value={ row.rowAttributes } />
+                                            </td>
+                                            <td>
+                                                <button className="row-insert-btn btn btn-primary" onClick={(e) => insertNewRow(e, index) }>Insert</button>
+                                                <button className="row-up-btn btn btn-primary" onClick={(e) => moveRowUp(index) }>Up</button>
+                                                <button className="row-down-btn btn btn-primary" onClick={(e) => moveRowDown(index) }>Down</button>
+                                                <button className="row-delete-btn btn btn-danger" onClick={(e) => deleteRow(index) }>Delete</button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                }
+                                <tr data-index="{{ loop.index0 + 1 }}">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <button className="row-insert-btn btn btn-primary" onClick={(e) => insertNewRow(e, -1) }>Insert</button>
+                                    </td>
+                                </tr>
+                            </tbody>
                         </table>
+                        <datalist id="mysql-data-types">
+                            <option value="VARCHAR(255)" />
+                            <option value="VARCHAR(255)?" />
+                            <option value="INT" />
+                            <option value="INT?" />
+                            <option value="FLOAT(14,2)" />
+                            <option value="FLOAT(14,2)?" />
+                            <option value="BOOLEAN" />
+                            <option value="BOOLEAN?" />
+                        </datalist>
+                        <datalist id="attribute-suggestions">
+                            <option value="PK" />
+                            <option value='FK("TableName")' />
+                        </datalist> 
                     </div>
                     <div className="modal-footer" style={{justifyContent: "space-between" }}>
                         <button className="table-delete-btn btn btn-danger" onClick={() => deleteTable() }>Delete table</button>

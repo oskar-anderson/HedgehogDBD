@@ -4,10 +4,12 @@ import { Schema } from "../model/Schema";
 import RasterModelerFormat from "../RasterModelerFormat";
 import { DrawScene } from "../scenes/DrawScene";
 import { ScriptingScene } from "../scenes/ScriptingScene";
+import { useAppStateManagement } from "../Store";
 import { AppState } from "./MainContent";
 
 
 export default function TopToolbarAction() {
+    const { setAppState } = useAppStateManagement();
 
     const newSchema = () => {
         const oldDraw = Manager.getInstance().draw;
@@ -15,24 +17,26 @@ export default function TopToolbarAction() {
     }
 
     const saveAsPng = async () => {
-        ScriptingScene.executeWithLog(await fetch('../wwwroot/scripts/takeScreenshot.js', {cache: "no-cache"}).then(x => x.text()), Manager.getInstance().draw)
+        ScriptingScene.executeWithLog(await fetch('src/wwwroot/scripts/takeScreenshot.js', {cache: "no-cache"}).then(x => x.text()), Manager.getInstance().draw)
     }
 
     const saveToClipboard = async () => {
-        ScriptingScene.executeWithLog(await fetch('../wwwroot/scripts/saveToClipboard.js', {cache: "no-cache"}).then(x => x.text()), Manager.getInstance().draw)
+        ScriptingScene.executeWithLog(await fetch('src/wwwroot/scripts/saveToClipboard.js', {cache: "no-cache"}).then(x => x.text()), Manager.getInstance().draw)
     }
 
     const changeSceneToScripting = async () => {
         if (Manager.getInstance().getScene()!.getState() === AppState.ScriptingScene) { return; }
         Manager.getInstance().changeScene(new ScriptingScene());
+        setAppState(AppState.ScriptingScene);
     }
     const changeSceneToDraw = async () => {
         if (Manager.getInstance().getScene()!.getState() === AppState.DrawScene) { return; }
         Manager.getInstance().changeScene(new DrawScene());
+        setAppState(AppState.DrawScene);
     }
 
     const saveAsText = async () => {
-        ScriptingScene.executeWithLog(await fetch('../wwwroot/scripts/saveAsTxt.js', {cache: "no-cache"}).then(x => x.text()), Manager.getInstance().draw)
+        ScriptingScene.executeWithLog(await fetch('src/wwwroot/scripts/saveAsTxt.js', {cache: "no-cache"}).then(x => x.text()), Manager.getInstance().draw)
     }
 
     const importFile = () => {

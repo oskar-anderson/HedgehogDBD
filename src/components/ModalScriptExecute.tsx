@@ -17,7 +17,7 @@ export default function modalScriptExecute({ content, isSuccess, setModalState }
             </div>
             <div className="modal-body">
                 {isSuccess ?
-                    <pre>{content}</pre> :
+                    <pre dangerouslySetInnerHTML={{__html: content}}></pre> :
                     <p style={{ color: "red" }}>{content}</p>
                 }
             </div>

@@ -20,7 +20,7 @@ export class ScriptingScene extends Container implements IScene {
     static async executeWithLog(value: string, draw: Draw) {
         let resultLog: string[] = [];
         let errorMsg = "";
-        let SHARED = await fetch('../wwwroot/scripts/_SHARED.js', {cache: "no-cache"}).then(x => x.text());
+        let SHARED = await fetch('src/wwwroot/scripts/_SHARED.js', {cache: "no-cache"}).then(x => x.text());
         let fnBody = `"use strict";\n${SHARED}\n${value}`;
         let schemaDTO = SchemaDTO.init(draw);
         try {
@@ -36,7 +36,7 @@ export class ScriptingScene extends Container implements IScene {
     }
 
     static async executeAndReturn(value: string, draw: Draw) {
-        let SHARED = await fetch('../wwwroot/scripts/_SHARED.js',  {cache: "no-cache"}).then(x => x.text());
+        let SHARED = await fetch('src/wwwroot/scripts/_SHARED.js',  {cache: "no-cache"}).then(x => x.text());
         let fnBody = `"use strict";\n${SHARED}\n${value}`;
         let schemaDTO = SchemaDTO.init(draw);
         let fn = Function("schema", fnBody);

@@ -6,6 +6,8 @@
   },
   "dependencies": {
     "@datastructures-js/priority-queue": "^6.1.4",
+    "@giscus/react": "^2.2.8",
+    "@monaco-editor/react": "^4.5.0",
     "@pixi/events": "^6.5.8",
     "@pixi/math-extras": "^6.5.8",
     "dayjs": "^1.11.6",

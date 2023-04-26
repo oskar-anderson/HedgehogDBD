@@ -41,6 +41,22 @@ pre { font-family: "Courier New"; }
 
 p { padding: 10px 0px 5px 0px; }
 
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+th {
+    font-weight: bold;
+}
+
 
 /* General Layout
 -------------------------------------------------------------- */

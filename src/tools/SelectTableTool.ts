@@ -87,6 +87,11 @@ export class SelectTableTool implements ITool {
 
         let xDiff = this.hover!.hoverTable.position.x - this.hover!.hoverTableSource!.position.x;
         let yDiff = this.hover!.hoverTable.position.y - this.hover!.hoverTableSource!.position.y;
+
+        if (xDiff === 0 && yDiff === 0) { 
+            mouseUpDone();
+            return;
+        }
         
         this.draw.history.execute(new CommandMoveTableRelative(
             this.draw, {

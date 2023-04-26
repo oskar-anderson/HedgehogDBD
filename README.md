@@ -16,10 +16,9 @@ Write executable JavaScript in Monaco Editor (Visual Studio Code) based on schem
 
 Check demo video- https://www.youtube.com/watch?v=Qnqnqw68eeo
 
-## Local installation
-1. `npm run build`
-2. `python pyServer.py`
-3. Visit http://127.0.0.1:1337/webapp/pages/draw.html
+## Running locally
+1. `npm run dev`
+2. Visit http://localhost:5173/
 
 ## Todo
 * Script tagging and filtering

@@ -8,7 +8,7 @@ export interface ModalSaveScriptProps {
     localStorageData: LocalStorageData
 }
 
-export default function modalSaveScript({setModalSaveScriptState, editorValue, localStorageData} : ModalSaveScriptProps) {
+export default function ModalSaveScript({setModalSaveScriptState, editorValue, localStorageData} : ModalSaveScriptProps) {
     
     const [inputValue, setInputValue] = useState("");
     

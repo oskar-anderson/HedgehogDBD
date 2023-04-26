@@ -8,7 +8,7 @@ export interface ModelJsonDisplayProps {
 }
 
 
-export default function modelJsonDisplayModal({ setJsonDisplayModelState }: ModelJsonDisplayProps) {
+export default function ModelJsonDisplayModal({ setJsonDisplayModelState }: ModelJsonDisplayProps) {
     const [content, setContent] = useState("");
 
     useEffect(() => {

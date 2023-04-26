@@ -8,8 +8,6 @@ import { Draw } from "../model/Draw";
 import { Manager } from "../Manager";
 import { LoaderScene } from "../scenes/LoaderScene";
 import { useContext, useEffect, useRef, useState } from "react";
-import { LocalStorageData, Script } from "../model/LocalStorageData";
-import { TableScene } from "../scenes/TableScene";
 
 
 interface MainComponentProps {
@@ -23,7 +21,7 @@ export enum AppState {
     TableScene
 }
 
-export default function mainComponent({ draw }: MainComponentProps) {
+export default function MainComponent({ draw }: MainComponentProps) {
     const { appState, setAppState } = useAppStateManagement();
     const canvasContainerRef = useRef<HTMLDivElement>(null);
 

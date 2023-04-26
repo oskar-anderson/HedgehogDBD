@@ -6,7 +6,7 @@ export interface ModalScriptExecuteProps {
     setModalState: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function modalScriptExecute({ content, isSuccess, setModalState }: ModalScriptExecuteProps) {
+export default function ModalScriptExecute({ content, isSuccess, setModalState }: ModalScriptExecuteProps) {
     return (
         <div className="modal-content">
             <div className="modal-header">

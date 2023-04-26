@@ -13,7 +13,7 @@ import { AppState } from "../MainContent";
 import { useAppStateManagement } from "../../Store";
 
 
-export default function scripting() {
+export default function Scripting() {
     console.log("scripting")
 
     let [builtinScripts, setBuiltinScripts] = useState<Script[]>([]);

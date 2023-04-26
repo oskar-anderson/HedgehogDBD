@@ -18,7 +18,7 @@ export class DrawingUtil {
     }
 }
 
-export default function drawing() {
+export default function Drawing() {
     console.log("drawing")
     const minimap = new Minimap(new Rectangle(0, 0, 180, 120));
     const canvasContainerRef = useRef<HTMLDivElement>(null);

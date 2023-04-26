@@ -15,7 +15,7 @@ export interface ModalScriptListItemProps {
 }
 
 
-export default function modalScriptListItem({
+export default function ModalScriptListItem({
     script,
     highlightedContent,
     setScriptModalState,

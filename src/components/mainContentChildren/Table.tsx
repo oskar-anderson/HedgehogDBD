@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { CommandDeleteTable } from "../../commands/appCommands/CommandDeleteTable";
 import { CommandModifyTable } from "../../commands/appCommands/CommandModifyTable";
 import { Manager } from "../../Manager";
-import { Table } from "../../model/Table"
+import { Table as TableModel } from "../../model/Table"
 import { TableRow } from "../../model/TableRow";
 import { DrawScene } from "../../scenes/DrawScene";
 import { TableScene } from "../../scenes/TableScene";
@@ -12,7 +12,7 @@ import TableRowJSX from "./tableChildren/TableRow"
 
 
 
-export default function table() {
+export default function Table() {
     const { setAppState } = useAppStateManagement();
     
     const tableBeingEdited = (Manager.getInstance().getScene() as TableScene).tableBeingEdited;
@@ -33,7 +33,7 @@ export default function table() {
     const saveChanges = () => {
         const draw = Manager.getInstance().draw;
         let oldTable = draw.schema.tables.find(x => x.equals(tableBeingEdited))!;
-        const newTable = Table.initClone(tableBeingEdited);
+        const newTable = TableModel.initClone(tableBeingEdited);
         newTable.head = tableName;
         newTable.tableRows = rowData.map(tableRow => TableRow.init(
             tableRow.rowName, 

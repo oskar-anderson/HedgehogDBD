@@ -17,11 +17,11 @@ export default function TopToolbarAction() {
     }
 
     const saveAsJpg = async () => {
-        ScriptingScene.executeWithLog(await fetch('src/wwwroot/scripts/takeScreenshot.js', {cache: "no-cache"}).then(x => x.text()), Manager.getInstance().draw)
+        ScriptingScene.executeWithLog(await fetch(import.meta.env.VITE_BASE_URL + '/wwwroot/scripts/takeScreenshot.js', {cache: "no-cache"}).then(x => x.text()), Manager.getInstance().draw)
     }
 
     const saveToClipboard = async () => {
-        ScriptingScene.executeWithLog(await fetch('src/wwwroot/scripts/saveToClipboard.js', {cache: "no-cache"}).then(x => x.text()), Manager.getInstance().draw)
+        ScriptingScene.executeWithLog(await fetch(import.meta.env.VITE_BASE_URL + '/wwwroot/scripts/saveToClipboard.js', {cache: "no-cache"}).then(x => x.text()), Manager.getInstance().draw)
     }
 
     const changeSceneToScripting = async () => {
@@ -36,7 +36,7 @@ export default function TopToolbarAction() {
     }
 
     const saveAsText = async () => {
-        ScriptingScene.executeWithLog(await fetch('src/wwwroot/scripts/saveAsTxt.js', {cache: "no-cache"}).then(x => x.text()), Manager.getInstance().draw)
+        ScriptingScene.executeWithLog(await fetch(import.meta.env.VITE_BASE_URL + '/wwwroot/scripts/saveAsTxt.js', {cache: "no-cache"}).then(x => x.text()), Manager.getInstance().draw)
     }
 
     const importFile = () => {
@@ -61,7 +61,7 @@ export default function TopToolbarAction() {
       <nav className="py-1 px-4 navbar navbar-expand-lg" style={{backgroundColor: 'rgb(255, 73, 73)'}}>
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
-            <img style={{height: '36px'}} src="/src/wwwroot/img/logo_compact_white.png" />
+            <img style={{height: '36px'}} src={import.meta.env.VITE_BASE_URL + "/wwwroot/img/logo_compact_white.png"} />
           </a>
           <ul className="navbar-nav me-auto" style={{flexDirection: 'row'}}>
             <li className="nav-item dropdown" style={{marginLeft: '2em'}}>

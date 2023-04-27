@@ -8,6 +8,13 @@ export default defineConfig({
     react(),
     monacoEditorPlugin({})
   ],
+  base: "./",
+  server: {
+    port: 8080
+  },
+  preview: {
+    port: 8080,
+  },
 })
 
 

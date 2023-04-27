@@ -16,9 +16,38 @@ Write executable JavaScript in Monaco Editor (Visual Studio Code) based on schem
 
 Check demo video- https://www.youtube.com/watch?v=Qnqnqw68eeo
 
-## Running locally
+## Bash commands
+
+Make sure to change `.env` variable `VITE_BASE_URL` to match the environment  
+```
+http://localhost:8080 OR
+https://oskar-anderson.github.io/RasterModeler
+```
+when running any commands.
+
+### Running locally
 1. `npm run dev`
-2. Visit http://localhost:5173/
+2. Visit http://localhost:8080
+
+### Building
+Build the app
+```
+npm run build
+```
+
+Run the built app
+```
+npm run preview
+```
+
+### Deploying to Github Pages gh-pages branch
+```
+npm run deploy
+```
+
+## Known problems
+* Sometimes draw screen text will be blurry even with browser zoom at 100%.
+* Files in public directory cannot be prefixed with underscores (_). Do not use underscores.
 
 ## Todo
 * Script tagging and filtering

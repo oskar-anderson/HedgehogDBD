@@ -1,7 +1,7 @@
 const app = new PIXI.Application();
 
 async function load() {
-    app.loader.add('src/wwwroot/font/consolas/consolas-24-xml-white-text-with-alpha-padding0-spacing1.fnt');
+    app.loader.add(BASE_URL + '/wwwroot/font/consolas/consolas-24-xml-white-text-with-alpha-padding0-spacing1.fnt');
 
     return new Promise((resolve, reject) => {
         app.loader.onComplete.add(() => {

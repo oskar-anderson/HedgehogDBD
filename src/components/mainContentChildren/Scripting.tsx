@@ -30,37 +30,37 @@ export default function Scripting() {
             const fetchedScripts = [
                 new Script(
                     "List tables", 
-                    await fetch('src/wwwroot/scripts/listAllTables.js', {cache: "no-cache"}).then(x => x.text()), 
+                    await fetch(import.meta.env.VITE_BASE_URL + '/wwwroot/scripts/listAllTables.js', {cache: "no-cache"}).then(x => x.text()), 
                     ["builtin"]
                 ),
                 new Script(
                     "List tables and rows",
-                    await fetch('src/wwwroot/scripts/listAllTableRows.js', {cache: "no-cache"}).then(x => x.text()),
+                    await fetch(import.meta.env.VITE_BASE_URL + '/wwwroot/scripts/listAllTableRows.js', {cache: "no-cache"}).then(x => x.text()),
                     ['builtin', 'CSV']
                 ),
                 new Script(
                     "SQL CREATE",
-                    await fetch('src/wwwroot/scripts/createTablesSQL.js', {cache: "no-cache"}).then(x => x.text()),
+                    await fetch(import.meta.env.VITE_BASE_URL + '/wwwroot/scripts/createTablesSQL.js', {cache: "no-cache"}).then(x => x.text()),
                     ["builtin", "SQL"]
                 ),
                 new Script(
                     "Export TXT",
-                    await fetch('src/wwwroot/scripts/saveAsTxt.js', {cache: "no-cache"}).then(x => x.text()),
+                    await fetch(import.meta.env.VITE_BASE_URL + '/wwwroot/scripts/saveAsTxt.js', {cache: "no-cache"}).then(x => x.text()),
                     ["builtin"]
                 ),
                 new Script(
                     "Export clipboard",
-                    await fetch('src/wwwroot/scripts/saveToClipboard.js', {cache: "no-cache"}).then(x => x.text()),
+                    await fetch(import.meta.env.VITE_BASE_URL + '/wwwroot/scripts/saveToClipboard.js', {cache: "no-cache"}).then(x => x.text()),
                     ["builtin"]
                 ),
                 new Script(
                     "Export image",
-                    await fetch('src/wwwroot/scripts/takeScreenshot.js', {cache: "no-cache"}).then(x => x.text()),
+                    await fetch(import.meta.env.VITE_BASE_URL + '/wwwroot/scripts/takeScreenshot.js', {cache: "no-cache"}).then(x => x.text()),
                     ["builtin", "async"]
                 ),
                 new Script(
                     "Shared scripts lib",
-                    await fetch('src/wwwroot/scripts/_SHARED.js', {cache: "no-cache"}).then(x => x.text()),
+                    await fetch(import.meta.env.VITE_BASE_URL + '/wwwroot/scripts/SHARED.js', {cache: "no-cache"}).then(x => x.text()),
                     ["builtin", "readonly"]
                 )
             ];

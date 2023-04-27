@@ -11,7 +11,7 @@ function App() {
 
   useEffect(() => {
     async function fetchApp() {
-      let text = await (await fetch('/src/wwwroot/data/SchemaTest2.txt', { cache: "no-cache" })).text();
+      let text = await (await fetch(import.meta.env.VITE_BASE_URL + '/wwwroot/data/SchemaTest2.txt', { cache: "no-cache" })).text();
       let draw = RasterModelerFormat.parse(text);
       setDraw(draw)
     }

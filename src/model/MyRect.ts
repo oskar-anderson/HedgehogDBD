@@ -1,5 +1,4 @@
 import { Point, Rectangle } from "pixi.js";
-import { deflateRawSync } from "zlib";
 import '@pixi/math-extras';
 
 export class MyRect extends Rectangle {

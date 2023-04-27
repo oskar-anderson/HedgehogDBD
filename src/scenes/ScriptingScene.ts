@@ -20,15 +20,15 @@ export class ScriptingScene extends Container implements IScene {
     static async executeWithLog(value: string, draw: Draw) {
         let resultLog: string[] = [];
         let errorMsg = "";
-        let SHARED = await fetch('src/wwwroot/scripts/_SHARED.js', {cache: "no-cache"}).then(x => x.text());
+        let SHARED = await fetch(import.meta.env.VITE_BASE_URL + '/wwwroot/scripts/SHARED.js', {cache: "no-cache"}).then(x => x.text());
         let fnBody = `"use strict";\n${SHARED}\n${value}`;
         let schemaDTO = SchemaDTO.init(draw);
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncFunction
         // https://stackoverflow.com/questions/46118496/asyncfunction-is-not-defined-yet-mdn-documents-its-usage
         const AsyncFunction = async function () {}.constructor;
-        let fn = AsyncFunction("RESULT_LOG", "schema", "dayjs", "PIXI", fnBody);
+        let fn = AsyncFunction("RESULT_LOG", "schema", "dayjs", "PIXI", "BASE_URL", fnBody);
         try {
-            await fn(resultLog, schemaDTO, dayjs, PIXI);
+            await fn(resultLog, schemaDTO, dayjs, PIXI, import.meta.env.VITE_BASE_URL);
         } catch (error: any) {
             errorMsg = `${error.name}: ${error.message}`;
         }
@@ -39,7 +39,7 @@ export class ScriptingScene extends Container implements IScene {
     }
 
     static async executeAndReturn(value: string, draw: Draw) {
-        let SHARED = await fetch('src/wwwroot/scripts/_SHARED.js',  {cache: "no-cache"}).then(x => x.text());
+        let SHARED = await fetch(import.meta.env.VITE_BASE_URL + '/wwwroot/scripts/SHARED.js',  {cache: "no-cache"}).then(x => x.text());
         let fnBody = `"use strict";\n${SHARED}\n${value}`;
         let fn = Function("schema", fnBody);
         let schemaDTO = SchemaDTO.init(draw);

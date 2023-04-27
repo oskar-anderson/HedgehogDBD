@@ -40,11 +40,6 @@ Run the built app
 npm run preview
 ```
 
-### Deploying to Github Pages gh-pages branch
-```
-npm run deploy
-```
-
 ## Known problems
 * Sometimes draw screen text will be blurry even with browser zoom at 100%.
 * Files in public directory cannot be prefixed with underscores (_). Do not use underscores.

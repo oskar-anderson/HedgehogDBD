@@ -1,11 +1,11 @@
 name: Build and push to gh-pages branch
 
-# Run workflow on every push to the main branch
+# Run workflow on every push to the master branch
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   run-action:
@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        # uses GitHub's checkout action to checkout code form the main branch - https://github.com/actions/checkout
+        # Gives the workflow access to the repository - https://github.com/actions/checkout
         uses: actions/checkout@v3
       - name: Use Node.js 18.x
         uses: actions/setup-node@v3

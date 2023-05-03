@@ -57,6 +57,7 @@ export default function Table() {
         const data = [...rowData];
         const value = (event.target as HTMLInputElement).value;
         data[index][name] = value;
+        setRowData(data);
     }
 
     const insertNewRow = (event: FormEvent<HTMLButtonElement>, index: number) => {

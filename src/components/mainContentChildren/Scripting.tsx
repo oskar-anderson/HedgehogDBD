@@ -11,6 +11,7 @@ import Editor from '@monaco-editor/react';
 import Giscus from '@giscus/react';
 import { AppState } from "../MainContent";
 import { useAppStateManagement } from "../../Store";
+import EnvGlobals from "../../../EnvGlobals";
 
 
 export default function Scripting() {
@@ -29,38 +30,38 @@ export default function Scripting() {
         const getScripts = async () => {
             const fetchedScripts = [
                 new Script(
-                    "List tables", 
-                    await fetch(import.meta.env.VITE_BASE_URL + '/wwwroot/scripts/listAllTables.js', {cache: "no-cache"}).then(x => x.text()), 
+                    "List tables",
+                    await fetch(EnvGlobals.BASE_URL + '/wwwroot/scripts/listAllTables.js', { cache: "no-cache" }).then(x => x.text()),
                     ["builtin"]
                 ),
                 new Script(
                     "List tables and rows",
-                    await fetch(import.meta.env.VITE_BASE_URL + '/wwwroot/scripts/listAllTableRows.js', {cache: "no-cache"}).then(x => x.text()),
+                    await fetch(EnvGlobals.BASE_URL + '/wwwroot/scripts/listAllTableRows.js', { cache: "no-cache" }).then(x => x.text()),
                     ['builtin', 'CSV']
                 ),
                 new Script(
                     "SQL CREATE",
-                    await fetch(import.meta.env.VITE_BASE_URL + '/wwwroot/scripts/createTablesSQL.js', {cache: "no-cache"}).then(x => x.text()),
+                    await fetch(EnvGlobals.BASE_URL + '/wwwroot/scripts/createTablesSQL.js', { cache: "no-cache" }).then(x => x.text()),
                     ["builtin", "SQL"]
                 ),
                 new Script(
                     "Export TXT",
-                    await fetch(import.meta.env.VITE_BASE_URL + '/wwwroot/scripts/saveAsTxt.js', {cache: "no-cache"}).then(x => x.text()),
+                    await fetch(EnvGlobals.BASE_URL + '/wwwroot/scripts/saveAsTxt.js', { cache: "no-cache" }).then(x => x.text()),
                     ["builtin"]
                 ),
                 new Script(
                     "Export clipboard",
-                    await fetch(import.meta.env.VITE_BASE_URL + '/wwwroot/scripts/saveToClipboard.js', {cache: "no-cache"}).then(x => x.text()),
+                    await fetch(EnvGlobals.BASE_URL + '/wwwroot/scripts/saveToClipboard.js', { cache: "no-cache" }).then(x => x.text()),
                     ["builtin"]
                 ),
                 new Script(
                     "Export image",
-                    await fetch(import.meta.env.VITE_BASE_URL + '/wwwroot/scripts/takeScreenshot.js', {cache: "no-cache"}).then(x => x.text()),
+                    await fetch(EnvGlobals.BASE_URL + '/wwwroot/scripts/takeScreenshot.js', { cache: "no-cache" }).then(x => x.text()),
                     ["builtin", "async"]
                 ),
                 new Script(
                     "Shared scripts lib",
-                    await fetch(import.meta.env.VITE_BASE_URL + '/wwwroot/scripts/SHARED.js', {cache: "no-cache"}).then(x => x.text()),
+                    await fetch(EnvGlobals.BASE_URL + '/wwwroot/scripts/SHARED.js', { cache: "no-cache" }).then(x => x.text()),
                     ["builtin", "readonly"]
                 )
             ];
@@ -126,7 +127,7 @@ export default function Scripting() {
 
     const executeEditorCode = async () => {
         const result = await ScriptingScene.executeWithLog(
-            editorRef.current!.getValue(), 
+            editorRef.current!.getValue(),
             Manager.getInstance().draw
         );
         setExecuteModalProps({
@@ -141,8 +142,8 @@ export default function Scripting() {
         <>
             <div className="scripting-container">
                 <div>
-                    <div style={{ display: "flex", justifyContent: "center"}}>
-                        <div className="mt-4" style={{ width: "90%"}}>
+                    <div style={{ display: "flex", justifyContent: "center" }}>
+                        <div className="mt-4" style={{ width: "90%" }}>
                             <div className="h4">Scripts</div>
                             <ul className="list-group" style={{ maxHeight: "calc(41px * 6)", overflowY: "scroll" }}>
                                 {
@@ -163,8 +164,8 @@ export default function Scripting() {
                         </div>
                     </div>
 
-                    <div style={{ display: "flex", justifyContent: "center"}}>
-                        <div className="mt-4" style={{ width: "90%"}}>
+                    <div style={{ display: "flex", justifyContent: "center" }}>
+                        <div className="mt-4" style={{ width: "90%" }}>
                             <div className="h4">Editor</div>
                             <div>
                                 <button type="button" onClick={() => displaySaveModal()} className="save-btn btn btn-light">Save</button>
@@ -185,7 +186,7 @@ export default function Scripting() {
                 </div>
             </div>
             <div className="comment-container">
-                <div className="giscus" style={{margin: "1em 0", display: "flex", justifyContent: "center" }}>
+                <div className="giscus" style={{ margin: "1em 0", display: "flex", justifyContent: "center" }}>
                     <div style={{ width: "90%" }}>
                         <Giscus
                             repo="oskar-anderson/RasterModeler"
@@ -203,40 +204,40 @@ export default function Scripting() {
                     </div>
                 </div>
             </div>
-            {isScriptListItemModalVisible && <div className="modal" tabIndex={-1} style={{display: "block"}}>
+            {isScriptListItemModalVisible && <div className="modal" tabIndex={-1} style={{ display: "block" }}>
                 <div className="modal-dialog">
                     <ScriptModal
-                            script={mainModalProps!.script}
-                            highlightedContent={mainModalProps!.highlightedContent}
-                            switchToExecuteModel={switchToExecuteModel}
-                            setScriptModalState={setIsScriptListItemModalVisible}
-                            setExecuteModalState={setIsExecuteModalVisible}
-                            setEditorValue={setEditorValue}
-                            removeScriptFromLocalStorage={removeScriptFromLocalStorage}
+                        script={mainModalProps!.script}
+                        highlightedContent={mainModalProps!.highlightedContent}
+                        switchToExecuteModel={switchToExecuteModel}
+                        setScriptModalState={setIsScriptListItemModalVisible}
+                        setExecuteModalState={setIsExecuteModalVisible}
+                        setEditorValue={setEditorValue}
+                        removeScriptFromLocalStorage={removeScriptFromLocalStorage}
                     ></ScriptModal>
                 </div>
             </div>}
-            {isExecuteModalVisible && <div className="modal" tabIndex={-1} style={{display: "block"}}>
+            {isExecuteModalVisible && <div className="modal" tabIndex={-1} style={{ display: "block" }}>
                 <div className="modal-dialog">
                     <ScriptExecuteModal
-                            isSuccess={executeModalProps!.isSuccess}
-                            content={executeModalProps!.content}
-                            setModalState={executeModalProps!.setModalState}
-                        />
+                        isSuccess={executeModalProps!.isSuccess}
+                        content={executeModalProps!.content}
+                        setModalState={executeModalProps!.setModalState}
+                    />
                 </div>
             </div>}
-            {isJsonDisplayModalVisible && <div className="modal" tabIndex={-1} style={{display: "block"}}>
+            {isJsonDisplayModalVisible && <div className="modal" tabIndex={-1} style={{ display: "block" }}>
                 <div className="modal-dialog">
                     <JsonDisplayModal
-                            setJsonDisplayModelState={setIsJsonDisplayModalVisible}
-                        />
+                        setJsonDisplayModelState={setIsJsonDisplayModalVisible}
+                    />
                 </div>
             </div>}
-            {isSaveScriptModalVisible && <div className="modal" tabIndex={-1} style={{display: "block"}}>
+            {isSaveScriptModalVisible && <div className="modal" tabIndex={-1} style={{ display: "block" }}>
                 <div className="modal-dialog">
-                    <ModalSaveScript 
-                            { ...saveScriptModalProps!}
-                        />
+                    <ModalSaveScript
+                        {...saveScriptModalProps!}
+                    />
                 </div>
             </div>}
         </>

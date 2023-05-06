@@ -13,7 +13,6 @@ import { PriorityQueue } from "@datastructures-js/priority-queue";
 import RasterModelerFormat from "../RasterModelerFormat";
 import { AppState } from "../components/MainContent";
 
-
 export class DrawScene extends Container implements IScene {
 
     canvasView: Container;
@@ -78,6 +77,7 @@ export class DrawScene extends Container implements IScene {
         if (isForceScreenReset) {
             this.canvasView.removeChildren();
         }
+        let t0 = performance.now();
         for (let y = 0; y < screenCharGrid.height; y++) {
             for (let x = 0; x < screenCharGrid.width; x++) {
                 // console.log(`x: ${x}, y: ${y}, index: ${y * charGridSize.width + x}`);
@@ -98,6 +98,8 @@ export class DrawScene extends Container implements IScene {
                 }
             }
         }
+        let t1 = performance.now();
+        console.log(`renderScreen with isForceScreenReset: ${isForceScreenReset ? "True" : "False"} took ${t1 - t0} milliseconds.`);
         DrawScene.cullViewport(this.canvasView);
     }
 
@@ -249,15 +251,12 @@ export class DrawScene extends Container implements IScene {
     
     paintWorld9PatchSafe(rect: Rectangle, _9patch: string[]) {
         let [tl, t, tr, ml, _, mr, bl, b, br] = _9patch;  // skip middle
-        let paintWorldPointToScreenSafe = (x: number, y: number, char: string) => {
-            if (! this.draw.getWorldCharGrid().contains(x, y)) { return; }
-            this.draw.schema.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].char = char;
-        }
         let paintWorldRectToScreenSafe = (rect: Rectangle, fillchar: string) => {
             for (let y = rect.y; y < rect.bottom; y++) {
                 for (let x = rect.x; x < rect.right; x++) {
-                    paintWorldPointToScreenSafe(x, y, fillchar);
-                } 
+                    if (! this.draw.getWorldCharGrid().contains(x, y)) { continue; }
+                    this.draw.schema.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].char = fillchar;
+                }
             }
         }
         paintWorldRectToScreenSafe(new Rectangle(rect.left, rect.top, 1, 1), tl);
@@ -268,5 +267,81 @@ export class DrawScene extends Container implements IScene {
         paintWorldRectToScreenSafe(new Rectangle(rect.left, rect.bottom, 1, 1), bl);
         paintWorldRectToScreenSafe(new Rectangle(rect.x + 1, rect.bottom, rect.width - 1, 1), b);
         paintWorldRectToScreenSafe(new Rectangle(rect.right, rect.bottom, 1, 1), br);
+    }
+
+    static paintWorld9PatchSafe2(rect: Rectangle, out: string[][] | null = null, _9patch: string[] = ['+', '-', '+', '|', 'X', '|', '+', '-', '+']): (string)[][] {
+        if (out == null) {
+            out = new Array(rect.height).fill([]).map(() => new Array(rect.width).fill(" "));
+        }
+        let [tl, t, tr, ml, _, mr, bl, b, br] = _9patch;  // skip middle
+        let paintWorldRectToScreenSafe = (rect: Rectangle, fillchar: string) => {
+            for (let y = rect.y; y < rect.bottom; y++) {
+                for (let x = rect.x; x < rect.right; x++) {
+                    out![y][x] = fillchar;
+                }
+            }
+        }
+        paintWorldRectToScreenSafe(new Rectangle(rect.left, rect.top, 1, 1), tl);
+        paintWorldRectToScreenSafe(new Rectangle(rect.x + 1, rect.top, rect.width - 2, 1), t);
+        paintWorldRectToScreenSafe(new Rectangle(rect.right - 1, rect.top, 1, 1), tr);
+
+        paintWorldRectToScreenSafe(new Rectangle(rect.x, rect.y + 1, 1, rect.height - 2), ml);
+        paintWorldRectToScreenSafe(new Rectangle(rect.right - 1, rect.y + 1, 1, rect.height - 2), mr);
+
+        paintWorldRectToScreenSafe(new Rectangle(rect.left, rect.bottom - 1, 1, 1), bl);
+        paintWorldRectToScreenSafe(new Rectangle(rect.x + 1, rect.bottom - 1, rect.width - 2, 1), b);
+        paintWorldRectToScreenSafe(new Rectangle(rect.right - 1, rect.bottom - 1, 1, 1), br);
+        return out;
+    }
+
+    static setWorldTable2(rows: { name: string, datatype: string, attributes: string }[], head: string, tableRect: Rectangle): string[][] {
+        let longestnameLenght = rows.map(x => x.name).reduce((acc, row) => Math.max(acc, row.length), 0);
+        let longestDatatypeLenght = rows.map(x => x.datatype).reduce((acc, row) => Math.max(acc, row.length), 0);
+        let longestAttributeLenght = rows.map(x => x.attributes).reduce((acc, row) => Math.max(acc, row.length), 0);
+
+        let pad = 4;  // padding plus one non-writable wall
+        let firstColumnWidth = longestnameLenght + pad;
+        let secondColumnWidth =  longestDatatypeLenght + pad;
+        let thirdColumnWidth = longestAttributeLenght + pad;
+
+        let rectHead = new Rectangle(0, 0, tableRect.width, 3);
+        let rectNameRow = new Rectangle(0, 2, firstColumnWidth, tableRect.height - 2);
+        let rectTypeRow = new Rectangle(0 + firstColumnWidth - 1, 2, secondColumnWidth, tableRect.height - 2);
+        let rectAttributeRow = new Rectangle(0 + firstColumnWidth + secondColumnWidth - 2, 2, thirdColumnWidth, tableRect.height - 2);
+        let parts = ['+', '-', '+', '|', 'X', '|', '+', '-', '+'];
+        let result: string[][] = new Array(tableRect.height).fill([]).map(() => new Array(tableRect.width).fill(' '));
+        DrawScene.paintWorld9PatchSafe2(rectHead, result, parts);
+        DrawScene.paintWorld9PatchSafe2(rectNameRow, result, parts);
+        DrawScene.paintWorld9PatchSafe2(rectTypeRow, result, parts);
+        DrawScene.paintWorld9PatchSafe2(rectAttributeRow, result, parts);
+        let rectHeadInner = new Rectangle(rectHead.left + 2, rectHead.top + 1, rectHead.width - 4, 1);
+        for (let y = rectHeadInner.y; y < rectHeadInner.bottom; y++) {
+            for (let x = rectHeadInner.x; x < rectHeadInner.right; x++) {
+                result[y][x] = head[x - rectHeadInner.x] ?? ' ';
+            }
+        }
+        let rectNameRowInner = new Rectangle(rectNameRow.left + 2, rectNameRow.top + 1, rectNameRow.width - 3, rectNameRow.height - 2)
+        let rectNameRowInnerRelativeToTable = new Rectangle(rectNameRowInner.x, rectNameRowInner.y, rectNameRowInner.width, rectNameRowInner.height)
+        
+        for (let y = rectNameRowInnerRelativeToTable.y; y < rectNameRowInnerRelativeToTable.bottom; y++) {
+            for (let x = rectNameRowInnerRelativeToTable.x; x < rectNameRowInnerRelativeToTable.right; x++) {
+                result[y][x] = rows[y - rectNameRowInnerRelativeToTable.y].name[x - rectNameRowInnerRelativeToTable.x] ?? ' ';
+            }
+        }
+        let rectTypeRowInner = new Rectangle(rectTypeRow.left + 2, rectTypeRow.top + 1, rectTypeRow.width - 3, rectTypeRow.height - 2);
+        let rectTypeRowInnerRelativeToTable = new Rectangle(rectTypeRowInner.x, rectTypeRowInner.y, rectTypeRowInner.width, rectTypeRowInner.height);
+        for (let y = rectTypeRowInnerRelativeToTable.y; y < rectTypeRowInnerRelativeToTable.bottom; y++) {
+            for (let x = rectTypeRowInnerRelativeToTable.x; x < rectTypeRowInnerRelativeToTable.right; x++) {
+                result[y][x] = rows[y - rectTypeRowInnerRelativeToTable.y].datatype[x - rectTypeRowInnerRelativeToTable.x] ?? ' ';
+            }
+        }
+        let rectSpecialRowInner = new Rectangle(rectAttributeRow.left + 2, rectAttributeRow.top + 1, rectAttributeRow.width - 3, rectAttributeRow.height - 2);
+        let rectSpecialRowInnerRelative = new Rectangle(rectSpecialRowInner.x, rectSpecialRowInner.y, rectSpecialRowInner.width, rectSpecialRowInner.height);
+        for (let y = rectSpecialRowInnerRelative.y; y < rectSpecialRowInnerRelative.bottom; y++) {
+            for (let x = rectSpecialRowInnerRelative.x; x < rectSpecialRowInnerRelative.right; x++) {
+                result[y][x] = rows[y - rectSpecialRowInnerRelative.y].attributes[x - rectSpecialRowInnerRelative.x] ?? ' ';
+            }
+        }
+        return result;
     }
 }

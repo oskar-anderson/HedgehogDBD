@@ -2,6 +2,7 @@ import { Container, Graphics, Loader } from "pixi.js";
 import { IScene, Manager } from "../Manager";
 import { DrawScene } from "./DrawScene";
 import { AppState } from "../components/MainContent";
+import EnvGlobals from "../../EnvGlobals";
 
 export class LoaderScene extends Container implements IScene {
 
@@ -31,18 +32,18 @@ export class LoaderScene extends Container implements IScene {
         this.loaderBar.position.y = (height - this.loaderBar.height) / 2;
         this.addChild(this.loaderBar);
 
-        Loader.shared.add(import.meta.env.VITE_BASE_URL + '/wwwroot/font/consolas/consolas-7-xml-white-text-with-alpha-padding0-spacing1.fnt');
-        Loader.shared.add(import.meta.env.VITE_BASE_URL + '/wwwroot/font/consolas/consolas-8-xml-white-text-with-alpha-padding0-spacing1.fnt');
-        Loader.shared.add(import.meta.env.VITE_BASE_URL + '/wwwroot/font/consolas/consolas-9-xml-white-text-with-alpha-padding0-spacing1.fnt');
-        Loader.shared.add(import.meta.env.VITE_BASE_URL + '/wwwroot/font/consolas/consolas-10-xml-white-text-with-alpha-padding0-spacing1.fnt');
-        Loader.shared.add(import.meta.env.VITE_BASE_URL + '/wwwroot/font/consolas/consolas-11-xml-white-text-with-alpha-padding0-spacing1.fnt');
-        Loader.shared.add(import.meta.env.VITE_BASE_URL + '/wwwroot/font/consolas/consolas-12-xml-white-text-with-alpha-padding0-spacing1.fnt');
-        Loader.shared.add(import.meta.env.VITE_BASE_URL + '/wwwroot/font/consolas/consolas-14-xml-white-text-with-alpha-padding0-spacing1.fnt');
-        Loader.shared.add(import.meta.env.VITE_BASE_URL + '/wwwroot/font/consolas/consolas-16-xml-white-text-with-alpha-padding0-spacing1.fnt');
-        Loader.shared.add(import.meta.env.VITE_BASE_URL + '/wwwroot/font/consolas/consolas-18-xml-white-text-with-alpha-padding0-spacing1.fnt');
-        Loader.shared.add(import.meta.env.VITE_BASE_URL + '/wwwroot/font/consolas/consolas-20-xml-white-text-with-alpha-padding0-spacing1.fnt');
-        Loader.shared.add(import.meta.env.VITE_BASE_URL + '/wwwroot/font/consolas/consolas-22-xml-white-text-with-alpha-padding0-spacing1.fnt');
-        Loader.shared.add(import.meta.env.VITE_BASE_URL + '/wwwroot/font/consolas/consolas-24-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add(EnvGlobals.BASE_URL + '/wwwroot/font/consolas/consolas-7-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add(EnvGlobals.BASE_URL + '/wwwroot/font/consolas/consolas-8-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add(EnvGlobals.BASE_URL + '/wwwroot/font/consolas/consolas-9-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add(EnvGlobals.BASE_URL + '/wwwroot/font/consolas/consolas-10-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add(EnvGlobals.BASE_URL + '/wwwroot/font/consolas/consolas-11-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add(EnvGlobals.BASE_URL + '/wwwroot/font/consolas/consolas-12-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add(EnvGlobals.BASE_URL + '/wwwroot/font/consolas/consolas-14-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add(EnvGlobals.BASE_URL + '/wwwroot/font/consolas/consolas-16-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add(EnvGlobals.BASE_URL + '/wwwroot/font/consolas/consolas-18-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add(EnvGlobals.BASE_URL + '/wwwroot/font/consolas/consolas-20-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add(EnvGlobals.BASE_URL + '/wwwroot/font/consolas/consolas-22-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add(EnvGlobals.BASE_URL + '/wwwroot/font/consolas/consolas-24-xml-white-text-with-alpha-padding0-spacing1.fnt');
         
         Loader.shared.onProgress.add((loader) => {
             let progressRatio = loader.progress / 100;

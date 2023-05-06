@@ -3,15 +3,15 @@ import { Draw } from "./model/Draw";
 import RasterModelerFormat from './RasterModelerFormat';
 import { AppStateManagementContext, useAppStateManagementDefault } from './Store';
 import MainContent from './components/MainContent';
-
+import EnvGlobals from "../EnvGlobals"
 
 
 function App() {
-  const [ draw, setDraw ] = useState<Draw | null>(null);
+  const [draw, setDraw] = useState<Draw | null>(null);
 
   useEffect(() => {
     async function fetchApp() {
-      let text = await (await fetch(import.meta.env.VITE_BASE_URL + '/wwwroot/data/SchemaTest2.txt', { cache: "no-cache" })).text();
+      let text = await (await fetch(EnvGlobals.BASE_URL + '/wwwroot/data/SchemaTest2.txt', { cache: "no-cache" })).text();
       let draw = RasterModelerFormat.parse(text);
       setDraw(draw)
     }
@@ -21,7 +21,7 @@ function App() {
 
   const appStateManagementValue = useAppStateManagementDefault();
 
-  if (! draw) {
+  if (!draw) {
     return (<div>Loading...</div>);
   }
 

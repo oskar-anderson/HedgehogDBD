@@ -18,7 +18,7 @@ Check demo video- https://www.youtube.com/watch?v=Qnqnqw68eeo
 
 ## Running Locally
 
-1. Make sure to change `.env` variable `VITE_BASE_URL` to match the environment before running any commands 
+1. Make sure to change `EnvGlobals.ts` variable `BASE_URL` to match the environment before running any commands 
 ```
 http://localhost:8080 
 OR

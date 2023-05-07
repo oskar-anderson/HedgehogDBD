@@ -12,7 +12,6 @@
     "@pixi/events": "^6.5.8",
     "@pixi/math-extras": "^6.5.8",
     "dayjs": "^1.11.6",
-    "dotenv": "^16.0.3",
     "monaco-editor": "^0.34.1",
     "pixi.js": "^6.5.6",
     "react": "^18.2.0",

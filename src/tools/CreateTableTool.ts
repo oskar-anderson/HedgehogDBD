@@ -21,13 +21,9 @@ export class CreateTableTool implements ITool {
     }
 
     init(): void {
-        this.hover = Table.init(
-            new Point(0, 0),
-            "new_table",
-            [ TableRow.init("id", "VARCHAR(255)", ["PK"])]
-        );
+        this.hover = new Table(new Point(0, 0), "new_table", [ TableRow.init("id", "VARCHAR(255)", ["PK"])], undefined, undefined, true);
         this.draw.selectedTable = this.hover;
-        this.draw.hover = this.hover;
+        this.draw.schema.tables.push(this.hover);
     }
 
     update(screenX: number, screenY: number, worldX: number, worldY: number): void {
@@ -37,7 +33,7 @@ export class CreateTableTool implements ITool {
 
     exit(): void {
         this.draw.selectedTable = null;
-        this.draw.hover = null;
+        this.draw.schema.tables = this.draw.schema.tables.filter(x => ! x.isHover)
     }
 
     mouseMove(mouseCharGridX: number, mouseCharGridY: number) {
@@ -64,6 +60,8 @@ export class CreateTableTool implements ITool {
             return;
         }
 
+        this.draw.schema.tables = this.draw.schema.tables.filter(x => ! x.isHover)
+        this.hover!.isHover = false;
         this.draw.history.execute(new CommandCreateTable(
             this.draw, {
                 tableJson: JSON.stringify(this.hover!)

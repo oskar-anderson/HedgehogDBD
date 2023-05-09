@@ -8,48 +8,32 @@ export class Table {
     position: Point;
     head: string;
     tableRows: TableRow[];
-    color: number = 0x008000;
-    visible: boolean = true;
+    color: number;
+    isHover: boolean;
     
     /* 
     This constuctor exists for cloning, you probably want to use Table.init() 
     Treat as private constructor - this is public for JSON handling only
     */
-    private constructor(table: { id: string, position: Point, head: string, tableRows: TableRow[], color: number, visible: boolean }) {
-        this.id = table.id;
-        this.position = table.position;
-        this.head = table.head;
-        this.tableRows = table.tableRows;
-        this.color = table.color;
-    }
-    
-    static init(position: Point, head: string, tableRows: TableRow[]) {
-        return new Table({
-            id: crypto.randomUUID(),
-            position: position,
-            head: head,
-            tableRows: tableRows,
-            color: 0x008000,
-            visible: true
-         });
+    constructor(position: Point, head: string, tableRows: TableRow[], id: string = crypto.randomUUID(), color: number = 0x008000, isHover: boolean = false) {
+        this.id = id;
+        this.position = position;
+        this.head = head;
+        this.tableRows = tableRows;
+        this.color = color;
+        this.isHover = isHover;
     }
 
     static initClone(table: Table): Table {
+        if (table.isHover) { throw Error("Hover table should not be cloned") }
         let copy = new Table(
-            {
-                id: table.id,
-                position: new Point(table.position.x, table.position.y),
-                head: table.head,
-                tableRows: table.tableRows.map(x => TableRow.initClone(x)),
-                color: table.color,
-                visible: table.visible
-            }
+            new Point(table.position.x, table.position.y),
+            table.head,
+            table.tableRows.map(x => TableRow.initClone(x)),
+            table.id,
+            table.color
         );
         return copy;
-    }
-
-    initNewId() {
-        this.id = crypto.randomUUID();
     }
 
     equals(other: Table) {

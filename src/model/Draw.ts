@@ -25,7 +25,6 @@ export class Draw {
     selectedFontSize: { size: number, width: number, height: number} = Draw.fontSizes.find((x => x.size === 14))!;
     selectedTable: Table | null = null
     schema: Schema;
-    hover: Table | null = null;
     activeTool: ITool;
     
     private world: MyRect;
@@ -37,11 +36,7 @@ export class Draw {
     }
 
     getVisibleTables() {
-        let visibleTables = this.schema.tables.filter(x => x.visible);
-        if (this.hover !== null) {
-            visibleTables.push(this.hover);
-        }
-        return visibleTables;
+        return this.schema.tables;
     }
 
     setWorld(world: MyRect) {

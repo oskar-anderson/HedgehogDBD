@@ -1,7 +1,6 @@
 import { Draw } from "../model/Draw";
 import { CommandMoveTableRelative } from "../commands/appCommands/CommandMoveTableRelative";
 import { Table } from "../model/Table";
-import { TableHoverPreview } from "../model/TableHoverPreview";
 import { ITool, IToolNames } from "./ITool";
 import { Manager } from "../Manager";
 import { TableScene } from "../scenes/TableScene";
@@ -12,7 +11,11 @@ export class SelectTableTool implements ITool {
 
     isDirty = false;
     draw: Draw;
-    hover: TableHoverPreview | null = null;
+    hover: { 
+        hoverTable: Table;
+        hoverTableOriginalPosition: Point;
+        hoverTablePivot: Point;
+    } | null = null;
 
     constructor(draw: Draw) {
         this.draw = draw;
@@ -27,52 +30,54 @@ export class SelectTableTool implements ITool {
     }
 
     update(screenX: number, screenY: number, worldX: number, worldY: number) {
-        if (this.hover !== null) {
-            let mouseCharGrid = this.draw.getWorldToCharGridPoint(worldX, worldY);
-            this.updateHoverTablePosition(mouseCharGrid.x, mouseCharGrid.y);
-        }
+        if (this.hover === null) return
+        let mouseCharGrid = this.draw.getWorldToCharGridPoint(worldX, worldY);
+        this.updateHoverTablePosition(mouseCharGrid.x, mouseCharGrid.y);
+        
     }
 
     exit() {
-        this.draw.hover = null;
         this.draw.selectedTable = null;
-        this.draw.schema.tables.forEach(x => x.visible = true);
     }
 
     mouseDown(mouseCharGridX: number, mouseCharGridY: number) {
+        /** 
+            The mouseUp will not register unless it is inside the canvas.
+            It is possible that the user selected a table by holding down left mouse and 
+            dragged it off the canvas and let go of left mouse. 
+        */
+        if (this.hover !== null) return
         this.isDirty = false;
         for (let table of this.draw.schema.tables) {
             if (table.getContainingRect().contains(mouseCharGridX, mouseCharGridY)) {
-                let hover = Table.initClone(table);
-                hover.initNewId();
-                this.draw.selectedTable = hover;
-                this.draw.hover = hover;
-                table.visible = false;
-                this.hover = new TableHoverPreview(hover, table, table.position.x - mouseCharGridX, table.position.y - mouseCharGridY);
+                this.draw.selectedTable = table;
+                this.hover = { 
+                    hoverTable: table, 
+                    hoverTableOriginalPosition: new Point(table.position.x, table.position.y),
+                    hoverTablePivot: new Point(table.position.x - mouseCharGridX, table.position.y - mouseCharGridY)
+                }
                 return;
             }
         }
     }
 
     updateHoverTablePosition(mouseCharGridX: number, mouseCharGridY: number) {
-        if (! this.hover) throw Error("Trying to update hover table with hover table being null");
-        let newX = Math.max(0, Math.min(this.draw.getWorldCharGrid().width - this.hover.hoverTable.getContainingRect().width, mouseCharGridX + this.hover.hoverTablePivotX));
-        let newY = Math.max(0, Math.min(this.draw.getWorldCharGrid().height - this.hover.hoverTable.getContainingRect().height, mouseCharGridY + this.hover.hoverTablePivotY));
+        if (this.hover === null) throw Error("Trying to update hover table with hover table being null");
+        let newX = Math.max(0, Math.min(this.draw.getWorldCharGrid().width - this.hover.hoverTable.getContainingRect().width, mouseCharGridX + this.hover.hoverTablePivot.x));
+        let newY = Math.max(0, Math.min(this.draw.getWorldCharGrid().height - this.hover.hoverTable.getContainingRect().height, mouseCharGridY + this.hover.hoverTablePivot.y));
         this.isDirty = !(this.hover.hoverTable!.position.x === newX && this.hover.hoverTable!.position.y === newY);
         this.hover.hoverTable!.position.x = newX;
         this.hover.hoverTable!.position.y = newY;
     };
 
     mouseEventUp(mouseCharGridX: number, mouseCharGridY: number) {
+        if (this.hover === null) return;
         this.updateHoverTablePosition(mouseCharGridX, mouseCharGridY);
         let isGoodPlaceForTableFunc = () => {
-            if (this.hover !== null) {
-                let hoverRect = this.hover.hoverTable.getContainingRect();
-                return this.draw.getVisibleTables()
-                    .filter(x => ! x.equals(this.hover!.hoverTable))
-                    .every(x => !x.getContainingRect().intersects(hoverRect))
-            }
-            return false
+            let hoverRect = this.hover!.hoverTable.getContainingRect();
+            return this.draw.getVisibleTables()
+                .filter(x => ! x.equals(this.hover!.hoverTable))
+                .every(x => !x.getContainingRect().intersects(hoverRect))
         }
         let isGoodPlaceForTable = isGoodPlaceForTableFunc();
         let mouseUpDone = () => {
@@ -81,23 +86,21 @@ export class SelectTableTool implements ITool {
             this.exit();
         }
         if (! isGoodPlaceForTable) {
+            this.hover.hoverTable.position = this.hover.hoverTableOriginalPosition;
             mouseUpDone();
             return;
         }
-
-        let xDiff = this.hover!.hoverTable.position.x - this.hover!.hoverTableSource!.position.x;
-        let yDiff = this.hover!.hoverTable.position.y - this.hover!.hoverTableSource!.position.y;
-
-        if (xDiff === 0 && yDiff === 0) { 
+        let diff = this.hover.hoverTable.position.subtract(this.hover.hoverTableOriginalPosition);
+        if (diff.equals(new Point(0, 0))) { 
             mouseUpDone();
             return;
         }
-        
+        this.hover.hoverTable.position = this.hover.hoverTableOriginalPosition;
         this.draw.history.execute(new CommandMoveTableRelative(
             this.draw, {
-                id: this.hover!.hoverTableSource!.id,
-                x: xDiff, 
-                y: yDiff
+                id: this.hover.hoverTable.id,
+                x: diff.x, 
+                y: diff.y
             })
         );
         this.draw.schema.relations.forEach(relation => relation.isDirty = true);
@@ -111,9 +114,8 @@ export class SelectTableTool implements ITool {
                 this.mouseDown(mouseCharGrid.x, mouseCharGrid.y);
                 break;
             case "mouseup":
-                if (this.hover !== null) {
-                    this.mouseEventUp(mouseCharGrid.x, mouseCharGrid.y);
-                }
+                if (this.hover === null) return;
+                this.mouseEventUp(mouseCharGrid.x, mouseCharGrid.y);
                 break;
             case "click": 
                 if (event.detail === 2) {  // double click

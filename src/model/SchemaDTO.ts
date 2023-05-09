@@ -18,7 +18,7 @@ export class SchemaDTO {
 
     static init(draw: Draw) {
         return new SchemaDTO(
-            draw.schema.tables.map(x => new TableDTO({ head: x.head, tableRows: x.tableRows })),
+            draw.schema.tables.map(x => TableDTO.initFromTable(x)),
             draw.schema.worldDrawArea,
             draw.getWorldCharGrid().width,
             draw.getWorldCharGrid().height
@@ -27,7 +27,7 @@ export class SchemaDTO {
 
     static initJsonDisplayable(draw: Draw) {
         return new SchemaDTO(
-            draw.schema.tables.map(x => new TableDTO({ head: x.head, tableRows: x.tableRows })),
+            draw.schema.tables.map(x => TableDTO.initFromTable(x)),
             [],  // draw.schema.worldDrawArea  // cannot be displayed
             draw.getWorldCharGrid().width,
             draw.getWorldCharGrid().height

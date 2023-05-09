@@ -32,15 +32,13 @@ export default function Table() {
 
     const saveChanges = () => {
         const draw = Manager.getInstance().draw;
-        let oldTable = draw.schema.tables.find(x => x.equals(tableBeingEdited))!;
-        const newTable = TableModel.initClone(tableBeingEdited);
-        newTable.head = tableName;
-        newTable.tableRows = rowData.map(tableRow => TableRow.init(
+        let oldTable = draw.schema.tables.find(x => x.id === tableBeingEdited.id)!;
+        let newTableRows = rowData.map(tableRow => new TableRow(
             tableRow.rowName, 
             tableRow.rowDatatype, 
             tableRow.rowAttributes.split(",").map(x => x.trim())
         ));
-        draw.selectedTable = newTable;
+        const newTable = new TableModel(tableBeingEdited.position, tableName, newTableRows, tableBeingEdited.id);
         draw.history.execute(new CommandModifyTable(
             draw, 
             {
@@ -101,7 +99,7 @@ export default function Table() {
                 draw, 
                 {
                     tableJson: JSON.stringify(tableBeingEdited!),
-                    listIndex: draw.schema.tables.findIndex(x => x.equals(tableBeingEdited))
+                    listIndex: draw.schema.tables.findIndex(x => x.id === tableBeingEdited.id)
                 }
             )
         )

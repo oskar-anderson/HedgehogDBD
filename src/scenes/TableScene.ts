@@ -2,18 +2,15 @@ import { Container } from "pixi.js";
 import { IScene, Manager } from "../Manager";
 import { Table } from "../model/Table";
 import { AppState } from "../components/MainContent";
+import { TableDTO } from "../model/TableDTO";
 
 export class TableScene extends Container implements IScene {
 
-    tableBeingEdited: Table;
+    tableBeingEdited: TableDTO;
 
-    constructor() {
+    constructor(selectedTable: TableDTO) {
         super();
-        const selectedTable = Manager.getInstance().draw.selectedTable;
-        if (selectedTable === null) {
-            throw Error("No table selected!");
-        }
-        this.tableBeingEdited = Table.initClone(selectedTable);
+        this.tableBeingEdited = selectedTable;
     }
     
     getState(): AppState {

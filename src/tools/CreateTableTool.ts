@@ -21,8 +21,7 @@ export class CreateTableTool implements ITool {
     }
 
     init(): void {
-        this.hover = new Table(new Point(0, 0), "new_table", [ TableRow.init("id", "VARCHAR(255)", ["PK"])], undefined, undefined, true);
-        this.draw.selectedTable = this.hover;
+        this.hover = new Table(new Point(0, 0), "new_table", [ new TableRow("id", "VARCHAR(255)", ["PK"])], undefined, undefined, true);
         this.draw.schema.tables.push(this.hover);
     }
 
@@ -32,7 +31,6 @@ export class CreateTableTool implements ITool {
     }
 
     exit(): void {
-        this.draw.selectedTable = null;
         this.draw.schema.tables = this.draw.schema.tables.filter(x => ! x.isHover)
     }
 

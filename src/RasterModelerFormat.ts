@@ -77,7 +77,7 @@ class RasterModelerFormat {
                     .join("").trim();
                 let columns = row.split("|").map(function(item) { return item.trim(); });
                 let attributeList = columns[2].split(',').map(x => x.trim());
-                tableRows.push(TableRow.init(columns[0], columns[1], attributeList));
+                tableRows.push(new TableRow(columns[0], columns[1], attributeList));
             }
             tables.push(new Table(new Point(rect.x, rect.y), head, tableRows));
         }

@@ -23,7 +23,6 @@ export class Draw {
         { size: 24, width: 12, height: 24 },
     ];
     selectedFontSize: { size: number, width: number, height: number} = Draw.fontSizes.find((x => x.size === 14))!;
-    selectedTable: Table | null = null
     schema: Schema;
     activeTool: ITool;
     

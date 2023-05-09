@@ -11,10 +11,6 @@ export class Table {
     color: number;
     isHover: boolean;
     
-    /* 
-    This constuctor exists for cloning, you probably want to use Table.init() 
-    Treat as private constructor - this is public for JSON handling only
-    */
     constructor(position: Point, head: string, tableRows: TableRow[], id: string = crypto.randomUUID(), color: number = 0x008000, isHover: boolean = false) {
         this.id = id;
         this.position = position;

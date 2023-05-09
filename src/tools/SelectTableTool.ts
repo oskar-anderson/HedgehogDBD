@@ -6,6 +6,7 @@ import { Manager } from "../Manager";
 import { TableScene } from "../scenes/TableScene";
 import CustomMouseEvent from "../model/MouseEvent";
 import { Point } from "pixi.js";
+import { TableDTO } from "../model/TableDTO";
 
 export class SelectTableTool implements ITool {
 
@@ -37,7 +38,7 @@ export class SelectTableTool implements ITool {
     }
 
     exit() {
-        this.draw.selectedTable = null;
+
     }
 
     mouseDown(mouseCharGridX: number, mouseCharGridY: number) {
@@ -50,7 +51,6 @@ export class SelectTableTool implements ITool {
         this.isDirty = false;
         for (let table of this.draw.schema.tables) {
             if (table.getContainingRect().contains(mouseCharGridX, mouseCharGridY)) {
-                this.draw.selectedTable = table;
                 this.hover = { 
                     hoverTable: table, 
                     hoverTableOriginalPosition: new Point(table.position.x, table.position.y),
@@ -121,8 +121,7 @@ export class SelectTableTool implements ITool {
                 if (event.detail === 2) {  // double click
                     let selectedTable = this.draw.schema.tables.find(table => table.getContainingRect().contains(mouseCharGrid.x, mouseCharGrid.y))
                     if (! selectedTable) { break; }
-                    this.draw.selectedTable = selectedTable;
-                    Manager.getInstance().changeScene(new TableScene());
+                    Manager.getInstance().changeScene(new TableScene(TableDTO.initFromTable(selectedTable)));
                 }
                 break;
             default:

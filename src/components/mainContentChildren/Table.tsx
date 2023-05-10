@@ -18,7 +18,8 @@ export default function Table() {
     const tableBeingEdited = (Manager.getInstance().getScene() as TableScene).tableBeingEdited;
 
     const switchToDraw = () => {
-        Manager.getInstance().changeScene(new DrawScene())
+        const draw = Manager.getInstance().draw;
+        Manager.getInstance().changeScene(new DrawScene(draw))
         setAppState(AppState.DrawScene);
     }
 
@@ -47,7 +48,7 @@ export default function Table() {
             }
         ));
         draw.schema.relations.forEach(relation => relation.isDirty = true);
-        Manager.getInstance().changeScene(new DrawScene())
+        Manager.getInstance().changeScene(new DrawScene(draw))
         setAppState(AppState.DrawScene);
     }
 
@@ -104,7 +105,7 @@ export default function Table() {
             )
         )
         draw.schema.relations.forEach(relation => relation.isDirty = true);
-        Manager.getInstance().changeScene(new DrawScene())
+        Manager.getInstance().changeScene(new DrawScene(draw))
         setAppState(AppState.DrawScene);
     }
 

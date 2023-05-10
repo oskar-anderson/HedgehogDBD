@@ -19,7 +19,6 @@ export default function CanvasContainer({
 
     useEffect(() => {
         console.log("CanvasContainer useEffect")
-        const drawScene = (Manager.getInstance().getScene() as DrawScene);
 
         const mapMouseEvent = (event: MouseEvent): CustomMouseEvent => {
             return {
@@ -32,8 +31,12 @@ export default function CanvasContainer({
             }
         }
 
-        const mouseButtonEvent = (event: MouseEvent) => { drawScene.draw.activeTool.mouseEventHandler(mapMouseEvent(event)) };
+        const mouseButtonEvent = (event: MouseEvent) => { 
+            const drawScene = (Manager.getInstance().getScene() as DrawScene);
+            drawScene.draw.activeTool.mouseEventHandler(mapMouseEvent(event)) 
+        };
         const mouseMoveEvent = (event: MouseEvent) => {
+            const drawScene = (Manager.getInstance().getScene() as DrawScene);
             const mouseEvent = mapMouseEvent(event);
             const charGridPoint = drawScene.draw.getWorldToCharGridPoint(mouseEvent.worldX, mouseEvent.worldY);
             // using useState would cause a lot of rerenders and make the app unresponsive

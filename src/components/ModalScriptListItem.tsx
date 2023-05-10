@@ -1,5 +1,6 @@
 import { SetStateAction, useState } from "react";
 import { Manager } from "../Manager";
+import { Draw } from "../model/Draw";
 import { Script } from "../model/LocalStorageData";
 import { ScriptingScene } from "../scenes/ScriptingScene";
 import { ModalScriptExecuteProps } from "./ModalScriptExecute";
@@ -25,8 +26,8 @@ export default function ModalScriptListItem({
     removeScriptFromLocalStorage
 }: ModalScriptListItemProps) {
 
-    const execute = async (value: string): Promise<ModalScriptExecuteProps> => {
-        let executeResult = await ScriptingScene.executeWithLog(value, Manager.getInstance().draw);
+    const execute = async (value: string, draw: Draw): Promise<ModalScriptExecuteProps> => {
+        let executeResult = await ScriptingScene.executeWithLog(value, draw);
         return {
             isSuccess: executeResult.error === "",
             content: executeResult.resultLog.join("\n"),
@@ -58,7 +59,7 @@ export default function ModalScriptListItem({
 
                 {!script.tags.includes("readonly") &&
                     <>
-                        <button onClick={async () => { switchToExecuteModel(await execute(script.content)) }} type="button" className="btn btn-primary">⚡ Execute</button>
+                        <button onClick={async () => { switchToExecuteModel(await execute(script.content, Manager.getInstance().draw)) }} type="button" className="btn btn-primary">⚡ Execute</button>
                         <button onClick={() => onClickCopyToEditor()} type="button" className="btn btn-primary">Paste to editor</button>
                     </>
                 }

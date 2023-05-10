@@ -14,7 +14,7 @@ export default function TopToolbarAction() {
 
   const newSchema = () => {
     const oldDraw = Manager.getInstance().draw;
-    Manager.getInstance().draw = new Draw(new Schema([]), oldDraw.getWorld());
+    Manager.getInstance().changeScene(new DrawScene(new Draw(new Schema([]), oldDraw.getWorld())));
   }
 
   const saveAsJpg = async () => {
@@ -32,7 +32,7 @@ export default function TopToolbarAction() {
   }
   const changeSceneToDraw = async () => {
     if (Manager.getInstance().getScene()!.getState() === AppState.DrawScene) { return; }
-    Manager.getInstance().changeScene(new DrawScene());
+    Manager.getInstance().changeScene(new DrawScene(Manager.getInstance().draw));
     setAppState(AppState.DrawScene);
   }
 
@@ -44,8 +44,8 @@ export default function TopToolbarAction() {
     let reader = new FileReader();
     reader.onload = (event: ProgressEvent) => {
       let file = (event.target as FileReader).result as string;
-      Manager.getInstance().draw = RasterModelerFormat.parse(file)
-      Manager.getInstance().changeScene(new DrawScene())
+      const draw = RasterModelerFormat.parse(file);
+      Manager.getInstance().changeScene(new DrawScene(draw))
     }
     let startReadingFile = (thisElement: HTMLInputElement) => {
       let inputFile = thisElement.files![0];

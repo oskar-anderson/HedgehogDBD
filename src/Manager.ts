@@ -8,6 +8,9 @@ export class Manager {
 
     private app: Application;
     private currentScene: IScene | null = null;
+    /**
+     * For accessing state inside React components. Query for every operation separately, not once for entire component.
+     */
     public draw: Draw;
 
     private static instance: Manager;

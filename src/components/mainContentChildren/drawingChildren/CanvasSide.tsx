@@ -26,11 +26,11 @@ function CanvasSide({
         minimapContainerRef.current!.appendChild(minimap.app.view);
     }, [])
 
-    const draw = Manager.getInstance().draw;
     const [highlightActiveSideToolbarTool, setHighlightActiveSideToolbarTool] = useState(IToolNames.select);
 
 
     const setZoomFontSize = (e: ChangeEvent): void => {
+        const draw = Manager.getInstance().draw;
         let size = Number.parseInt((e.target as HTMLSelectElement).value);
         let centerScreenOriginalXPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().x / draw.getWorld().width;
         let centerScreenOriginalYPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().y / draw.getWorld().height;
@@ -51,18 +51,21 @@ function CanvasSide({
     }
 
     const onToolSelectClick = (selectedTool: IToolNames): void => {
+        const draw = Manager.getInstance().draw;
         setHighlightActiveSideToolbarTool(selectedTool);
         IToolManager.toolActivate(draw, selectedTool);
         (Manager.getInstance().getScene() as DrawScene).renderScreen(false);  // clean up new table hover
     };
 
     const undo = (): void  => {
+        const draw = Manager.getInstance().draw;
         draw.history.undo(draw);
         draw.schema.relations.forEach(relation => relation.isDirty = true);
         (Manager.getInstance().getScene() as DrawScene).renderScreen(false);
     }
 
     const redo = (): void => {
+        const draw = Manager.getInstance().draw;
         draw.history.redo(draw);
         draw.schema.relations.forEach(relation => relation.isDirty = true);
         (Manager.getInstance().getScene() as DrawScene).renderScreen(false);

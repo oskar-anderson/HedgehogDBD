@@ -18,9 +18,10 @@ export class DrawScene extends Container implements IScene {
     canvasView: Container;
     draw: Draw;
     
-    constructor() {
+    constructor(draw: Draw) {
         super();
-        this.draw = Manager.getInstance().draw;
+        this.draw = draw;
+        Manager.getInstance().draw = draw;
 
         this.canvasView = new PIXI.Container();
         this.canvasView.hitArea = this.draw.getWorld();  // needed for events
@@ -34,23 +35,6 @@ export class DrawScene extends Container implements IScene {
 
     getState(): AppState {
         return AppState.DrawScene
-    }
-
-    async import() {
-        let reader = new FileReader();
-        reader.onload = async (event: ProgressEvent) => {
-            let file = (event.target as FileReader).result as string;
-            Manager.getInstance().draw = RasterModelerFormat.parse(file); // TODO make sure it still works - changed
-        }
-        let startReadingFile = (thisElement: HTMLInputElement) => {
-            let inputFile = thisElement.files![0];
-            reader.readAsText(inputFile);
-        }
-        let input = document.createElement('input');
-        input.type = 'file';
-        input.accept = '.txt';
-        input.addEventListener("change", () => startReadingFile(input));
-        input.click();
     }
 
 

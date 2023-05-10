@@ -3,6 +3,7 @@ import { IScene, Manager } from "../Manager";
 import { DrawScene } from "./DrawScene";
 import { AppState } from "../components/MainContent";
 import EnvGlobals from "../../EnvGlobals";
+import { Draw } from "../model/Draw";
 
 export class LoaderScene extends Container implements IScene {
 
@@ -11,9 +12,10 @@ export class LoaderScene extends Container implements IScene {
     private loaderBarBorded: Graphics;
     private loaderBarFill: Graphics;
 
-    constructor(width: number, height: number) {
+    constructor(width: number, height: number, draw: Draw) {
         super();
         const loaderBarWidth = width * 0.8;
+        Manager.getInstance().draw = draw;
 
         this.loaderBarFill = new Graphics();
         this.loaderBarFill.beginFill(0x008800, 1)
@@ -50,7 +52,7 @@ export class LoaderScene extends Container implements IScene {
             this.loaderBarFill.scale.x = progressRatio;
         });
         Loader.shared.onComplete.once((loader) => { 
-            let scene = new DrawScene()
+            let scene = new DrawScene(draw)
             Manager.getInstance().changeScene(scene);
         });
 

@@ -134,7 +134,7 @@ export class DrawScene extends Container implements IScene {
                 return !hasMatchingRelation;
             });
             for (const toTable of fromTableReferences) {
-                let referenceCenter =  toTable.getContainingRect().getFittingSquareTowardsPoint(fromTable.getContainingRect().getCenter()).getCenter();
+                let referenceCenter =  toTable.getContainingRect().getLargestFittingSquareClosestToPoint(fromTable.getContainingRect().getCenter()).getCenter();
                 let closestFromTablePoint: { x: number, y: number } | null = null;
                 for (let point of fromTable.getContainingRect().GetRelationAttachmentPoints(worldSize)) {
                     if ((closestFromTablePoint === null || 
@@ -163,7 +163,7 @@ export class DrawScene extends Container implements IScene {
             let fromTable = reference.value.fromTable;
             let toTable = reference.value.toTable;
             let startPoint = reference.value.fromTablePointA;
-            let heuristicEndPoint =  toTable.getContainingRect().getFittingSquareTowardsPoint(fromTable.getContainingRect().getCenter()).getCenter();
+            let heuristicEndPoint =  toTable.getContainingRect().getLargestFittingSquareClosestToPoint(fromTable.getContainingRect().getCenter()).getCenter();
             let possibleEnds = toTable.getContainingRect().GetRelationAttachmentPoints(worldSize);
             if (toTable.head === fromTable.head) {
                 possibleEnds = possibleEnds.filter((end) => { return AStarFinderCustom.euclidean(startPoint!, end) === 10 });
@@ -184,12 +184,6 @@ export class DrawScene extends Container implements IScene {
     }
 
     setWorldTables() {
-        let tableRect = this.draw.selectedTable?.getContainingRect() ?? new Rectangle();
-        for (let x = tableRect.x; x < tableRect.right; x++) {
-            for (let y = tableRect.y; y < tableRect.bottom; y++) {
-                this.draw.schema.worldDrawArea[this.getWorldPointCanvasIndex(x, y)].color = 0x800080;
-            }
-        }
         for (const table of this.draw.getVisibleTables()) {
             this.setWorldTable(table);
         }

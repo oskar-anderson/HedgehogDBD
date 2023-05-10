@@ -35,26 +35,12 @@ export class MyRect extends Rectangle {
         return new Point(this.x + this.width / 2, this.y + this.height / 2);
     }
     
-    getFittingSquareTowardsPoint(target: { x: number, y: number}) {
+    getLargestFittingSquareClosestToPoint(target: { x: number, y: number}) {
         let smallestSide = this.width > this.height ? this.height : this.width;
         let square = new MyRect(this.x, this.y, smallestSide, smallestSide);
         let clamp = (number: number, min: number, max: number) => Math.max(min, Math.min(number, max));
-        let dx = target.x - this.x + this.width / 2;
-        let dy = target.y - this.y + this.height / 2;
-        while(
-            dx != 0 
-            && this.contains(square.x + 1 * clamp(dx, -1, 1), square.y) 
-            && this.contains(square.x + square.width + 1 * clamp(dx, -1, 1), square.y)) {
-            square.x = square.x + (dx > 0 ? 1 : -1);
-            dx = dx + (dx > 0 ? -1 : 1);
-        }
-        while(
-            dy != 0 
-            && this.contains(square.x, square.y + 1 * clamp(dy, -1, 1)) 
-            && this.contains(square.x, square.y + square.height + 1 * clamp(dy, -1, 1))) {
-            square.y = square.y + (dy > 0 ? 1 : -1);
-            dy = dy + (dy > 0 ? -1 : 1);
-        }
+        square.x = Math.floor(clamp(target.x - square.width / 2, this.x, this.x + this.width - square.width))
+        square.y = Math.floor(clamp(target.y - square.height / 2, this.y, this.y + this.height - square.height))
         return square;
     }
 }

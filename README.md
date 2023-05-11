@@ -38,10 +38,6 @@ npm run preview
 
 3. Visit http://localhost:8080
 
-## Known problems
-* Sometimes draw screen text will be blurry even with browser zoom at 100%.
-* Files in public directory cannot be prefixed with underscores (_). Do not use underscores.
-
 ## Todo
 * Script tagging and filtering
 * Add hidden semantic description field on table row fields to allow better documentation generation. Saving has to be reworked to include extra values on top of the schema

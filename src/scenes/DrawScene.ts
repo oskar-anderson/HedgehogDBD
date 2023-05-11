@@ -69,7 +69,7 @@ export class DrawScene extends Container implements IScene {
                 if (isForceScreenReset) {
                     let bitmapText = new PIXI.BitmapText(tile.char,
                         {
-                            fontName: "Consolas",
+                            fontName: `Consolas-24`,
                             fontSize: this.draw.selectedFontSize.size,
                             tint: tile.color,
                         });

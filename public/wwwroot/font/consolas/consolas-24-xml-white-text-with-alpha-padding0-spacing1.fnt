@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <font>
-  <info face="Consolas" size="24" bold="0" italic="0" charset="" unicode="1" stretchH="100" smooth="1" aa="1" padding="0,0,0,0" spacing="1,1" outline="0"/>
+  <info face="Consolas-24" size="24" bold="0" italic="0" charset="" unicode="1" stretchH="100" smooth="1" aa="1" padding="0,0,0,0" spacing="1,1" outline="0"/>
   <common lineHeight="24" base="19" scaleW="518" scaleH="250" pages="1" packed="0" alphaChnl="0" redChnl="4" greenChnl="4" blueChnl="4"/>
   <pages>
     <page id="0" file="consolas-24-xml-white-text-with-alpha-padding0-spacing1_0.png" />

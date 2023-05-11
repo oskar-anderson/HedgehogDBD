@@ -143,10 +143,7 @@ export class DrawScene extends Container implements IScene {
         }
 
         while (! references.isEmpty()) {
-            let reference = references.pop();
-            let fromTable = reference.value.fromTable;
-            let toTable = reference.value.toTable;
-            let startPoint = reference.value.fromTablePointA;
+            let {value: {fromTable, toTable, fromTablePointA: startPoint}} = references.pop();
             let heuristicEndPoint =  toTable.getContainingRect().getLargestFittingSquareClosestToPoint(fromTable.getContainingRect().getCenter()).getCenter();
             let possibleEnds = toTable.getContainingRect().GetRelationAttachmentPoints(worldSize);
             if (toTable.head === fromTable.head) {

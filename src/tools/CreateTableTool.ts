@@ -25,11 +25,6 @@ export class CreateTableTool implements ITool {
         this.draw.schema.tables.push(this.hover);
     }
 
-    update(screenX: number, screenY: number, worldX: number, worldY: number): void {
-        let mouseCharGrid = this.draw.getWorldToCharGridPoint(worldX, worldY);
-        this.mouseMove(mouseCharGrid.x, mouseCharGrid.y);
-    }
-
     exit(): void {
         this.draw.schema.tables = this.draw.schema.tables.filter(x => ! x.isHover)
     }
@@ -70,11 +65,13 @@ export class CreateTableTool implements ITool {
     }
 
     mouseEventHandler(event: CustomMouseEvent): void {
+        let mouseCharGrid = this.draw.getWorldToCharGridPoint(event.worldX, event.worldY);
         switch (event.type) {
             case "click": 
-                let mouseCharGrid = this.draw.getWorldToCharGridPoint(event.worldX, event.worldY);
                 this.createTable(mouseCharGrid.x, mouseCharGrid.y);
                 break;
+            case "mousemove":
+                this.mouseMove(mouseCharGrid.x, mouseCharGrid.y);
             default:
                 break;
         }

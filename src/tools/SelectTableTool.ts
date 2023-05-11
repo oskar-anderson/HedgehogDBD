@@ -30,13 +30,6 @@ export class SelectTableTool implements ITool {
 
     }
 
-    update(screenX: number, screenY: number, worldX: number, worldY: number) {
-        if (this.hover === null) return
-        let mouseCharGrid = this.draw.getWorldToCharGridPoint(worldX, worldY);
-        this.updateHoverTablePosition(mouseCharGrid.x, mouseCharGrid.y);
-        
-    }
-
     exit() {
 
     }
@@ -124,6 +117,9 @@ export class SelectTableTool implements ITool {
                     Manager.getInstance().changeScene(new TableScene(TableDTO.initFromTable(selectedTable)));
                 }
                 break;
+            case "mousemove":
+                if (this.hover === null) return
+                this.updateHoverTablePosition(mouseCharGrid.x, mouseCharGrid.y);
             default:
                 break;
         }

@@ -31,10 +31,15 @@ export default function CanvasContainer({
             }
         }
 
-        const mouseButtonEvent = (event: MouseEvent) => { 
+        const activeToolMouseEventHandler = (event: MouseEvent) => { 
             const drawScene = (Manager.getInstance().getScene() as DrawScene);
-            drawScene.draw.activeTool.mouseEventHandler(mapMouseEvent(event)) 
+            drawScene.draw.activeTool.mouseEventHandler(mapMouseEvent(event));
+            if (drawScene.draw.activeTool.isDirty) {
+                drawScene.draw.activeTool.isDirty = false;
+                drawScene.renderScreen(false);
+            }
         };
+
         const mouseMoveEvent = (event: MouseEvent) => {
             const drawScene = (Manager.getInstance().getScene() as DrawScene);
             const mouseEvent = mapMouseEvent(event);
@@ -51,22 +56,18 @@ export default function CanvasContainer({
                 WCx: ${charGridPoint.x}, WCy: ${charGridPoint.y}
             </div>
             `;
-            drawScene.draw.activeTool.update(mouseEvent.screenX, mouseEvent.screenY, mouseEvent.worldX, mouseEvent.worldY);
-            if (drawScene.draw.activeTool.isDirty) {
-                drawScene.draw.activeTool.isDirty = false;
-                drawScene.renderScreen(false);
-            }
+            activeToolMouseEventHandler(event);
          }
 
-        Manager.getInstance().getView().addEventListener("click", mouseButtonEvent);
-        Manager.getInstance().getView().addEventListener("mousedown", mouseButtonEvent);
-        Manager.getInstance().getView().addEventListener("mouseup", mouseButtonEvent);
+        Manager.getInstance().getView().addEventListener("click", activeToolMouseEventHandler);
+        Manager.getInstance().getView().addEventListener("mousedown", activeToolMouseEventHandler);
+        Manager.getInstance().getView().addEventListener("mouseup", activeToolMouseEventHandler);
         Manager.getInstance().getView().addEventListener('mousemove', mouseMoveEvent);
 
         return () => { 
-            Manager.getInstance().getView().removeEventListener("click", mouseButtonEvent);
-            Manager.getInstance().getView().removeEventListener("mousedown", mouseButtonEvent);
-            Manager.getInstance().getView().removeEventListener("mouseup", mouseButtonEvent);
+            Manager.getInstance().getView().removeEventListener("click", activeToolMouseEventHandler);
+            Manager.getInstance().getView().removeEventListener("mousedown", activeToolMouseEventHandler);
+            Manager.getInstance().getView().removeEventListener("mouseup", activeToolMouseEventHandler);
             Manager.getInstance().getView().removeEventListener("mousemove", mouseMoveEvent);
         }
     }, []);

@@ -5,7 +5,6 @@ import { SelectTableTool } from "./SelectTableTool";
 
 export interface ITool {
     init(): void;
-    update(screenX: number, screenY: number, worldX: number, worldY: number): void;
     exit(): void;
     isDirty: boolean;
     getName(): IToolNames;

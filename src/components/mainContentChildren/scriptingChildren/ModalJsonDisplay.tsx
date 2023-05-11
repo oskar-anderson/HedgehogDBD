@@ -1,5 +1,5 @@
-import { Manager } from "../Manager";
-import { SchemaDTO } from "../model/SchemaDTO";
+import { Manager } from "../../../Manager";
+import { SchemaDTO } from "../../../model/SchemaDTO";
 import * as monaco from 'monaco-editor';
 import { useEffect, useState } from "react";
 
@@ -8,7 +8,7 @@ export interface ModelJsonDisplayProps {
 }
 
 
-export default function ModelJsonDisplayModal({ setJsonDisplayModelState }: ModelJsonDisplayProps) {
+export default function ModalJsonDisplay({ setJsonDisplayModelState }: ModelJsonDisplayProps) {
     const [content, setContent] = useState("");
 
     useEffect(() => {
@@ -28,7 +28,7 @@ export default function ModelJsonDisplayModal({ setJsonDisplayModelState }: Mode
                 <button type="button" className="btn-close" onClick={() => { setJsonDisplayModelState(false) }} aria-label="Close"></button>
             </div>
             <div className="modal-body">
-                <pre className="colored-code" data-lang="javascript" dangerouslySetInnerHTML={{__html: content}}></pre>
+                <pre className="colored-code" data-lang="javascript" dangerouslySetInnerHTML={{ __html: content }}></pre>
             </div>
             <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" onClick={() => { setJsonDisplayModelState(false) }}>Close</button>

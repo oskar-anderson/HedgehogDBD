@@ -2,11 +2,11 @@ import { Manager } from "../../Manager";
 import { LocalStorageData, Script } from "../../model/LocalStorageData";
 import * as Monaco from 'monaco-editor';
 import { ScriptingScene } from "../../scenes/ScriptingScene";
-import ScriptModal, { ModalScriptListItemProps } from "../ModalScriptListItem";
+import ModalScriptListItem, { ModalScriptListItemProps } from "./scriptingChildren/ModalScriptListItem";
 import { SetStateAction, useCallback, useEffect, useReducer, useRef, useState } from "react";
-import ScriptExecuteModal, { ModalScriptExecuteProps } from "../ModalScriptExecute";
-import JsonDisplayModal, { ModelJsonDisplayProps } from "../ModalJsonDisplay";
-import ModalSaveScript, { ModalSaveScriptProps } from "../ModalSaveScript";
+import ModalScriptExecute, { ModalScriptExecuteProps } from "./scriptingChildren/ModalScriptExecute";
+import ModalJsonDisplay, { ModelJsonDisplayProps } from "./scriptingChildren/ModalJsonDisplay";
+import ModalSaveScript, { ModalSaveScriptProps } from "./scriptingChildren/ModalSaveScript";
 import Editor from '@monaco-editor/react';
 import Giscus from '@giscus/react';
 import { AppState } from "../MainContent";
@@ -18,6 +18,7 @@ export default function Scripting() {
     console.log("scripting")
 
     let [builtinScripts, setBuiltinScripts] = useState<Script[]>([]);
+    let [areScriptsLoaded, setAreScriptsLoaded] = useState(false);
     const editorRef = useRef<Monaco.editor.IStandaloneCodeEditor>(null);
 
     function handleEditorDidMount(editor: Monaco.editor.IStandaloneCodeEditor, monaco: any) {
@@ -65,13 +66,14 @@ export default function Scripting() {
                     ["builtin", "readonly"]
                 )
             ];
-            setBuiltinScripts(fetchedScripts)
+            setBuiltinScripts(fetchedScripts);
+            setAreScriptsLoaded(true);
         }
         getScripts();
     }, []);
 
-    const localStorageData = LocalStorageData.getStorage();
-    const scripts = localStorageData.scripts.concat(builtinScripts);  // TODO! useReducer
+    const [localStorageScripts, setLocalStorageScripts] = useState(LocalStorageData.getStorage().scripts);
+    const scripts = localStorageScripts.concat(builtinScripts)
 
     const [isScriptListItemModalVisible, setIsScriptListItemModalVisible] = useState(false);
     const [mainModalProps, setMainModalProps] = useState<ModalScriptListItemProps | null>(null);
@@ -86,8 +88,14 @@ export default function Scripting() {
     const [saveScriptModalProps, setSaveScriptModalProps] = useState<ModalSaveScriptProps | null>(null);
 
 
+    const addScriptFromLocalStorage = (script: Script) => {
+        LocalStorageData.getStorage().addScript(script)
+        setLocalStorageScripts([...LocalStorageData.getStorage().scripts])
+    }
+
     const removeScriptFromLocalStorage = useCallback((script: Script) => {
-        localStorageData.removeScript(script)
+        LocalStorageData.getStorage().removeScript(script)
+        setLocalStorageScripts([...LocalStorageData.getStorage().scripts])
     }, [])
 
 
@@ -120,7 +128,7 @@ export default function Scripting() {
         setSaveScriptModalProps({
             setModalSaveScriptState: setIsSaveScriptModalVisible,
             editorValue: editorRef.current!.getValue(),
-            localStorageData: localStorageData
+            addLocalStorageData: addScriptFromLocalStorage
         })
         setIsSaveScriptModalVisible(true);
     }
@@ -147,18 +155,31 @@ export default function Scripting() {
                             <div className="h4">Scripts</div>
                             <ul className="list-group" style={{ maxHeight: "calc(41px * 6)", overflowY: "scroll" }}>
                                 {
-                                    scripts.map((script, i) => (
-                                        <li key={i} onClick={() => onClickScriptListItem(script)} className="script-modal list-group-item d-flex justify-content-between">
-                                            <span>{script.name}</span>
-                                            <div>
-                                                {
-                                                    script.tags.map((tag, j) => (
-                                                        <span key={j} className="badge bg-info rounded-pill">{tag}</span>
-                                                    ))
-                                                }
-                                            </div>
-                                        </li>
-                                    ))
+                                    areScriptsLoaded ?
+                                        scripts.map((script, i) => (
+                                            <li key={i} onClick={() => onClickScriptListItem(script)} className="script-modal list-group-item d-flex justify-content-between">
+                                                <span>{script.name}</span>
+                                                <div>
+                                                    {
+                                                        script.tags.map((tag, j) => (
+                                                            <span key={j} className="badge bg-info rounded-pill">{tag}</span>
+                                                        ))
+                                                    }
+                                                </div>
+                                            </li>
+                                        ))
+                                        : (() => {
+                                            const placeholderElements = [];
+                                            for (let i = 0; i < 6; i++) {
+                                                placeholderElements.push(
+                                                    <li key={i} className="script-modal list-group-item d-flex justify-content-between">
+                                                        <span>Loading ...</span>
+                                                        <div></div>
+                                                    </li>
+                                                );
+                                            }
+                                            return placeholderElements;
+                                        })()
                                 }
                             </ul>
                         </div>
@@ -206,7 +227,7 @@ export default function Scripting() {
             </div>
             {isScriptListItemModalVisible && <div className="modal" tabIndex={-1} style={{ display: "block" }}>
                 <div className="modal-dialog">
-                    <ScriptModal
+                    <ModalScriptListItem
                         script={mainModalProps!.script}
                         highlightedContent={mainModalProps!.highlightedContent}
                         switchToExecuteModel={switchToExecuteModel}
@@ -214,12 +235,12 @@ export default function Scripting() {
                         setExecuteModalState={setIsExecuteModalVisible}
                         setEditorValue={setEditorValue}
                         removeScriptFromLocalStorage={removeScriptFromLocalStorage}
-                    ></ScriptModal>
+                    ></ModalScriptListItem>
                 </div>
             </div>}
             {isExecuteModalVisible && <div className="modal" tabIndex={-1} style={{ display: "block" }}>
                 <div className="modal-dialog">
-                    <ScriptExecuteModal
+                    <ModalScriptExecute
                         isSuccess={executeModalProps!.isSuccess}
                         content={executeModalProps!.content}
                         setModalState={executeModalProps!.setModalState}
@@ -228,7 +249,7 @@ export default function Scripting() {
             </div>}
             {isJsonDisplayModalVisible && <div className="modal" tabIndex={-1} style={{ display: "block" }}>
                 <div className="modal-dialog">
-                    <JsonDisplayModal
+                    <ModalJsonDisplay
                         setJsonDisplayModelState={setIsJsonDisplayModalVisible}
                     />
                 </div>

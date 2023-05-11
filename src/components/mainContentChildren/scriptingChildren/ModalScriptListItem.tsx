@@ -1,8 +1,8 @@
 import { SetStateAction, useState } from "react";
-import { Manager } from "../Manager";
-import { Draw } from "../model/Draw";
-import { Script } from "../model/LocalStorageData";
-import { ScriptingScene } from "../scenes/ScriptingScene";
+import { Manager } from "../../../Manager";
+import { Draw } from "../../../model/Draw";
+import { Script } from "../../../model/LocalStorageData";
+import { ScriptingScene } from "../../../scenes/ScriptingScene";
 import { ModalScriptExecuteProps } from "./ModalScriptExecute";
 
 export interface ModalScriptListItemProps {
@@ -49,7 +49,7 @@ export default function ModalScriptListItem({
                 <button type="button" className="btn-close" onClick={() => { setScriptModalState(false) }} aria-label="Close"></button>
             </div>
             <div className="modal-body colored-code" style={{ maxHeight: '76vh', overflow: 'auto' }}>
-                <pre dangerouslySetInnerHTML={{__html: highlightedContent}}></pre>
+                <pre dangerouslySetInnerHTML={{ __html: highlightedContent }}></pre>
             </div>
             <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" onClick={() => { setScriptModalState(false) }}>Close</button>

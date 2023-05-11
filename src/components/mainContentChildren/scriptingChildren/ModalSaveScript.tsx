@@ -1,22 +1,22 @@
-import { useState } from "react";
-import { LocalStorageData, Script } from "../model/LocalStorageData";
+import { SetStateAction, useState } from "react";
+import { LocalStorageData, Script } from "../../../model/LocalStorageData";
 
 
 export interface ModalSaveScriptProps {
     setModalSaveScriptState: React.Dispatch<React.SetStateAction<boolean>>
     editorValue: string
-    localStorageData: LocalStorageData
+    addLocalStorageData: (script: Script) => void
 }
 
-export default function ModalSaveScript({setModalSaveScriptState, editorValue, localStorageData} : ModalSaveScriptProps) {
-    
+export default function ModalSaveScript({ setModalSaveScriptState, editorValue, addLocalStorageData }: ModalSaveScriptProps) {
+
     const [inputValue, setInputValue] = useState("");
-    
+
     const onClickSaveScript = () => {
-        localStorageData.addScript(new Script(inputValue, editorValue, []));
+        addLocalStorageData(new Script(inputValue, editorValue, []));
         setModalSaveScriptState(false)
     }
-    
+
     return (
         <div className="modal-content">
             <div className="modal-header">
@@ -29,7 +29,7 @@ export default function ModalSaveScript({setModalSaveScriptState, editorValue, l
             </div>
             <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" onClick={() => setModalSaveScriptState(false)}>Cancel</button>
-                <button id="modal-save-btn" onClick={() => onClickSaveScript() } type="button" className="btn btn-primary">Save</button>
+                <button id="modal-save-btn" onClick={() => onClickSaveScript()} type="button" className="btn btn-primary">Save</button>
             </div>
         </div>
     )

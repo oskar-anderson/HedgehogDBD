@@ -5,11 +5,9 @@ import Scripting from "./mainContentChildren/Scripting";
 import { useAppStateManagement } from "../Store";
 import TopToolbarAction from "./TopToolbarAction";
 import { Draw } from "../model/Draw";
-import { Manager } from "../Manager";
+import { IScene, Manager } from "../Manager";
 import { LoaderScene } from "../scenes/LoaderScene";
 import { useContext, useEffect, useRef, useState } from "react";
-import { Schema } from "../model/Schema";
-import { MyRect } from "../model/MyRect";
 
 
 interface MainComponentProps {
@@ -32,14 +30,17 @@ export default function MainComponent({ draw }: MainComponentProps) {
             draw.getWorld().width,
             draw.getWorld().height,
             0xffffff,
-            draw
+            draw,
+            (newScene: IScene) => { setAppState(newScene.getState()); }
         );
         canvasContainerRef.current!.appendChild(Manager.getInstance().getView());
         let scene = new LoaderScene(canvasContainerRef.current!.offsetWidth, 720, draw);
         Manager.getInstance().changeScene(scene);
     }, [])
 
-    const optionalTopToolbar = (appState === AppState.DrawScene || appState === AppState.ScriptingScene) ? <TopToolbarAction /> : null
+    const optionalTopToolbar = (appState === AppState.DrawScene || appState === AppState.ScriptingScene) ? 
+        <TopToolbarAction /> : 
+        null
 
     return (
         <>

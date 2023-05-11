@@ -12,6 +12,7 @@ export class Manager {
      * For accessing state inside React components. Query for every operation separately, not once for entire component.
      */
     public draw: Draw;
+    public onSceneChange: ((newScene: IScene) => void)
 
     private static instance: Manager;
 
@@ -27,14 +28,16 @@ export class Manager {
         height: number, 
         background: number, 
         draw: Draw, 
+        onSceneChange: (newScene: IScene) => void
         ): void {
-        this.instance = new Manager(width, height, background, draw);
+        this.instance = new Manager(width, height, background, draw, onSceneChange);
 
     }
 
-    private constructor(width: number, height: number, background: number, draw: Draw
+    private constructor(width: number, height: number, background: number, draw: Draw, onSceneChange: ((newScene: IScene) => void)
         ) {
         this.draw = draw;
+        this.onSceneChange = onSceneChange;
         extensions.remove(InteractionManager);
         this.app = new Application({
             backgroundColor: background,
@@ -72,6 +75,7 @@ export class Manager {
         // Add the new one
         this.currentScene = newScene;
         this.app.stage.addChild(this.currentScene);
+        this.onSceneChange(newScene);
     }
 
     public getScene(): IScene | null {

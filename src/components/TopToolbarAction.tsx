@@ -10,8 +10,6 @@ import EnvGlobals from "../../EnvGlobals";
 
 
 export default function TopToolbarAction() {
-  const { setAppState } = useAppStateManagement();
-
   const newSchema = () => {
     const oldDraw = Manager.getInstance().draw;
     Manager.getInstance().changeScene(new DrawScene(new Draw(new Schema([]), oldDraw.getWorld())));
@@ -28,12 +26,10 @@ export default function TopToolbarAction() {
   const changeSceneToScripting = async () => {
     if (Manager.getInstance().getScene()!.getState() === AppState.ScriptingScene) { return; }
     Manager.getInstance().changeScene(new ScriptingScene());
-    setAppState(AppState.ScriptingScene);
   }
   const changeSceneToDraw = async () => {
     if (Manager.getInstance().getScene()!.getState() === AppState.DrawScene) { return; }
     Manager.getInstance().changeScene(new DrawScene(Manager.getInstance().draw));
-    setAppState(AppState.DrawScene);
   }
 
   const saveAsText = async () => {

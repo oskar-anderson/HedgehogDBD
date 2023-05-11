@@ -56,17 +56,6 @@ export default function Drawing() {
         return () => { clearInterval(minimapUpdateInterval) }
     }, [])
 
-    useEffect(() => {
-        // this is kinda stupid but it will mean that the canvas has no knowledge of react and setState.
-        const appStateHasChangedCheckInterval = setInterval(() => {
-            const scene = Manager.getInstance().getScene();
-            if (scene !== null && scene.getState() !== AppState.DrawScene) {
-                setAppState(scene.getState());
-            }
-        }, 1000 / 60)
-        
-        return () => { clearInterval(appStateHasChangedCheckInterval); }
-    }, []);
 
 
     return (

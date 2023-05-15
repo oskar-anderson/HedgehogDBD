@@ -39,7 +39,7 @@ export default function MainComponent({ draw }: MainComponentProps) {
     }, [])
 
     const optionalTopToolbar = (appState === AppState.DrawScene || appState === AppState.ScriptingScene) ? 
-        <TopToolbarAction /> : 
+        <TopToolbarAction currentState={appState} /> : 
         null
 
     return (

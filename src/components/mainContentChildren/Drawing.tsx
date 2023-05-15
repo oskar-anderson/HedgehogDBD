@@ -9,6 +9,7 @@ import { DrawScene } from "../../scenes/DrawScene";
 import { MyRect } from "../../model/MyRect";
 import { AppState } from "../MainContent";
 import { useAppStateManagement } from "../../Store";
+import CanvasSecondaryTopToolbar from "./drawingChildren/CanvasSecondaryTopToolbar";
 
 
 export class DrawingUtil {
@@ -60,6 +61,7 @@ export default function Drawing() {
 
     return (
         <div className="canvas-visibility-container">
+            <CanvasSecondaryTopToolbar />
             <div style={{ display: 'flex', width: '100vw', height: '720px' }}>
                 <CanvasSide 
                     canvasContainerRef={canvasContainerRef}

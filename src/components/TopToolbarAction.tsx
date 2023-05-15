@@ -73,11 +73,11 @@ export default function TopToolbarAction({ currentState } : TopToolbarActionProp
         <ul className="navbar-nav me-auto flex-row ms-3 gap-3">
           <li>
             <img ref={drawTooltipRef} data-bs-toggle="tooltip" data-bs-placement="bottom" title="Draw" style={currentState === AppState.DrawScene ? linkStyles.activeLinkColoredca63 : (isDrawIconFocused ? linkStyles.selectedLinkColor99968c : linkStyles.defaultLinkColorf1f1f1)} 
-              width={42} height={42} src={"/wwwroot/img/icons/erd-icon.png"} alt="Draw" onClick={() => changeSceneToDraw()} />
+              width={42} height={42} src={EnvGlobals.BASE_URL + "/wwwroot/img/icons/erd-icon.png"} alt="Draw" onClick={() => changeSceneToDraw()} />
           </li>
           <li>
             <img ref={scriptingTooltipRef} data-bs-toggle="tooltip" data-bs-placement="bottom" title="Scripting" style={currentState === AppState.ScriptingScene ? linkStyles.activeLinkColoredca63 : (isScriptIconFocused ? linkStyles.selectedLinkColor99968c : linkStyles.defaultLinkColorf1f1f1)} 
-                width={42} height={42} src={"/wwwroot/img/icons/code-icon.png"} alt="Scripting" onClick={() => changeSceneToScripting()} />
+                width={42} height={42} src={EnvGlobals.BASE_URL + "/wwwroot/img/icons/code-icon.png"} alt="Scripting" onClick={() => changeSceneToScripting()} />
           </li>
         </ul>
       </div>

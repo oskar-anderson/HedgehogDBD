@@ -34,11 +34,6 @@ export default function TopToolbarAction({ currentState } : TopToolbarActionProp
     return () => {
       draw.dispose()
       scripting.dispose()
-      
-      drawTooltipRef.current!.removeEventListener("show.bs.tooltip", handleDrawShow)
-      drawTooltipRef.current!.removeEventListener("hide.bs.tooltip", handleDrawHide)
-      scriptingTooltipRef.current!.removeEventListener("show.bs.tooltip", handleScriptingShow)
-      scriptingTooltipRef.current!.removeEventListener("hide.bs.tooltip", handleScriptingHide)
     }
   }, [])
 

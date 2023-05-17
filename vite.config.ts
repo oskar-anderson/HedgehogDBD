@@ -8,6 +8,10 @@ export default defineConfig({
     react(),
     monacoEditorPlugin({})
   ],
+  build: {
+    // Enables better console errors messages (name of React component error occured in) on built app
+    minify: false
+  },
   base: "./",
   server: {
     port: 8080

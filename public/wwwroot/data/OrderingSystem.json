@@ -1,0 +1,342 @@
+[
+    {
+        "id": "9e00060d-1e1d-413b-a485-edaf6ce146e7",
+        "position": {
+            "x": 18,
+            "y": 5
+        },
+        "head": "order_items",
+        "tableRows": [
+            {
+                "name": "order_item_id",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    "PK"
+                ]
+            },
+            {
+                "name": "order_id",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    "FK(\"orders\")"
+                ]
+            },
+            {
+                "name": "product_id",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    "FK(\"products\")"
+                ]
+            },
+            {
+                "name": "product_quantity",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            },
+            {
+                "name": "other_details",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            }
+        ]
+    },
+    {
+        "id": "4060e967-9a43-4ab4-87cc-caa1539865d6",
+        "position": {
+            "x": 13,
+            "y": 21
+        },
+        "head": "products",
+        "tableRows": [
+            {
+                "name": "product_id",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    "PK"
+                ]
+            },
+            {
+                "name": "product_type_id",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    "FK(\"product_types\")"
+                ]
+            },
+            {
+                "name": "product_name",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            },
+            {
+                "name": "product_size",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            },
+            {
+                "name": "product_description",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            },
+            {
+                "name": "other_details",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            }
+        ]
+    },
+    {
+        "id": "07ba7d4b-7697-4e4b-9c04-72282dc23577",
+        "position": {
+            "x": 14,
+            "y": 37
+        },
+        "head": "product_types",
+        "tableRows": [
+            {
+                "name": "product_type_id",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    "PK"
+                ]
+            },
+            {
+                "name": "parent_type_id",
+                "datatype": "VARCHAR(255)?",
+                "attributes": [
+                    "FK(\"product_types\")"
+                ]
+            },
+            {
+                "name": "product_name",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            },
+            {
+                "name": "product_type_description",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            }
+        ]
+    },
+    {
+        "id": "3a6aa648-cebc-4696-833b-adbac6120b1e",
+        "position": {
+            "x": 90,
+            "y": 8
+        },
+        "head": "orders",
+        "tableRows": [
+            {
+                "name": "order_id",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    "PK"
+                ]
+            },
+            {
+                "name": "customer_id",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    "FK(\"customers\")"
+                ]
+            },
+            {
+                "name": "date_order_placed",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            },
+            {
+                "name": "order_details",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            }
+        ]
+    },
+    {
+        "id": "294bae43-0f25-488b-a552-4996d7f64ee0",
+        "position": {
+            "x": 102,
+            "y": 22
+        },
+        "head": "invoices",
+        "tableRows": [
+            {
+                "name": "invoice_id",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    "PK"
+                ]
+            },
+            {
+                "name": "order_id",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    "FK(\"orders\")"
+                ]
+            },
+            {
+                "name": "invoice_date",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            },
+            {
+                "name": "invoice_detail",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            }
+        ]
+    },
+    {
+        "id": "b9690d38-feaf-468b-9eb1-ac12945ee365",
+        "position": {
+            "x": 172,
+            "y": 4
+        },
+        "head": "customers",
+        "tableRows": [
+            {
+                "name": "customer_id",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    "PK"
+                ]
+            },
+            {
+                "name": "customer_first_name",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            },
+            {
+                "name": "customer_middle_initial",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            },
+            {
+                "name": "customer_last_name",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            },
+            {
+                "name": "gender",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            },
+            {
+                "name": "email_address",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            },
+            {
+                "name": "login_name",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            },
+            {
+                "name": "login_password",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            },
+            {
+                "name": "phone_number",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            },
+            {
+                "name": "address_line_1",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            },
+            {
+                "name": "address_line_2",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            },
+            {
+                "name": "address_line_3",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            },
+            {
+                "name": "address_line_4",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            },
+            {
+                "name": "town_city",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            },
+            {
+                "name": "state_county_province",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            },
+            {
+                "name": "country",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            },
+            {
+                "name": "order_details",
+                "datatype": "VARCHAR(255)",
+                "attributes": [
+                    ""
+                ]
+            }
+        ]
+    }
+]

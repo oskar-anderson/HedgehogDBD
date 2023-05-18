@@ -1,12 +1,14 @@
 import { MyRect } from "./MyRect";
 import { Draw } from "./Draw";
+import { Table } from "./Table";
+import { Relation } from "./Relation";
 
 export class CostGrid {
 
     value: CostGridTileTypes[][][];
     size: MyRect;
-    constructor(draw: Draw) {
-        this.size = draw.getWorldCharGrid();
+    constructor(sizeWorldCharGrid: MyRect) {
+        this.size = sizeWorldCharGrid;
         this.value = this.getEmptyWorldCharGridCost();
     }
 
@@ -18,6 +20,19 @@ export class CostGrid {
                 row.push([]);
             }              
             costGrid.push(row);
+        }
+        return costGrid;
+    }
+
+    static getCostGrid(size: MyRect, tables: Table[], relations: Relation[]) {
+        let costGrid = new CostGrid(size);
+
+        for (let table of tables) {
+            table.updateTableCost(costGrid, size);
+        }
+
+        for (let relation of relations) {
+            relation.updateRelationsCost(costGrid, size);
         }
         return costGrid;
     }

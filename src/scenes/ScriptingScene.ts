@@ -27,9 +27,9 @@ export class ScriptingScene extends Container implements IScene {
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncFunction
         // https://stackoverflow.com/questions/46118496/asyncfunction-is-not-defined-yet-mdn-documents-its-usage
         const AsyncFunction = async function () {}.constructor;
-        let fn = AsyncFunction("RESULT_LOG", "schema", "dayjs", "PIXI", "BASE_URL", fnBody);
+        let fn = AsyncFunction("RESULT_LOG", "schema", "dayjs", "BASE_URL", fnBody);
         try {
-            await fn(resultLog, schemaDTO, dayjs, PIXI, EnvGlobals.BASE_URL);
+            await fn(resultLog, schemaDTO, dayjs, EnvGlobals.BASE_URL);
         } catch (error: any) {
             errorMsg = `${error.name}: ${error.message}`;
         }

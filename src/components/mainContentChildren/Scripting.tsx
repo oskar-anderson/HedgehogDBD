@@ -44,26 +44,6 @@ export default function Scripting() {
                     "SQL CREATE",
                     await fetch(EnvGlobals.BASE_URL + '/wwwroot/scripts/createTablesSQL.js', { cache: "no-cache" }).then(x => x.text()),
                     ["builtin", "SQL"]
-                ),
-                new Script(
-                    "Export TXT",
-                    await fetch(EnvGlobals.BASE_URL + '/wwwroot/scripts/saveAsTxt.js', { cache: "no-cache" }).then(x => x.text()),
-                    ["builtin"]
-                ),
-                new Script(
-                    "Export clipboard",
-                    await fetch(EnvGlobals.BASE_URL + '/wwwroot/scripts/saveToClipboard.js', { cache: "no-cache" }).then(x => x.text()),
-                    ["builtin"]
-                ),
-                new Script(
-                    "Export image",
-                    await fetch(EnvGlobals.BASE_URL + '/wwwroot/scripts/takeScreenshot.js', { cache: "no-cache" }).then(x => x.text()),
-                    ["builtin", "async"]
-                ),
-                new Script(
-                    "Shared scripts lib",
-                    await fetch(EnvGlobals.BASE_URL + '/wwwroot/scripts/SHARED.js', { cache: "no-cache" }).then(x => x.text()),
-                    ["builtin", "readonly"]
                 )
             ];
             setBuiltinScripts(fetchedScripts);

@@ -7,29 +7,11 @@ import EnvGlobals from "../EnvGlobals"
 
 
 function App() {
-  const [draw, setDraw] = useState<Draw | null>(null);
-
-  useEffect(() => {
-    async function fetchApp() {
-      let text = await (await fetch(EnvGlobals.BASE_URL + '/wwwroot/data/SchemaTest2.txt', { cache: "no-cache" })).text();
-      let draw = RasterModelerFormat.parse(text);
-      setDraw(draw)
-    }
-
-    fetchApp();
-  }, [])
-
   const appStateManagementValue = useAppStateManagementDefault();
-
-  if (!draw) {
-    return (<div>Loading...</div>);
-  }
-
-
 
   return (
     <AppStateManagementContext.Provider value={appStateManagementValue}>
-      <MainContent draw={draw} />
+      <MainContent />
     </AppStateManagementContext.Provider>
   )
 }

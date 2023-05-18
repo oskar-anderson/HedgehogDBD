@@ -12,6 +12,7 @@ import { CostGrid } from "../model/CostGrid";
 import { PriorityQueue } from "@datastructures-js/priority-queue";
 import RasterModelerFormat from "../RasterModelerFormat";
 import { AppState } from "../components/MainContent";
+import { MyRect } from "../model/MyRect";
 
 export class DrawScene extends Container implements IScene {
 
@@ -94,7 +95,7 @@ export class DrawScene extends Container implements IScene {
     setWorldRelation() {
         let worldSize = this.draw.getWorldCharGrid();
 
-        let costGrid = new CostGrid(this.draw);
+        let costGrid = new CostGrid(this.draw.getWorldCharGrid());
         for (let table of this.draw.schema.tables) {
             table.updateTableCost(costGrid, worldSize);
         }
@@ -316,6 +317,56 @@ export class DrawScene extends Container implements IScene {
             for (let x = rectSpecialRowInnerRelative.x; x < rectSpecialRowInnerRelative.right; x++) {
                 result[y][x] = rows[y - rectSpecialRowInnerRelative.y].attributes[x - rectSpecialRowInnerRelative.x] ?? ' ';
             }
+        }
+        return result;
+    }
+
+    static setWorldRelation2(costGrid: CostGrid, worldSize: MyRect, tables: Table[]) {
+        let references = new PriorityQueue<{ 
+            value: { fromTable: Table, fromTablePointA: { x: number, y: number}, toTable: Table}, 
+            cost: number
+        }>((a: {cost: number}, b: {cost: number}) => { return a.cost < b.cost ? -1 : 1 });   // lowest cost will pop first
+        for (let fromTable of tables) {
+            let fromTableReferences = fromTable.getReferences(tables);
+            for (const toTable of fromTableReferences) {
+                let referenceCenter =  toTable.getContainingRect().getLargestFittingSquareClosestToPoint(fromTable.getContainingRect().getCenter()).getCenter();
+                let closestFromTablePoint: { x: number, y: number } | null = null;
+                for (let point of fromTable.getContainingRect().GetRelationAttachmentPoints(worldSize)) {
+                    if ((closestFromTablePoint === null || 
+                        AStarFinderCustom.euclidean(closestFromTablePoint, referenceCenter) > 
+                        AStarFinderCustom.euclidean(point, referenceCenter))
+                    ) {
+                        closestFromTablePoint = point;
+                    }
+                }
+                if (closestFromTablePoint === null) {
+                    continue;
+                }
+                references.push({ 
+                    value: { 
+                        fromTable: fromTable,
+                        fromTablePointA: closestFromTablePoint,
+                        toTable:  toTable
+                    }, 
+                    cost: AStarFinderCustom.euclidean(closestFromTablePoint, referenceCenter)
+                });
+            }
+        }
+
+        let result = []
+        while (! references.isEmpty()) {
+            let {value: {fromTable, toTable, fromTablePointA: startPoint}} = references.pop();
+            let heuristicEndPoint =  toTable.getContainingRect().getLargestFittingSquareClosestToPoint(fromTable.getContainingRect().getCenter()).getCenter();
+            let possibleEnds = toTable.getContainingRect().GetRelationAttachmentPoints(worldSize);
+            if (toTable.head === fromTable.head) {
+                possibleEnds = possibleEnds.filter((end) => { return AStarFinderCustom.euclidean(startPoint!, end) === 10 });
+            }
+            let grid = new WorldGrid(costGrid.flatten());
+            let path = new AStarFinderCustom(AStarFinderCustom.manhattan).findPath(startPoint, heuristicEndPoint, possibleEnds, grid);
+            let points = path.map((point) => { return { point: new Point(point.x, point.y), char: "*" }; })
+            let relation = new Relation(points, fromTable, toTable)
+            relation.updateRelationsCost(costGrid, worldSize);
+            result.push(relation);
         }
         return result;
     }

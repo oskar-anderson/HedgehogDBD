@@ -8,11 +8,9 @@ import { Draw } from "../model/Draw";
 import { IScene, Manager } from "../Manager";
 import { LoaderScene } from "../scenes/LoaderScene";
 import { useContext, useEffect, useRef, useState } from "react";
+import { Schema } from "../model/Schema";
+import { MyRect } from "../model/MyRect";
 
-
-interface MainComponentProps {
-    draw: Draw
-}
 
 export enum AppState {
     DrawScene,
@@ -21,14 +19,15 @@ export enum AppState {
     TableScene
 }
 
-export default function MainComponent({ draw }: MainComponentProps) {
+export default function MainComponent() {
     const { appState, setAppState } = useAppStateManagement();
     const canvasContainerRef = useRef<HTMLDivElement>(null);
     
     useEffect(() => {
+        let draw = new Draw(new Schema([]), new MyRect(0, 0, 3240, 2160));
         Manager.constructInstance(
-            draw.getWorld().width,
-            draw.getWorld().height,
+            3240,
+            2160,
             0xffffff,
             draw,
             (newScene: IScene) => { setAppState(newScene.getState()); }

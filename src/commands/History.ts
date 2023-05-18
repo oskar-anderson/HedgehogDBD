@@ -1,18 +1,12 @@
 import { Draw } from "../model/Draw";
-import { CommandMoveTableRelative } from "./appCommands/CommandMoveTableRelative";
-import { CommandModifyTable } from "./appCommands/CommandModifyTable";
-import { CommandCreateTable } from "./appCommands/CommandCreateTable";
-import { CommandDeleteTable } from "./appCommands/CommandDeleteTable";
+import { CommandMoveTableRelative, CommandMoveTableRelativeArgs } from "./appCommands/CommandMoveTableRelative";
+import { CommandModifyTable, CommandModifyTableArgs } from "./appCommands/CommandModifyTable";
+import { CommandCreateTable, CommandCreateTableArgs } from "./appCommands/CommandCreateTable";
+import { CommandDeleteTable, CommandDeleteTableArgs } from "./appCommands/CommandDeleteTable";
 import { ICommand } from "./ICommand";
 
 
 export class History {
-    static implementations = [ 
-        { name: CommandMoveTableRelative.name, constructor: CommandMoveTableRelative },
-        { name: CommandModifyTable.name, constructor: CommandModifyTable },
-        { name: CommandCreateTable.name, constructor: CommandCreateTable },
-        { name: CommandDeleteTable.name, constructor: CommandDeleteTable },
-    ];
     undoHistory: string[] = [];
     redoHistory: string[] = [];
     
@@ -20,16 +14,37 @@ export class History {
 
     execute(commandInstance: ICommand<any>) {
         let command = { commandName: commandInstance.constructor.name, args: commandInstance.args};
-        if (! History.implementations.some(x => x.name === command.commandName)) throw Error(`Implementation not registered! commandName: ${command.commandName}`);
         this.undoHistory.push(JSON.stringify(command));
         this.redoHistory = [];
         commandInstance.redo();
     }
 
     private getICommandInstance(command: CommandPattern, context: Draw): ICommand<any> {
-        let implementation = History.implementations.find(x => x.name === command.commandName);
-        if (! implementation) throw Error(`Unknown command given! commandName: ${command.commandName}`);
-        return new implementation.constructor(context, command.args);
+        if (command.commandName === CommandMoveTableRelative.name) {
+            let unhydratedArgs = command.args as CommandMoveTableRelativeArgs;
+            let args = new CommandMoveTableRelativeArgs(unhydratedArgs.id, unhydratedArgs.x, unhydratedArgs.y);
+            args.hydrate();
+            return new CommandMoveTableRelative(context, args);    
+        }
+        if (command.commandName === CommandModifyTable.name) {
+            let unhydratedArgs = command.args as CommandModifyTableArgs;
+            let args = new CommandModifyTableArgs(unhydratedArgs.oldTable, unhydratedArgs.newTable);
+            args.hydrate();
+            return new CommandModifyTable(context, args);
+        }
+        if (command.commandName === CommandCreateTable.name) {
+            let unhydratedArgs = command.args as CommandCreateTableArgs;
+            let args = new CommandCreateTableArgs(unhydratedArgs.table);
+            args.hydrate();
+            return new CommandCreateTable(context, args);
+        }
+        if (command.commandName === CommandDeleteTable.name) {
+            let unhydratedArgs = command.args as CommandDeleteTableArgs;
+            let args = new CommandDeleteTableArgs(unhydratedArgs.table, unhydratedArgs.listIndex);
+            args.hydrate();
+            return new CommandDeleteTable(context, args);
+        }
+        throw Error(`Unknown command given! commandName: ${command.commandName}`);
     }
 
     redo(context: Draw) {
@@ -49,5 +64,5 @@ export class History {
 
 interface CommandPattern {
     commandName: string;
-    args: any;
+    args: unknown
 }

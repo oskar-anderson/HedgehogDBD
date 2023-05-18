@@ -23,6 +23,19 @@ export class CommandMoveTableRelative implements ICommand<CommandMoveTableRelati
     }
 }
 
-export interface CommandMoveTableRelativeArgs {
-    id: string; x: number; y: number;
+export class CommandMoveTableRelativeArgs {
+    id: string;
+    x: number;
+    y: number;
+
+    constructor(id: string, x: number, y: number) {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+    }
+
+
+    hydrate() {
+        return this;
+    } 
 }

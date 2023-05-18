@@ -20,6 +20,10 @@ export class TableDTO {
         return new TableDTO(table.id, table.position.clone(), table.head, table.tableRows.map(x => new TableRowDTO(x.name, x.datatype, [...x.attributes])))
     }
 
+    static parse(content: string) {
+        return TableDTO.hydrate(JSON.parse(content) as TableDTO);
+    }
+
     static hydrate(jsonObject: TableDTO) {
         return new TableDTO(
             jsonObject.id,

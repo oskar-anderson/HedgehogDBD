@@ -1,7 +1,8 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { CommandDeleteTable } from "../../commands/appCommands/CommandDeleteTable";
-import { CommandModifyTable } from "../../commands/appCommands/CommandModifyTable";
+import { CommandDeleteTable, CommandDeleteTableArgs } from "../../commands/appCommands/CommandDeleteTable";
+import { CommandModifyTable, CommandModifyTableArgs } from "../../commands/appCommands/CommandModifyTable";
 import { Manager } from "../../Manager";
+import { TableDTO } from "../../model/dto/TableDTO";
 import { Table as TableModel } from "../../model/Table"
 import { TableRow } from "../../model/TableRow";
 import { DrawScene } from "../../scenes/DrawScene";
@@ -14,7 +15,7 @@ import TableRowJSX from "./tableChildren/TableRow"
 
 export default function Table() {
     const { setAppState } = useAppStateManagement();
-    
+
     const tableBeingEdited = (Manager.getInstance().getScene() as TableScene).tableBeingEdited;
 
     const switchToDraw = () => {
@@ -23,11 +24,13 @@ export default function Table() {
         setAppState(AppState.DrawScene);
     }
 
-    const [rowData, setRowData] = useState(tableBeingEdited.tableRows.map((x) => { return {
-        rowName: x.name,
-        rowDatatype: x.datatype,
-        rowAttributes: x.attributes.join(", ")
-    } }));
+    const [rowData, setRowData] = useState(tableBeingEdited.tableRows.map((x) => {
+        return {
+            rowName: x.name,
+            rowDatatype: x.datatype,
+            rowAttributes: x.attributes.join(", ")
+        }
+    }));
 
     const [tableName, setTableName] = useState(tableBeingEdited.head);
 
@@ -35,17 +38,13 @@ export default function Table() {
         const draw = Manager.getInstance().draw;
         let oldTable = draw.schema.tables.find(x => x.id === tableBeingEdited.id)!;
         let newTableRows = rowData.map(tableRow => new TableRow(
-            tableRow.rowName, 
-            tableRow.rowDatatype, 
+            tableRow.rowName,
+            tableRow.rowDatatype,
             tableRow.rowAttributes.split(",").map(x => x.trim())
         ));
         const newTable = new TableModel(tableBeingEdited.position, tableName, newTableRows, tableBeingEdited.id);
         draw.history.execute(new CommandModifyTable(
-            draw, 
-            {
-                oldTableJson: JSON.stringify(oldTable), 
-                newTableJson: JSON.stringify(newTable)
-            }
+            draw, new CommandModifyTableArgs(TableDTO.initFromTable(oldTable), TableDTO.initFromTable(newTable))
         ));
         draw.schema.relations.forEach(relation => relation.isDirty = true);
         Manager.getInstance().changeScene(new DrawScene(draw))
@@ -60,7 +59,7 @@ export default function Table() {
     }
 
     const insertNewRow = (event: FormEvent<HTMLButtonElement>, index: number) => {
-        if (index === -1) { index = rowData.length}
+        if (index === -1) { index = rowData.length }
         const newRows = [
             ...[...rowData].slice(0, index),
             {
@@ -97,11 +96,7 @@ export default function Table() {
         const draw = Manager.getInstance().draw;
         draw.history.execute(
             new CommandDeleteTable(
-                draw, 
-                {
-                    tableJson: JSON.stringify(tableBeingEdited!),
-                    listIndex: draw.schema.tables.findIndex(x => x.id === tableBeingEdited.id)
-                }
+                draw, new CommandDeleteTableArgs(tableBeingEdited!, draw.schema.tables.findIndex(x => x.id === tableBeingEdited.id))
             )
         )
         draw.schema.relations.forEach(relation => relation.isDirty = true);
@@ -113,14 +108,14 @@ export default function Table() {
     return (
         <div className="table-edit-container">
             <div className="modal" tabIndex={-1} style={{ display: "block" }}>
-                <div className="modal-dialog modal-dialog-scrollable" style={{maxWidth: "80%"}}>
+                <div className="modal-dialog modal-dialog-scrollable" style={{ maxWidth: "80%" }}>
                     <div className="modal-content">
                         <div className="modal-header">
                             <p className="modal-title">
                                 <label htmlFor="table-name" style={{ marginRight: "6px" }}>Table</label>
-                                <input id="table-name" className="input-tablename" onChange={(e) => setTableName(e.target.value)} type="text" value={ tableName } />
+                                <input id="table-name" className="input-tablename" onChange={(e) => setTableName(e.target.value)} type="text" value={tableName} />
                             </p>
-                            <button type="button" className="btn-close" onClick={() => switchToDraw() } aria-label="Close"></button>
+                            <button type="button" className="btn-close" onClick={() => switchToDraw()} aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
                             <table>
@@ -133,7 +128,7 @@ export default function Table() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    { 
+                                    {
                                         rowData.map((row, index) => (
                                             <TableRowJSX key={index} index={index} numberOfTableRows={rowData.length} row={row} handleFormChange={handleFormChange} insertNewRow={insertNewRow} moveRowUp={moveRowUp} moveRowDown={moveRowDown} deleteRow={deleteRow} />
                                         ))
@@ -143,7 +138,7 @@ export default function Table() {
                                         <td></td>
                                         <td></td>
                                         <td>
-                                            <button className="row-insert-btn btn btn-primary" onClick={(e) => insertNewRow(e, -1) }>Insert</button>
+                                            <button className="row-insert-btn btn btn-primary" onClick={(e) => insertNewRow(e, -1)}>Insert</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -161,13 +156,13 @@ export default function Table() {
                             <datalist id="attribute-suggestions">
                                 <option value="PK" />
                                 <option value='FK("TableName")' />
-                            </datalist> 
+                            </datalist>
                         </div>
-                        <div className="modal-footer" style={{justifyContent: "space-between" }}>
-                            <button className="table-delete-btn btn btn-danger" onClick={() => deleteTable() }>Delete table</button>
+                        <div className="modal-footer" style={{ justifyContent: "space-between" }}>
+                            <button className="table-delete-btn btn btn-danger" onClick={() => deleteTable()}>Delete table</button>
                             <div>
-                                <button type="button" className="btn btn-secondary" onClick={() => switchToDraw() }>Close</button>
-                                <button type="button" id="modal-save-changes" onClick={() => saveChanges() } className="btn btn-primary">Save changes</button>
+                                <button type="button" className="btn btn-secondary" onClick={() => switchToDraw()}>Close</button>
+                                <button type="button" id="modal-save-changes" onClick={() => saveChanges()} className="btn btn-primary">Save changes</button>
                             </div>
                         </div>
                     </div>

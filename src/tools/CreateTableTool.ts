@@ -1,11 +1,12 @@
 import { Point, Rectangle } from "pixi.js";
-import { CommandCreateTable } from "../commands/appCommands/CommandCreateTable";
+import { CommandCreateTable, CommandCreateTableArgs } from "../commands/appCommands/CommandCreateTable";
 import { Draw } from "../model/Draw";
 import { Table } from "../model/Table";
 import { TableRow } from "../model/TableRow";
 import { MyRect } from "../model/MyRect";
 import { ITool, IToolNames } from "./ITool";
 import CustomMouseEvent from "../model/MouseEvent";
+import { TableDTO } from "../model/dto/TableDTO";
 
 export class CreateTableTool implements ITool {
 
@@ -56,10 +57,8 @@ export class CreateTableTool implements ITool {
         this.draw.schema.tables = this.draw.schema.tables.filter(x => ! x.isHover)
         this.hover!.isHover = false;
         this.draw.history.execute(new CommandCreateTable(
-            this.draw, {
-                tableJson: JSON.stringify(this.hover!)
-            })
-        );
+            this.draw, new CommandCreateTableArgs(TableDTO.initFromTable(this.hover!))
+        ));
         this.isDirty = true;
         this.init();
     }

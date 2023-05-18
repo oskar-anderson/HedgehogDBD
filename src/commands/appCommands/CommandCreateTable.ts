@@ -1,6 +1,7 @@
 import { Draw } from "../../model/Draw";
 import { ICommand } from "../ICommand";
 import { Table } from "../../model/Table";
+import { TableDTO } from "../../model/dto/TableDTO";
 
 export class CommandCreateTable implements ICommand<CommandCreateTableArgs> {
     context: Draw;
@@ -16,7 +17,7 @@ export class CommandCreateTable implements ICommand<CommandCreateTableArgs> {
     }
 
     redo() {
-        let newTable = Table.initClone(JSON.parse(this.args.tableJson));
+        let newTable = this.args.table.mapToTable();
         this.context.schema.tables.push(newTable);
     }
 
@@ -25,6 +26,16 @@ export class CommandCreateTable implements ICommand<CommandCreateTableArgs> {
     }
 }
 
-export interface CommandCreateTableArgs {
-    tableJson: string;
+export class CommandCreateTableArgs {
+    table: TableDTO;
+
+    constructor(table: TableDTO) {
+        this.table = table;
+    }
+
+
+    hydrate() {
+        this.table = TableDTO.hydrate(this.table)
+        return this;
+    }
 }

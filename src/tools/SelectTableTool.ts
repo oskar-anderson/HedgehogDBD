@@ -1,5 +1,5 @@
 import { Draw } from "../model/Draw";
-import { CommandMoveTableRelative } from "../commands/appCommands/CommandMoveTableRelative";
+import { CommandMoveTableRelative, CommandMoveTableRelativeArgs } from "../commands/appCommands/CommandMoveTableRelative";
 import { Table } from "../model/Table";
 import { ITool, IToolNames } from "./ITool";
 import { Manager } from "../Manager";
@@ -90,12 +90,8 @@ export class SelectTableTool implements ITool {
         }
         this.hover.hoverTable.position = this.hover.hoverTableOriginalPosition;
         this.draw.history.execute(new CommandMoveTableRelative(
-            this.draw, {
-                id: this.hover.hoverTable.id,
-                x: diff.x, 
-                y: diff.y
-            })
-        );
+            this.draw, new CommandMoveTableRelativeArgs(this.hover.hoverTable.id, diff.x, diff.y)
+        ));
         this.draw.schema.relations.forEach(relation => relation.isDirty = true);
         mouseUpDone();
     }

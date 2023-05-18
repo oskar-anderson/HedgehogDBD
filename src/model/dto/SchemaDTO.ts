@@ -1,5 +1,6 @@
-import { Draw } from "./Draw";
-import { DrawChar } from "./DrawChar";
+import { Draw } from "../Draw";
+import { Schema } from "../Schema";
+import { Table } from "../Table";
 import { TableDTO } from "./TableDTO";
 
 export class SchemaDTO {
@@ -24,5 +25,21 @@ export class SchemaDTO {
 
     getJson() {
         return JSON.stringify(this, null, 4);
+    }
+
+    static parse(content: string) {
+        return SchemaDTO.hydrate(JSON.parse(content) as SchemaDTO);
+    }
+
+    static hydrate(jsonObject: SchemaDTO) {
+        return new SchemaDTO(
+            jsonObject.tables.map(x => TableDTO.hydrate(x))
+        );
+    }
+
+    mapToSchema() {
+        return new Schema(
+            this.tables.map(x => x.mapToTable())
+        );
     }
 }

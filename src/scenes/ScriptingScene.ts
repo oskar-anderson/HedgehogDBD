@@ -1,9 +1,8 @@
 import { Container } from "pixi.js";
-import * as PIXI from "pixi.js";
 import { IScene } from "../Manager";
 import { Draw } from "../model/Draw";
 import dayjs from "dayjs";  // used in scripts
-import { SchemaDTO } from "../model/SchemaDTO";
+import { SchemaDTO } from "../model/dto/SchemaDTO";
 import { AppState } from "../components/MainContent";
 import EnvGlobals from "../../EnvGlobals";
 

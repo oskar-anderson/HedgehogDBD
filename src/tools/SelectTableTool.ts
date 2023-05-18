@@ -6,7 +6,7 @@ import { Manager } from "../Manager";
 import { TableScene } from "../scenes/TableScene";
 import CustomMouseEvent from "../model/MouseEvent";
 import { Point } from "pixi.js";
-import { TableDTO } from "../model/TableDTO";
+import { TableDTO } from "../model/dto/TableDTO";
 
 export class SelectTableTool implements ITool {
 

@@ -5,16 +5,16 @@ import { Manager } from "../../../Manager";
 import { Draw } from "../../../model/Draw";
 import { MyRect } from "../../../model/MyRect";
 import { Schema } from "../../../model/Schema";
-import { TableDTO } from "../../../model/TableDTO";
+import { TableDTO } from "../../../model/dto/TableDTO";
 import RasterModelerFormat from "../../../RasterModelerFormat";
 import { DrawScene } from "../../../scenes/DrawScene";
 import { ScriptingScene } from "../../../scenes/ScriptingScene";
 import { DrawChar } from "../../../model/DrawChar";
-import { SchemaDTO } from "../../../model/SchemaDTO";
+import { SchemaDTO } from "../../../model/dto/SchemaDTO";
 
 
 export default function CanvasSecondaryTopToolbar() {
-    
+
     const newSchema = () => {
         const oldDraw = Manager.getInstance().draw;
         Manager.getInstance().changeScene(new DrawScene(new Draw(new Schema([]), oldDraw.getWorld())));
@@ -24,15 +24,15 @@ export default function CanvasSecondaryTopToolbar() {
         async function main(app: PIXI.Application) {
             let draw = Manager.getInstance().draw;
             renderScreen(app, draw.schema.worldDrawArea, draw.getWorldCharGrid().height, draw.getWorldCharGrid().width);
-        
+
             const containerSize = app.stage.getBounds();
             const container = new PIXI.Container();
-        
+
             const background = new PIXI.Graphics();
             background.beginFill(0xFFFFFF);
             background.drawRect(containerSize.x, containerSize.y, containerSize.width, containerSize.height)
             background.endFill();
-        
+
             container.addChild(background);
             container.addChild(app.stage);
             const img = app.renderer.plugins.extract.image(container);
@@ -44,8 +44,8 @@ export default function CanvasSecondaryTopToolbar() {
             a.remove();
             app.destroy(false, true);
         }
-        
-        
+
+
         function renderScreen(app: PIXI.Application, worldDrawArea: DrawChar[], worldCharHeight: number, worldCharWidth: number) {
             for (let y = 0; y < worldCharHeight; y++) {
                 for (let x = 0; x < worldCharWidth; x++) {
@@ -102,7 +102,8 @@ export default function CanvasSecondaryTopToolbar() {
     const saveAsJson = async () => {
         let element = document.createElement('a');
         let schema = SchemaDTO.init(Manager.getInstance().draw)
-        element.setAttribute('href', 'data:application/json;charset=utf-8,' + schema.getJson());
+        // encodeURIComponent is needed to maintain newlines
+        element.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(schema.getJson()));
         element.setAttribute('download', `RasterModeler_${dayjs().format('YYYY-MM-DD_HH-mm-ss')}.json`);
         element.style.display = 'none';
         document.body.appendChild(element);
@@ -114,8 +115,8 @@ export default function CanvasSecondaryTopToolbar() {
         let reader = new FileReader();
         reader.onload = (event: ProgressEvent) => {
             let file = (event.target as FileReader).result as string;
-            let tables = JSON.parse(file);
-            let draw = new Draw(new Schema(tables), new MyRect(0, 0, 3240, 2160))
+            let schema = SchemaDTO.parse(file).mapToSchema();
+            let draw = new Draw(schema, new MyRect(0, 0, 3240, 2160))
             Manager.getInstance().changeScene(new DrawScene(draw))
         }
         let startReadingFile = (thisElement: HTMLInputElement) => {
@@ -134,7 +135,7 @@ export default function CanvasSecondaryTopToolbar() {
         let draw = RasterModelerFormat.parse(text);
         Manager.getInstance().changeScene(new DrawScene(draw));
     }
-    
+
     return (
         <ul className="navbar-nav me-auto" style={{ flexDirection: 'row' }}>
             <li className="nav-item dropdown">

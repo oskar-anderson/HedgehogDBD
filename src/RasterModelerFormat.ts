@@ -1,21 +1,14 @@
-import { Point, Rectangle } from "pixi.js";
 import { Draw } from "./model/Draw";
 import { MyRect } from "./model/MyRect";
-import { Schema } from "./model/Schema";
-import { Table } from "./model/Table";
-import { TableRow } from "./model/TableRow";
+import { SchemaDTO } from "./model/dto/SchemaDTO";
 
 
 class RasterModelerFormat {
 
     public static parse(schema: string): Draw {
-        let tablesUnhydrated = JSON.parse(schema);
-        let tables = [];
-        for (let tableUnhydrated of tablesUnhydrated) {
-            tables.push(Table.initClone(tableUnhydrated));
-        }
+        let schemaDTO = SchemaDTO.parse(schema);
         return new Draw(
-            new Schema(tables), 
+            schemaDTO.mapToSchema(), 
             new MyRect(0, 0, 3240, 2160)
         );
         /*

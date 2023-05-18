@@ -1,5 +1,5 @@
 import { Manager } from "../../../Manager";
-import { SchemaDTO } from "../../../model/SchemaDTO";
+import { SchemaDTO } from "../../../model/dto/SchemaDTO";
 import * as monaco from 'monaco-editor';
 import { useEffect, useState } from "react";
 

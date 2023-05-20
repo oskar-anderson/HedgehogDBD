@@ -38,7 +38,6 @@ export default function Drawing() {
                     x - Math.ceil(canvasContainerRef.current!.offsetWidth / 2),
                     y - Math.ceil(canvasContainerRef.current!.offsetHeight / 2)
                 );
-                DrawScene.cullViewport((Manager.getInstance().getScene() as DrawScene).canvasView);
                 minimap.update(Manager.getInstance().draw.getVisibleTables(), DrawingUtil.getScreen(canvasContainerRef));
             }
         );

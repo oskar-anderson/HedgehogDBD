@@ -47,28 +47,28 @@ function CanvasSide({
             DrawingUtil.getScreen(canvasContainerRef).x + draw.getWorld().width * (centerScreenOriginalXPercent - centerScreenResizeXPercent),
             DrawingUtil.getScreen(canvasContainerRef).y + draw.getWorld().height * (centerScreenOriginalYPercent - centerScreenResizeYPercent)
         );
-        (Manager.getInstance().getScene() as DrawScene).renderScreen(true);
+        (Manager.getInstance().getScene() as DrawScene).renderScreen();
     }
 
     const onToolSelectClick = (selectedTool: IToolNames): void => {
         const draw = Manager.getInstance().draw;
         setHighlightActiveSideToolbarTool(selectedTool);
         IToolManager.toolActivate(draw, selectedTool);
-        (Manager.getInstance().getScene() as DrawScene).renderScreen(false);  // clean up new table hover
+        (Manager.getInstance().getScene() as DrawScene).renderScreen();  // clean up new table hover
     };
 
     const undo = (): void  => {
         const draw = Manager.getInstance().draw;
         draw.history.undo(draw);
-        draw.schema.relations.forEach(relation => relation.isDirty = true);
-        (Manager.getInstance().getScene() as DrawScene).renderScreen(false);
+        draw.schema.tables.flatMap(x => x.relations).forEach(relation => relation.isDirty = true);
+        (Manager.getInstance().getScene() as DrawScene).renderScreen();
     }
 
     const redo = (): void => {
         const draw = Manager.getInstance().draw;
         draw.history.redo(draw);
-        draw.schema.relations.forEach(relation => relation.isDirty = true);
-        (Manager.getInstance().getScene() as DrawScene).renderScreen(false);
+        draw.schema.tables.flatMap(x => x.relations).forEach(relation => relation.isDirty = true);
+        (Manager.getInstance().getScene() as DrawScene).renderScreen();
     }
 
     return (

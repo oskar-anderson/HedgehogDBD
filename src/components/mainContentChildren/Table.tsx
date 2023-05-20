@@ -3,7 +3,7 @@ import { CommandDeleteTable, CommandDeleteTableArgs } from "../../commands/appCo
 import { CommandModifyTable, CommandModifyTableArgs } from "../../commands/appCommands/CommandModifyTable";
 import { Manager } from "../../Manager";
 import { TableDTO } from "../../model/dto/TableDTO";
-import { Table as TableModel } from "../../model/Table"
+import { TableRowDTO } from "../../model/dto/TableRowDTO";
 import { TableRow } from "../../model/TableRow";
 import { DrawScene } from "../../scenes/DrawScene";
 import { TableScene } from "../../scenes/TableScene";
@@ -37,16 +37,15 @@ export default function Table() {
     const saveChanges = () => {
         const draw = Manager.getInstance().draw;
         let oldTable = draw.schema.tables.find(x => x.id === tableBeingEdited.id)!;
-        let newTableRows = rowData.map(tableRow => new TableRow(
+        let newTableRows = rowData.map(tableRow => new TableRowDTO(
             tableRow.rowName,
             tableRow.rowDatatype,
             tableRow.rowAttributes.split(",").map(x => x.trim())
         ));
-        const newTable = new TableModel(tableBeingEdited.position, tableName, newTableRows, tableBeingEdited.id);
         draw.history.execute(new CommandModifyTable(
-            draw, new CommandModifyTableArgs(TableDTO.initFromTable(oldTable), TableDTO.initFromTable(newTable))
+            draw, new CommandModifyTableArgs(TableDTO.initFromTable(oldTable), new TableDTO(tableBeingEdited.id, tableBeingEdited.position, tableName, newTableRows))
         ));
-        draw.schema.relations.forEach(relation => relation.isDirty = true);
+        draw.schema.tables.flatMap(x => x.relations).forEach(relation => relation.isDirty = true);
         Manager.getInstance().changeScene(new DrawScene(draw))
         setAppState(AppState.DrawScene);
     }
@@ -99,7 +98,7 @@ export default function Table() {
                 draw, new CommandDeleteTableArgs(tableBeingEdited!, draw.schema.tables.findIndex(x => x.id === tableBeingEdited.id))
             )
         )
-        draw.schema.relations.forEach(relation => relation.isDirty = true);
+        draw.schema.tables.flatMap(x => x.relations).forEach(relation => relation.isDirty = true);
         Manager.getInstance().changeScene(new DrawScene(draw))
         setAppState(AppState.DrawScene);
     }

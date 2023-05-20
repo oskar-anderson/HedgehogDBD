@@ -115,8 +115,7 @@ export default function CanvasSecondaryTopToolbar() {
         let reader = new FileReader();
         reader.onload = (event: ProgressEvent) => {
             let file = (event.target as FileReader).result as string;
-            let schema = SchemaDTO.parse(file).mapToSchema();
-            let draw = new Draw(schema, new MyRect(0, 0, 3240, 2160))
+            let draw = RasterModelerFormat.parse(file);
             Manager.getInstance().changeScene(new DrawScene(draw))
         }
         let startReadingFile = (thisElement: HTMLInputElement) => {

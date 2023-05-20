@@ -34,6 +34,12 @@ export class LoaderScene extends Container implements IScene {
         this.loaderBar.position.y = (height - this.loaderBar.height) / 2;
         this.addChild(this.loaderBar);
 
+        /*
+        Hiero - Renderer: Java - Blurry
+        Hiero - Renderer: Native - artifacts on char edges
+        Glyph Designer - Promising - will need payed version
+        BMFont
+        */
         Loader.shared.add(EnvGlobals.BASE_URL + '/wwwroot/font/consolas/consolas-24-xml-white-text-with-alpha-padding0-spacing1.fnt');
 
         Loader.shared.onProgress.add((loader) => {

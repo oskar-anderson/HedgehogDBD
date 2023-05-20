@@ -36,7 +36,7 @@ export default function CanvasContainer({
             drawScene.draw.activeTool.mouseEventHandler(mapMouseEvent(event));
             if (drawScene.draw.activeTool.isDirty) {
                 drawScene.draw.activeTool.isDirty = false;
-                drawScene.renderScreen(false);
+                drawScene.renderScreen();
             }
         };
 

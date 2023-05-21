@@ -40,7 +40,7 @@ export class LoaderScene extends Container implements IScene {
         Glyph Designer - Promising - will need payed version
         BMFont
         */
-        Loader.shared.add(EnvGlobals.BASE_URL + '/wwwroot/font/consolas/consolas-24-xml-white-text-with-alpha-padding0-spacing1.fnt');
+        Loader.shared.add(EnvGlobals.BASE_URL + '/wwwroot/font/consolas/consolas-24-mac.fnt');
 
         Loader.shared.onProgress.add((loader) => {
             let progressRatio = loader.progress / 100;

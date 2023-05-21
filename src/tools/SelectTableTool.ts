@@ -49,6 +49,8 @@ export class SelectTableTool implements ITool {
                     hoverTableOriginalPosition: table.getPosition().clone(),
                     hoverTablePivot: new Point(table.getPosition().x - mouseCharGridX, table.getPosition().y - mouseCharGridY)
                 }
+                this.hover.hoverTable.setIsHover(true, this.draw.schema.tables);
+                this.isDirty = true;
                 return;
             }
         }
@@ -73,6 +75,7 @@ export class SelectTableTool implements ITool {
         }
         let isGoodPlaceForTable = isGoodPlaceForTableFunc();
         let mouseUpDone = () => {
+            this.hover!.hoverTable.setIsHover(false, this.draw.schema.tables);
             this.hover = null;
             this.isDirty = true;
             this.exit();
@@ -83,7 +86,7 @@ export class SelectTableTool implements ITool {
             return;
         }
         let diff = this.hover.hoverTable.getPosition().clone().subtract(this.hover.hoverTableOriginalPosition);
-        if (diff.equals(new Point(0, 0))) { 
+        if (diff.equals(new Point(0, 0))) {
             mouseUpDone();
             return;
         }
@@ -91,7 +94,6 @@ export class SelectTableTool implements ITool {
         this.draw.history.execute(new CommandMoveTableRelative(
             this.draw, new CommandMoveTableRelativeArgs(this.hover.hoverTable.id, diff.x, diff.y)
         ));
-        this.draw.schema.tables.forEach(table => table.relations.forEach(relation => relation.isDirty = true));
         mouseUpDone();
     }
 

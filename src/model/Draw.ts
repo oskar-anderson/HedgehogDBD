@@ -9,18 +9,18 @@ import { SelectTableTool } from "../tools/SelectTableTool";
 export class Draw {
     history = new History();
     static fontSizes = [
-        { size: 7, width: 3, height: 6 },
+        { size: 7, width: 4, height: 6 },
         { size: 8, width: 4, height: 8 },
-        { size: 9, width: 4, height: 9 },
+        { size: 9, width: 5, height: 9 },
         { size: 10, width: 5, height: 10 },
-        { size: 11, width: 5, height: 11 },
-        { size: 12, width: 6, height: 12 },
-        { size: 14, width: 7, height: 14 },
-        { size: 16, width: 8, height: 16 },
-        { size: 18, width: 9, height: 18 },
-        { size: 20, width: 10, height: 20 },
-        { size: 22, width: 11, height: 22 },
-        { size: 24, width: 12, height: 24 },
+        { size: 11, width: 6, height: 11 },
+        { size: 12, width: 7, height: 12 },
+        { size: 14, width: 8, height: 14 },
+        { size: 16, width: 8.8, height: 16 },
+        { size: 18, width: 9.9, height: 18 },
+        { size: 20, width: 11, height: 20 },
+        { size: 22, width: 12.1, height: 22 },
+        { size: 24, width: 13.2, height: 24 },
     ];
     selectedFontSize: { size: number, width: number, height: number} = Draw.fontSizes.find((x => x.size === 14))!;
     schema: Schema;

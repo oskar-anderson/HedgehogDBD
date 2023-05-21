@@ -1,4 +1,4 @@
-import { BitmapText, Point, Text } from "pixi.js";
+import { BitmapText, Point, Text, Container } from "pixi.js";
 import { MyRect } from "./MyRect";
 import { CostGrid, CostGridTileTypes } from "./CostGrid";
 import { Draw } from "./Draw";
@@ -9,19 +9,19 @@ export class Relation {
     points: Point[] = [];
     target: Table;
     source: Table;
-    isDirty = false;
-    worldCharGridStartingPoint: Point = new Point(0, 0);
-    displayable: BitmapText;
+    isDrawable = true;
+    isDirty = true;
+    displayable: Text;
 
-    constructor(source: Table, target: Table, displayable: BitmapText) {
+    constructor(source: Table, target: Table, displayable: Text) {
         this.source = source;
         this.target = target;
         this.displayable = displayable;
     }
 
     static initDisplayable() {
-        let text = new BitmapText("", {
-            fontName: `Consolas-24`,
+        let text = new Text("", {
+            fontFamily: `Consolas`,
         })
         // fontsize will be changed on draw
         return text;
@@ -31,7 +31,10 @@ export class Relation {
         return this.target.equals(targetTable) && this.source.equals(sourceTable)
     }
 
-    getContent() {
+    getContent(): string[][] {
+        if (! this.isDrawable) {
+            return [];
+        }
         let maxX = Math.max(...this.points.map(p => p.x));
         let minX = Math.min(...this.points.map(p => p.x));
         let maxY = Math.max(...this.points.map(p => p.y));

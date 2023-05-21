@@ -45,7 +45,6 @@ export default function Table() {
         draw.history.execute(new CommandModifyTable(
             draw, new CommandModifyTableArgs(TableDTO.initFromTable(oldTable), new TableDTO(tableBeingEdited.id, tableBeingEdited.position, tableName, newTableRows))
         ));
-        draw.schema.tables.flatMap(x => x.relations).forEach(relation => relation.isDirty = true);
         Manager.getInstance().changeScene(new DrawScene(draw))
         setAppState(AppState.DrawScene);
     }
@@ -98,7 +97,6 @@ export default function Table() {
                 draw, new CommandDeleteTableArgs(tableBeingEdited!, draw.schema.tables.findIndex(x => x.id === tableBeingEdited.id))
             )
         )
-        draw.schema.tables.flatMap(x => x.relations).forEach(relation => relation.isDirty = true);
         Manager.getInstance().changeScene(new DrawScene(draw))
         setAppState(AppState.DrawScene);
     }

@@ -42,54 +42,56 @@ export class DrawScene extends Container implements IScene {
     renderScreen() {
         this.canvasView.removeChildren();
 
-        for (const table of this.draw.schema.tables) {
-            if (table.isDirty) {
-                let tableRows = table.tableRows.map(tr => {return { name: tr.name, datatype: tr.datatype, attributes: tr.attributes.join(", ")} });
-                let updatedTextArr = DrawScene.setWorldTable2(tableRows, table.head, table.getContainingRect() );
-                let updatedText = updatedTextArr.map(z => z.join("")).join("\n");
-                table.displayable.text = updatedText;
-                table.displayable.fontSize = this.draw.selectedFontSize.size
-                table.displayable.tint = 0x000000;
-                table.displayable.position = new Point(
-                    table.getContainingRect().x * this.draw.selectedFontSize.width, 
-                    table.getContainingRect().y * this.draw.selectedFontSize.height
-                );
-                table.updateRelations(this.draw.schema.tables);
-                table.isDirty = false;
-            }
+        for (const table of this.draw.schema.tables.filter(x => x.getIsDirty())) {
+            let tableRows = table.tableRows.map(tr => {return { name: tr.name, datatype: tr.datatype, attributes: tr.attributes.join(", ")} });
+            let updatedTextArr = DrawScene.setWorldTable2(tableRows, table.head, table.getContainingRect() );
+            let updatedText = updatedTextArr.map(z => z.join("")).join("\n");
+            
+            table.displayable.text = updatedText;
+            table.displayable.style.fontSize = this.draw.selectedFontSize.size
+            table.displayable.style.fill = 0x000000;
+            table.displayable.position = new Point(
+                table.getContainingRect().x * this.draw.selectedFontSize.width, 
+                table.getContainingRect().y * this.draw.selectedFontSize.height
+            );
+            
+            table.setIsDirty(false);
         }
 
         let drawables1 = this.draw.schema.tables.map(x => x.displayable);
-        if (drawables1.length === 0) {
-            return;
+        if (drawables1.length !== 0) {
+            this.canvasView.addChild(...drawables1);
         }
-        this.canvasView.addChild(...drawables1);
 
         let worldSize = this.draw.getWorldCharGrid();
-        let costGrid = new CostGrid(worldSize);
-        for (let table of this.draw.schema.tables) {
-            table.updateTableCost(costGrid, worldSize);
-        }
-        for (let relation of this.draw.schema.tables.flatMap(x => x.relations)) {
-            relation.updateRelationsCost(costGrid, worldSize);
-        }
-        let orderedRelations = DrawScene.getRelationDrawOrder(this.draw.schema.tables, worldSize)
-        for (const relation of orderedRelations) {
-            DrawScene.setWorldRelation2(relation, costGrid, worldSize)
-            relation.displayable.text = relation.getContent().map(z => z.join("")).join("\n");
-            relation.displayable.fontSize = this.draw.selectedFontSize.size
-            relation.displayable.tint = 0x000000;
-            relation.displayable.position = new Point(
-                relation.getPositionCharGrid().x * this.draw.selectedFontSize.width, 
-                relation.getPositionCharGrid().y * this.draw.selectedFontSize.height
-            );
-        }
+        let relationsThatNeedUpdating = this.draw.schema.tables.flatMap(x => x.relations).filter(x => x.isDirty)
+        let orderedRelations = DrawScene.getRelationDrawOrder(relationsThatNeedUpdating, worldSize)
+        if (orderedRelations.length !== 0) {
+            let costGrid = new CostGrid(worldSize);
+            for (let table of this.draw.schema.tables.filter(x => ! x.getIsHover())) {
+                table.updateTableCost(costGrid, worldSize);
+            }
+            for (let relation of this.draw.schema.tables.flatMap(x => x.relations).filter(x => ! x.isDirty)) {
+                relation.updateRelationsCost(costGrid, worldSize);
+            }
 
-        let drawables2 = orderedRelations.map(x => x.displayable);
-        if (drawables2.length === 0) {
-            return;
+            for (const relation of orderedRelations) {
+                DrawScene.setWorldRelation2(relation, costGrid, worldSize)
+                relation.displayable.text = relation.getContent().map(z => z.join("")).join("\n");
+                relation.displayable.style.fontSize = this.draw.selectedFontSize.size
+                relation.displayable.style.fill = 0x000000;
+                relation.displayable.position = new Point(
+                    relation.getPositionCharGrid().x * this.draw.selectedFontSize.width, 
+                    relation.getPositionCharGrid().y * this.draw.selectedFontSize.height
+                );
+                relation.isDirty = false;
+                relation.updateRelationsCost(costGrid, worldSize);
+            }
         }
-        this.canvasView.addChild(...drawables2);
+        let drawables2 = this.draw.schema.tables.flatMap(x => x.relations).flatMap(x => x.displayable);
+        if (drawables2.length !== 0) {
+            this.canvasView.addChild(...drawables2);
+        }
     }
 
 
@@ -181,24 +183,24 @@ export class DrawScene extends Container implements IScene {
         relation.points = path.map((point) => { return new Point(point.x, point.y); })
     }
 
-    static getRelationDrawOrder(tables: Table[], worldSize: MyRect): Relation[] {
+    static getRelationDrawOrder(relations: Relation[], worldSize: MyRect): Relation[] {
         let references = new PriorityQueue<{ 
             value: Relation, 
             cost: number
         }>((a: {cost: number}, b: {cost: number}) => { return a.cost < b.cost ? -1 : 1 });   // lowest cost will pop first
-        for (let fromTable of tables) {
-            for (const relation of fromTable.relations) {
-                let referenceCenter =  relation.target.getContainingRect().getLargestFittingSquareClosestToPoint(fromTable.getContainingRect().getCenter()).getCenter();
-                let closestFromTablePoint = relation.source.getRelationStartingPoint(worldSize, relation.target);
-                if (closestFromTablePoint === null) {
-                    continue;
-                }
-                references.push({ 
-                    value: relation, 
-                    cost: AStarFinderCustom.euclidean(closestFromTablePoint, referenceCenter)
-                });
+
+        for (const relation of relations) {
+            let referenceCenter =  relation.target.getContainingRect().getLargestFittingSquareClosestToPoint(relation.source.getContainingRect().getCenter()).getCenter();
+            let closestFromTablePoint = relation.source.getRelationStartingPoint(worldSize, relation.target);
+            if (closestFromTablePoint === null) {
+                continue;
             }
+            references.push({ 
+                value: relation, 
+                cost: AStarFinderCustom.euclidean(closestFromTablePoint, referenceCenter)
+            });
         }
+        
         return references.toArray().map(x => x.value);
     }
 }

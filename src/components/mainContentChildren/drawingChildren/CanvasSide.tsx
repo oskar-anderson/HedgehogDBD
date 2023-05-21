@@ -47,6 +47,8 @@ function CanvasSide({
             DrawingUtil.getScreen(canvasContainerRef).x + draw.getWorld().width * (centerScreenOriginalXPercent - centerScreenResizeXPercent),
             DrawingUtil.getScreen(canvasContainerRef).y + draw.getWorld().height * (centerScreenOriginalYPercent - centerScreenResizeYPercent)
         );
+        draw.schema.tables.forEach(x => x.setIsDirty(true));
+        draw.schema.tables.forEach(x => x.relations.forEach(y => y.isDirty = true));
         (Manager.getInstance().getScene() as DrawScene).renderScreen();
     }
 
@@ -60,14 +62,12 @@ function CanvasSide({
     const undo = (): void  => {
         const draw = Manager.getInstance().draw;
         draw.history.undo(draw);
-        draw.schema.tables.flatMap(x => x.relations).forEach(relation => relation.isDirty = true);
         (Manager.getInstance().getScene() as DrawScene).renderScreen();
     }
 
     const redo = (): void => {
         const draw = Manager.getInstance().draw;
         draw.history.redo(draw);
-        draw.schema.tables.flatMap(x => x.relations).forEach(relation => relation.isDirty = true);
         (Manager.getInstance().getScene() as DrawScene).renderScreen();
     }
 
@@ -77,19 +77,12 @@ function CanvasSide({
                 <span>Bird's Eye</span>
                 <div style={{ display: 'flex' }}>
                     <span>Zoom:</span>
-                    <select defaultValue={14} name="zoom-font-size" onChange={ (e) => setZoomFontSize(e) } className="zoom-font-size" autoComplete="off" style={{ marginLeft: '6px' }}>
-                        <option value={7}>7</option>
-                        <option value={8}>8</option>
-                        <option value={9}>9</option>
-                        <option value={10}>10</option>
-                        <option value={11}>11</option>
-                        <option value={12}>12</option>
-                        <option value={14}>14</option>
-                        <option value={16}>16</option>
-                        <option value={18}>18</option>
-                        <option value={20}>20</option>
-                        <option value={22}>22</option>
-                        <option value={24}>24</option>
+                    <select defaultValue={Manager.getInstance().draw.selectedFontSize.size} name="zoom-font-size" onChange={ (e) => setZoomFontSize(e) } className="zoom-font-size" autoComplete="off" style={{ marginLeft: '6px' }}>
+                        {
+                        Draw.fontSizes.map(x => 
+                            <option value={x.size}>{x.size}</option>
+                        )
+                        }
                     </select>
                 </div>
                 <div className="canvas-side-minimap" ref={minimapContainerRef} style={{ marginTop: '6px' }}></div>

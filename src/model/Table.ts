@@ -1,4 +1,4 @@
-import { BitmapText, Point, Text } from "pixi.js";
+import { BitmapText, Point, Text, Container } from "pixi.js";
 import { MyRect } from "./MyRect";
 import { CostGrid, CostGridTileTypes } from "./CostGrid";
 import { TableRow } from "./TableRow";
@@ -11,12 +11,12 @@ export class Table {
     head: string;
     tableRows: TableRow[];
     color: number;
-    isHover: boolean;
-    displayable: BitmapText;
-    isDirty = true;
+    private isHover: boolean;
+    displayable: Text;
+    private isDirty = true;
     relations: Relation[] = [];
     
-    constructor(position: Point, head: string, tableRows: TableRow[], displayable: BitmapText, id: string = crypto.randomUUID(), color: number = 0x008000, isHover: boolean = false) {
+    constructor(position: Point, head: string, tableRows: TableRow[], displayable: Text, id: string = crypto.randomUUID(), color: number = 0x008000, isHover: boolean = false) {
         this.id = id;
         this.position = position;
         this.head = head;
@@ -26,9 +26,9 @@ export class Table {
         this.isHover = isHover;
     }
 
-    static initDisplayable(): BitmapText {
-        let text = new BitmapText("", {
-            fontName: `Consolas-24`
+    static initDisplayable(): Text {
+        let text = new Text("", {
+            fontFamily: `Consolas`
         })
         // fontsize will be changed on draw
         return text;
@@ -41,6 +41,34 @@ export class Table {
 
     getPosition() {
         return this.position;
+    }
+
+    setIsDirty(value: boolean) {
+        this.isDirty = value;
+    }
+
+    getIsDirty() {
+        return this.isDirty;
+    }
+
+    setIsHover(isHover: boolean, tables: Table[]) {
+        this.relations.forEach(x => { 
+            x.isDrawable = !isHover;
+            x.isDirty = true;
+        });
+        tables
+            .flatMap(table => table.relations)
+            .filter(x => x.equals(x.source, this))
+            .forEach(rel => {
+                rel.isDrawable = !isHover;
+                rel.isDirty = true;   
+            });
+        this.isHover = isHover;
+        this.isDirty = true;
+    }
+
+    getIsHover() {
+        return this.isHover;
     }
 
     equals(other: Table) {

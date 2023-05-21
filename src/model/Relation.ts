@@ -31,14 +31,14 @@ export class Relation {
         return this.target.equals(targetTable) && this.source.equals(sourceTable)
     }
 
-    getContent(): string[][] {
+    getContent(points: Point[]): string[][] {
         if (! this.isDrawable) {
             return [];
         }
-        let maxX = Math.max(...this.points.map(p => p.x));
-        let minX = Math.min(...this.points.map(p => p.x));
-        let maxY = Math.max(...this.points.map(p => p.y));
-        let minY = Math.min(...this.points.map(p => p.y));
+        let maxX = Math.max(...points.map(p => p.x));
+        let minX = Math.min(...points.map(p => p.x));
+        let maxY = Math.max(...points.map(p => p.y));
+        let minY = Math.min(...points.map(p => p.y));
         let grid2D: string[][] = [];
         for (let y = minY; y <= maxY; y++) {
             let row = []
@@ -48,13 +48,17 @@ export class Relation {
             grid2D.push(row);
         }
         // let grid2D: string[][] = new Array(maxY - minY + 1).fill(new Array(maxX - minX + 1).fill(" "));
-        this.points.forEach(p => grid2D[p.y - minY][p.x - minX] = "*");
+        points.forEach(p => grid2D[p.y - minY][p.x - minX] = "*");
         return grid2D;
     }
 
-    getPositionCharGrid() {
-        let minX = Math.min(...this.points.map(p => p.x));
-        let minY = Math.min(...this.points.map(p => p.y));
+    getPositionCharGrid(points: Point[]) {
+        if (points.length === 0) {
+            // Return default value. Maybe it would be better to throw error.
+            return new Point(0, 0)
+        }
+        let minX = Math.min(...points.map(p => p.x));
+        let minY = Math.min(...points.map(p => p.y));
         return new Point(minX, minY);
     }
 

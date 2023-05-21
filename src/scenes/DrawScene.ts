@@ -4,7 +4,6 @@ import { Draw } from "../model/Draw";
 import * as PIXI from "pixi.js";
 import { Table } from "../model/Table";
 import { Relation } from "../model/Relation";
-import { DrawChar } from "../model/DrawChar";
 import { IToolManager } from "../tools/ITool";
 import AStarFinderCustom from "../path/AStarFinderCustom";
 import { WorldGrid } from "../path/WorldGrid";
@@ -67,22 +66,17 @@ export class DrawScene extends Container implements IScene {
         let relationsThatNeedUpdating = this.draw.schema.tables.flatMap(x => x.relations).filter(x => x.isDirty)
         let orderedRelations = DrawScene.getRelationDrawOrder(relationsThatNeedUpdating, worldSize)
         if (orderedRelations.length !== 0) {
-            let costGrid = new CostGrid(worldSize);
-            for (let table of this.draw.schema.tables.filter(x => ! x.getIsHover())) {
-                table.updateTableCost(costGrid, worldSize);
-            }
-            for (let relation of this.draw.schema.tables.flatMap(x => x.relations).filter(x => ! x.isDirty)) {
-                relation.updateRelationsCost(costGrid, worldSize);
-            }
+            let costGrid = CostGrid.getCostGrid(worldSize, this.draw.schema.tables);
 
             for (const relation of orderedRelations) {
-                DrawScene.setWorldRelation2(relation, costGrid, worldSize)
-                relation.displayable.text = relation.getContent().map(z => z.join("")).join("\n");
+                let points = DrawScene.setWorldRelation2(relation, costGrid, worldSize)
+                relation.points = points;
+                relation.displayable.text = relation.getContent(points).map(z => z.join("")).join("\n");
                 relation.displayable.style.fontSize = this.draw.selectedFontSize.size
                 relation.displayable.style.fill = 0x000000;
                 relation.displayable.position = new Point(
-                    relation.getPositionCharGrid().x * this.draw.selectedFontSize.width, 
-                    relation.getPositionCharGrid().y * this.draw.selectedFontSize.height
+                    relation.getPositionCharGrid(points).x * this.draw.selectedFontSize.width, 
+                    relation.getPositionCharGrid(points).y * this.draw.selectedFontSize.height
                 );
                 relation.isDirty = false;
                 relation.updateRelationsCost(costGrid, worldSize);
@@ -171,7 +165,7 @@ export class DrawScene extends Container implements IScene {
         return result;
     }
 
-    static setWorldRelation2(relation: Relation, costGrid: CostGrid, worldSize: MyRect): void {
+    static setWorldRelation2(relation: Relation, costGrid: CostGrid, worldSize: MyRect): Point[] {
         let startPoint = relation.source.getRelationStartingPoint(worldSize, relation.target)!;
         let heuristicEndPoint =  relation.target.getContainingRect().getLargestFittingSquareClosestToPoint(relation.source.getContainingRect().getCenter()).getCenter();
         let possibleEnds = relation.target.getContainingRect().GetRelationAttachmentPoints(worldSize);
@@ -180,7 +174,7 @@ export class DrawScene extends Container implements IScene {
         }
         let grid = new WorldGrid(costGrid.flatten());
         let path = new AStarFinderCustom(AStarFinderCustom.manhattan).findPath(startPoint, heuristicEndPoint, possibleEnds, grid);
-        relation.points = path.map((point) => { return new Point(point.x, point.y); })
+        return path.map((point) => { return new Point(point.x, point.y); })
     }
 
     static getRelationDrawOrder(relations: Relation[], worldSize: MyRect): Relation[] {

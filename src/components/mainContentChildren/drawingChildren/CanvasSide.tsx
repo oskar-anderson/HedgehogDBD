@@ -1,23 +1,20 @@
-import { Container, DisplayObject, Rectangle } from "pixi.js";
-import { ChangeEvent, RefObject, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Manager } from "../../../Manager";
 import { Draw } from "../../../model/Draw";
-import { MyRect } from "../../../model/MyRect";
 import { DrawScene } from "../../../scenes/DrawScene";
 import { IToolManager, IToolNames } from "../../../tools/ITool";
 import { Minimap } from "../../Minimap";
-import { DrawingUtil } from "../Drawing";
 
 
 interface CanvasSideProps {
-    canvasContainerRef: React.RefObject<HTMLDivElement>
+    setZoomFontSize: (size: number) => void
     minimap: Minimap,
     debugInfoContainer: React.RefObject<HTMLDivElement>
 }
 
 
 function CanvasSide({ 
-    canvasContainerRef, minimap, debugInfoContainer
+    setZoomFontSize, minimap, debugInfoContainer
 }: CanvasSideProps) {
     const minimapContainerRef = useRef<HTMLDivElement>(null);
     console.log("CanvasSide")
@@ -28,29 +25,6 @@ function CanvasSide({
 
     const [highlightActiveSideToolbarTool, setHighlightActiveSideToolbarTool] = useState(IToolNames.select);
 
-
-    const setZoomFontSize = (e: ChangeEvent): void => {
-        const draw = Manager.getInstance().draw;
-        let size = Number.parseInt((e.target as HTMLSelectElement).value);
-        let centerScreenOriginalXPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().x / draw.getWorld().width;
-        let centerScreenOriginalYPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().y / draw.getWorld().height;
-        let widthCharGridOriginal = draw.getWorldCharGrid().width;
-        let heightCharGridOriginal = draw.getWorldCharGrid().height;
-        draw.selectedFontSize = Draw.fontSizes.find(x => x.size === size)!;
-        let widthWorldResize = widthCharGridOriginal * draw.selectedFontSize.width;
-        let heightWorldResize = heightCharGridOriginal * draw.selectedFontSize.height;
-        Manager.getInstance().getRenderer().resize(widthWorldResize, heightWorldResize);
-        draw.setWorld(new MyRect(0, 0, widthWorldResize, heightWorldResize))
-        let centerScreenResizeXPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().x / draw.getWorld().width;
-        let centerScreenResizeYPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().y / draw.getWorld().height;
-        canvasContainerRef.current!.scrollTo(
-            DrawingUtil.getScreen(canvasContainerRef).x + draw.getWorld().width * (centerScreenOriginalXPercent - centerScreenResizeXPercent),
-            DrawingUtil.getScreen(canvasContainerRef).y + draw.getWorld().height * (centerScreenOriginalYPercent - centerScreenResizeYPercent)
-        );
-        draw.schema.tables.forEach(x => x.setIsDirty(true));
-        draw.schema.tables.forEach(x => x.relations.forEach(y => y.isDirty = true));
-        (Manager.getInstance().getScene() as DrawScene).renderScreen();
-    }
 
     const onToolSelectClick = (selectedTool: IToolNames): void => {
         const draw = Manager.getInstance().draw;
@@ -77,10 +51,10 @@ function CanvasSide({
                 <span>Bird's Eye</span>
                 <div style={{ display: 'flex' }}>
                     <span>Zoom:</span>
-                    <select defaultValue={Manager.getInstance().draw.selectedFontSize.size} name="zoom-font-size" onChange={ (e) => setZoomFontSize(e) } className="zoom-font-size" autoComplete="off" style={{ marginLeft: '6px' }}>
+                    <select defaultValue={Manager.getInstance().draw.selectedFontSize.size} name="zoom-font-size" onChange={ (e) => setZoomFontSize(Number.parseInt((e.target as HTMLSelectElement).value)) } className="zoom-font-size" autoComplete="off" style={{ marginLeft: '6px' }}>
                         {
                         Draw.fontSizes.map(x => 
-                            <option value={x.size}>{x.size}</option>
+                            <option key={x.size} value={x.size}>{x.size}</option>
                         )
                         }
                     </select>

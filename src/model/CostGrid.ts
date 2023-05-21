@@ -24,21 +24,21 @@ export class CostGrid {
         return costGrid;
     }
 
-    static getCostGrid(size: MyRect, tables: Table[], relations: Relation[]) {
+    static getCostGrid(size: MyRect, tables: Table[]) {
         let costGrid = new CostGrid(size);
-
-        for (let table of tables) {
+        
+        for (let table of tables.filter(x => ! x.getIsHover())) {
             table.updateTableCost(costGrid, size);
         }
 
-        for (let relation of relations) {
+        for (let relation of tables.flatMap(x => x.relations).filter(x => ! x.isDirty)) {
             relation.updateRelationsCost(costGrid, size);
         }
         return costGrid;
     }
 
     merge(other: CostGrid) {
-        if (this.size.toString() !== other.size.toString()) throw Error("Cannot merge different size CostGrids!")
+        if (this.size.equals(other.size)) throw Error("Cannot merge different size CostGrids!")
         for (let y = 0; y < this.size.height; y++) {
             for (let x = 0; x < this.size.width; x++) {
                 this.value[y][x].push(...other.value[y][x])

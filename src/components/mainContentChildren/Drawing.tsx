@@ -56,14 +56,37 @@ export default function Drawing() {
         return () => { clearInterval(minimapUpdateInterval) }
     }, [])
 
+    const setZoomFontSize = (size: number): void => {
+        const draw = Manager.getInstance().draw;
+        let centerScreenOriginalXPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().x / draw.getWorld().width;
+        let centerScreenOriginalYPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().y / draw.getWorld().height;
+        let widthCharGridOriginal = draw.getWorldCharGrid().width;
+        let heightCharGridOriginal = draw.getWorldCharGrid().height;
+        draw.selectedFontSize = Draw.fontSizes.find(x => x.size === size)!;
+        let widthWorldResize = widthCharGridOriginal * draw.selectedFontSize.width;
+        let heightWorldResize = heightCharGridOriginal * draw.selectedFontSize.height;
+        Manager.getInstance().getRenderer().resize(widthWorldResize, heightWorldResize);
+        draw.setWorld(new MyRect(0, 0, widthWorldResize, heightWorldResize))
+        let centerScreenResizeXPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().x / draw.getWorld().width;
+        let centerScreenResizeYPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().y / draw.getWorld().height;
+        canvasContainerRef.current!.scrollTo(
+            DrawingUtil.getScreen(canvasContainerRef).x + draw.getWorld().width * (centerScreenOriginalXPercent - centerScreenResizeXPercent),
+            DrawingUtil.getScreen(canvasContainerRef).y + draw.getWorld().height * (centerScreenOriginalYPercent - centerScreenResizeYPercent)
+        );
+        draw.schema.tables.forEach(x => x.setIsDirty(true));
+        draw.schema.tables.forEach(x => x.relations.forEach(y => y.isDirty = true));
+        (Manager.getInstance().getScene() as DrawScene).renderScreen();
+    }
 
 
     return (
         <div className="canvas-visibility-container">
-            <CanvasSecondaryTopToolbar />
+            <CanvasSecondaryTopToolbar 
+                setZoomFontSize={setZoomFontSize}
+            />
             <div style={{ display: 'flex', width: '100vw', height: '720px' }}>
                 <CanvasSide 
-                    canvasContainerRef={canvasContainerRef}
+                    setZoomFontSize={setZoomFontSize}
                     minimap={minimap} 
                     debugInfoContainer={debugInfoContainer}
                 />

@@ -28,7 +28,7 @@ export class Table {
 
     static initDisplayable(): Text {
         let text = new Text("", {
-            fontFamily: `Consolas`
+            fontFamily: `Inconsolata`,
         })
         // fontsize will be changed on draw
         return text;

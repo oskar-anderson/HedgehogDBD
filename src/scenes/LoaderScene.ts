@@ -41,8 +41,6 @@ export class LoaderScene extends Container implements IScene {
         BMFont
         */
         Loader.shared.add(EnvGlobals.BASE_URL + '/wwwroot/font/consolas/consolas-24-mac.fnt');
-        Loader.shared.add(EnvGlobals.BASE_URL + '/wwwroot/font/consolas/Consolas.ttf');
-        Loader.shared.add(EnvGlobals.BASE_URL + '/wwwroot/font/consolas/Inconsolata.ttf');
 
         Loader.shared.onProgress.add((loader) => {
             let progressRatio = loader.progress / 100;

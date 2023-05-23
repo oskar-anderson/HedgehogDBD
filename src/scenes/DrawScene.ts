@@ -49,6 +49,8 @@ export class DrawScene extends Container implements IScene {
             table.displayable.text = updatedText;
             table.displayable.style.fontSize = this.draw.selectedFontSize.size
             table.displayable.style.fill = 0x000000;
+            // this is needed for multiline text to match expected height, otherwise height seems to be shorter than expected rowCount * fontSize
+            table.displayable.style.lineHeight = this.draw.selectedFontSize.height;
             table.displayable.position = new Point(
                 table.getContainingRect().x * this.draw.selectedFontSize.width, 
                 table.getContainingRect().y * this.draw.selectedFontSize.height
@@ -74,6 +76,8 @@ export class DrawScene extends Container implements IScene {
                 relation.displayable.text = relation.getContent(points).map(z => z.join("")).join("\n");
                 relation.displayable.style.fontSize = this.draw.selectedFontSize.size
                 relation.displayable.style.fill = 0x000000;
+                // this is needed for multiline text to match expected height, otherwise height seems to be shorter than expected rowCount * fontSize
+                relation.displayable.style.lineHeight = this.draw.selectedFontSize.height;
                 relation.displayable.position = new Point(
                     relation.getPositionCharGrid(points).x * this.draw.selectedFontSize.width, 
                     relation.getPositionCharGrid(points).y * this.draw.selectedFontSize.height

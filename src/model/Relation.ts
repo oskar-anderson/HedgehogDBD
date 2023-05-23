@@ -21,7 +21,7 @@ export class Relation {
 
     static initDisplayable() {
         let text = new Text("", {
-            fontFamily: `Consolas`,
+            fontFamily: `Inconsolata`,
         })
         // fontsize will be changed on draw
         return text;

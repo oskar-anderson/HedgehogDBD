@@ -17,7 +17,7 @@ import { History } from "../../../commands/History";
 interface CanvasSecondaryTopToolbarProps {
     setZoomFontSize: (size: number) => void;
 }
-export default function CanvasSecondaryTopToolbar({setZoomFontSize}: CanvasSecondaryTopToolbarProps) {
+export default function CanvasSecondaryTopToolbar({ setZoomFontSize }: CanvasSecondaryTopToolbarProps) {
 
     const newSchema = () => {
         const oldDraw = Manager.getInstance().draw;
@@ -27,7 +27,7 @@ export default function CanvasSecondaryTopToolbar({setZoomFontSize}: CanvasSecon
     const saveAsJpg = async () => {
         let app = Manager.getInstance().getApp();
         let oldFontSize = Manager.getInstance().draw.selectedFontSize.size;
-        let maxFontSize = Math.max(...Draw.fontSizes.map(x => x.size))
+        let maxFontSize = Math.max(...Draw.fontSizes_Inconsolata.map(x => x.size))
         setZoomFontSize(maxFontSize);
         const containerSize = app.stage.getBounds();
         const container = new PIXI.Container();
@@ -78,7 +78,7 @@ export default function CanvasSecondaryTopToolbar({setZoomFontSize}: CanvasSecon
                 }
             }
         }
-        
+
         let content2D = trim(drawArea);
         let content = content2D.map(x => x.join("")).join("\n")
         navigator.clipboard.writeText(content)

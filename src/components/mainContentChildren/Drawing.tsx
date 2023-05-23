@@ -41,7 +41,7 @@ export default function Drawing() {
                 minimap.update(Manager.getInstance().draw.getVisibleTables(), DrawingUtil.getScreen(canvasContainerRef));
             }
         );
-        
+
         const minimapUpdateInterval = setInterval(() => {
             const draw = Manager.getInstance().draw;
             if (canvasContainerRef.current == null) {
@@ -52,7 +52,7 @@ export default function Drawing() {
             let screen = DrawingUtil.getScreen(canvasContainerRef);
             minimap.update(draw.getVisibleTables(), screen);
         }, 1000 / 30);
-        
+
         return () => { clearInterval(minimapUpdateInterval) }
     }, [])
 
@@ -62,7 +62,7 @@ export default function Drawing() {
         let centerScreenOriginalYPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().y / draw.getWorld().height;
         let widthCharGridOriginal = draw.getWorldCharGrid().width;
         let heightCharGridOriginal = draw.getWorldCharGrid().height;
-        draw.selectedFontSize = Draw.fontSizes.find(x => x.size === size)!;
+        draw.selectedFontSize = Draw.fontSizes_Inconsolata.find(x => x.size === size)!;
         let widthWorldResize = widthCharGridOriginal * draw.selectedFontSize.width;
         let heightWorldResize = heightCharGridOriginal * draw.selectedFontSize.height;
         Manager.getInstance().getRenderer().resize(widthWorldResize, heightWorldResize);
@@ -81,13 +81,13 @@ export default function Drawing() {
 
     return (
         <div className="canvas-visibility-container">
-            <CanvasSecondaryTopToolbar 
+            <CanvasSecondaryTopToolbar
                 setZoomFontSize={setZoomFontSize}
             />
             <div style={{ display: 'flex', width: '100vw', height: '720px' }}>
-                <CanvasSide 
+                <CanvasSide
                     setZoomFontSize={setZoomFontSize}
-                    minimap={minimap} 
+                    minimap={minimap}
                     debugInfoContainer={debugInfoContainer}
                 />
                 <CanvasContainer

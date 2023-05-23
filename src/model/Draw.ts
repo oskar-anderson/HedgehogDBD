@@ -9,24 +9,19 @@ import { SelectTableTool } from "../tools/SelectTableTool";
 export class Draw {
     history = new History();
     // 1.555 scale font size increase
-    static fontSizes = [
-        // { size: 7, width: 4, height: 6 }, // does not work vertically
-        // { size: 8, width: 4, height: 8 }, // does not work vertically
-        { size: 9, width: 5, height: 9 },
-        // { size: 10, width: 5, height: 10 },  // does not work vertically
-        // { size: 11, width: 6, height: 11 }, // does not work vertically
-        // { size: 12, width: 7, height: 12 }, // does not work vertically
-        { size: 14, width: 8, height: 14 },
-        // { size: 16, width: 8.8, height: 16 }, // does not work vertically
-        // { size: 18, width: 9.9, height: 18 },
-        // { size: 20, width: 11, height: 20 }, // does not work vertically
+    static fontSizes_Consolas = [
+        { size: 9, width: 4.95, height: 9 },  // Windows system font is width: 5.0
+        { size: 14, width: 7.7, height: 14 },  // Windows system font is width: 8.0
         { size: 22, width: 12.1, height: 22 },
-        // { size: 24, width: 13.2, height: 24 }, // 24 has a problem rendering "-" char slightly lower than "+"
-        // { size: 26, width: 14.3, height: 26 },
-        // { size: 28, width: 15.4, height: 28 }, // does not work vertically
-        // { size: 34, width: 18.7, height: 34 }, // WTF! does not work vertically
+        { size: 34, width: 18.7, height: 34 },
     ];
-    selectedFontSize: { size: number, width: number, height: number} = Draw.fontSizes.find((x => x.size === 14))!;
+    static fontSizes_Inconsolata = [
+        { size: 9, width: 4.5, height: 9 },
+        { size: 14, width: 7, height: 14 },
+        { size: 22, width: 11, height: 22 },
+        { size: 34, width: 17, height: 34 },
+    ];
+    selectedFontSize: { size: number, width: number, height: number} = Draw.fontSizes_Inconsolata.find((x => x.size === 14))!;
     schema: Schema;
     activeTool: ITool;
     

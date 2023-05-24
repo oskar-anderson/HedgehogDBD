@@ -19,7 +19,11 @@ export class DrawingUtil {
     }
 }
 
-export default function Drawing() {
+interface DrawingProps {
+    topToolBarHeightPx: number
+}
+
+export default function Drawing({ topToolBarHeightPx }: DrawingProps) {
     console.log("drawing")
     const minimap = new Minimap(new Rectangle(0, 0, 180, 120));
     const canvasContainerRef = useRef<HTMLDivElement>(null);
@@ -77,14 +81,14 @@ export default function Drawing() {
         draw.schema.tables.forEach(x => x.relations.forEach(y => y.isDirty = true));
         (Manager.getInstance().getScene() as DrawScene).renderScreen();
     }
-
+    const canvasSecondaryTopToolbarHeightPx = 38;
 
     return (
         <div className="canvas-visibility-container">
             <CanvasSecondaryTopToolbar
-                setZoomFontSize={setZoomFontSize}
+                setZoomFontSize={setZoomFontSize} heightPx={canvasSecondaryTopToolbarHeightPx}
             />
-            <div style={{ display: 'flex', width: '100vw', height: '720px' }}>
+            <div style={{ display: 'flex', width: '100vw', height: `calc(100vh - ${topToolBarHeightPx}px  - ${canvasSecondaryTopToolbarHeightPx}px)` }}>
                 <CanvasSide
                     setZoomFontSize={setZoomFontSize}
                     minimap={minimap}

@@ -16,8 +16,9 @@ import { History } from "../../../commands/History";
 
 interface CanvasSecondaryTopToolbarProps {
     setZoomFontSize: (size: number) => void;
+    heightPx: number;
 }
-export default function CanvasSecondaryTopToolbar({ setZoomFontSize }: CanvasSecondaryTopToolbarProps) {
+export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx}: CanvasSecondaryTopToolbarProps) {
 
     const newSchema = () => {
         const oldDraw = Manager.getInstance().draw;
@@ -151,7 +152,7 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize }: CanvasSec
     }
 
     return (
-        <ul className="navbar-nav me-auto" style={{ flexDirection: 'row' }}>
+        <ul className="navbar-nav me-auto" style={{ flexDirection: 'row', height: `${heightPx}px` }}>
             <li className="nav-item dropdown">
                 <button className="btn" data-bs-toggle="dropdown">
                     File

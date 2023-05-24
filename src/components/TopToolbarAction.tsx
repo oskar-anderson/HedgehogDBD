@@ -9,10 +9,11 @@ import { Tooltip } from 'bootstrap'
 
 interface TopToolbarActionProps {
   currentState: AppState
+  heightPx: number
 }
 
 
-export default function TopToolbarAction({ currentState } : TopToolbarActionProps) {
+export default function TopToolbarAction({ currentState, heightPx } : TopToolbarActionProps) {
   const [isDrawIconFocused, setIsDrawIconFocused] = useState(false)
   const [isScriptIconFocused, setIsScriptIconFocused] = useState(false)
   const drawTooltipRef = useRef<HTMLImageElement>(null)
@@ -60,7 +61,7 @@ export default function TopToolbarAction({ currentState } : TopToolbarActionProp
   }
 
   return (
-    <nav className="py-1 px-4 navbar navbar-expand-lg" style={{ backgroundColor: 'rgb(255, 73, 73)' }}>
+    <nav className="py-1 px-4 navbar navbar-expand-lg" style={{ backgroundColor: 'rgb(255, 73, 73)', height: `${heightPx}px` }}>
       <div className="container-fluid">
         <a className="navbar-brand" href="#">
           <img style={{ height: '36px' }} src={EnvGlobals.BASE_URL + "/wwwroot/img/logo_compact_white.png"} />

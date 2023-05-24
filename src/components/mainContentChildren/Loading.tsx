@@ -15,7 +15,7 @@ export default function Loading({canvasContainerRef} : LoadingProps) {
     
     return (
         <>
-            <div style={{ display: 'flex', width: '100vw', height: '720px' }}>
+            <div style={{ display: 'flex', width: '100vw', height: '100vh' }}>
                 <div 
                     ref={canvasContainerRef}
                     className="canvas-container" 

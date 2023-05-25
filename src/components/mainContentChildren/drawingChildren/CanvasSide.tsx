@@ -7,16 +7,16 @@ import { Minimap } from "../../Minimap";
 
 
 interface CanvasSideProps {
-    setZoomFontSize: (size: number) => void
     minimap: Minimap,
     debugInfoContainer: React.RefObject<HTMLDivElement>
 }
 
 
 function CanvasSide({
-    setZoomFontSize, minimap, debugInfoContainer
+    minimap, debugInfoContainer
 }: CanvasSideProps) {
     const minimapContainerRef = useRef<HTMLDivElement>(null);
+    const [activeTab, setActiveTab] = useState("debug");
     console.log("CanvasSide")
 
     useEffect(() => {
@@ -46,26 +46,39 @@ function CanvasSide({
     }
 
     return (
-        <div className="canvas-side" style={{ display: 'flex', marginLeft: '6px', backgroundColor: '#f5f5f5' }}>
-            <div>
-                <span>Bird's Eye</span>
-                <div style={{ display: 'flex' }}>
-                    <span>Zoom:</span>
-                    <select defaultValue={Manager.getInstance().draw.selectedFontSize.size} name="zoom-font-size" onChange={(e) => setZoomFontSize(Number.parseInt((e.target as HTMLSelectElement).value))} className="zoom-font-size" autoComplete="off" style={{ marginLeft: '6px' }}>
-                        {
-                            Draw.fontSizes_Inconsolata.map(x =>
-                                <option key={x.size} value={x.size}>{x.size}</option>
-                            )
-                        }
-                    </select>
+        <div className="canvas-side" style={{ display: 'flex', backgroundColor: '#f5f5f5' }}>
+            <div style={{ padding: "2px" }}>
+                <div>
+                    <div>
+                        <div className="canvas-side-minimap" ref={minimapContainerRef} style={{ marginTop: '6px' }}></div>
+                    </div>
                 </div>
-                <div className="canvas-side-minimap" ref={minimapContainerRef} style={{ marginTop: '6px' }}></div>
-                <span>Reset browser zoom to 100% (ctrl + 0) if image is blurry</span>
-                <div ref={debugInfoContainer}>
+                <div>
+                    {
+                        /*
+                        <div style={{ display: "flex"}}>
+                            <button style={{ padding: "0 8px", border: 0, backgroundColor: `${activeTab === "tables" ? "white" : "#d2d2d2"}`, }} onClick={() => setActiveTab("tables")}>Tables</button>
+                            <button style={{ padding: "0 8px", border: 0, backgroundColor: `${activeTab === "debug" ? "white" : "#d2d2d2"}`, }} onClick={() => setActiveTab("debug")}>Debug</button>
+                        </div>
+                        */
+                        
+                    }
+                    {
+                        {
+                            debug: 
+                                <div ref={debugInfoContainer}>
+
+                                </div>,
+                            tables: 
+                                <div>
+                                    TODO!
+                                </div>
+                        }[activeTab]
+                    }
 
                 </div>
             </div>
-            <div className="canvas-side-tools" style={{ backgroundColor: '#eeeeee' }}>
+            <div className="canvas-side-tools" style={{ backgroundColor: '#eeeeee', padding: "2px", borderRightWidth: "1px", borderLeftWidth: "1px", borderStyle: "solid" }}>
                 <header style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
 
                     <button onClick={() => onToolSelectClick(IToolNames.select)} className={`tool-select btn btn-light ${highlightActiveSideToolbarTool === IToolNames.select ? 'active' : ''}`} style={{ borderRadius: 0 }} title="Select/Edit table">

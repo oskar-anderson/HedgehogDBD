@@ -1,4 +1,4 @@
-import { Point, Rectangle } from "pixi.js";
+import { BitmapText, Point, Rectangle } from "pixi.js";
 import { CommandCreateTable, CommandCreateTableArgs } from "../commands/appCommands/CommandCreateTable";
 import { Draw } from "../model/Draw";
 import { Table } from "../model/Table";
@@ -22,19 +22,19 @@ export class CreateTableTool implements ITool {
     }
 
     init(): void {
-        this.hover = new Table(new Point(0, 0), "new_table", [ new TableRow("id", "VARCHAR(255)", ["PK"])], undefined, undefined, true);
+        this.hover = new Table(new Point(0, 0), "new_table", [ new TableRow("id", "VARCHAR(255)", ["PK"])], Table.initDisplayable(), undefined, undefined, true);
         this.draw.schema.tables.push(this.hover);
     }
 
     exit(): void {
-        this.draw.schema.tables = this.draw.schema.tables.filter(x => ! x.isHover)
+        this.draw.schema.tables = this.draw.schema.tables.filter(x => ! x.getIsHover())
     }
 
     mouseMove(mouseCharGridX: number, mouseCharGridY: number) {
         if (this.hover === null) throw new Error("Moving new table hover with hover being null!");
         let newPos = this.getPositionInBounds(mouseCharGridX, mouseCharGridY, this.hover.getContainingRect().width, this.hover.getContainingRect().height);
-        this.isDirty = ! (this.hover!.position.x === newPos.x && this.hover!.position.y === newPos.y);
-        this.hover.position = newPos;
+        this.isDirty = ! (this.hover!.getPosition().x === newPos.x && this.hover!.getPosition().y === newPos.y);
+        this.hover.setPosition(newPos, this.draw.selectedFontSize);
     };
 
     getPositionInBounds(x: number, y: number, width: number, height: number) {
@@ -54,8 +54,10 @@ export class CreateTableTool implements ITool {
             return;
         }
 
-        this.draw.schema.tables = this.draw.schema.tables.filter(x => ! x.isHover)
-        this.hover!.isHover = false;
+        // Remove the table so it can be created throught command pattern
+        this.draw.schema.tables = this.draw.schema.tables.filter(x => ! x.getIsHover())
+        this.hover!.setIsHover(false, this.draw.schema.tables);
+
         this.draw.history.execute(new CommandCreateTable(
             this.draw, new CommandCreateTableArgs(TableDTO.initFromTable(this.hover!))
         ));

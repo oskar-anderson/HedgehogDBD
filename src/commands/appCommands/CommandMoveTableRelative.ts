@@ -1,3 +1,4 @@
+import { Point } from "pixi.js";
 import { Draw } from "../../model/Draw";
 import { ICommand } from "../ICommand";
 
@@ -12,14 +13,14 @@ export class CommandMoveTableRelative implements ICommand<CommandMoveTableRelati
 
     redo() {
         let table = this.context.schema.tables.find(x => x.id === this.args.id)!;
-        table.position.x += this.args.x;
-        table.position.y += this.args.y;
+        table.setPosition(new Point(table.getPosition().x + this.args.x, table.getPosition().y + this.args.y), this.context.selectedFontSize)
+        this.context.schema.tables.forEach(x => x.updateRelations(this.context.schema.tables));
     }
 
     undo() {
         let table = this.context.schema.tables.find(x => x.id === this.args.id)!;
-        table.position.x -= this.args.x;
-        table.position.y -= this.args.y;
+        table.setPosition(new Point(table.getPosition().x - this.args.x, table.getPosition().y - this.args.y), this.context.selectedFontSize)
+        this.context.schema.tables.forEach(x => x.updateRelations(this.context.schema.tables));
     }
 }
 

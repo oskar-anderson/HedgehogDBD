@@ -46,9 +46,11 @@ export class SelectTableTool implements ITool {
             if (table.getContainingRect().contains(mouseCharGridX, mouseCharGridY)) {
                 this.hover = { 
                     hoverTable: table, 
-                    hoverTableOriginalPosition: new Point(table.position.x, table.position.y),
-                    hoverTablePivot: new Point(table.position.x - mouseCharGridX, table.position.y - mouseCharGridY)
+                    hoverTableOriginalPosition: table.getPosition().clone(),
+                    hoverTablePivot: new Point(table.getPosition().x - mouseCharGridX, table.getPosition().y - mouseCharGridY)
                 }
+                this.hover.hoverTable.setIsHover(true, this.draw.schema.tables);
+                this.isDirty = true;
                 return;
             }
         }
@@ -58,9 +60,8 @@ export class SelectTableTool implements ITool {
         if (this.hover === null) throw Error("Trying to update hover table with hover table being null");
         let newX = Math.max(0, Math.min(this.draw.getWorldCharGrid().width - this.hover.hoverTable.getContainingRect().width, mouseCharGridX + this.hover.hoverTablePivot.x));
         let newY = Math.max(0, Math.min(this.draw.getWorldCharGrid().height - this.hover.hoverTable.getContainingRect().height, mouseCharGridY + this.hover.hoverTablePivot.y));
-        this.isDirty = !(this.hover.hoverTable!.position.x === newX && this.hover.hoverTable!.position.y === newY);
-        this.hover.hoverTable!.position.x = newX;
-        this.hover.hoverTable!.position.y = newY;
+        this.isDirty = !(this.hover.hoverTable!.getPosition().x === newX && this.hover.hoverTable!.getPosition().y === newY);
+        this.hover.hoverTable!.setPosition(new Point(newX, newY), this.draw.selectedFontSize);
     };
 
     mouseEventUp(mouseCharGridX: number, mouseCharGridY: number) {
@@ -74,25 +75,25 @@ export class SelectTableTool implements ITool {
         }
         let isGoodPlaceForTable = isGoodPlaceForTableFunc();
         let mouseUpDone = () => {
+            this.hover!.hoverTable.setIsHover(false, this.draw.schema.tables);
             this.hover = null;
             this.isDirty = true;
             this.exit();
         }
         if (! isGoodPlaceForTable) {
-            this.hover.hoverTable.position = this.hover.hoverTableOriginalPosition;
+            this.hover.hoverTable.setPosition(this.hover.hoverTableOriginalPosition, this.draw.selectedFontSize);
             mouseUpDone();
             return;
         }
-        let diff = this.hover.hoverTable.position.subtract(this.hover.hoverTableOriginalPosition);
-        if (diff.equals(new Point(0, 0))) { 
+        let diff = this.hover.hoverTable.getPosition().clone().subtract(this.hover.hoverTableOriginalPosition);
+        if (diff.equals(new Point(0, 0))) {
             mouseUpDone();
             return;
         }
-        this.hover.hoverTable.position = this.hover.hoverTableOriginalPosition;
+        this.hover.hoverTable.setPosition(this.hover.hoverTableOriginalPosition, this.draw.selectedFontSize);
         this.draw.history.execute(new CommandMoveTableRelative(
             this.draw, new CommandMoveTableRelativeArgs(this.hover.hoverTable.id, diff.x, diff.y)
         ));
-        this.draw.schema.relations.forEach(relation => relation.isDirty = true);
         mouseUpDone();
     }
 

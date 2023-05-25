@@ -19,10 +19,12 @@ export class CommandCreateTable implements ICommand<CommandCreateTableArgs> {
     redo() {
         let newTable = this.args.table.mapToTable();
         this.context.schema.tables.push(newTable);
+        this.context.schema.tables.forEach(x => x.updateRelations(this.context.schema.tables));
     }
 
     undo() {
         this.context.schema.tables.pop();
+        this.context.schema.tables.forEach(x => x.updateRelations(this.context.schema.tables));
     }
 }
 

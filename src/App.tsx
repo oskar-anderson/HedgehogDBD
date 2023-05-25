@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react'
-import { Draw } from "./model/Draw";
-import RasterModelerFormat from './RasterModelerFormat';
 import { AppStateManagementContext, useAppStateManagementDefault } from './Store';
 import MainContent from './components/MainContent';
-import EnvGlobals from "../EnvGlobals"
-
+import FontFaceObserver from "fontfaceobserver"
 
 function App() {
+  new FontFaceObserver('Inconsolata').load();
+  new FontFaceObserver('RealReal_Consolas').load();
+  
   const appStateManagementValue = useAppStateManagementDefault();
 
   return (

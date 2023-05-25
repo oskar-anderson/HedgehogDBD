@@ -1,6 +1,5 @@
 import { Container } from "pixi.js";
 import { IScene, Manager } from "../Manager";
-import { Table } from "../model/Table";
 import { AppState } from "../components/MainContent";
 import { TableDTO } from "../model/dto/TableDTO";
 

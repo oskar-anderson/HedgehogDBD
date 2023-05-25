@@ -37,8 +37,9 @@ export default function MainComponent() {
         Manager.getInstance().changeScene(scene);
     }, [])
 
+    const topToolBarHeightPx = 54;
     const optionalTopToolbar = (appState === AppState.DrawScene || appState === AppState.ScriptingScene) ? 
-        <TopToolbarAction currentState={appState} /> : 
+        <TopToolbarAction currentState={appState} heightPx={topToolBarHeightPx} /> : 
         null
 
     return (
@@ -48,7 +49,7 @@ export default function MainComponent() {
             </div>
 
             { appState === AppState.LoaderScene && <Loading canvasContainerRef={canvasContainerRef} /> }
-            { appState === AppState.DrawScene && <Drawing/> }
+            { appState === AppState.DrawScene && <Drawing topToolBarHeightPx={topToolBarHeightPx} /> }
             { appState === AppState.ScriptingScene && <Scripting/> }
             { appState === AppState.TableScene && <Table/> }
         </>

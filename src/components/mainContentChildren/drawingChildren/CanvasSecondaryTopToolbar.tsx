@@ -9,11 +9,16 @@ import { TableDTO } from "../../../model/dto/TableDTO";
 import RasterModelerFormat from "../../../RasterModelerFormat";
 import { DrawScene } from "../../../scenes/DrawScene";
 import { ScriptingScene } from "../../../scenes/ScriptingScene";
-import { DrawChar } from "../../../model/DrawChar";
 import { SchemaDTO } from "../../../model/dto/SchemaDTO";
+import { CostGrid } from "../../../model/CostGrid";
+import { History } from "../../../commands/History";
 
 
-export default function CanvasSecondaryTopToolbar() {
+interface CanvasSecondaryTopToolbarProps {
+    setZoomFontSize: (size: number) => void;
+    heightPx: number;
+}
+export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx}: CanvasSecondaryTopToolbarProps) {
 
     const newSchema = () => {
         const oldDraw = Manager.getInstance().draw;
@@ -21,67 +26,74 @@ export default function CanvasSecondaryTopToolbar() {
     }
 
     const saveAsJpg = async () => {
-        async function main(app: PIXI.Application) {
-            let draw = Manager.getInstance().draw;
-            renderScreen(app, draw.schema.worldDrawArea, draw.getWorldCharGrid().height, draw.getWorldCharGrid().width);
+        let app = Manager.getInstance().getApp();
+        let oldFontSize = Manager.getInstance().draw.selectedFontSize.size;
+        let maxFontSize = Math.max(...Draw.fontSizes_Inconsolata.map(x => x.size))
+        setZoomFontSize(maxFontSize);
+        const containerSize = app.stage.getBounds();
+        const container = new PIXI.Container();
 
-            const containerSize = app.stage.getBounds();
-            const container = new PIXI.Container();
+        const background = new PIXI.Graphics();
+        background.beginFill(0xFFFFFF);
+        background.drawRect(containerSize.x, containerSize.y, containerSize.width, containerSize.height)
+        background.endFill();
 
-            const background = new PIXI.Graphics();
-            background.beginFill(0xFFFFFF);
-            background.drawRect(containerSize.x, containerSize.y, containerSize.width, containerSize.height)
-            background.endFill();
-
-            container.addChild(background);
-            container.addChild(app.stage);
-            const img = app.renderer.plugins.extract.image(container);
-            const a = document.createElement('a');
-            document.body.append(a);
-            a.download = `RasterModeler_${dayjs().format('YYYY-MM-DD-HH-mm-ss')}_screenshot.jpg`;
-            a.href = img.src;
-            a.click();
-            a.remove();
-            app.destroy(false, true);
-        }
-
-
-        function renderScreen(app: PIXI.Application, worldDrawArea: DrawChar[], worldCharHeight: number, worldCharWidth: number) {
-            for (let y = 0; y < worldCharHeight; y++) {
-                for (let x = 0; x < worldCharWidth; x++) {
-                    let tile = worldDrawArea[y * worldCharWidth + x];
-                    if (tile.char === " ") { continue; }
-                    let bitmapText = new PIXI.BitmapText(tile.char,
-                        {
-                            fontName: "Consolas-24",
-                            fontSize: 24,
-                            tint: tile.color
-                        });
-                    bitmapText.x = x * 12;
-                    bitmapText.y = y * 24;
-                    app.stage.addChild(bitmapText);
-                }
-            }
-        }
-
-        const app = new PIXI.Application();
-        await main(app)
+        container.addChild(background);
+        container.addChild(app.stage);
+        const img = app.renderer.plugins.extract.image(container);
+        const a = document.createElement('a');
+        document.body.append(a);
+        a.download = `RasterModeler_${dayjs().format('YYYY-MM-DD-HH-mm-ss')}_screenshot.jpg`;
+        a.href = img.src;
+        a.click();
+        a.remove();
+        setZoomFontSize(oldFontSize);
     }
 
     const saveToClipboard = async () => {
         let draw = Manager.getInstance().draw;
 
-        let width = draw.getWorldCharGrid().width;
-        let height = draw.getWorldCharGrid().height;
-        let sb = [];
+        let worldRect = draw.getWorldCharGrid();
+        let drawArea: string[][] = [];
+        for (let y = 0; y < worldRect.height; y++) {
+            let row: string[] = [];
+            for (let x = 0; x < worldRect.width; x++) {
+                row.push(' ');
+            }
+            drawArea.push(row);
+        }
+        for (let table of draw.schema.tables) {
+            let table2D = DrawScene.setWorldTable2(
+                table.tableRows.map(x => { return { name: x.name, datatype: x.datatype, attributes: x.attributes.join(", ") } }),
+                table.head,
+                table.getContainingRect()
+            );
+            for (let y = 0; y < table2D.length; y++) {
+                for (let x = 0; x < table2D[0].length; x++) {
+                    drawArea[y + table.getPosition().y][x + table.getPosition().x] = table2D[y][x];
+                }
+            }
+            for (let relation of table.relations) {
+                for (let path of relation.points) {
+                    drawArea[path.y][path.x] = "*";
+                }
+            }
+        }
+
+        let content2D = trim(drawArea);
+        let content = content2D.map(x => x.join("")).join("\n")
+        navigator.clipboard.writeText(content)
+    }
+
+    function trim<T>(drawArea: T[][]): T[][] {
+        let result: T[][] = [];
         let xMax = 0;
-        let xMin = width;
+        let xMin = Number.MAX_VALUE;
         let yMax = 0;
-        let yMin = height;
-        for (let y = 0; y < height; y++) {
-            for (let x = 0; x < width; x++) {
-                let tile = draw.schema.worldDrawArea[y * width + x];
-                if (tile.char !== " ") {
+        let yMin = Number.MAX_VALUE;
+        for (let y = 0; y < drawArea.length; y++) {
+            for (let x = 0; x < drawArea[0].length; x++) {
+                if (drawArea[y][x] !== " ") {
                     xMin = Math.min(xMin, x);
                     xMax = Math.max(xMax, x);
                     yMin = Math.min(yMin, y);
@@ -90,13 +102,13 @@ export default function CanvasSecondaryTopToolbar() {
             }
         }
         for (let y = yMin; y <= yMax; y++) {
+            let row: T[] = []
             for (let x = xMin; x <= xMax; x++) {
-                sb.push(draw.schema.worldDrawArea[y * width + x].char);
+                row.push(drawArea[y][x]);
             }
-            sb.push("\n");
+            result.push(row);
         }
-        let content = sb.join("");
-        navigator.clipboard.writeText(content)
+        return result;
     }
 
     const saveAsJson = async () => {
@@ -115,9 +127,10 @@ export default function CanvasSecondaryTopToolbar() {
         let reader = new FileReader();
         reader.onload = (event: ProgressEvent) => {
             let file = (event.target as FileReader).result as string;
-            let schema = SchemaDTO.parse(file).mapToSchema();
-            let draw = new Draw(schema, new MyRect(0, 0, 3240, 2160))
-            Manager.getInstance().changeScene(new DrawScene(draw))
+            let schema = RasterModelerFormat.parse(file);
+            Manager.getInstance().draw.schema = schema;
+            Manager.getInstance().draw.history = new History();
+            Manager.getInstance().changeScene(new DrawScene(Manager.getInstance().draw));
         }
         let startReadingFile = (thisElement: HTMLInputElement) => {
             let inputFile = thisElement.files![0];
@@ -132,12 +145,14 @@ export default function CanvasSecondaryTopToolbar() {
 
     const loadSchema = async (fileName: string) => {
         let text = await (await fetch(EnvGlobals.BASE_URL + `/wwwroot/data/${fileName}`, { cache: "no-cache" })).text();
-        let draw = RasterModelerFormat.parse(text);
-        Manager.getInstance().changeScene(new DrawScene(draw));
+        let schema = RasterModelerFormat.parse(text);
+        Manager.getInstance().draw.schema = schema;
+        Manager.getInstance().draw.history = new History();
+        Manager.getInstance().changeScene(new DrawScene(Manager.getInstance().draw));
     }
 
     return (
-        <ul className="navbar-nav me-auto" style={{ flexDirection: 'row' }}>
+        <ul className="navbar-nav me-auto" style={{ flexDirection: 'row', height: `${heightPx}px` }}>
             <li className="nav-item dropdown">
                 <button className="btn" data-bs-toggle="dropdown">
                     File

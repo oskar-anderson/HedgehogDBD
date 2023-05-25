@@ -19,7 +19,11 @@ export class DrawingUtil {
     }
 }
 
-export default function Drawing() {
+interface DrawingProps {
+    topToolBarHeightPx: number
+}
+
+export default function Drawing({ topToolBarHeightPx }: DrawingProps) {
     console.log("drawing")
     const minimap = new Minimap(new Rectangle(0, 0, 180, 120));
     const canvasContainerRef = useRef<HTMLDivElement>(null);
@@ -38,11 +42,10 @@ export default function Drawing() {
                     x - Math.ceil(canvasContainerRef.current!.offsetWidth / 2),
                     y - Math.ceil(canvasContainerRef.current!.offsetHeight / 2)
                 );
-                DrawScene.cullViewport((Manager.getInstance().getScene() as DrawScene).canvasView);
                 minimap.update(Manager.getInstance().draw.getVisibleTables(), DrawingUtil.getScreen(canvasContainerRef));
             }
         );
-        
+
         const minimapUpdateInterval = setInterval(() => {
             const draw = Manager.getInstance().draw;
             if (canvasContainerRef.current == null) {
@@ -53,19 +56,42 @@ export default function Drawing() {
             let screen = DrawingUtil.getScreen(canvasContainerRef);
             minimap.update(draw.getVisibleTables(), screen);
         }, 1000 / 30);
-        
+
         return () => { clearInterval(minimapUpdateInterval) }
     }, [])
 
-
+    const setZoomFontSize = (size: number): void => {
+        const draw = Manager.getInstance().draw;
+        let centerScreenOriginalXPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().x / draw.getWorld().width;
+        let centerScreenOriginalYPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().y / draw.getWorld().height;
+        let widthCharGridOriginal = draw.getWorldCharGrid().width;
+        let heightCharGridOriginal = draw.getWorldCharGrid().height;
+        draw.selectedFontSize = Draw.fontSizes_Inconsolata.find(x => x.size === size)!;
+        let widthWorldResize = widthCharGridOriginal * draw.selectedFontSize.width;
+        let heightWorldResize = heightCharGridOriginal * draw.selectedFontSize.height;
+        Manager.getInstance().getRenderer().resize(widthWorldResize, heightWorldResize);
+        draw.setWorld(new MyRect(0, 0, widthWorldResize, heightWorldResize))
+        let centerScreenResizeXPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().x / draw.getWorld().width;
+        let centerScreenResizeYPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().y / draw.getWorld().height;
+        canvasContainerRef.current!.scrollTo(
+            DrawingUtil.getScreen(canvasContainerRef).x + draw.getWorld().width * (centerScreenOriginalXPercent - centerScreenResizeXPercent),
+            DrawingUtil.getScreen(canvasContainerRef).y + draw.getWorld().height * (centerScreenOriginalYPercent - centerScreenResizeYPercent)
+        );
+        draw.schema.tables.forEach(x => x.setIsDirty(true));
+        draw.schema.tables.forEach(x => x.relations.forEach(y => y.isDirty = true));
+        (Manager.getInstance().getScene() as DrawScene).renderScreen();
+    }
+    const canvasSecondaryTopToolbarHeightPx = 38;
 
     return (
         <div className="canvas-visibility-container">
-            <CanvasSecondaryTopToolbar />
-            <div style={{ display: 'flex', width: '100vw', height: '720px' }}>
-                <CanvasSide 
-                    canvasContainerRef={canvasContainerRef}
-                    minimap={minimap} 
+            <CanvasSecondaryTopToolbar
+                setZoomFontSize={setZoomFontSize} heightPx={canvasSecondaryTopToolbarHeightPx}
+            />
+            <div style={{ display: 'flex', width: '100vw', height: `calc(100vh - ${topToolBarHeightPx}px  - ${canvasSecondaryTopToolbarHeightPx}px)` }}>
+                <CanvasSide
+                    setZoomFontSize={setZoomFontSize}
+                    minimap={minimap}
                     debugInfoContainer={debugInfoContainer}
                 />
                 <CanvasContainer

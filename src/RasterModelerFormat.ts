@@ -1,16 +1,14 @@
 import { Draw } from "./model/Draw";
 import { MyRect } from "./model/MyRect";
 import { SchemaDTO } from "./model/dto/SchemaDTO";
+import { Schema } from "./model/Schema";
 
 
 class RasterModelerFormat {
 
-    public static parse(schema: string): Draw {
+    public static parse(schema: string): Schema {
         let schemaDTO = SchemaDTO.parse(schema);
-        return new Draw(
-            schemaDTO.mapToSchema(), 
-            new MyRect(0, 0, 3240, 2160)
-        );
+        return schemaDTO.mapToSchema();
         /*
         const defaultFontSize = Draw.fontSizes.find(x => x.size === 14)!;
         return new Draw(

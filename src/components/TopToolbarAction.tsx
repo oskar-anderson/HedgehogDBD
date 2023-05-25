@@ -9,10 +9,11 @@ import { Tooltip } from 'bootstrap'
 
 interface TopToolbarActionProps {
   currentState: AppState
+  heightPx: number
 }
 
 
-export default function TopToolbarAction({ currentState } : TopToolbarActionProps) {
+export default function TopToolbarAction({ currentState, heightPx } : TopToolbarActionProps) {
   const [isDrawIconFocused, setIsDrawIconFocused] = useState(false)
   const [isScriptIconFocused, setIsScriptIconFocused] = useState(false)
   const drawTooltipRef = useRef<HTMLImageElement>(null)
@@ -48,30 +49,30 @@ export default function TopToolbarAction({ currentState } : TopToolbarActionProp
 
   const linkStyles = {
     // https://angel-rs.github.io/css-color-filter-generator/
-    defaultLinkColorf1f1f1: {
+    defaultLinkColor_f1f1f1: {
       filter: 'brightness(0) saturate(100%) invert(100%) sepia(12%) saturate(73%) hue-rotate(117deg) brightness(115%) contrast(89%)'
     },
-    selectedLinkColor99968c: {
+    selectedLinkColor_99968c: {
       filter: 'brightness(0) saturate(100%) invert(69%) sepia(0%) saturate(6996%) hue-rotate(219deg) brightness(84%) contrast(91%)'
     },
-    activeLinkColoredca63: {
+    activeLinkColor_edca63: {
       filter: 'brightness(0) saturate(100%) invert(82%) sepia(47%) saturate(504%) hue-rotate(349deg) brightness(96%) contrast(93%)'
     }
   }
 
   return (
-    <nav className="py-1 px-4 navbar navbar-expand-lg" style={{ backgroundColor: 'rgb(255, 73, 73)' }}>
+    <nav className="py-1 px-4 navbar navbar-expand-lg" style={{ backgroundColor: 'rgb(255, 73, 73)', height: `${heightPx}px` }}>
       <div className="container-fluid">
         <a className="navbar-brand" href="#">
           <img style={{ height: '36px' }} src={EnvGlobals.BASE_URL + "/wwwroot/img/logo_compact_white.png"} />
         </a>
         <ul className="navbar-nav me-auto flex-row ms-3 gap-3">
           <li>
-            <img ref={drawTooltipRef} data-bs-toggle="tooltip" data-bs-placement="bottom" title="Draw" style={currentState === AppState.DrawScene ? linkStyles.activeLinkColoredca63 : (isDrawIconFocused ? linkStyles.selectedLinkColor99968c : linkStyles.defaultLinkColorf1f1f1)} 
+            <img ref={drawTooltipRef} data-bs-toggle="tooltip" data-bs-placement="bottom" title="Draw" style={currentState === AppState.DrawScene ? linkStyles.activeLinkColor_edca63 : (isDrawIconFocused ? linkStyles.selectedLinkColor_99968c : linkStyles.defaultLinkColor_f1f1f1)} 
               width={42} height={42} src={EnvGlobals.BASE_URL + "/wwwroot/img/icons/erd-icon.png"} alt="Draw" onClick={() => changeSceneToDraw()} />
           </li>
           <li>
-            <img ref={scriptingTooltipRef} data-bs-toggle="tooltip" data-bs-placement="bottom" title="Scripting" style={currentState === AppState.ScriptingScene ? linkStyles.activeLinkColoredca63 : (isScriptIconFocused ? linkStyles.selectedLinkColor99968c : linkStyles.defaultLinkColorf1f1f1)} 
+            <img ref={scriptingTooltipRef} data-bs-toggle="tooltip" data-bs-placement="bottom" title="Scripting" style={currentState === AppState.ScriptingScene ? linkStyles.activeLinkColor_edca63 : (isScriptIconFocused ? linkStyles.selectedLinkColor_99968c : linkStyles.defaultLinkColor_f1f1f1)} 
                 width={42} height={42} src={EnvGlobals.BASE_URL + "/wwwroot/img/icons/code-icon.png"} alt="Scripting" onClick={() => changeSceneToScripting()} />
           </li>
         </ul>

@@ -152,8 +152,8 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx}: 
     }
 
     return (
-        <ul className="navbar-nav me-auto" style={{ flexDirection: 'row', height: `${heightPx}px` }}>
-            <li className="nav-item dropdown">
+        <div className="navbar-nav me-auto" style={{ flexDirection: 'row', height: `${heightPx}px`, borderBottomWidth: "1px", borderStyle: "solid", alignItems: "center" }}>
+            <div className="nav-item dropdown">
                 <button className="btn" data-bs-toggle="dropdown">
                     File
                 </button>
@@ -192,8 +192,8 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx}: 
                         </button>
                     </li>
                 </ul>
-            </li>
-            <li className="nav-item dropdown">
+            </div>
+            <div className="nav-item dropdown">
                 <button className="btn" data-bs-toggle="dropdown">
                     Samples
                 </button>
@@ -204,7 +204,15 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx}: 
                         </button>
                     </li>
                 </ul>
-            </li>
-        </ul>
+            </div>
+            <div className="vertical-seperator" style={{ margin: "0 44px 0 0" }}></div>
+            <select defaultValue={Manager.getInstance().draw.selectedFontSize.size} name="zoom-font-size" onChange={(e) => setZoomFontSize(Number.parseInt((e.target as HTMLSelectElement).value))} className="zoom-font-size" autoComplete="off">
+                {
+                    Draw.fontSizes_Inconsolata.map(x =>
+                        <option key={x.size} value={x.size}>{x.size} pt</option>
+                    )
+                }
+            </select>
+        </div>
     );
 }

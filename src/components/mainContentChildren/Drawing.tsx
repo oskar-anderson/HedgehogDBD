@@ -90,7 +90,6 @@ export default function Drawing({ topToolBarHeightPx }: DrawingProps) {
             />
             <div style={{ display: 'flex', width: '100vw', height: `calc(100vh - ${topToolBarHeightPx}px  - ${canvasSecondaryTopToolbarHeightPx}px)` }}>
                 <CanvasSide
-                    setZoomFontSize={setZoomFontSize}
                     minimap={minimap}
                     debugInfoContainer={debugInfoContainer}
                 />

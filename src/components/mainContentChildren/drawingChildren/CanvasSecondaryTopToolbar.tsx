@@ -17,12 +17,13 @@ import { History } from "../../../commands/History";
 interface CanvasSecondaryTopToolbarProps {
     setZoomFontSize: (size: number) => void;
     heightPx: number;
+    onTablesUpdateCallback: (tables: TableDTO[]) => void;
 }
-export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx}: CanvasSecondaryTopToolbarProps) {
+export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx, onTablesUpdateCallback}: CanvasSecondaryTopToolbarProps) {
 
     const newSchema = () => {
         const oldDraw = Manager.getInstance().draw;
-        Manager.getInstance().changeScene(new DrawScene(new Draw(new Schema([]), oldDraw.getWorld())));
+        Manager.getInstance().changeScene(new DrawScene(new Draw(new Schema([], onTablesUpdateCallback), oldDraw.getWorld())));
     }
 
     const saveAsJpg = async () => {
@@ -127,7 +128,8 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx}: 
         let reader = new FileReader();
         reader.onload = (event: ProgressEvent) => {
             let file = (event.target as FileReader).result as string;
-            let schema = RasterModelerFormat.parse(file);
+            let schemaDTO = RasterModelerFormat.parse(file);
+            let schema = schemaDTO.mapToSchema(onTablesUpdateCallback);
             Manager.getInstance().draw.schema = schema;
             Manager.getInstance().draw.history = new History();
             Manager.getInstance().changeScene(new DrawScene(Manager.getInstance().draw));
@@ -145,7 +147,8 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx}: 
 
     const loadSchema = async (fileName: string) => {
         let text = await (await fetch(EnvGlobals.BASE_URL + `/wwwroot/data/${fileName}`, { cache: "no-cache" })).text();
-        let schema = RasterModelerFormat.parse(text);
+        let schemaDTO = RasterModelerFormat.parse(text);
+        let schema = schemaDTO.mapToSchema(onTablesUpdateCallback);
         Manager.getInstance().draw.schema = schema;
         Manager.getInstance().draw.history = new History();
         Manager.getInstance().changeScene(new DrawScene(Manager.getInstance().draw));
@@ -154,7 +157,7 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx}: 
     return (
         <div className="navbar-nav me-auto" style={{ flexDirection: 'row', height: `${heightPx}px`, borderBottomWidth: "1px", borderStyle: "solid", alignItems: "center" }}>
             <div className="nav-item dropdown">
-                <button className="btn" data-bs-toggle="dropdown">
+                <button className="btn" data-bs-toggle="dropdown" style={{ borderRadius: "0px" }}>
                     File
                 </button>
                 <ul className="dropdown-menu" style={{ position: 'absolute' }}>
@@ -194,7 +197,7 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx}: 
                 </ul>
             </div>
             <div className="nav-item dropdown">
-                <button className="btn" data-bs-toggle="dropdown">
+                <button className="btn" data-bs-toggle="dropdown" style={{ borderRadius: "0px" }}>
                     Samples
                 </button>
                 <ul className="dropdown-menu" style={{ position: 'absolute' }}>

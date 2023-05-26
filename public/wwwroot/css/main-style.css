@@ -19,8 +19,8 @@
 
 :root {
     --bs-btn-color: #fff;
-    --bs-btn-hover-bg: #fff4;
-    --bs-btn-active-bg: #fff4;
+    --bs-btn-hover-bg: #c2c2c2;
+    --bs-btn-active-bg: #c2c2c2;
 }
 
 .dropdown-menu {
@@ -38,13 +38,6 @@ hr {
     border-top: 1px solid;
     opacity: .25;
 }
-
-
-a, a:link, a:visited { color: #e3e3e3; font-size: 1em; text-decoration: none; }
-
-a:visited { text-decoration: none; }
-
-a:hover, a:visited:hover { color: #e3e3e3; text-decoration: underline; }
 
 h1, h2, h3, h4, h5, h6 { color: #28db00; }
 

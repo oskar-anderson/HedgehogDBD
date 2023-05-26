@@ -45,17 +45,19 @@ export default function CanvasContainer({
             const mouseEvent = mapMouseEvent(event);
             const charGridPoint = drawScene.draw.getWorldToCharGridPoint(mouseEvent.worldX, mouseEvent.worldY);
             // using useState would cause a lot of rerenders and make the app unresponsive
-            debugInfoContainer.current!.innerHTML = `
-            <div>
-                Sx: ${mouseEvent.screenX}, Sy: ${mouseEvent.screenY}
-            </div>
-            <div>
-                Wx: ${mouseEvent.worldX}, Wy: ${mouseEvent.worldY}
-            </div>
-            <div>
-                WCx: ${charGridPoint.x}, WCy: ${charGridPoint.y}
-            </div>
-            `;
+            if (debugInfoContainer.current !== null) {
+                debugInfoContainer.current.innerHTML = `
+                <div>
+                    Sx: ${mouseEvent.screenX}, Sy: ${mouseEvent.screenY}
+                </div>
+                <div>
+                    Wx: ${mouseEvent.worldX}, Wy: ${mouseEvent.worldY}
+                </div>
+                <div>
+                    WCx: ${charGridPoint.x}, WCy: ${charGridPoint.y}
+                </div>
+                `;
+            }
             activeToolMouseEventHandler(event);
          }
 

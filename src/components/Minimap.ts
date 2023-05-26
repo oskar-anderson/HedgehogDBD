@@ -71,7 +71,6 @@ export class Minimap {
         );
         // dirty hack to make screenBorder be drawn over the minimap border on all edges
         screenBorderRect = screenBorderRect.fit(new MyRect(1, 0, this.minimapSize.width, this.minimapSize.height - 1))
-        console.log(screenBorderRect);
         screenBorder.drawRect(
             screenBorderRect.x,
             screenBorderRect.y,

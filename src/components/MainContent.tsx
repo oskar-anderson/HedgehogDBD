@@ -10,6 +10,7 @@ import { LoaderScene } from "../scenes/LoaderScene";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Schema } from "../model/Schema";
 import { MyRect } from "../model/MyRect";
+import { TableDTO } from "../model/dto/TableDTO";
 
 
 export enum AppState {
@@ -22,9 +23,13 @@ export enum AppState {
 export default function MainComponent() {
     const { appState, setAppState } = useAppStateManagement();
     const canvasContainerRef = useRef<HTMLDivElement>(null);
+    const [tables, setTables] = useState<TableDTO[]>([]);
     
+    const onTablesUpdateCallbackOuterReadonly = (tables: TableDTO[]) => {
+        setTables(tables);
+    };
     useEffect(() => {
-        let draw = new Draw(new Schema([]), new MyRect(0, 0, 3240, 2160));
+        let draw = new Draw(new Schema([], onTablesUpdateCallbackOuterReadonly), new MyRect(0, 0, 3240, 2160));
         Manager.constructInstance(
             3240,
             2160,
@@ -49,7 +54,7 @@ export default function MainComponent() {
             </div>
 
             { appState === AppState.LoaderScene && <Loading canvasContainerRef={canvasContainerRef} /> }
-            { appState === AppState.DrawScene && <Drawing topToolBarHeightPx={topToolBarHeightPx} /> }
+            { appState === AppState.DrawScene && <Drawing topToolBarHeightPx={topToolBarHeightPx} tables={tables} onTablesUpdateCallbackOuterReadonly={onTablesUpdateCallbackOuterReadonly} /> }
             { appState === AppState.ScriptingScene && <Scripting/> }
             { appState === AppState.TableScene && <Table/> }
         </>

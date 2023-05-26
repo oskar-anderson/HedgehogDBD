@@ -49,14 +49,11 @@ export default function TopToolbarAction({ currentState, heightPx } : TopToolbar
 
   const linkStyles = {
     // https://angel-rs.github.io/css-color-filter-generator/
-    defaultLinkColor_f1f1f1: {
+    selectedLinkColor_f1f1f1: {
       filter: 'brightness(0) saturate(100%) invert(100%) sepia(12%) saturate(73%) hue-rotate(117deg) brightness(115%) contrast(89%)'
     },
-    selectedLinkColor_99968c: {
-      filter: 'brightness(0) saturate(100%) invert(69%) sepia(0%) saturate(6996%) hue-rotate(219deg) brightness(84%) contrast(91%)'
-    },
-    activeLinkColor_edca63: {
-      filter: 'brightness(0) saturate(100%) invert(82%) sepia(47%) saturate(504%) hue-rotate(349deg) brightness(96%) contrast(93%)'
+    defaultLinkColor_515151: {
+      filter: 'brightness(0) saturate(100%) invert(26%) sepia(0%) saturate(3789%) hue-rotate(43deg) brightness(109%) contrast(83%)'
     }
   }
 
@@ -68,11 +65,11 @@ export default function TopToolbarAction({ currentState, heightPx } : TopToolbar
         </a>
         <ul className="navbar-nav me-auto flex-row ms-3 gap-3">
           <li>
-            <img ref={drawTooltipRef} data-bs-toggle="tooltip" data-bs-placement="bottom" title="Draw" style={currentState === AppState.DrawScene ? linkStyles.activeLinkColor_edca63 : (isDrawIconFocused ? linkStyles.selectedLinkColor_99968c : linkStyles.defaultLinkColor_f1f1f1)} 
+            <img ref={drawTooltipRef} data-bs-toggle="tooltip" data-bs-placement="bottom" title="Draw" style={currentState === AppState.DrawScene ? linkStyles.selectedLinkColor_f1f1f1 : (isDrawIconFocused ? linkStyles.selectedLinkColor_f1f1f1 : linkStyles.defaultLinkColor_515151)} 
               width={42} height={42} src={EnvGlobals.BASE_URL + "/wwwroot/img/icons/erd-icon.png"} alt="Draw" onClick={() => changeSceneToDraw()} />
           </li>
           <li>
-            <img ref={scriptingTooltipRef} data-bs-toggle="tooltip" data-bs-placement="bottom" title="Scripting" style={currentState === AppState.ScriptingScene ? linkStyles.activeLinkColor_edca63 : (isScriptIconFocused ? linkStyles.selectedLinkColor_99968c : linkStyles.defaultLinkColor_f1f1f1)} 
+            <img ref={scriptingTooltipRef} data-bs-toggle="tooltip" data-bs-placement="bottom" title="Scripting" style={currentState === AppState.ScriptingScene ? linkStyles.selectedLinkColor_f1f1f1 : (isScriptIconFocused ? linkStyles.selectedLinkColor_f1f1f1 : linkStyles.defaultLinkColor_515151)} 
                 width={42} height={42} src={EnvGlobals.BASE_URL + "/wwwroot/img/icons/code-icon.png"} alt="Scripting" onClick={() => changeSceneToScripting()} />
           </li>
         </ul>

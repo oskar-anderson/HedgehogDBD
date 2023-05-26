@@ -37,9 +37,10 @@ export class SchemaDTO {
         );
     }
 
-    mapToSchema() {
+    mapToSchema(onTablesChangeCallback: (tables: TableDTO[]) => void) {
         return new Schema(
-            this.tables.map(x => x.mapToTable())
+            this.tables.map(x => x.mapToTable()),
+            onTablesChangeCallback
         );
     }
 }

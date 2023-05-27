@@ -21,9 +21,9 @@ export class CreateTableTool implements ITool {
         return IToolNames.newTable;
     }
 
-    init(): void {
+    init(startingPoint = new Point(0, 0)): void {
         this.hover = new Table( 
-            new Point(0, 0), 
+            startingPoint, 
             "new_table", 
             [ new TableRow("id", "VARCHAR(255)", ["PK"])], 
             {
@@ -69,7 +69,7 @@ export class CreateTableTool implements ITool {
             this.draw, new CommandCreateTableArgs(TableDTO.initFromTable(this.hover!))
         ));
         this.isDirty = true;
-        this.init();
+        this.init(this.hover!.getPosition().clone());
     }
 
     mouseEventHandler(event: CustomMouseEvent): void {

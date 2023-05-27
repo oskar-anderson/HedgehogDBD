@@ -42,14 +42,14 @@ export class SelectTableTool implements ITool {
         */
         if (this.hover !== null) return
         this.isDirty = false;
-        for (let table of this.draw.schema.tables) {
+        for (let table of this.draw.schema.getTables()) {
             if (table.getContainingRect().contains(mouseCharGridX, mouseCharGridY)) {
                 this.hover = { 
                     hoverTable: table, 
                     hoverTableOriginalPosition: table.getPosition().clone(),
                     hoverTablePivot: new Point(table.getPosition().x - mouseCharGridX, table.getPosition().y - mouseCharGridY)
                 }
-                this.hover.hoverTable.setIsHover(true, this.draw.schema.tables);
+                this.hover.hoverTable.setIsHover(true, this.draw.schema.getTables());
                 this.isDirty = true;
                 return;
             }
@@ -75,7 +75,7 @@ export class SelectTableTool implements ITool {
         }
         let isGoodPlaceForTable = isGoodPlaceForTableFunc();
         let mouseUpDone = () => {
-            this.hover!.hoverTable.setIsHover(false, this.draw.schema.tables);
+            this.hover!.hoverTable.setIsHover(false, this.draw.schema.getTables());
             this.hover = null;
             this.isDirty = true;
             this.exit();
@@ -109,7 +109,7 @@ export class SelectTableTool implements ITool {
                 break;
             case "click": 
                 if (event.detail === 2) {  // double click
-                    let selectedTable = this.draw.schema.tables.find(table => table.getContainingRect().contains(mouseCharGrid.x, mouseCharGrid.y))
+                    let selectedTable = this.draw.schema.getTables().find(table => table.getContainingRect().contains(mouseCharGrid.x, mouseCharGrid.y))
                     if (! selectedTable) { break; }
                     Manager.getInstance().changeScene(new TableScene(TableDTO.initFromTable(selectedTable)));
                 }

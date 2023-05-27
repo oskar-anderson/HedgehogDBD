@@ -80,7 +80,7 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx, o
             }
             drawArea.push(row);
         }
-        for (let table of draw.schema.tables) {
+        for (let table of draw.schema.getTables()) {
             let table2D = DrawScene.setWorldTable2(
                 table.tableRows.map(x => { return { name: x.name, datatype: x.datatype, attributes: x.attributes.join(", ") } }),
                 table.head,

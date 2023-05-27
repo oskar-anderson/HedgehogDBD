@@ -13,13 +13,13 @@ export class SchemaDTO {
 
     static init(draw: Draw) {
         return new SchemaDTO(
-            draw.schema.tables.map(x => TableDTO.initFromTable(x)),
+            draw.schema.getTables().map(x => TableDTO.initFromTable(x)),
         );
     }
 
     static initJsonDisplayable(draw: Draw) {
         return new SchemaDTO(
-            draw.schema.tables.map(x => TableDTO.initFromTable(x)),
+            draw.schema.getTables().map(x => TableDTO.initFromTable(x)),
         );
     }
 

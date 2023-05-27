@@ -41,7 +41,7 @@ export class DrawScene extends Container implements IScene {
     renderScreen() {
         this.canvasView.removeChildren();
 
-        for (const table of this.draw.schema.tables.filter(x => x.getIsDirty())) {
+        for (const table of this.draw.schema.getTables().filter(x => x.getIsDirty())) {
             let tableRows = table.tableRows.map(tr => {return { name: tr.name, datatype: tr.datatype, attributes: tr.attributes.join(", ")} });
             let updatedTextArr = DrawScene.setWorldTable2(tableRows, table.head, table.getContainingRect() );
             let updatedText = updatedTextArr.map(z => z.join("")).join("\n");
@@ -59,16 +59,16 @@ export class DrawScene extends Container implements IScene {
             table.setIsDirty(false);
         }
 
-        let drawables1 = this.draw.schema.tables.map(x => x.displayable);
+        let drawables1 = this.draw.schema.getTables().map(x => x.displayable);
         if (drawables1.length !== 0) {
             this.canvasView.addChild(...drawables1);
         }
 
         let worldSize = this.draw.getWorldCharGrid();
-        let relationsThatNeedUpdating = this.draw.schema.tables.flatMap(x => x.relations).filter(x => x.isDirty)
+        let relationsThatNeedUpdating = this.draw.schema.getTables().flatMap(x => x.relations).filter(x => x.isDirty)
         let orderedRelations = DrawScene.getRelationDrawOrder(relationsThatNeedUpdating, worldSize)
         if (orderedRelations.length !== 0) {
-            let costGrid = CostGrid.getCostGrid(worldSize, this.draw.schema.tables);
+            let costGrid = CostGrid.getCostGrid(worldSize, this.draw.schema.getTables());
 
             for (const relation of orderedRelations) {
                 let points = DrawScene.setWorldRelation2(relation, costGrid, worldSize)
@@ -86,7 +86,7 @@ export class DrawScene extends Container implements IScene {
                 relation.updateRelationsCost(costGrid, worldSize);
             }
         }
-        let drawables2 = this.draw.schema.tables.flatMap(x => x.relations).flatMap(x => x.displayable);
+        let drawables2 = this.draw.schema.getTables().flatMap(x => x.relations).flatMap(x => x.displayable);
         if (drawables2.length !== 0) {
             this.canvasView.addChild(...drawables2);
         }

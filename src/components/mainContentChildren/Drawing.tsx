@@ -80,8 +80,8 @@ export default function Drawing({ topToolBarHeightPx, tables, onTablesUpdateCall
             DrawingUtil.getScreen(canvasContainerRef).x + draw.getWorld().width * (centerScreenOriginalXPercent - centerScreenResizeXPercent),
             DrawingUtil.getScreen(canvasContainerRef).y + draw.getWorld().height * (centerScreenOriginalYPercent - centerScreenResizeYPercent)
         );
-        draw.schema.tables.forEach(x => x.setIsDirty(true));
-        draw.schema.tables.forEach(x => x.relations.forEach(y => y.isDirty = true));
+        draw.schema.getTables().forEach(x => x.setIsDirty(true));
+        draw.schema.getTables().forEach(x => x.relations.forEach(y => y.isDirty = true));
         (Manager.getInstance().getScene() as DrawScene).renderScreen();
     }
     const canvasSecondaryTopToolbarHeightPx = 38;

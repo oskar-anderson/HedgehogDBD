@@ -18,13 +18,11 @@ export class CommandDeleteTable implements ICommand<CommandDeleteTableArgs> {
 
     redo() {
         this.context.schema.removeAtAndUpdate(this.args.listIndex);
-        this.context.schema.tables.forEach(x => x.updateRelations(this.context.schema.tables));
     }
 
     undo() {
         let newTable = this.args.table.mapToTable();
         this.context.schema.insertAtAndUpdate(this.args.listIndex, newTable);
-        this.context.schema.tables.forEach(x => x.updateRelations(this.context.schema.tables));
     }
 }
 

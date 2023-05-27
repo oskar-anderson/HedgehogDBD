@@ -10,19 +10,17 @@ export class Table {
     private position: Point;
     head: string;
     tableRows: TableRow[];
-    color: number;
     private isHover: boolean;
     displayable: Text;
     private isDirty = true;
     relations: Relation[] = [];
     
-    constructor(position: Point, head: string, tableRows: TableRow[], displayable: Text, id: string = crypto.randomUUID(), color: number = 0x008000, isHover: boolean = false) {
+    constructor(position: Point, head: string, tableRows: TableRow[], displayable: Text, id: string = crypto.randomUUID(), isHover: boolean = false) {
         this.id = id;
         this.position = position;
         this.head = head;
         this.tableRows = tableRows;
         this.displayable = displayable;
-        this.color = color;
         this.isHover = isHover;
     }
 

@@ -12,15 +12,15 @@ export class CommandMoveTableRelative implements ICommand<CommandMoveTableRelati
     }
 
     redo() {
-        let table = this.context.schema.tables.find(x => x.id === this.args.id)!;
+        let table = this.context.schema.getTables().find(x => x.id === this.args.id)!;
         table.setPosition(new Point(table.getPosition().x + this.args.x, table.getPosition().y + this.args.y), this.context.selectedFontSize)
-        this.context.schema.tables.forEach(x => x.updateRelations(this.context.schema.tables));
+        this.context.schema.getTables().forEach(x => x.updateRelations(this.context.schema.getTables()));
     }
 
     undo() {
-        let table = this.context.schema.tables.find(x => x.id === this.args.id)!;
+        let table = this.context.schema.getTables().find(x => x.id === this.args.id)!;
         table.setPosition(new Point(table.getPosition().x - this.args.x, table.getPosition().y - this.args.y), this.context.selectedFontSize)
-        this.context.schema.tables.forEach(x => x.updateRelations(this.context.schema.tables));
+        this.context.schema.getTables().forEach(x => x.updateRelations(this.context.schema.getTables()));
     }
 }
 

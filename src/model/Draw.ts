@@ -34,7 +34,7 @@ export class Draw {
     }
 
     getVisibleTables() {
-        return this.schema.tables;
+        return this.schema.getTables();
     }
 
     setWorld(world: MyRect) {

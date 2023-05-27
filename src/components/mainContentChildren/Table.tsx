@@ -36,7 +36,7 @@ export default function Table() {
 
     const saveChanges = () => {
         const draw = Manager.getInstance().draw;
-        let oldTable = draw.schema.tables.find(x => x.id === tableBeingEdited.id)!;
+        let oldTable = draw.schema.getTables().find(x => x.id === tableBeingEdited.id)!;
         let newTableRows = rowData.map(tableRow => new TableRowDTO(
             tableRow.rowName,
             tableRow.rowDatatype,
@@ -94,7 +94,7 @@ export default function Table() {
         const draw = Manager.getInstance().draw;
         draw.history.execute(
             new CommandDeleteTable(
-                draw, new CommandDeleteTableArgs(tableBeingEdited!, draw.schema.tables.findIndex(x => x.id === tableBeingEdited.id))
+                draw, new CommandDeleteTableArgs(tableBeingEdited!, draw.schema.getTables().findIndex(x => x.id === tableBeingEdited.id))
             )
         )
         Manager.getInstance().changeScene(new DrawScene(draw))

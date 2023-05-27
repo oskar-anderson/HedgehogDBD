@@ -11,7 +11,8 @@ import { Minimap } from "../../Minimap";
 interface CanvasSideProps {
     minimap: Minimap,
     debugInfoContainer: React.RefObject<HTMLDivElement>
-    tables: TableDTO[];
+    tables: TableDTO[]
+    setZoomFontSize: (size: number) => void
 }
 
 enum TabState {
@@ -20,7 +21,7 @@ enum TabState {
 }
 
 
-function CanvasSide({minimap, debugInfoContainer, tables}: CanvasSideProps) {
+function CanvasSide({minimap, debugInfoContainer, tables, setZoomFontSize}: CanvasSideProps) {
     const minimapContainerRef = useRef<HTMLDivElement>(null);
     const [activeTab, setActiveTab] = useState<TabState>(TabState.Tables);
 
@@ -28,95 +29,58 @@ function CanvasSide({minimap, debugInfoContainer, tables}: CanvasSideProps) {
         minimapContainerRef.current!.appendChild(minimap.app.view);
     }, [])
 
-    const [highlightActiveSideToolbarTool, setHighlightActiveSideToolbarTool] = useState(IToolNames.select);
-
-
-    const onToolSelectClick = (selectedTool: IToolNames): void => {
-        const draw = Manager.getInstance().draw;
-        setHighlightActiveSideToolbarTool(selectedTool);
-        IToolManager.toolActivate(draw, selectedTool);
-        (Manager.getInstance().getScene() as DrawScene).renderScreen();  // clean up new table hover
-    };
-
-    const undo = (): void => {
-        const draw = Manager.getInstance().draw;
-        draw.history.undo(draw);
-        (Manager.getInstance().getScene() as DrawScene).renderScreen();
-    }
-
-    const redo = (): void => {
-        const draw = Manager.getInstance().draw;
-        draw.history.redo(draw);
-        (Manager.getInstance().getScene() as DrawScene).renderScreen();
-    }
-
     return (
-        <div className="canvas-side" style={{ display: 'flex', backgroundColor: '#f5f5f5' }}>
-            <div style={{ padding: "2px", display: "flex", flexDirection: "column", width: "184px" }}>
+        <div className="canvas-side" style={{ display: 'flex', backgroundColor: '#f5f5f5', borderRightWidth: "1px", borderStyle: "solid" }}>
+            <div style={{ padding: "2px", display: "flex", flexDirection: "column", width: "184px", gap: "6px" }}>
                 <div>
                     <div>
                         <div className="canvas-side-minimap" ref={minimapContainerRef}></div>
                     </div>
+                    <div className="d-flex" style={{ alignItems: "center"}}>
+                        <span>Zoom:&nbsp;</span>
+                        <select style={{ borderColor: "#c2c2c2", boxShadow: "none", borderRadius: 0 }} defaultValue={Manager.getInstance().draw.selectedFontSize.size} onChange={(e) => setZoomFontSize(Number.parseInt((e.target as HTMLSelectElement).value))} className="form-select zoom-font-size" autoComplete="off">
+                            {
+                                Draw.fontSizes_Inconsolata.map(x =>
+                                    <option key={x.size} value={x.size}>{x.size} pt</option>
+                                )
+                            }
+                        </select>
+                    </div>
                 </div>
-
                 
-                    <div style={{ display: "flex", backgroundColor: "#d2d2d2", justifyContent: "center" }}>
+                <div style={{ display: "flex", height: 0, flex: 1, flexDirection: "column" }}>
+                    <div style={{ display: "flex", backgroundColor: "#d2d2d2" }}>
                         <button style={{ padding: "0 8px", border: 0, backgroundColor: `${activeTab === TabState.Tables ? "white" : "#d2d2d2"}`, }} onClick={() => setActiveTab(TabState.Tables)}>Tables</button>
                         <button style={{ padding: "0 8px", border: 0, backgroundColor: `${activeTab === TabState.Info ? "white" : "#d2d2d2"}`, }} onClick={() => setActiveTab(TabState.Info)}>Info</button>
                     </div>
-                
-                {
+                    
                     {
-                        0: 
-                            <div className="m-1">
-                                <p>Text based ERD modeling tool with scripting support.</p>
-                                <p>View source and make feature requests on <a href="oskar-anderson.github.io/RasterModeler">Github</a></p>
-                                
-                                <div>
-                                    Mouse position: 
-                                    <div ref={debugInfoContainer}></div>
+                        {
+                            0: 
+                                <div className="m-1">
+                                    <p>Text based ERD modeling tool with scripting support.</p>
+                                    <p>View source and make feature requests on <a href="https://github.com/oskar-anderson/RasterModeler">Github</a></p>
+                                    
+                                    <div>
+                                        Mouse position: 
+                                        <div ref={debugInfoContainer}></div>
+                                    </div>
+                                </div>,
+                            1: 
+                                <div style={{ overflowY: "auto" }}>
+                                    { tables.sort((a, b) => Number(a.head > b.head)).map((table, i) => {
+                                        return (
+                                            <div key={i} 
+                                                onClick={() => { Manager.getInstance().changeScene(new TableScene(table)); } } 
+                                                className="btn" style={{ width: "100%", display: "flex" }}>
+                                                <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{table.head}</span>
+                                            </div>
+                                        )
+                                    })}
                                 </div>
-                            </div>,
-                        1: 
-                            <div style={{ overflowY: "auto" }}>
-                                { tables.sort((a, b) => Number(a.head > b.head)).map((table, i) => {
-                                    return (
-                                        <div key={i} 
-                                            onClick={() => { Manager.getInstance().changeScene(new TableScene(table)); } } 
-                                            className="btn" style={{ width: "100%", display: "flex" }}>
-                                            <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{table.head}</span>
-                                        </div>
-                                    )
-                                })}
-                            </div>
-                    }[activeTab]
-                }
-
-            </div>
-            <div className="canvas-side-tools" style={{ backgroundColor: '#eeeeee', padding: "2px", borderRightWidth: "1px", borderLeftWidth: "1px", borderStyle: "solid" }}>
-                <header style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-
-                    <button onClick={() => onToolSelectClick(IToolNames.select)} className={`tool-select btn ${highlightActiveSideToolbarTool === IToolNames.select ? 'active' : ''}`} style={{ borderRadius: 0 }} title="Select/Edit table">
-                        <svg width="16px" height="16px" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fillRule="evenodd" clipRule="evenodd" d="M3.29227 0.048984C3.47033 -0.032338 3.67946 -0.00228214 3.8274 0.125891L12.8587 7.95026C13.0134 8.08432 13.0708 8.29916 13.0035 8.49251C12.9362 8.68586 12.7578 8.81866 12.5533 8.82768L9.21887 8.97474L11.1504 13.2187C11.2648 13.47 11.1538 13.7664 10.9026 13.8808L8.75024 14.8613C8.499 14.9758 8.20255 14.8649 8.08802 14.6137L6.15339 10.3703L3.86279 12.7855C3.72196 12.934 3.50487 12.9817 3.31479 12.9059C3.1247 12.8301 3 12.6461 3 12.4414V0.503792C3 0.308048 3.11422 0.130306 3.29227 0.048984ZM4 1.59852V11.1877L5.93799 9.14425C6.05238 9.02363 6.21924 8.96776 6.38319 8.99516C6.54715 9.02256 6.68677 9.12965 6.75573 9.2809L8.79056 13.7441L10.0332 13.178L8.00195 8.71497C7.93313 8.56376 7.94391 8.38824 8.03072 8.24659C8.11753 8.10494 8.26903 8.01566 8.435 8.00834L11.2549 7.88397L4 1.59852Z" fill="#000000" />
-                        </svg>
-                    </button>
-
-                    <button onClick={() => onToolSelectClick(IToolNames.newTable)} className={`tool-select btn ${highlightActiveSideToolbarTool === IToolNames.newTable ? 'active' : ''}`} style={{ borderRadius: 0 }} title="New table">
-                        <svg width="16px" height="16px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
-                            <path stroke="#000000" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2M3 8v6m0-6h6m12 0v4m0-4H9m-6 6v4a2 2 0 0 0 2 2h4m-6-6h6m0-6v6m0 0h4a2 2 0 0 0 2-2V8m-6 6v6m0 0h2m7-5v3m0 0v3m0-3h3m-3 0h-3" />
-                        </svg>
-                    </button>
-
-                    <button onClick={() => undo()} className="btn" style={{ borderRadius: 0 }} title="Undo">
-                        <svg fill="#000000" height="16px" viewBox="0 0 24 24" width="16px" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path className="icon inactive" d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"></path></svg>
-                    </button>
-
-                    <button onClick={() => redo()} className="btn" style={{ borderRadius: 0 }} title="Redo">
-                        <svg fill="#000000" height="16px" viewBox="0 0 24 24" width="16px" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"></path><path className="icon inactive" d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z"></path></svg>
-                    </button>
-                </header>
-
+                        }[activeTab]
+                    }
+                </div>
             </div>
         </div>
     )

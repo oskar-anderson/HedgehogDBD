@@ -96,6 +96,7 @@ export default function Drawing({ topToolBarHeightPx, tables, onTablesUpdateCall
                     tables={tables}
                     minimap={minimap}
                     debugInfoContainer={debugInfoContainer}
+                    setZoomFontSize={setZoomFontSize}
                 />
                 <CanvasContainer
                     canvasContainerScrollableRef={canvasContainerRef}

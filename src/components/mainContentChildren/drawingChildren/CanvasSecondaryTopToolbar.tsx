@@ -12,13 +12,30 @@ import { ScriptingScene } from "../../../scenes/ScriptingScene";
 import { SchemaDTO } from "../../../model/dto/SchemaDTO";
 import { CostGrid } from "../../../model/CostGrid";
 import { History } from "../../../commands/History";
+import { IToolManager, IToolNames } from "../../../tools/ITool";
+import { useState } from "react";
 
+interface TopToolbarListElementIconProps {
+    onClickAction: () => void,
+    iconSrc: string | null,
+    actionName: string
+}
+
+function TopToolbarListElementIcon( {onClickAction, iconSrc, actionName}: TopToolbarListElementIconProps) {
+    return (
+        <button onClick={onClickAction} className="dropdown-item d-flex">
+            {iconSrc !== null ? <img className="me-2" src={iconSrc} /> : null }
+            <span>{actionName}</span>
+        </button>
+    )
+}
 
 interface CanvasSecondaryTopToolbarProps {
     setZoomFontSize: (size: number) => void;
     heightPx: number;
     onTablesUpdateCallback: (tables: TableDTO[]) => void;
 }
+
 export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx, onTablesUpdateCallback}: CanvasSecondaryTopToolbarProps) {
 
     const newSchema = () => {
@@ -154,6 +171,28 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx, o
         Manager.getInstance().changeScene(new DrawScene(Manager.getInstance().draw));
     }
 
+    const undo = (): void => {
+        const draw = Manager.getInstance().draw;
+        draw.history.undo(draw);
+        (Manager.getInstance().getScene() as DrawScene).renderScreen();
+    }
+
+    const redo = (): void => {
+        const draw = Manager.getInstance().draw;
+        draw.history.redo(draw);
+        (Manager.getInstance().getScene() as DrawScene).renderScreen();
+    }
+
+    const [highlightActiveSideToolbarTool, setHighlightActiveSideToolbarTool] = useState(IToolNames.select);
+
+
+    const onToolSelectClick = (selectedTool: IToolNames): void => {
+        const draw = Manager.getInstance().draw;
+        setHighlightActiveSideToolbarTool(selectedTool);
+        IToolManager.toolActivate(draw, selectedTool);
+        (Manager.getInstance().getScene() as DrawScene).renderScreen();  // clean up new table hover
+    };
+
     return (
         <div className="navbar-nav me-auto" style={{ flexDirection: 'row', height: `${heightPx}px`, borderBottomWidth: "1px", borderStyle: "solid", alignItems: "center" }}>
             <div className="nav-item dropdown">
@@ -162,37 +201,60 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx, o
                 </button>
                 <ul className="dropdown-menu" style={{ position: 'absolute' }}>
                     <li>
-                        {/* https://www.svgrepo.com/svg/376495/file-line */}
-                        <button onClick={() => newSchema()} className="dropdown-item">
-                            <svg width={24} height={24} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path stroke="#000000" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 9v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8m6 6v-.172a2 2 0 0 0-.586-1.414l-3.828-3.828A2 2 0 0 0 14.172 3H14m6 6h-4a2 2 0 0 1-2-2V3" /></svg>
-                            New schema
-                        </button>
+                        <TopToolbarListElementIcon 
+                            onClickAction={() => newSchema()} 
+                            iconSrc={EnvGlobals.BASE_URL + "public/wwwroot/img/svg/file-line.svg"} 
+                            actionName="New schema" 
+                        />
                     </li>
                     <li>
-                        <button onClick={() => saveAsJson()} className="dropdown-item">
-                            <svg fill="#000000" height={24} viewBox="0 0 24 24" width={24} xmlns="http://www.w3.org/2000/svg"><path className="icon" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" /><path d="M0 0h24v24H0z" fill="none" /></svg>
-                            Save
-                        </button>
+                        <TopToolbarListElementIcon 
+                            onClickAction={() => saveAsJson()} 
+                            iconSrc={EnvGlobals.BASE_URL + "public/wwwroot/img/svg/file-download.svg"} 
+                            actionName="Save" 
+                        />
                     </li>
                     <li>
-                        {/* https://www.svgrepo.com/svg/357887/image-download */}
-                        <button onClick={() => saveAsJpg()} className="dropdown-item">
-                            <svg width={24} height={24} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.71,6.29a1,1,0,0,0-1.42,0L20,7.59V2a1,1,0,0,0-2,0V7.59l-1.29-1.3a1,1,0,0,0-1.42,1.42l3,3a1,1,0,0,0,.33.21.94.94,0,0,0,.76,0,1,1,0,0,0,.33-.21l3-3A1,1,0,0,0,22.71,6.29ZM19,13a1,1,0,0,0-1,1v.38L16.52,12.9a2.79,2.79,0,0,0-3.93,0l-.7.7L9.41,11.12a2.85,2.85,0,0,0-3.93,0L4,12.6V7A1,1,0,0,1,5,6h8a1,1,0,0,0,0-2H5A3,3,0,0,0,2,7V19a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V14A1,1,0,0,0,19,13ZM5,20a1,1,0,0,1-1-1V15.43l2.9-2.9a.79.79,0,0,1,1.09,0l3.17,3.17,0,0L15.46,20Zm13-1a.89.89,0,0,1-.18.53L13.31,15l.7-.7a.77.77,0,0,1,1.1,0L18,17.21Z" /></svg>
-                            Export image
-                        </button>
+                        <TopToolbarListElementIcon 
+                            onClickAction={() => saveAsJpg()} 
+                            iconSrc={EnvGlobals.BASE_URL + "public/wwwroot/img/svg/image-download.svg"} 
+                            actionName="Export image" 
+                        />
                     </li>
                     <li>
-                        {/* https://www.svgrepo.com/svg/357606/copy */}
-                        <button onClick={() => saveToClipboard()} className="dropdown-item">
-                            <svg width={24} height={24} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21,8.94a1.31,1.31,0,0,0-.06-.27l0-.09a1.07,1.07,0,0,0-.19-.28h0l-6-6h0a1.07,1.07,0,0,0-.28-.19.32.32,0,0,0-.09,0A.88.88,0,0,0,14.05,2H10A3,3,0,0,0,7,5V6H6A3,3,0,0,0,3,9V19a3,3,0,0,0,3,3h8a3,3,0,0,0,3-3V18h1a3,3,0,0,0,3-3V9S21,9,21,8.94ZM15,5.41,17.59,8H16a1,1,0,0,1-1-1ZM15,19a1,1,0,0,1-1,1H6a1,1,0,0,1-1-1V9A1,1,0,0,1,6,8H7v7a3,3,0,0,0,3,3h5Zm4-4a1,1,0,0,1-1,1H10a1,1,0,0,1-1-1V5a1,1,0,0,1,1-1h3V7a3,3,0,0,0,3,3h3Z" /></svg>
-                            Add to clipboard
-                        </button>
+                        <TopToolbarListElementIcon 
+                            onClickAction={() => saveToClipboard()} 
+                            iconSrc={EnvGlobals.BASE_URL + "public/wwwroot/img/svg/copy.svg"} 
+                            actionName="Add to clipboard" 
+                        />
                     </li>
                     <li>
-                        <button onClick={() => { importFile() }} className="dropdown-item">
-                            <svg fill="#000000" height={24} viewBox="0 0 24 24" width={24} xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none" /><path className="icon" d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z" /></svg>
-                            Import
-                        </button>
+                        <TopToolbarListElementIcon 
+                            onClickAction={() => importFile()} 
+                            iconSrc={EnvGlobals.BASE_URL + "public/wwwroot/img/svg/import.svg"}
+                            actionName="Import"
+                        />
+                    </li>
+                </ul>
+            </div>
+            <div className="nav-item dropdown">
+                <button className="btn" data-bs-toggle="dropdown" style={{ borderRadius: "0px" }}>
+                    Edit
+                </button>
+                <ul className="dropdown-menu" style={{ position: 'absolute' }}>
+                    <li>
+                        <TopToolbarListElementIcon 
+                            onClickAction={() => undo()} 
+                            iconSrc={EnvGlobals.BASE_URL + "public/wwwroot/img/svg/undo.svg"}
+                            actionName="Undo"
+                        />
+                    </li>
+                    <li>
+                        <TopToolbarListElementIcon 
+                            onClickAction={() => redo()} 
+                            iconSrc={EnvGlobals.BASE_URL + "public/wwwroot/img/svg/redo.svg"}
+                            actionName="Redo"
+                        />
                     </li>
                 </ul>
             </div>
@@ -202,20 +264,27 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx, o
                 </button>
                 <ul className="dropdown-menu" style={{ position: 'absolute' }}>
                     <li>
-                        <button onClick={() => loadSchema("OrderingSystem.json")} className="dropdown-item">
-                            Ordering System
-                        </button>
+                        <TopToolbarListElementIcon 
+                            onClickAction={() => loadSchema("OrderingSystem.json")} 
+                            iconSrc={null}
+                            actionName="Ordering System"
+                        />
                     </li>
                 </ul>
             </div>
             <div className="vertical-seperator" style={{ margin: "0 44px 0 0" }}></div>
-            <select defaultValue={Manager.getInstance().draw.selectedFontSize.size} name="zoom-font-size" onChange={(e) => setZoomFontSize(Number.parseInt((e.target as HTMLSelectElement).value))} className="zoom-font-size" autoComplete="off">
-                {
-                    Draw.fontSizes_Inconsolata.map(x =>
-                        <option key={x.size} value={x.size}>{x.size} pt</option>
-                    )
-                }
-            </select>
+            
+            <button onClick={() => onToolSelectClick(IToolNames.select)} className={`tool-select btn ${highlightActiveSideToolbarTool === IToolNames.select ? 'active' : ''}`} style={{ borderRadius: 0 }} title="Select/Edit table">
+                <svg width="16px" height="16px" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M3.29227 0.048984C3.47033 -0.032338 3.67946 -0.00228214 3.8274 0.125891L12.8587 7.95026C13.0134 8.08432 13.0708 8.29916 13.0035 8.49251C12.9362 8.68586 12.7578 8.81866 12.5533 8.82768L9.21887 8.97474L11.1504 13.2187C11.2648 13.47 11.1538 13.7664 10.9026 13.8808L8.75024 14.8613C8.499 14.9758 8.20255 14.8649 8.08802 14.6137L6.15339 10.3703L3.86279 12.7855C3.72196 12.934 3.50487 12.9817 3.31479 12.9059C3.1247 12.8301 3 12.6461 3 12.4414V0.503792C3 0.308048 3.11422 0.130306 3.29227 0.048984ZM4 1.59852V11.1877L5.93799 9.14425C6.05238 9.02363 6.21924 8.96776 6.38319 8.99516C6.54715 9.02256 6.68677 9.12965 6.75573 9.2809L8.79056 13.7441L10.0332 13.178L8.00195 8.71497C7.93313 8.56376 7.94391 8.38824 8.03072 8.24659C8.11753 8.10494 8.26903 8.01566 8.435 8.00834L11.2549 7.88397L4 1.59852Z" fill="#000000" />
+                </svg>
+            </button>
+
+            <button onClick={() => onToolSelectClick(IToolNames.newTable)} className={`tool-select btn ${highlightActiveSideToolbarTool === IToolNames.newTable ? 'active' : ''}`} style={{ borderRadius: 0 }} title="New table">
+                <svg width="16px" height="16px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                    <path stroke="#000000" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2M3 8v6m0-6h6m12 0v4m0-4H9m-6 6v4a2 2 0 0 0 2 2h4m-6-6h6m0-6v6m0 0h4a2 2 0 0 0 2-2V8m-6 6v6m0 0h2m7-5v3m0 0v3m0-3h3m-3 0h-3" />
+                </svg>
+            </button>
         </div>
     );
 }

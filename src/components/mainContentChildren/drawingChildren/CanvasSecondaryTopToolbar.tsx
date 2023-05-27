@@ -203,35 +203,35 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx, o
                     <li>
                         <TopToolbarListElementIcon 
                             onClickAction={() => newSchema()} 
-                            iconSrc={EnvGlobals.BASE_URL + "public/wwwroot/img/svg/file-line.svg"} 
+                            iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/file-line.svg"} 
                             actionName="New schema" 
                         />
                     </li>
                     <li>
                         <TopToolbarListElementIcon 
                             onClickAction={() => saveAsJson()} 
-                            iconSrc={EnvGlobals.BASE_URL + "public/wwwroot/img/svg/file-download.svg"} 
+                            iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/file-download.svg"} 
                             actionName="Save" 
                         />
                     </li>
                     <li>
                         <TopToolbarListElementIcon 
                             onClickAction={() => saveAsJpg()} 
-                            iconSrc={EnvGlobals.BASE_URL + "public/wwwroot/img/svg/image-download.svg"} 
+                            iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/image-download.svg"} 
                             actionName="Export image" 
                         />
                     </li>
                     <li>
                         <TopToolbarListElementIcon 
                             onClickAction={() => saveToClipboard()} 
-                            iconSrc={EnvGlobals.BASE_URL + "public/wwwroot/img/svg/copy.svg"} 
+                            iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/copy.svg"} 
                             actionName="Add to clipboard" 
                         />
                     </li>
                     <li>
                         <TopToolbarListElementIcon 
                             onClickAction={() => importFile()} 
-                            iconSrc={EnvGlobals.BASE_URL + "public/wwwroot/img/svg/import.svg"}
+                            iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/import.svg"}
                             actionName="Import"
                         />
                     </li>
@@ -245,14 +245,14 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx, o
                     <li>
                         <TopToolbarListElementIcon 
                             onClickAction={() => undo()} 
-                            iconSrc={EnvGlobals.BASE_URL + "public/wwwroot/img/svg/undo.svg"}
+                            iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/undo.svg"}
                             actionName="Undo"
                         />
                     </li>
                     <li>
                         <TopToolbarListElementIcon 
                             onClickAction={() => redo()} 
-                            iconSrc={EnvGlobals.BASE_URL + "public/wwwroot/img/svg/redo.svg"}
+                            iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/redo.svg"}
                             actionName="Redo"
                         />
                     </li>

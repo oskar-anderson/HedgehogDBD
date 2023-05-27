@@ -1,7 +1,6 @@
 import { MyRect } from "./MyRect";
 import { Draw } from "./Draw";
 import { Table } from "./Table";
-import { Relation } from "./Relation";
 
 export class CostGrid {
 

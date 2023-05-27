@@ -38,8 +38,9 @@ export class TableDTO {
             new Point(this.position.x, this.position.y),
             this.head,
             this.tableRows.map(x => x.mapToTableRow()),
-            Table.initDisplayable(),
-            this.id
+            {
+                id: this.id
+            },
         );
     }
 }

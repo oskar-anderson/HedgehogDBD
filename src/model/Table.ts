@@ -6,30 +6,25 @@ import { Relation } from "./Relation";
 import AStarFinderCustom from "../path/AStarFinderCustom";
 
 export class Table {
-    id: string = crypto.randomUUID();
-    private position: Point;
-    head: string;
-    tableRows: TableRow[];
-    private isHover: boolean;
-    displayable: Text;
+    displayable: Text = new Text("", { fontFamily: `Inconsolata` });
+    readonly id: string = crypto.randomUUID();
+    isHover: boolean = false;
     private isDirty = true;
     relations: Relation[] = [];
     
-    constructor(position: Point, head: string, tableRows: TableRow[], displayable: Text, id: string = crypto.randomUUID(), isHover: boolean = false) {
-        this.id = id;
-        this.position = position;
-        this.head = head;
-        this.tableRows = tableRows;
+    constructor(
+        private position: Point, 
+        public head: string, 
+        public tableRows: TableRow[], 
+        {
+            displayable = new Text("", { fontFamily: `Inconsolata` }), 
+            id = crypto.randomUUID(),
+            isHover = false
+        } = {}
+        ) {
         this.displayable = displayable;
+        this.id = id;
         this.isHover = isHover;
-    }
-
-    static initDisplayable(): Text {
-        let text = new Text("", {
-            fontFamily: `Inconsolata`,
-        })
-        // fontsize will be changed on draw
-        return text;
     }
 
     setPosition(newPosition: Point, fontSize: { size: number, width: number, height: number }) {
@@ -145,7 +140,7 @@ export class Table {
             if (! targetTable) { continue; }
             references.push(targetTable)
         }
-        this.relations = references.map(x => new Relation(this, x, Relation.initDisplayable()));
+        this.relations = references.map(x => new Relation(this, x));
     }
 
     updateTableCost(costGrid: CostGrid, worldSize: MyRect) {

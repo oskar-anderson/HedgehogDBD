@@ -13,18 +13,16 @@ export class Relation {
     isDirty = true;
     displayable: Text;
 
-    constructor(source: Table, target: Table, displayable: Text) {
+    constructor(
+        source: Table, 
+        target: Table, 
+        {
+            displayable = new Text("", { fontFamily: `Inconsolata` }) 
+        } = {}
+    ) {
         this.source = source;
         this.target = target;
         this.displayable = displayable;
-    }
-
-    static initDisplayable() {
-        let text = new Text("", {
-            fontFamily: `Inconsolata`,
-        })
-        // fontsize will be changed on draw
-        return text;
     }
 
     equals(sourceTable: Table, targetTable: Table) {

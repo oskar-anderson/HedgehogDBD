@@ -22,7 +22,14 @@ export class CreateTableTool implements ITool {
     }
 
     init(): void {
-        this.hover = new Table(new Point(0, 0), "new_table", [ new TableRow("id", "VARCHAR(255)", ["PK"])], Table.initDisplayable(), undefined, true);
+        this.hover = new Table( 
+            new Point(0, 0), 
+            "new_table", 
+            [ new TableRow("id", "VARCHAR(255)", ["PK"])], 
+            {
+                isHover: true
+            }
+        );
         this.draw.schema.pushAndUpdate(this.hover);
     }
 

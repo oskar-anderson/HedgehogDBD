@@ -1,5 +1,4 @@
 import { TableDTO } from "./dto/TableDTO";
-import { Relation } from "./Relation";
 import { Table } from "./Table";
 
 export class Schema {

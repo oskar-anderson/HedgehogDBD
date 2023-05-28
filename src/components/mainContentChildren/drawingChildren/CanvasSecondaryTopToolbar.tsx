@@ -17,15 +17,15 @@ import { useState } from "react";
 
 interface TopToolbarListElementIconProps {
     onClickAction: () => void,
-    iconSrc: string | null,
-    actionName: string
+    iconSrc?: string,
+    children: React.ReactNode
 }
 
-function TopToolbarListElementIcon( {onClickAction, iconSrc, actionName}: TopToolbarListElementIconProps) {
+function TopToolbarListElementIcon( {onClickAction, iconSrc, children}: TopToolbarListElementIconProps) {
     return (
         <button onClick={onClickAction} className="dropdown-item d-flex">
-            {iconSrc !== null ? <img className="me-2" src={iconSrc} /> : null }
-            <span>{actionName}</span>
+            {iconSrc !== undefined ? <img className="me-2" src={iconSrc} /> : null }
+            <span>{children}</span>
         </button>
     )
 }
@@ -201,39 +201,29 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx, o
                 </button>
                 <ul className="dropdown-menu" style={{ position: 'absolute' }}>
                     <li>
-                        <TopToolbarListElementIcon 
-                            onClickAction={() => newSchema()} 
-                            iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/file-line.svg"} 
-                            actionName="New schema" 
-                        />
+                        <TopToolbarListElementIcon onClickAction={() => newSchema()} iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/file-line.svg"} >
+                            New schema
+                        </TopToolbarListElementIcon>
                     </li>
                     <li>
-                        <TopToolbarListElementIcon 
-                            onClickAction={() => saveAsJson()} 
-                            iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/file-download.svg"} 
-                            actionName="Save" 
-                        />
+                        <TopToolbarListElementIcon onClickAction={() => saveAsJson()} iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/file-download.svg"} >
+                            Save
+                        </TopToolbarListElementIcon>
                     </li>
                     <li>
-                        <TopToolbarListElementIcon 
-                            onClickAction={() => saveAsJpg()} 
-                            iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/image-download.svg"} 
-                            actionName="Export image" 
-                        />
+                        <TopToolbarListElementIcon onClickAction={() => saveAsJpg()} iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/image-download.svg"} >
+                            Export image
+                        </TopToolbarListElementIcon>
                     </li>
                     <li>
-                        <TopToolbarListElementIcon 
-                            onClickAction={() => saveToClipboard()} 
-                            iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/copy.svg"} 
-                            actionName="Add to clipboard" 
-                        />
+                        <TopToolbarListElementIcon onClickAction={() => saveToClipboard()} iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/copy.svg"} >
+                            Add to clipboard
+                        </TopToolbarListElementIcon>
                     </li>
                     <li>
-                        <TopToolbarListElementIcon 
-                            onClickAction={() => importFile()} 
-                            iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/import.svg"}
-                            actionName="Import"
-                        />
+                        <TopToolbarListElementIcon onClickAction={() => importFile()} iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/import.svg"}>
+                            Import
+                        </TopToolbarListElementIcon>
                     </li>
                 </ul>
             </div>
@@ -243,18 +233,14 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx, o
                 </button>
                 <ul className="dropdown-menu" style={{ position: 'absolute' }}>
                     <li>
-                        <TopToolbarListElementIcon 
-                            onClickAction={() => undo()} 
-                            iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/undo.svg"}
-                            actionName="Undo"
-                        />
+                        <TopToolbarListElementIcon onClickAction={() => undo()} iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/undo.svg"}>
+                            Undo
+                        </TopToolbarListElementIcon>
                     </li>
                     <li>
-                        <TopToolbarListElementIcon 
-                            onClickAction={() => redo()} 
-                            iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/redo.svg"}
-                            actionName="Redo"
-                        />
+                        <TopToolbarListElementIcon onClickAction={() => redo()} iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/redo.svg"}>
+                            Redo
+                        </TopToolbarListElementIcon>
                     </li>
                 </ul>
             </div>
@@ -264,11 +250,12 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx, o
                 </button>
                 <ul className="dropdown-menu" style={{ position: 'absolute' }}>
                     <li>
-                        <TopToolbarListElementIcon 
-                            onClickAction={() => loadSchema("OrderingSystem.json")} 
-                            iconSrc={null}
-                            actionName="Ordering System"
-                        />
+                        <TopToolbarListElementIcon onClickAction={() => loadSchema("Bookit.json")}>
+                            Bookit
+                        </TopToolbarListElementIcon>
+                        <TopToolbarListElementIcon onClickAction={() => loadSchema("OrderingSystem.json")}>
+                            Ordering System
+                        </TopToolbarListElementIcon>
                     </li>
                 </ul>
             </div>

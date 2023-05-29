@@ -18,8 +18,25 @@ export default function CanvasContainer({
     console.log("CanvasContainer")
 
     useEffect(() => {
-        console.log("CanvasContainer useEffect")
+        const handleScroll = (position: Point) => {
+            canvasContainerScrollableRef.current!.scrollTo(position.x, position.y);
+            Manager.getInstance().draw.canvasScrollPosition = position;
+        };
 
+        canvasContainerScrollableRef.current!.addEventListener("scroll", (e) => {
+            handleScroll(new Point(
+                (e.target as HTMLDivElement).scrollLeft, 
+                (e.target as HTMLDivElement).scrollTop
+            ))
+        });
+        // set scroll initial position, will not work outside setTimeout
+        setTimeout(() => {
+            canvasContainerScrollableRef.current!.style.display = "grid";
+            handleScroll(Manager.getInstance().draw.canvasScrollPosition)
+        }, 0);
+    }, [])
+
+    useEffect(() => {
         const mapMouseEvent = (event: MouseEvent): CustomMouseEvent => {
             return {
                 worldX: event.offsetX,
@@ -77,8 +94,9 @@ export default function CanvasContainer({
         <div
             ref={canvasContainerScrollableRef}
             className="canvas-outer-scrollable-container"
-            style={{ overflow: 'auto', display: "grid" }}
+            style={{ overflow: 'auto', display: "none" }}
         >
+            {/* display: "none" is needed to prevent content flash before the div is scrolled to correct position */}
             {/* display: "grid" is needed to stop 4px height gap between the canvas and the container bottom */}
             {/* Canvas gets added here by PIXI.js */}
         </div>

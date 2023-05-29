@@ -21,6 +21,7 @@ export class Draw {
         { size: 22, width: 11, height: 22 },
         { size: 34, width: 17, height: 34 },
     ];
+    canvasScrollPosition = new Point(0, 0);
     selectedFontSize: { size: number, width: number, height: number} = Draw.fontSizes_Inconsolata.find((x => x.size === 14))!;
     schema: Schema;
     activeTool: ITool;

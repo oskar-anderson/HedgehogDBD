@@ -165,8 +165,8 @@
         {
             "id": "80ca6f2f-17e0-4083-b83d-3bc73e9a087b",
             "position": {
-                "x": 162,
-                "y": 17
+                "x": 101,
+                "y": 18
             },
             "head": "person",
             "tableRows": [
@@ -192,29 +192,29 @@
                     ]
                 },
                 {
-                    "name": "is_juridical",
-                    "datatype": "BOOLEAN",
+                    "name": "first_name",
+                    "datatype": "VARCHAR(255)",
                     "attributes": [
                         ""
                     ]
                 },
                 {
-                    "name": "pperson_first_name",
-                    "datatype": "VARCHAR(255)?",
+                    "name": "last_name",
+                    "datatype": "VARCHAR(255)",
                     "attributes": [
                         ""
                     ]
                 },
                 {
-                    "name": "pperson_last_name",
-                    "datatype": "VARCHAR(255)?",
+                    "name": "phone",
+                    "datatype": "VARCHAR(255)",
                     "attributes": [
                         ""
                     ]
                 },
                 {
-                    "name": "jperson_company_name",
-                    "datatype": "VARCHAR(255)?",
+                    "name": "email",
+                    "datatype": "VARCHAR(255)",
                     "attributes": [
                         ""
                     ]
@@ -224,8 +224,8 @@
         {
             "id": "599dadae-0359-4d33-bb81-ecb808657a50",
             "position": {
-                "x": 101,
-                "y": 39
+                "x": 92,
+                "y": 37
             },
             "head": "hotel",
             "tableRows": [
@@ -237,6 +237,13 @@
                     ]
                 },
                 {
+                    "name": "person_id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "FK(\"person\")"
+                    ]
+                },
+                {
                     "name": "name",
                     "datatype": "VARCHAR(255)",
                     "attributes": [
@@ -245,20 +252,41 @@
                 },
                 {
                     "name": "description",
+                    "datatype": "VARCHAR(25555)",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "location_street_address",
                     "datatype": "VARCHAR(255)",
                     "attributes": [
                         ""
                     ]
                 },
                 {
-                    "name": "location_dd",
+                    "name": "location_address_line2",
                     "datatype": "VARCHAR(255)",
                     "attributes": [
                         ""
                     ]
                 },
                 {
-                    "name": "location_name",
+                    "name": "location_region_country",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "location_city",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "location_zip_code",
                     "datatype": "VARCHAR(255)",
                     "attributes": [
                         ""
@@ -315,14 +343,21 @@
                     "attributes": [
                         ""
                     ]
+                },
+                {
+                    "name": "order",
+                    "datatype": "INT",
+                    "attributes": [
+                        ""
+                    ]
                 }
             ]
         },
         {
             "id": "ee83aa2d-7c44-40f6-98b9-8255c54f41f9",
             "position": {
-                "x": 90,
-                "y": 53
+                "x": 91,
+                "y": 55
             },
             "head": "room_type",
             "tableRows": [
@@ -355,7 +390,7 @@
                     ]
                 },
                 {
-                    "name": "area_m2",
+                    "name": "size_m2",
                     "datatype": "VARCHAR(255)",
                     "attributes": [
                         ""
@@ -374,14 +409,28 @@
                     "attributes": [
                         ""
                     ]
+                },
+                {
+                    "name": "number_of_guests",
+                    "datatype": "INT",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "bed_is_extra_beds",
+                    "datatype": "BOOLEAN",
+                    "attributes": [
+                        ""
+                    ]
                 }
             ]
         },
         {
             "id": "e734b969-a659-4049-99a2-382d0f0dd221",
             "position": {
-                "x": 113,
-                "y": 71
+                "x": 76,
+                "y": 94
             },
             "head": "room_type_picture",
             "tableRows": [
@@ -411,8 +460,8 @@
         {
             "id": "b875ffa9-5cf5-49fb-a010-e425ad818110",
             "position": {
-                "x": 78,
-                "y": 79
+                "x": 156,
+                "y": 57
             },
             "head": "room",
             "tableRows": [
@@ -431,29 +480,15 @@
                     ]
                 },
                 {
-                    "name": "number",
+                    "name": "name",
                     "datatype": "VARCHAR(255)",
                     "attributes": [
                         ""
                     ]
                 },
                 {
-                    "name": "floor_number",
-                    "datatype": "VARCHAR(255)",
-                    "attributes": [
-                        ""
-                    ]
-                },
-                {
-                    "name": "is_being_renovated",
+                    "name": "is_disabled",
                     "datatype": "BOOLEAN",
-                    "attributes": [
-                        ""
-                    ]
-                },
-                {
-                    "name": "sku_code",
-                    "datatype": "VARCHAR(255)",
                     "attributes": [
                         ""
                     ]
@@ -486,7 +521,7 @@
                     "name": "comfort_list_id",
                     "datatype": "VARCHAR(255)",
                     "attributes": [
-                        "FK(\"comfort_list\")"
+                        "FK(\"dd_comfort\")"
                     ]
                 },
                 {
@@ -525,7 +560,7 @@
                 "x": 15,
                 "y": 52
             },
-            "head": "comfort_list",
+            "head": "dd_comfort",
             "tableRows": [
                 {
                     "name": "id",
@@ -561,6 +596,13 @@
                     "attributes": [
                         ""
                     ]
+                },
+                {
+                    "name": "order",
+                    "datatype": "INT",
+                    "attributes": [
+                        ""
+                    ]
                 }
             ]
         },
@@ -590,80 +632,7 @@
                     "name": "comfort_list_id",
                     "datatype": "VARCHAR(255)",
                     "attributes": [
-                        "FK(\"comfort_list\")"
-                    ]
-                }
-            ]
-        },
-        {
-            "id": "6350d92e-a1d7-4775-88ea-2882e72b5633",
-            "position": {
-                "x": 205,
-                "y": 50
-            },
-            "head": "reservation_line",
-            "tableRows": [
-                {
-                    "name": "id",
-                    "datatype": "VARCHAR(255)",
-                    "attributes": [
-                        "PK"
-                    ]
-                },
-                {
-                    "name": "reservation_id",
-                    "datatype": "VARCHAR(255)",
-                    "attributes": [
-                        "FK(\"reservation\")"
-                    ]
-                },
-                {
-                    "name": "room_type_id",
-                    "datatype": "VARCHAR(255)",
-                    "attributes": [
-                        "FK(\"room_type\")"
-                    ]
-                },
-                {
-                    "name": "date_from",
-                    "datatype": "VARCHAR(255)",
-                    "attributes": [
-                        ""
-                    ]
-                },
-                {
-                    "name": "date_to",
-                    "datatype": "VARCHAR(255)",
-                    "attributes": [
-                        ""
-                    ]
-                },
-                {
-                    "name": "name",
-                    "datatype": "VARCHAR(255)",
-                    "attributes": [
-                        ""
-                    ]
-                },
-                {
-                    "name": "room_type_price",
-                    "datatype": "FLOAT(14,2)",
-                    "attributes": [
-                        ""
-                    ]
-                },
-                {
-                    "name": "person_full_name",
-                    "datatype": "VARCHAR(255)",
-                    "attributes": [
-                        ""
-                    ]
-                },
-                {
-                    "name": "person_email",
-                    "datatype": "VARCHAR(255)",
-                    "attributes": [
-                        ""
+                        "FK(\"dd_comfort\")"
                     ]
                 }
             ]
@@ -671,8 +640,8 @@
         {
             "id": "d70f4c94-2d2b-41aa-9bf6-14005b2af9ab",
             "position": {
-                "x": 168,
-                "y": 38
+                "x": 172,
+                "y": 21
             },
             "head": "reservation",
             "tableRows": [
@@ -691,60 +660,43 @@
                     ]
                 },
                 {
-                    "name": "special_needs",
-                    "datatype": "VARCHAR(25555)?",
-                    "attributes": [
-                        ""
-                    ]
-                },
-                {
-                    "name": "predicted_arrival_datetime",
+                    "name": "person_id",
                     "datatype": "VARCHAR(255)?",
                     "attributes": [
+                        "FK(\"person\")"
+                    ]
+                },
+                {
+                    "name": "special_needs",
+                    "datatype": "VARCHAR(25555)",
+                    "attributes": [
                         ""
                     ]
                 },
                 {
-                    "name": "person_id",
-                    "datatype": "VARCHAR(255)",
-                    "attributes": [
-                        "FK(\"person\")"
-                    ]
-                }
-            ]
-        },
-        {
-            "id": "963c3e21-f9f5-4747-9cf1-34c365e6c586",
-            "position": {
-                "x": 94,
-                "y": 17
-            },
-            "head": "person_physical_acquaintances",
-            "tableRows": [
-                {
-                    "name": "id",
-                    "datatype": "VARCHAR(255)",
-                    "attributes": [
-                        "PK"
-                    ]
-                },
-                {
-                    "name": "person_id",
-                    "datatype": "VARCHAR(255)",
-                    "attributes": [
-                        "FK(\"person\")"
-                    ]
-                },
-                {
-                    "name": "full_name",
-                    "datatype": "VARCHAR(255)",
+                    "name": "predicted_arrival_date",
+                    "datatype": "VARCHAR(255)?",
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "email",
-                    "datatype": "VARCHAR(255)?",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "fullname",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "phone",
+                    "datatype": "VARCHAR(255)",
                     "attributes": [
                         ""
                     ]
@@ -754,16 +706,23 @@
         {
             "id": "1d05c4fb-f27d-49e0-bcb4-aa49c46790d9",
             "position": {
-                "x": 16,
-                "y": 81
+                "x": 232,
+                "y": 57
             },
-            "head": "occupant",
+            "head": "room_occupancy",
             "tableRows": [
                 {
                     "name": "id",
                     "datatype": "VARCHAR(255)",
                     "attributes": [
                         "PK"
+                    ]
+                },
+                {
+                    "name": "reservation_id",
+                    "datatype": "VARCHAR(255)?",
+                    "attributes": [
+                        "FK(\"reservation\")"
                     ]
                 },
                 {
@@ -774,14 +733,7 @@
                     ]
                 },
                 {
-                    "name": "firstname",
-                    "datatype": "VARCHAR(255)",
-                    "attributes": [
-                        ""
-                    ]
-                },
-                {
-                    "name": "lastname",
+                    "name": "fullname",
                     "datatype": "VARCHAR(255)",
                     "attributes": [
                         ""
@@ -820,8 +772,8 @@
         {
             "id": "81444787-2a58-41d4-b442-5a87a935dfe0",
             "position": {
-                "x": 169,
-                "y": 65
+                "x": 113,
+                "y": 81
             },
             "head": "room_type_reservable_price",
             "tableRows": [
@@ -865,8 +817,8 @@
         {
             "id": "3fa1a1f0-570a-4727-8724-c429b678d8fa",
             "position": {
-                "x": 265,
-                "y": 29
+                "x": 173,
+                "y": 41
             },
             "head": "purchase",
             "tableRows": [
@@ -882,6 +834,13 @@
                     "datatype": "VARCHAR(255)",
                     "attributes": [
                         "FK(\"hotel\")"
+                    ]
+                },
+                {
+                    "name": "person_id",
+                    "datatype": "VARCHAR(255)?",
+                    "attributes": [
+                        "FK(\"person\")"
                     ]
                 },
                 {
@@ -924,8 +883,8 @@
         {
             "id": "67338cf1-986d-4eba-834e-3771f53707bc",
             "position": {
-                "x": 266,
-                "y": 44
+                "x": 234,
+                "y": 41
             },
             "head": "purchase_line",
             "tableRows": [
@@ -967,6 +926,75 @@
                 {
                     "name": "price",
                     "datatype": "FLOAT(14,2)",
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "2b450b73-0708-4e55-95f9-c530bb7b8b16",
+            "position": {
+                "x": 13,
+                "y": 82
+            },
+            "head": "room_type_beds",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "bed_id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "FK(\"dd_bed\")"
+                    ]
+                },
+                {
+                    "name": "room_type_id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "FK(\"room_type\")"
+                    ]
+                },
+                {
+                    "name": "quantity",
+                    "datatype": "INT",
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "a0c1ffec-2bc4-4720-8be3-2f2aca146472",
+            "position": {
+                "x": 13,
+                "y": 96
+            },
+            "head": "dd_bed",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "order",
+                    "datatype": "INT",
                     "attributes": [
                         ""
                     ]

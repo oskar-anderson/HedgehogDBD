@@ -127,6 +127,11 @@ export class DrawScene extends Container implements IScene {
         let firstColumnWidth = longestnameLenght + pad;
         let secondColumnWidth =  longestDatatypeLenght + pad;
         let thirdColumnWidth = longestAttributeLenght + pad;
+        
+        // fix the last column to match the heading lenght - 1. and 2. column if the heading is really long
+        if (head.length + 4 > firstColumnWidth - 1 + secondColumnWidth - 1 + thirdColumnWidth) {
+            thirdColumnWidth = (head.length + 4) - (firstColumnWidth - 1) - (secondColumnWidth - 1);
+        }
 
         let rectHead = new Rectangle(0, 0, tableRect.width, 3);
         let rectNameRow = new Rectangle(0, 2, firstColumnWidth, tableRect.height - 2);

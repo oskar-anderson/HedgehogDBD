@@ -1,8 +1,11 @@
 
-import { Rectangle } from "pixi.js";
+import { Point, Rectangle } from "pixi.js";
 import { DrawScene } from "../src/scenes/DrawScene"
 import EnvGlobals from "../EnvGlobals"
 import {describe, expect, test} from '@jest/globals';
+import { Table } from "../src/model/Table";
+// This is some strange jest thing - https://stackoverflow.com/questions/48828759/unit-test-raises-error-because-of-getcontext-is-not-implemented
+import 'jest-canvas-mock';
 
 
 console.log("process.env.BASE_URL")
@@ -40,15 +43,13 @@ test("paintWorld9PatchSafe2 is functinal", () => {
 test("setWorldTable2 with table at (0,0)", () => {
 
 
-    const result = DrawScene.setWorldTable2([
-        { name: "id", datatype: "uuid", attributes: "PK" },
-        { name: "name", datatype: "VARCHAR", attributes: ""},
-        { name: "unit_price", datatype: "float", attributes: ""},
-        { name: "amount", datatype: "VARCHAR", attributes: "" },
-        { name: "description", datatype: "VARCHAR", attributes: "" }
-    ], "product", 
-        new Rectangle(0, 0, 30, 9)
-    );
+    const result = DrawScene.setWorldTable2(new Table(new Point(0, 0), "product", [
+        { name: "id", datatype: "uuid", attributes: ["PK"] },
+        { name: "name", datatype: "VARCHAR", attributes: []},
+        { name: "unit_price", datatype: "float", attributes: []},
+        { name: "amount", datatype: "VARCHAR", attributes: [] },
+        { name: "description", datatype: "VARCHAR", attributes: [] }
+    ]));
 
     let string2D = result.map(x => x.join("")).join("\n");
     let stringRows = string2D.split("\n")
@@ -67,15 +68,13 @@ test("setWorldTable2 with table at (0,0)", () => {
 test("setWorldTable2 with table offset at (5,5)", () => {
 
 
-    const result = DrawScene.setWorldTable2([
-        { name: "id", datatype: "uuid", attributes: "PK" },
-        { name: "name", datatype: "VARCHAR", attributes: ""},
-        { name: "unit_price", datatype: "float", attributes: ""},
-        { name: "amount", datatype: "VARCHAR", attributes: "" },
-        { name: "description", datatype: "VARCHAR", attributes: "" }
-    ], "product", 
-        new Rectangle(5, 5, 30, 9)
-    );
+    const result = DrawScene.setWorldTable2(new Table(new Point(0, 0), "product", [
+        { name: "id", datatype: "uuid", attributes: ["PK"] },
+        { name: "name", datatype: "VARCHAR", attributes: []},
+        { name: "unit_price", datatype: "float", attributes: []},
+        { name: "amount", datatype: "VARCHAR", attributes: [] },
+        { name: "description", datatype: "VARCHAR", attributes: [] }
+    ]));
 
     let string2D = result.map(x => x.join("")).join("\n");
     let stringRows = string2D.split("\n")

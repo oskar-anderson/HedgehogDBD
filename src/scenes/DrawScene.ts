@@ -42,8 +42,7 @@ export class DrawScene extends Container implements IScene {
         this.canvasView.removeChildren();
 
         for (const table of this.draw.schema.getTables().filter(x => x.getIsDirty())) {
-            let tableRows = table.tableRows.map(tr => {return { name: tr.name, datatype: tr.datatype, attributes: tr.attributes.join(", ")} });
-            let updatedTextArr = DrawScene.setWorldTable2(tableRows, table.head, table.getContainingRect() );
+            let updatedTextArr = DrawScene.setWorldTable2(table);
             let updatedText = updatedTextArr.map(z => z.join("")).join("\n");
             
             table.displayable.text = updatedText;
@@ -118,27 +117,30 @@ export class DrawScene extends Container implements IScene {
         return out;
     }
 
-    static setWorldTable2(rows: { name: string, datatype: string, attributes: string }[], head: string, tableRect: Rectangle): string[][] {
-        let longestnameLenght = rows.map(x => x.name).reduce((acc, row) => Math.max(acc, row.length), 0);
-        let longestDatatypeLenght = rows.map(x => x.datatype).reduce((acc, row) => Math.max(acc, row.length), 0);
-        let longestAttributeLenght = rows.map(x => x.attributes).reduce((acc, row) => Math.max(acc, row.length), 0);
+    static setWorldTable2(table: Table): string[][] {
+        let longestnameLenght = table.tableRows.map(x => x.name).reduce((acc, row) => Math.max(acc, row.length), 0);
+        let longestDatatypeLenght = table.tableRows.map(x => x.datatype).reduce((acc, row) => Math.max(acc, row.length), 0);
+        let longestAttributeLenght = table.tableRows.map(x => x.attributes).reduce((acc, row) => Math.max(acc, row.join(", ").length), 0);
 
-        let pad = 4;  // padding plus one non-writable wall
+        let pad = 4;  // horizontal padding and border
         let firstColumnWidth = longestnameLenght + pad;
         let secondColumnWidth =  longestDatatypeLenght + pad;
         let thirdColumnWidth = longestAttributeLenght + pad;
         
+        let tableHeight = table.getContainingRect().height;
+        let tableWidth = table.getContainingRect().width;
+
         // fix the last column to match the heading lenght - 1. and 2. column if the heading is really long
-        if (head.length + 4 > firstColumnWidth - 1 + secondColumnWidth - 1 + thirdColumnWidth) {
-            thirdColumnWidth = (head.length + 4) - (firstColumnWidth - 1) - (secondColumnWidth - 1);
+        if (tableWidth > firstColumnWidth - 1 + secondColumnWidth - 1 + thirdColumnWidth) {
+            thirdColumnWidth = tableWidth - (firstColumnWidth - 1) - (secondColumnWidth - 1);
         }
 
-        let rectHead = new Rectangle(0, 0, tableRect.width, 3);
-        let rectNameRow = new Rectangle(0, 2, firstColumnWidth, tableRect.height - 2);
-        let rectTypeRow = new Rectangle(0 + firstColumnWidth - 1, 2, secondColumnWidth, tableRect.height - 2);
-        let rectAttributeRow = new Rectangle(0 + firstColumnWidth + secondColumnWidth - 2, 2, thirdColumnWidth, tableRect.height - 2);
+        let rectHead = new Rectangle(0, 0, tableWidth, 3);
+        let rectNameRow = new Rectangle(0, 2, firstColumnWidth, tableHeight - 2);
+        let rectTypeRow = new Rectangle(0 + firstColumnWidth - 1, 2, secondColumnWidth, tableHeight - 2);
+        let rectAttributeRow = new Rectangle(0 + firstColumnWidth + secondColumnWidth - 2, 2, thirdColumnWidth, tableHeight - 2);
         let parts = ['+', '-', '+', '|', 'X', '|', '+', '-', '+'];
-        let result: string[][] = new Array(tableRect.height).fill([]).map(() => new Array(tableRect.width).fill(' '));
+        let result: string[][] = new Array(tableHeight).fill([]).map(() => new Array(tableWidth).fill(' '));
         DrawScene.paintWorld9PatchSafe2(rectHead, result, parts);
         DrawScene.paintWorld9PatchSafe2(rectNameRow, result, parts);
         DrawScene.paintWorld9PatchSafe2(rectTypeRow, result, parts);
@@ -146,29 +148,29 @@ export class DrawScene extends Container implements IScene {
         let rectHeadInner = new Rectangle(rectHead.left + 2, rectHead.top + 1, rectHead.width - 4, 1);
         for (let y = rectHeadInner.y; y < rectHeadInner.bottom; y++) {
             for (let x = rectHeadInner.x; x < rectHeadInner.right; x++) {
-                result[y][x] = head[x - rectHeadInner.x] ?? ' ';
+                result[y][x] = table.head[x - rectHeadInner.x] ?? ' ';
             }
         }
-        let rectNameRowInner = new Rectangle(rectNameRow.left + 2, rectNameRow.top + 1, rectNameRow.width - 3, rectNameRow.height - 2)
+        let rectNameRowInner = new Rectangle(rectNameRow.left + 2, rectNameRow.top + 1, rectNameRow.width - 4, rectNameRow.height - 2)
         let rectNameRowInnerRelativeToTable = new Rectangle(rectNameRowInner.x, rectNameRowInner.y, rectNameRowInner.width, rectNameRowInner.height)
         
         for (let y = rectNameRowInnerRelativeToTable.y; y < rectNameRowInnerRelativeToTable.bottom; y++) {
             for (let x = rectNameRowInnerRelativeToTable.x; x < rectNameRowInnerRelativeToTable.right; x++) {
-                result[y][x] = rows[y - rectNameRowInnerRelativeToTable.y].name[x - rectNameRowInnerRelativeToTable.x] ?? ' ';
+                result[y][x] = table.tableRows[y - rectNameRowInnerRelativeToTable.y].name[x - rectNameRowInnerRelativeToTable.x] ?? ' ';
             }
         }
-        let rectTypeRowInner = new Rectangle(rectTypeRow.left + 2, rectTypeRow.top + 1, rectTypeRow.width - 3, rectTypeRow.height - 2);
+        let rectTypeRowInner = new Rectangle(rectTypeRow.left + 2, rectTypeRow.top + 1, rectTypeRow.width - 4, rectTypeRow.height - 2);
         let rectTypeRowInnerRelativeToTable = new Rectangle(rectTypeRowInner.x, rectTypeRowInner.y, rectTypeRowInner.width, rectTypeRowInner.height);
         for (let y = rectTypeRowInnerRelativeToTable.y; y < rectTypeRowInnerRelativeToTable.bottom; y++) {
             for (let x = rectTypeRowInnerRelativeToTable.x; x < rectTypeRowInnerRelativeToTable.right; x++) {
-                result[y][x] = rows[y - rectTypeRowInnerRelativeToTable.y].datatype[x - rectTypeRowInnerRelativeToTable.x] ?? ' ';
+                result[y][x] = table.tableRows[y - rectTypeRowInnerRelativeToTable.y].datatype[x - rectTypeRowInnerRelativeToTable.x] ?? ' ';
             }
         }
-        let rectSpecialRowInner = new Rectangle(rectAttributeRow.left + 2, rectAttributeRow.top + 1, rectAttributeRow.width - 3, rectAttributeRow.height - 2);
+        let rectSpecialRowInner = new Rectangle(rectAttributeRow.left + 2, rectAttributeRow.top + 1, rectAttributeRow.width - 4, rectAttributeRow.height - 2);
         let rectSpecialRowInnerRelative = new Rectangle(rectSpecialRowInner.x, rectSpecialRowInner.y, rectSpecialRowInner.width, rectSpecialRowInner.height);
         for (let y = rectSpecialRowInnerRelative.y; y < rectSpecialRowInnerRelative.bottom; y++) {
             for (let x = rectSpecialRowInnerRelative.x; x < rectSpecialRowInnerRelative.right; x++) {
-                result[y][x] = rows[y - rectSpecialRowInnerRelative.y].attributes[x - rectSpecialRowInnerRelative.x] ?? ' ';
+                result[y][x] = table.tableRows[y - rectSpecialRowInnerRelative.y].attributes.join(", ")[x - rectSpecialRowInnerRelative.x] ?? ' ';
             }
         }
         return result;

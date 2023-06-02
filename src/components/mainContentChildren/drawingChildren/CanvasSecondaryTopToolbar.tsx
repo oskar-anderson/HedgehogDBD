@@ -81,11 +81,7 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx, o
             drawArea.push(row);
         }
         for (let table of draw.schema.getTables()) {
-            let table2D = DrawScene.setWorldTable2(
-                table.tableRows.map(x => { return { name: x.name, datatype: x.datatype, attributes: x.attributes.join(", ") } }),
-                table.head,
-                table.getContainingRect()
-            );
+            let table2D = DrawScene.setWorldTable2(table);
             for (let y = 0; y < table2D.length; y++) {
                 for (let x = 0; x < table2D[0].length; x++) {
                     drawArea[y + table.getPosition().y][x + table.getPosition().x] = table2D[y][x];

@@ -84,22 +84,6 @@ export class Table {
         return closestFromTablePoint
     }
 
-
-    getColumnWidths() {
-        let datatypeRows = this.tableRows.map(x => x.datatype);
-        let longestDatatypeLenght = datatypeRows.length !== 0 ? Math.max(...(datatypeRows.map(el => el.length))) : 0;
-
-        let attributeRows = this.tableRows.map(x => x.attributes.join(", "));
-        let longestAttributeLenght = attributeRows.length !== 0 ? Math.max(...(attributeRows.map(el => el.length))) : 0;
-
-        let pad = 3;  // padding plus one non-writable wall
-        return [
-            this.getContainingRect().width - 1 - ((longestDatatypeLenght + pad) + (longestAttributeLenght + pad)), 
-            longestDatatypeLenght + pad, 
-            longestAttributeLenght + pad
-        ];
-    }
-
     getContainingRect() {
         let columnWidth = 2 + Math.max(...(this.tableRows.map(el => el.name.length))) + 3 
             + Math.max(...(this.tableRows.map(el => el.datatype.length))) + 3 + 

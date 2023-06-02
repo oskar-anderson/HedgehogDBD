@@ -1,4 +1,4 @@
-export default interface CustomMouseEvent {
+export interface MyMouseEvent {
 
     worldX: number,
     worldY: number,

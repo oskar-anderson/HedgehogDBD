@@ -5,7 +5,7 @@ import { Table } from "../model/Table";
 import { TableRow } from "../model/TableRow";
 import { MyRect } from "../model/MyRect";
 import { ITool, IToolNames } from "./ITool";
-import CustomMouseEvent from "../model/MouseEvent";
+import { MyMouseEvent } from "../model/MyMouseEvent";
 import { TableDTO } from "../model/dto/TableDTO";
 
 export class CreateTableTool implements ITool {
@@ -72,7 +72,7 @@ export class CreateTableTool implements ITool {
         this.init(this.hover!.getPosition().clone());
     }
 
-    mouseEventHandler(event: CustomMouseEvent): void {
+    mouseEventHandler(event: MyMouseEvent): void {
         let mouseCharGrid = this.draw.getWorldToCharGridPoint(event.worldX, event.worldY);
         switch (event.type) {
             case "click": 

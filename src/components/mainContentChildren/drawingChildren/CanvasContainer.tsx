@@ -1,18 +1,17 @@
 import { Point } from "pixi.js";
 import { useEffect } from "react";
 import { Manager } from "../../../Manager";
-import CustomMouseEvent from "../../../model/MouseEvent";
+import DomHelper from "../../../DomHelper";
 import { DrawScene } from "../../../scenes/DrawScene";
-import Drawing, { DrawingUtil } from "../Drawing";
 
 interface CanvasContainerProps {
     canvasContainerScrollableRef: React.RefObject<HTMLDivElement>
     debugInfoContainer: React.RefObject<HTMLDivElement>
 }
 
-export default function CanvasContainer({ 
+export default function CanvasContainer({
     canvasContainerScrollableRef,
-    debugInfoContainer 
+    debugInfoContainer
 }: CanvasContainerProps) {
 
     console.log("CanvasContainer")
@@ -25,7 +24,7 @@ export default function CanvasContainer({
 
         canvasContainerScrollableRef.current!.addEventListener("scroll", (e) => {
             handleScroll(new Point(
-                (e.target as HTMLDivElement).scrollLeft, 
+                (e.target as HTMLDivElement).scrollLeft,
                 (e.target as HTMLDivElement).scrollTop
             ))
         });
@@ -37,20 +36,9 @@ export default function CanvasContainer({
     }, [])
 
     useEffect(() => {
-        const mapMouseEvent = (event: MouseEvent): CustomMouseEvent => {
-            return {
-                worldX: event.offsetX,
-                worldY: event.offsetY,
-                screenX: event.offsetX - DrawingUtil.getScreen(canvasContainerScrollableRef).x,
-                screenY: event.offsetY - DrawingUtil.getScreen(canvasContainerScrollableRef).y,
-                detail: event.detail,
-                type: event.type
-            }
-        }
-
-        const activeToolMouseEventHandler = (event: MouseEvent) => { 
+        const activeToolMouseEventHandler = (event: MouseEvent) => {
             const drawScene = (Manager.getInstance().getScene() as DrawScene);
-            drawScene.draw.activeTool.mouseEventHandler(mapMouseEvent(event));
+            drawScene.draw.activeTool.mouseEventHandler(DomHelper.mapMouseEvent(event, canvasContainerScrollableRef));
             if (drawScene.draw.activeTool.isDirty) {
                 drawScene.draw.activeTool.isDirty = false;
                 drawScene.renderScreen();
@@ -59,7 +47,7 @@ export default function CanvasContainer({
 
         const mouseMoveEvent = (event: MouseEvent) => {
             const drawScene = (Manager.getInstance().getScene() as DrawScene);
-            const mouseEvent = mapMouseEvent(event);
+            const mouseEvent = DomHelper.mapMouseEvent(event, canvasContainerScrollableRef);
             const charGridPoint = drawScene.draw.getWorldToCharGridPoint(mouseEvent.worldX, mouseEvent.worldY);
             // using useState would cause a lot of rerenders and make the app unresponsive
             if (debugInfoContainer.current !== null) {
@@ -76,14 +64,14 @@ export default function CanvasContainer({
                 `;
             }
             activeToolMouseEventHandler(event);
-         }
+        }
 
         Manager.getInstance().getView().addEventListener("click", activeToolMouseEventHandler);
         Manager.getInstance().getView().addEventListener("mousedown", activeToolMouseEventHandler);
         Manager.getInstance().getView().addEventListener("mouseup", activeToolMouseEventHandler);
         Manager.getInstance().getView().addEventListener('mousemove', mouseMoveEvent);
 
-        return () => { 
+        return () => {
             Manager.getInstance().getView().removeEventListener("click", activeToolMouseEventHandler);
             Manager.getInstance().getView().removeEventListener("mousedown", activeToolMouseEventHandler);
             Manager.getInstance().getView().removeEventListener("mouseup", activeToolMouseEventHandler);

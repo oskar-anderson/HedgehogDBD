@@ -11,14 +11,8 @@ import { AppState } from "../MainContent";
 import { useAppStateManagement } from "../../Store";
 import CanvasSecondaryTopToolbar from "./drawingChildren/CanvasSecondaryTopToolbar";
 import { TableDTO } from "../../model/dto/TableDTO";
+import DomHelper from "../../DomHelper";
 
-
-export class DrawingUtil {
-    static getScreen(canvasContainerRef: React.RefObject<HTMLDivElement>): MyRect {
-        const { scrollLeft, scrollTop, offsetWidth, offsetHeight } = canvasContainerRef.current!;
-        return new MyRect(scrollLeft, scrollTop, offsetWidth, offsetHeight)
-    }
-}
 
 interface DrawingProps {
     topToolBarHeightPx: number,
@@ -45,7 +39,7 @@ export default function Drawing({ topToolBarHeightPx, tables, onTablesUpdateCall
                     x - Math.ceil(canvasContainerRef.current!.offsetWidth / 2),
                     y - Math.ceil(canvasContainerRef.current!.offsetHeight / 2)
                 );
-                minimap.update(Manager.getInstance().draw.getVisibleTables(), DrawingUtil.getScreen(canvasContainerRef));
+                minimap.update(Manager.getInstance().draw.getVisibleTables(), DomHelper.getScreen(canvasContainerRef));
             }
         );
 
@@ -56,7 +50,7 @@ export default function Drawing({ topToolBarHeightPx, tables, onTablesUpdateCall
                 clearInterval(minimapUpdateInterval)
                 return;
             }
-            let screen = DrawingUtil.getScreen(canvasContainerRef);
+            let screen = DomHelper.getScreen(canvasContainerRef);
             minimap.update(draw.getVisibleTables(), screen);
         }, 1000 / 30);
 
@@ -65,8 +59,8 @@ export default function Drawing({ topToolBarHeightPx, tables, onTablesUpdateCall
 
     const setZoomFontSize = (size: number): void => {
         const draw = Manager.getInstance().draw;
-        let centerScreenOriginalXPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().x / draw.getWorld().width;
-        let centerScreenOriginalYPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().y / draw.getWorld().height;
+        let centerScreenOriginalXPercent = DomHelper.getScreen(canvasContainerRef).getCenter().x / draw.getWorld().width;
+        let centerScreenOriginalYPercent = DomHelper.getScreen(canvasContainerRef).getCenter().y / draw.getWorld().height;
         let widthCharGridOriginal = draw.getWorldCharGrid().width;
         let heightCharGridOriginal = draw.getWorldCharGrid().height;
         draw.selectedFontSize = Draw.fontSizes_Inconsolata.find(x => x.size === size)!;
@@ -74,11 +68,11 @@ export default function Drawing({ topToolBarHeightPx, tables, onTablesUpdateCall
         let heightWorldResize = heightCharGridOriginal * draw.selectedFontSize.height;
         Manager.getInstance().getRenderer().resize(widthWorldResize, heightWorldResize);
         draw.setWorld(new MyRect(0, 0, widthWorldResize, heightWorldResize))
-        let centerScreenResizeXPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().x / draw.getWorld().width;
-        let centerScreenResizeYPercent = DrawingUtil.getScreen(canvasContainerRef).getCenter().y / draw.getWorld().height;
+        let centerScreenResizeXPercent = DomHelper.getScreen(canvasContainerRef).getCenter().x / draw.getWorld().width;
+        let centerScreenResizeYPercent = DomHelper.getScreen(canvasContainerRef).getCenter().y / draw.getWorld().height;
         canvasContainerRef.current!.scrollTo(
-            DrawingUtil.getScreen(canvasContainerRef).x + draw.getWorld().width * (centerScreenOriginalXPercent - centerScreenResizeXPercent),
-            DrawingUtil.getScreen(canvasContainerRef).y + draw.getWorld().height * (centerScreenOriginalYPercent - centerScreenResizeYPercent)
+            DomHelper.getScreen(canvasContainerRef).x + draw.getWorld().width * (centerScreenOriginalXPercent - centerScreenResizeXPercent),
+            DomHelper.getScreen(canvasContainerRef).y + draw.getWorld().height * (centerScreenOriginalYPercent - centerScreenResizeYPercent)
         );
         draw.schema.getTables().forEach(x => x.setIsDirty(true));
         draw.schema.getTables().forEach(x => x.relations.forEach(y => y.isDirty = true));

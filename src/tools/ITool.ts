@@ -1,5 +1,5 @@
 import { Draw } from "../model/Draw";
-import CustomMouseEvent from "../model/MouseEvent";
+import MyMouseEvent from "../DomHelper";
 import { CreateTableTool } from "./CreateTableTool";
 import { SelectTableTool } from "./SelectTableTool";
 
@@ -8,7 +8,7 @@ export interface ITool {
     exit(): void;
     isDirty: boolean;
     getName(): IToolNames;
-    mouseEventHandler(event: CustomMouseEvent): void
+    mouseEventHandler(event: MyMouseEvent): void
 }
 
 export enum IToolNames {

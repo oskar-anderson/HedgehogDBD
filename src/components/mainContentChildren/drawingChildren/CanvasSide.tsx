@@ -10,9 +10,9 @@ import { Minimap } from "../../Minimap";
 
 interface CanvasSideProps {
     minimap: Minimap,
-    debugInfoContainer: React.RefObject<HTMLDivElement>
-    tables: TableDTO[]
-    setZoomFontSize: (size: number) => void
+    debugInfoContainer: React.RefObject<HTMLDivElement>,
+    tables: TableDTO[],
+    setZoomFontSize: (size: number) => void,
 }
 
 enum TabState {
@@ -68,6 +68,7 @@ function CanvasSide({minimap, debugInfoContainer, tables, setZoomFontSize}: Canv
                                 </div>,
                             1: 
                                 <div style={{ overflowY: "auto" }}>
+                                    <div>
                                     { tables.sort((a, b) => Number(a.head > b.head)).map((table, i) => {
                                         return (
                                             <div key={i} 
@@ -77,6 +78,7 @@ function CanvasSide({minimap, debugInfoContainer, tables, setZoomFontSize}: Canv
                                             </div>
                                         )
                                     })}
+                                    </div>
                                 </div>
                         }[activeTab]
                     }

@@ -4,7 +4,7 @@ import { Table } from "../model/Table";
 import { ITool, IToolNames } from "./ITool";
 import { Manager } from "../Manager";
 import { TableScene } from "../scenes/TableScene";
-import CustomMouseEvent from "../model/MouseEvent";
+import { MyMouseEvent } from "../model/MyMouseEvent";
 import { Point } from "pixi.js";
 import { TableDTO } from "../model/dto/TableDTO";
 
@@ -97,7 +97,7 @@ export class SelectTableTool implements ITool {
         mouseUpDone();
     }
 
-    mouseEventHandler(event: CustomMouseEvent): void {
+    mouseEventHandler(event: MyMouseEvent): void {
         let mouseCharGrid = this.draw.getWorldToCharGridPoint(event.worldX, event.worldY);
         switch (event.type) {
             case "mousedown":

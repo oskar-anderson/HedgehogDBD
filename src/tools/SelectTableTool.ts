@@ -31,7 +31,10 @@ export class SelectTableTool implements ITool {
     }
 
     exit() {
-
+        if (this.hover !== null) {
+            this.hover.hoverTable.setPosition(this.hover.hoverTableOriginalPosition, this.draw.selectedFontSize);
+            this.hover.hoverTable.setIsHover(false, this.draw.schema.getTables());
+        }
     }
 
     mouseDown(mouseCharGridX: number, mouseCharGridY: number) {
@@ -78,7 +81,6 @@ export class SelectTableTool implements ITool {
             this.hover!.hoverTable.setIsHover(false, this.draw.schema.getTables());
             this.hover = null;
             this.isDirty = true;
-            this.exit();
         }
         if (! isGoodPlaceForTable) {
             this.hover.hoverTable.setPosition(this.hover.hoverTableOriginalPosition, this.draw.selectedFontSize);

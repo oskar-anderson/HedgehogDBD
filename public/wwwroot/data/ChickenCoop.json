@@ -1,0 +1,578 @@
+{
+    "tables": [
+        {
+            "id": "1ec8d1f8-34f5-4b2a-9fa2-d1b503828efa",
+            "position": {
+                "x": 123,
+                "y": 53
+            },
+            "head": "chicken",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "breed",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "FK(\"breed\")"
+                    ]
+                },
+                {
+                    "name": "chicken_end_group_id",
+                    "datatype": "VARCHAR(255)?",
+                    "attributes": [
+                        "FK(\"chicken_end_group\")"
+                    ]
+                },
+                {
+                    "name": "cage_id",
+                    "datatype": "VARCHAR(255)?",
+                    "attributes": [
+                        "FK(\"cage\")"
+                    ]
+                },
+                {
+                    "name": "code",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ae1e7983-1604-47a5-8354-4422cb70a0d2",
+            "position": {
+                "x": 127,
+                "y": 70
+            },
+            "head": "breed",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "code",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "area_requirement",
+                    "datatype": "INT",
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "c32bd077-160d-4461-b568-6cbd49275419",
+            "position": {
+                "x": 242,
+                "y": 39
+            },
+            "head": "coop",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "3316752c-9dfe-458f-a333-82a9602c945b",
+            "position": {
+                "x": 242,
+                "y": 54
+            },
+            "head": "cage",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "cage_type_id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "FK(\"dd_cage_type\")"
+                    ]
+                },
+                {
+                    "name": "coop_id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "FK(\"coop\")"
+                    ]
+                },
+                {
+                    "name": "number",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "weighter_identifier_code",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ed1f8831-97a5-47be-a9c8-f038c507ea9f",
+            "position": {
+                "x": 125,
+                "y": 98
+            },
+            "head": "food_mix",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "code",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "description",
+                    "datatype": "VARCHAR(25555)",
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "eded5762-eba8-4003-a0b5-00ac155f3a61",
+            "position": {
+                "x": 126,
+                "y": 83
+            },
+            "head": "breed_food_mix",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "breed_id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "FK(\"breed\")"
+                    ]
+                },
+                {
+                    "name": "food_mix_id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "FK(\"food_mix\")"
+                    ]
+                },
+                {
+                    "name": "is_compatible",
+                    "datatype": "BOOLEAN",
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ae30b61f-c76f-4bc4-91c4-fb171632342f",
+            "position": {
+                "x": 221,
+                "y": 97
+            },
+            "head": "feeding_sys_log",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "cage_id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "FK(\"cage\")"
+                    ]
+                },
+                {
+                    "name": "food_mix_id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "FK(\"food_mix\")"
+                    ]
+                },
+                {
+                    "name": "date",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "amount",
+                    "datatype": "INT",
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "7c87920b-8321-4d2b-a9e2-72d9a0fe36e1",
+            "position": {
+                "x": 330,
+                "y": 65
+            },
+            "head": "dd_cage_type",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "area",
+                    "datatype": "INT",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "order",
+                    "datatype": "INT",
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "2542db72-ee36-43d0-b913-7c2c331d49a0",
+            "position": {
+                "x": 330,
+                "y": 53
+            },
+            "head": "weighter",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "serial_number",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "cage_identifier_code",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "64761372-452f-4cea-8602-01a3af7422f5",
+            "position": {
+                "x": 258,
+                "y": 75
+            },
+            "head": "cage_weighter_egg",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "cage_id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "FK(\"cage\")"
+                    ]
+                },
+                {
+                    "name": "egg_weight_code",
+                    "datatype": "VARCHAR(255)?",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "egg_weight_name",
+                    "datatype": "VARCHAR(255)?",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "date_recorded",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "date_added",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "weight",
+                    "datatype": "INT",
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "4369f3f3-2cc3-4410-8689-4325d8ad716c",
+            "position": {
+                "x": 330,
+                "y": 39
+            },
+            "head": "egg_weight_category",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "code",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "min_weight",
+                    "datatype": "INT",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "max_weight",
+                    "datatype": "INT",
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "1dca8942-9c8f-4e9b-9f69-5f0cceae6e5f",
+            "position": {
+                "x": 39,
+                "y": 38
+            },
+            "head": "dd_chicken_end_type",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "master_id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "FK(\"dd_chicken_end_type\")"
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "order",
+                    "datatype": "INT",
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "a09ceabf-e239-4de9-babf-254c6d0ed82e",
+            "position": {
+                "x": 31,
+                "y": 53
+            },
+            "head": "chicken_end_group",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "chicken_end_type_id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "FK(\"dd_chicken_end_type\")"
+                    ]
+                },
+                {
+                    "name": "place",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "date",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "note",
+                    "datatype": "VARCHAR(25555)",
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "855c4fd8-a622-4ccb-8cb8-b2a245d04448",
+            "position": {
+                "x": 31,
+                "y": 69
+            },
+            "head": "chicken_end_group_transaction_row",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "chicken_end_group_id",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        "FK(\"chicken_end_group\")"
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": "VARCHAR(255)",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "is_cost",
+                    "datatype": "BOOLEAN",
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "monetary_change",
+                    "datatype": "FLOAT(14,2)",
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        }
+    ]
+}

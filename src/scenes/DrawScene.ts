@@ -179,7 +179,7 @@ export class DrawScene extends Container implements IScene {
     static setWorldRelation2(relation: Relation, costGrid: CostGrid, worldSize: MyRect): Point[] {
         let startPoint = relation.source.getRelationStartingPoint(worldSize, relation.target)!;
         let heuristicEndPoint =  relation.target.getContainingRect().getLargestFittingSquareClosestToPoint(relation.source.getContainingRect().getCenter()).getCenter();
-        let possibleEnds = relation.target.getContainingRect().GetRelationAttachmentPoints(worldSize);
+        let possibleEnds = relation.target.getContainingRect().getRelationAttachmentPoints(worldSize);
         if (relation.target.head === relation.source.head) {
             possibleEnds = possibleEnds.filter((end) => { return AStarFinderCustom.euclidean(startPoint!, end) === 10 });
         }

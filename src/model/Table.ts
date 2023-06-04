@@ -72,7 +72,7 @@ export class Table {
         let referenceCenter =  targetTable.getContainingRect().getLargestFittingSquareClosestToPoint(this.getContainingRect().getCenter()).getCenter();
         let closestFromTablePoint: Point | null = null;
         let containingRect = this.getContainingRect();
-        let relationAttachmentPoints = containingRect.GetRelationAttachmentPoints(worldSize);
+        let relationAttachmentPoints = containingRect.getRelationAttachmentPoints(worldSize);
         for (let point of relationAttachmentPoints) {
             if ((closestFromTablePoint === null || 
                 AStarFinderCustom.euclidean(closestFromTablePoint, referenceCenter) > 
@@ -131,17 +131,17 @@ export class Table {
         let tableRect = this.getContainingRect();
         let tableRectPaddingInnerRect = new MyRect(tableRect.x - 1, tableRect.y - 1, tableRect.width + 2, tableRect.height + 2);
         let tableRectPaddingOuterRect = new MyRect(tableRect.x - 2, tableRect.y - 2, tableRect.width + 4, tableRect.height + 4);
-        let tableRectPaddingInnerPoints = tableRectPaddingInnerRect.ToPoints()
+        let tableRectPaddingInnerPoints = tableRectPaddingInnerRect.toPoints()
             .filter((point) => 
                 ! tableRect.contains(point.x, point.y) && 
                 worldSize.contains(point.x, point.y)
             );
-        let tableRectPaddingOuterPoints = tableRectPaddingOuterRect.ToPoints()
+        let tableRectPaddingOuterPoints = tableRectPaddingOuterRect.toPoints()
             .filter((point) => 
                 ! tableRectPaddingInnerRect.contains(point.x, point.y) && 
                 worldSize.contains(point.x, point.y)    
             );
-        tableRect.ToPoints().forEach((point) => costGrid.value[point.y][point.x].push(CostGridTileTypes.WALL));
+        tableRect.toPoints().filter(point => worldSize.contains(point.x, point.y)).forEach((point) => costGrid.value[point.y][point.x].push(CostGridTileTypes.WALL));
         tableRectPaddingInnerPoints.forEach((point) => costGrid.value[point.y][point.x].push(CostGridTileTypes.PADDINGINNER));
         tableRectPaddingOuterPoints.forEach((point) => costGrid.value[point.y][point.x].push(CostGridTileTypes.PADDINGOUTER));
     }

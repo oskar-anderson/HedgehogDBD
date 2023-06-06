@@ -23,6 +23,12 @@
     --bs-btn-active-bg: #c2c2c2;
 }
 
+.form-select {
+    /* reduce BootStrap select down arrow size */
+    padding: .375rem 1.5rem .375rem .375rem;
+    background-position: right 0.3rem center;
+}
+
 .dropdown-menu {
     --bs-dropdown-border-radius: 0.1875em;
     --bs-dropdown-padding-y: 0.2rem;

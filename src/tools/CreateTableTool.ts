@@ -7,6 +7,8 @@ import { MyRect } from "../model/MyRect";
 import { ITool, IToolNames } from "./ITool";
 import { MyMouseEvent } from "../model/MyMouseEvent";
 import { TableDTO } from "../model/dto/TableDTO";
+import TableRowDataType from "../model/TableRowDataType";
+import DataType, { DataTypeString } from "../model/DataTypes/DataType"
 
 export class CreateTableTool implements ITool {
 
@@ -25,7 +27,7 @@ export class CreateTableTool implements ITool {
         this.hover = new Table( 
             startingPoint, 
             "new_table", 
-            [ new TableRow("id", "VARCHAR(255)", ["PK"])], 
+            [ new TableRow("id", new TableRowDataType(DataType.string(), [{ value: 255, argument: DataTypeString.varcharLenght }], false), ["PK"])], 
             {
                 isHover: true
             }

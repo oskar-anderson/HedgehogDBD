@@ -119,7 +119,7 @@ export class DrawScene extends Container implements IScene {
 
     static setWorldTable2(table: Table): string[][] {
         let longestnameLenght = table.tableRows.map(x => x.name).reduce((acc, row) => Math.max(acc, row.length), 0);
-        let longestDatatypeLenght = table.tableRows.map(x => x.datatype).reduce((acc, row) => Math.max(acc, row.length), 0);
+        let longestDatatypeLenght = table.tableRows.map(x => x.datatype.getDisplayableText()).reduce((acc, row) => Math.max(acc, row.length), 0);
         let longestAttributeLenght = table.tableRows.map(x => x.attributes).reduce((acc, row) => Math.max(acc, row.join(", ").length), 0);
 
         let pad = 4;  // horizontal padding and border
@@ -163,7 +163,7 @@ export class DrawScene extends Container implements IScene {
         let rectTypeRowInnerRelativeToTable = new Rectangle(rectTypeRowInner.x, rectTypeRowInner.y, rectTypeRowInner.width, rectTypeRowInner.height);
         for (let y = rectTypeRowInnerRelativeToTable.y; y < rectTypeRowInnerRelativeToTable.bottom; y++) {
             for (let x = rectTypeRowInnerRelativeToTable.x; x < rectTypeRowInnerRelativeToTable.right; x++) {
-                result[y][x] = table.tableRows[y - rectTypeRowInnerRelativeToTable.y].datatype[x - rectTypeRowInnerRelativeToTable.x] ?? ' ';
+                result[y][x] = table.tableRows[y - rectTypeRowInnerRelativeToTable.y].datatype.getDisplayableText()[x - rectTypeRowInnerRelativeToTable.x] ?? ' ';
             }
         }
         let rectSpecialRowInner = new Rectangle(rectAttributeRow.left + 2, rectAttributeRow.top + 1, rectAttributeRow.width - 4, rectAttributeRow.height - 2);

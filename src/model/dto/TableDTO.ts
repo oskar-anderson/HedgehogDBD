@@ -1,5 +1,6 @@
 import { BitmapText, Point } from "pixi.js";
 import { Table } from "../Table";
+import TableRowDataTypeDTO from "./TableRowDataTypeDTO";
 import { TableRowDTO } from "./TableRowDTO";
 
 
@@ -17,7 +18,22 @@ export class TableDTO {
     }
 
     static initFromTable(table: Table) {
-        return new TableDTO(table.id, table.getPosition(), table.head, table.tableRows.map(x => new TableRowDTO(x.name, x.datatype, [...x.attributes])))
+        return new TableDTO(
+            table.id, 
+            table.getPosition(), 
+            table.head, 
+            table.tableRows.map(x => 
+                new TableRowDTO(
+                    x.name, 
+                    new TableRowDataTypeDTO(
+                        x.datatype.name, 
+                        [...x.datatype.arguments], 
+                        x.datatype.isNullable
+                    ), 
+                    [...x.attributes]
+                )
+            )
+        )
     }
 
     static parse(content: string) {

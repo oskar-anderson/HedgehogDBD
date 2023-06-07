@@ -1,6 +1,7 @@
 import { TableRow } from "../TableRow";
 import TableRowDataType from "../TableRowDataType";
 import TableRowDataTypeDTO from "./TableRowDataTypeDTO";
+import TableRowDataTypeArguments from "../TableRowDataTypeArguments";
 
 export class TableRowDTO {
     name: string;
@@ -18,7 +19,10 @@ export class TableRowDTO {
     }
 
     mapToTableRow() {
-        const tableRowDataType = new TableRowDataType(this.datatype.name, [...this.datatype.arguments], this.datatype.isNullable);
+        const tableRowArguments = this.datatype.arguments
+            .map(x => x.mapToTableRow())
+            .filter(x => x !== null) as TableRowDataTypeArguments[]
+        const tableRowDataType = new TableRowDataType(this.datatype.name, tableRowArguments, this.datatype.isNullable);
         return new TableRow(this.name, tableRowDataType, [...this.attributes])
     }
 }

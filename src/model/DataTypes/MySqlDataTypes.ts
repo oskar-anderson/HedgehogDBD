@@ -1,5 +1,3 @@
-import TableRowDataTypeArgumentsDTO from "../dto/TableRowDataTypeArgumentsDTO";
-import Databases from "./Databases";
 import { DataTypeBoolean, DataTypeDateTimeOffset, DataTypeFloat128, DataTypeFloat32, DataTypeFloat64, DataTypeGuid, DataTypeInt16, DataTypeInt32, DataTypeInt64, DataTypeString, IDataTypeArgument } from "./DataType";
 import IDatabaseType from "./IDatabaseType";
 

@@ -12,7 +12,7 @@ export default class Databases {
     static Postgres = { select: DataBaseSelector.Postgres, types: new PostgresDataTypes() }
     static SqlServer = { select: DataBaseSelector.SqlServer, types: new SqlServerDataTypes() }
 
-    selectedDatabase = Databases.Postgres;
+    selectedDatabase = Databases.MySql;
     
     static getAll(): Database[] {
         return [Databases.MySql, Databases.Postgres, Databases.SqlServer];

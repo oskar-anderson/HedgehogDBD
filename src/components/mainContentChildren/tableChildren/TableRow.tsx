@@ -1,24 +1,34 @@
 import { ChangeEvent, FormEvent, useState } from "react"
-import DataType from "../../../model/DataTypes/DataType"
-import TableRowDataTypeDTO from "../../../model/dto/TableRowDataTypeDTO";
-import TableRowDataTypeArgumentsDTO from "../../../model/dto/TableRowDataTypeArgumentsDTO";
+import DataType, { IDataTypeArgument } from "../../../model/DataTypes/DataType"
 import { Manager } from "../../../Manager";
+
+interface UiTableRowDatatype {
+    name: DataType,
+    arguments: {
+        value: {
+            isIncluded: boolean,
+            realValue: number,
+        },
+        argumentId: string
+    }[],
+    isNullable: boolean
+}
 
 export interface TableRowProps {
     index: number,
     row: {
         rowName: string
-        rowDatatype: TableRowDataTypeDTO
+        rowDatatype: UiTableRowDatatype
         rowAttributes: string
     },
     rows: {
         rowName: string;
-        rowDatatype: TableRowDataTypeDTO;
+        rowDatatype: UiTableRowDatatype;
         rowAttributes: string;
     }[],
     setRows: React.Dispatch<React.SetStateAction<{
         rowName: string;
-        rowDatatype: TableRowDataTypeDTO;
+        rowDatatype: UiTableRowDatatype;
         rowAttributes: string;
     }[]>>,
     insertNewRow: (event: FormEvent<HTMLButtonElement>, index: number) => void,
@@ -32,20 +42,23 @@ export default function TableRow({ index, row, setRows, rows, insertNewRow, move
 
     const [datatypeArguments, setDatatypeArguments] = useState<{
         value: string;
-        defaultValue: string;
         displayName: string;
         id: string;
-        isRequired: boolean;
-        type: string;
+        isReadonly: boolean;
+        isIncluded: boolean;
+        typeId: string;
     }[]>(row.rowDatatype.arguments
-        .map(x => ({
-            displayName: x.argument.displayName,
-            isRequired: x.argument.isRequired,
-            id: x.argument.id,
-            type: x.argument.type,
-            value: String(x.value),
-            defaultValue: String(x.argument.defaultValue)
-        }))
+        .map(x => {
+            const argument = DataType.getArgumentById(x.argumentId);
+            return {
+                displayName: argument.displayName,
+                isReadonly: argument.isReadonly,
+                isIncluded: x.value.isIncluded,
+                id: argument.id,
+                typeId: argument.typeId,
+                value: String(x.value.realValue)
+            }
+        })
     );
     const [mandatoryFieldBtnText, setMandatoryFieldBtnText] = useState('!');
     const handleArgumentInputChange = (e: ChangeEvent, argumentId: string) => {
@@ -53,46 +66,57 @@ export default function TableRow({ index, row, setRows, rows, insertNewRow, move
         const newArguments = [...datatypeArguments];
         const argumentToUpdate = newArguments.find(arg => arg.id === argumentId)!;
         const isContainingOnlyDigits = (value: string) => /^[0-9]+$/.test(value);
-        if (! isContainingOnlyDigits(newValue)) { return };
+        if (!isContainingOnlyDigits(newValue)) { return };
         const newDataTypeArgumentValueNumber = Number.parseInt(newValue);
         argumentToUpdate.value = String(newDataTypeArgumentValueNumber)
         setDatatypeArguments(newArguments);
         const rowsCopy = [...rows];
-        rowsCopy[index].rowDatatype.arguments = newArguments.map(x =>
-            new TableRowDataTypeArgumentsDTO(
-                newDataTypeArgumentValueNumber,
-                DataType.getType(x.type).getArgumentById(x.id)
-            )
-        );
+        rowsCopy[index].rowDatatype.arguments = newArguments.map(x => {
+            return {
+                value: {
+                    isIncluded: x.isIncluded,
+                    realValue: newDataTypeArgumentValueNumber,
+                },
+                argumentId: x.id
+            }
+        });
         setRows(rowsCopy);
     }
 
     const handleSelectInputOnChange = (e: ChangeEvent) => {
-        const selectedValue = (e.target as HTMLSelectElement).value;
+        const selectedDatatypeId = (e.target as HTMLSelectElement).value;
         const draw = Manager.getInstance().draw;
-        setDatatypeArguments(
-            DataType.getTypes()
-                .filter(x => x.getSelectListName() === selectedValue)
-                .map(x => x.base_getDatabaseArgumentsSorted(draw.activeDatabase.selectedDatabase.select))
-                .flat()
-                .map(x => ({
-                    displayName: x.displayName,
-                    isRequired: x.isRequired,
-                    id: x.id,
-                    type: x.type,
-                    value: String(x.defaultValue),
-                    defaultValue: String(x.defaultValue)
-                }))
-        );
+        const type = DataType.getTypes()
+            .find(x => x.getId() === selectedDatatypeId)!;
+        
+        const args = type.getAllArguments();
+        const dataTypeArguements = args.map(x => ({
+            displayName: x.displayName,
+            isReadonly: x.isReadonly,
+            isIncluded: true,
+            id: x.id,
+            typeId: x.typeId,
+            value: String(x.defaultValue),
+        }))
+        setDatatypeArguments(dataTypeArguements);
         const rowsCopy = [...rows];
-        rowsCopy[index].rowDatatype.name = DataType.getType(selectedValue);
+        rowsCopy[index].rowDatatype.name = DataType.getTypeById(selectedDatatypeId);
+        setRows(rowsCopy);
+    }
+
+    const handleArgumentWillNotBeProvidedCheckbox = (isChecked: boolean, argumentIndex: number) => {
+        const newArgs = [...datatypeArguments];
+        newArgs[argumentIndex].isIncluded = isChecked;
+        setDatatypeArguments(newArgs);
+        const rowsCopy = [...rows];
+        rowsCopy[index].rowDatatype.arguments[argumentIndex].value.isIncluded = isChecked;
         setRows(rowsCopy);
     }
 
     return (
         <tr>
             <td>
-                <input className="input-name" onChange={(e) => {
+                <input className="form-control" style={{ display: "inline" }} onChange={(e) => {
                     const rowsCopy = [...rows];
                     rowsCopy[index].rowName = (e.target as HTMLInputElement).value
                     setRows(rowsCopy);
@@ -105,11 +129,11 @@ export default function TableRow({ index, row, setRows, rows, insertNewRow, move
                             className="form-select"
                             name="input-datatype"
                             onChange={handleSelectInputOnChange}
-                            defaultValue={row.rowDatatype.name.getSelectListName()}
+                            defaultValue={row.rowDatatype.name.getId()}
                         >
                             {DataType.getTypes().map(x => {
                                 return (
-                                    <option key={x.getSelectListName()} value={x.getSelectListName()}>{x.getSelectListName()}</option>
+                                    <option key={x.getId()} value={x.getId()}>{x.getSelectListName()}</option>
                                 )
                             })}
                         </select>
@@ -124,47 +148,31 @@ export default function TableRow({ index, row, setRows, rows, insertNewRow, move
                             {mandatoryFieldBtnText}
                         </button>
                     </div>
-                    {datatypeArguments.map(argument => {
+                    {datatypeArguments.map((argument, index) => {
                         return (
                             <div key={argument.id} style={{ display: "flex", alignItems: "center", marginTop: "0.5em" }}>
+                                <input style={{ marginRight: "6px" }} type="checkbox"
+                                    onChange={(e) => { handleArgumentWillNotBeProvidedCheckbox((e.target as HTMLInputElement).checked, index) }}
+                                    checked={argument.isIncluded}
+                                    title={argument.isReadonly ? "Readonly" : undefined}
+                                    disabled={argument.isReadonly}
+                                />
                                 <span style={{ paddingRight: "0.5em" }}>{argument.displayName}: </span>
-                                <input style={{ width: "100%" }} type="text"
+                                <input style={{ width: "100%" }} type="text" className="form-control"
                                     onChange={(e) => handleArgumentInputChange(e, argument.id)}
-                                    value={argument.value}
+                                    value={argument.isIncluded ? argument.value : "Omited"}
+                                    title={argument.isReadonly ? "Readonly" : undefined}
+                                    disabled={argument.isReadonly || !argument.isIncluded}
                                 />
                             </div>
                         )
                     })}
                 </div>
-                {
-                    /*
-                        <Select 
-                            options={DataType.getTypes().map(x => { 
-                                return { 
-                                    value: x.getSelectListName(), 
-                                    label: x.getSelectListName() 
-                                } 
-                            } )}
-                            name="input-datatype" 
-                            onChange={(selectedValue) => { 
-                                setDatatypeArguments(DataType.getTypes().filter(x => x.getSelectListName() === selectedValue!.label).map(x => x.getRequiredArguments(new DataType())).flat()); 
-                            }}
-                        />
-                        <div>
-                            {datatypeArguments.map(argument => { 
-                                return (
-                                    <>
-                                        <label htmlFor={argument.displayName}>{argument.displayName}</label>
-                                        <input id={argument.displayName} key={argument.displayName} style={{width: "120px" }} value={ argument.value } />    
-                                    </>
-                                )
-                            })}
-                        </div>
-                    */
-                }
             </td>
             <td>
-                <input className="input-attributes" onChange={(e) => row.rowAttributes = (e.target as HTMLInputElement).value} list="attribute-suggestions" type="text" value={row.rowAttributes} />
+                <input className="form-control" style={{ display: "inline" }} list="attribute-suggestions" type="text" value={row.rowAttributes}
+                    onChange={(e) => row.rowAttributes = (e.target as HTMLInputElement).value}
+                />
             </td>
             <td>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>

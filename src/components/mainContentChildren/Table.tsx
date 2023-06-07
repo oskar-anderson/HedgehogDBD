@@ -2,9 +2,9 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { CommandDeleteTable, CommandDeleteTableArgs } from "../../commands/appCommands/CommandDeleteTable";
 import { CommandModifyTable, CommandModifyTableArgs } from "../../commands/appCommands/CommandModifyTable";
 import { Manager } from "../../Manager";
-import DataType from "../../model/DataTypes/DataType";
+import DataType, { DataTypeString } from "../../model/DataTypes/DataType";
 import { TableDTO } from "../../model/dto/TableDTO";
-import TableRowDataTypeDTO from "../../model/dto/TableRowDataTypeDTO";
+import TableRowDataTypeArgumentsDTO from "../../model/dto/TableRowDataTypeArgumentsDTO";
 import { TableRowDTO } from "../../model/dto/TableRowDTO";
 import { TableRow } from "../../model/TableRow";
 import { DrawScene } from "../../scenes/DrawScene";
@@ -28,7 +28,19 @@ export default function Table() {
     const [rows, setRows] = useState(tableBeingEdited.tableRows.map((x) => {
         return {
             rowName: x.name,
-            rowDatatype: x.datatype,
+            rowDatatype: {
+                name: x.datatype.name,
+                arguments: x.datatype.arguments.map(y => { 
+                    return {
+                        value: {
+                            isIncluded: y.argument.isIncluded,
+                            realValue: y.value,
+                        },
+                        argumentId: y.argument.id
+                    }
+                }),
+                isNullable: x.datatype.isNullable,
+            },
             rowAttributes: x.attributes.join(", ")
         }
     }));
@@ -40,7 +52,14 @@ export default function Table() {
         let oldTable = draw.schema.getTables().find(x => x.id === tableBeingEdited.id)!;
         let newTableRows = rows.map(tableRow => new TableRowDTO(
             tableRow.rowName,
-            tableRow.rowDatatype,
+            {
+                name: tableRow.rowDatatype.name,
+                arguments: tableRow.rowDatatype.arguments.map(arg => { 
+                    const argument = DataType.getArgumentById(arg.argumentId);
+                    return new TableRowDataTypeArgumentsDTO(arg.value.realValue, argument) 
+                }),
+                isNullable: tableRow.rowDatatype.isNullable
+            },
             tableRow.rowAttributes.split(",").map(x => x.trim())
         ));
         draw.history.execute(new CommandModifyTable(
@@ -52,11 +71,26 @@ export default function Table() {
 
     const insertNewRow = (event: FormEvent<HTMLButtonElement>, index: number) => {
         if (index === -1) { index = rows.length }
+        const activeDatabase = Manager.getInstance().draw.activeDatabase.selectedDatabase.select
         const newRows = [
             ...[...rows].slice(0, index),
             {
                 rowName: "",
-                rowDatatype: new TableRowDataTypeDTO(DataType.string(), [], false),
+                rowDatatype: {
+                    name: DataType.string(),
+                    arguments: DataType.getDatabaseArgumentsSorted(activeDatabase)
+                        .filter(x => x.typeId === new DataTypeString().getId())
+                        .map(x => {
+                        return {
+                            value: {
+                                isIncluded: x.isIncluded,
+                                realValue: x.defaultValue,
+                            },
+                            argumentId: x.id
+                        }    
+                    }),
+                    isNullable: false,
+                },
                 rowAttributes: "",
             },
             ...[...rows].slice(index)
@@ -102,9 +136,9 @@ export default function Table() {
                 <div className="modal-dialog modal-dialog-scrollable" style={{ maxWidth: "80%" }}>
                     <div className="modal-content">
                         <div className="modal-header">
-                            <p className="modal-title">
+                            <p className="modal-title" style={{ display: "flex", alignItems: "center" }}>
                                 <label htmlFor="table-name" style={{ marginRight: "6px" }}>Table</label>
-                                <input id="table-name" className="input-tablename" onChange={(e) => setTableName(e.target.value)} type="text" value={tableName} />
+                                <input id="table-name" className="form-control" style={{ display: "inline" }} onChange={(e) => setTableName(e.target.value)} type="text" value={tableName} />
                             </p>
                             <button type="button" className="btn-close" onClick={() => switchToDraw()} aria-label="Close"></button>
                         </div>

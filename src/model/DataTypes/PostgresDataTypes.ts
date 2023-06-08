@@ -3,45 +3,43 @@ import IDatabaseType from "./IDatabaseType";
 
 export default class MySqlDataTypes implements IDatabaseType {
 
-    getBooleanText(args: { value: number, name: IDataTypeArgument }[]) {
+    getBooleanText() {
         return `boolean`
     }
 
-    getDateTimeOffsetText(args: { value: number, name: IDataTypeArgument }[]) {
+    getDateTimeOffsetText() {
         return `timestamptz`
     }
 
-    getFloat128Text(args: { value: number, name: IDataTypeArgument }[]) {
+    getFloat128Text() {
         return `numeric`
     }
 
-    getFloat64Text(args: { value: number, name: IDataTypeArgument }[]) {
+    getFloat64Text() {
         return `double`
     }
 
-    getFloat32Text(args: { value: number, name: IDataTypeArgument }[]) {
+    getFloat32Text() {
         return `real`
     }
 
-    getGuidText(args: { value: number, name: IDataTypeArgument }[]) {
+    getGuidText() {
         return `uuid`
     }
 
-    getInt16Text(args: { value: number, name: IDataTypeArgument }[]) {
+    getInt16Text() {
         return `smallint`
     }
 
-    getInt32Text(args: { value: number, name: IDataTypeArgument }[]) {
+    getInt32Text() {
         return `int`
     }
 
-    getInt64Text(args: { value: number, name: IDataTypeArgument }[]) {
+    getInt64Text() {
         return `bigint`
     }
 
-    getStringText(args: { value: number, name: IDataTypeArgument }[]) {
-        const varcharLenght = args.find(x => x.name.id === DataTypeString.varcharLenght.id);
-        if (varcharLenght === undefined) return "varchar";
-        return `varchar(${varcharLenght.value})`
+    getStringText() {
+        return `varchar`
     }    
 }

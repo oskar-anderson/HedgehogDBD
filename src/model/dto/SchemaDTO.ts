@@ -17,12 +17,6 @@ export class SchemaDTO {
         );
     }
 
-    static initJsonDisplayable(draw: Draw) {
-        return new SchemaDTO(
-            draw.schema.getTables().map(x => TableDTO.initFromTable(x)),
-        );
-    }
-
     getJson() {
         return JSON.stringify(this, null, 4);
     }

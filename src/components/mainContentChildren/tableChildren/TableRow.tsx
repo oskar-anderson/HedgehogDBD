@@ -1,9 +1,10 @@
 import { ChangeEvent, FormEvent, useState } from "react"
 import DataType, { IDataTypeArgument } from "../../../model/DataTypes/DataType"
 import { Manager } from "../../../Manager";
+import { IDataType } from "../../../model/DataTypes/IDataType";
 
 interface UiTableRowDatatype {
-    name: DataType,
+    id: string,
     arguments: {
         value: {
             isIncluded: boolean,
@@ -60,7 +61,7 @@ export default function TableRow({ index, row, setRows, rows, insertNewRow, move
             }
         })
     );
-    const [mandatoryFieldBtnText, setMandatoryFieldBtnText] = useState('!');
+    const [mandatoryFieldBtnText, setMandatoryFieldBtnText] = useState(row.rowDatatype.isNullable ? "?" : "!");
     const handleArgumentInputChange = (e: ChangeEvent, argumentId: string) => {
         const newValue = (e.target! as HTMLInputElement).value;
         const newArguments = [...datatypeArguments];
@@ -86,10 +87,8 @@ export default function TableRow({ index, row, setRows, rows, insertNewRow, move
     const handleSelectInputOnChange = (e: ChangeEvent) => {
         const selectedDatatypeId = (e.target as HTMLSelectElement).value;
         const draw = Manager.getInstance().draw;
-        const type = DataType.getTypes()
-            .find(x => x.getId() === selectedDatatypeId)!;
+        const args = DataType.getArgumentsByDatabaseAndByType(draw.activeDatabase.select, selectedDatatypeId)
         
-        const args = type.getAllArguments();
         const dataTypeArguements = args.map(x => ({
             displayName: x.displayName,
             isReadonly: x.isReadonly,
@@ -100,7 +99,7 @@ export default function TableRow({ index, row, setRows, rows, insertNewRow, move
         }))
         setDatatypeArguments(dataTypeArguements);
         const rowsCopy = [...rows];
-        rowsCopy[index].rowDatatype.name = DataType.getTypeById(selectedDatatypeId);
+        rowsCopy[index].rowDatatype.id = selectedDatatypeId;
         setRows(rowsCopy);
     }
 
@@ -110,6 +109,12 @@ export default function TableRow({ index, row, setRows, rows, insertNewRow, move
         setDatatypeArguments(newArgs);
         const rowsCopy = [...rows];
         rowsCopy[index].rowDatatype.arguments[argumentIndex].value.isIncluded = isChecked;
+        setRows(rowsCopy);
+    }
+
+    const handleAttributeChange = (newValue: string) => {
+        const rowsCopy = [...rows];
+        rowsCopy[index].rowAttributes = newValue;
         setRows(rowsCopy);
     }
 
@@ -129,7 +134,7 @@ export default function TableRow({ index, row, setRows, rows, insertNewRow, move
                             className="form-select"
                             name="input-datatype"
                             onChange={handleSelectInputOnChange}
-                            defaultValue={row.rowDatatype.name.getId()}
+                            defaultValue={row.rowDatatype.id }
                         >
                             {DataType.getTypes().map(x => {
                                 return (
@@ -139,10 +144,10 @@ export default function TableRow({ index, row, setRows, rows, insertNewRow, move
                         </select>
                         <button style={{ height: "38px", width: "38px" }} className="btn btn-light"
                             onClick={() => {
-                                const isNullable = mandatoryFieldBtnText !== "!"
-                                setMandatoryFieldBtnText(mandatoryFieldBtnText === "!" ? "?" : "!")
+                                const wasNullable = mandatoryFieldBtnText !== "!"
+                                setMandatoryFieldBtnText(wasNullable ? "!" : "?")
                                 const rowsCopy = [...rows];
-                                rowsCopy[index].rowDatatype.isNullable = isNullable;
+                                rowsCopy[index].rowDatatype.isNullable = ! wasNullable;
                                 setRows(rowsCopy);
                             }}>
                             {mandatoryFieldBtnText}
@@ -171,7 +176,7 @@ export default function TableRow({ index, row, setRows, rows, insertNewRow, move
             </td>
             <td>
                 <input className="form-control" style={{ display: "inline" }} list="attribute-suggestions" type="text" value={row.rowAttributes}
-                    onChange={(e) => row.rowAttributes = (e.target as HTMLInputElement).value}
+                    onChange={(e) => handleAttributeChange((e.target as HTMLInputElement).value) }
                 />
             </td>
             <td>

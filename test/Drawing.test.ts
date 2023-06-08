@@ -6,6 +6,8 @@ import {describe, expect, test} from '@jest/globals';
 import { Table } from "../src/model/Table";
 // This is some strange jest thing - https://stackoverflow.com/questions/48828759/unit-test-raises-error-because-of-getcontext-is-not-implemented
 import 'jest-canvas-mock';
+import DataType from "../src/model/DataTypes/DataType";
+import TableRowDataType from "../src/model/TableRowDataType";
 
 
 console.log("process.env.BASE_URL")
@@ -44,48 +46,47 @@ test("setWorldTable2 with table at (0,0)", () => {
 
 
     const result = DrawScene.setWorldTable2(new Table(new Point(0, 0), "product", [
-        { name: "id", datatype: "uuid", attributes: ["PK"] },
-        { name: "name", datatype: "VARCHAR", attributes: []},
-        { name: "unit_price", datatype: "float", attributes: []},
-        { name: "amount", datatype: "VARCHAR", attributes: [] },
-        { name: "description", datatype: "VARCHAR", attributes: [] }
+        { name: "id", datatype: new TableRowDataType(DataType.guid(), [], false), attributes: ["PK"] },
+        { name: "name", datatype: new TableRowDataType(DataType.string(), [], false), attributes: []},
+        { name: "unit_price", datatype: new TableRowDataType(DataType.float64(), [], false), attributes: []},
+        { name: "amount", datatype: new TableRowDataType(DataType.string(), [], false), attributes: [] },
+        { name: "description", datatype: new TableRowDataType(DataType.string(), [], false), attributes: [] }
     ]));
 
     let string2D = result.map(x => x.join("")).join("\n");
     let stringRows = string2D.split("\n")
-    expect(stringRows[0]).toBe("+----------------------------+")
-    expect(stringRows[1]).toBe("| product                    |")
-    expect(stringRows[2]).toBe("+-------------+---------+----+")
-    expect(stringRows[3]).toBe("| id          | uuid    | PK |")
-    expect(stringRows[4]).toBe("| name        | VARCHAR |    |")
-    expect(stringRows[5]).toBe("| unit_price  | float   |    |")
-    expect(stringRows[6]).toBe("| amount      | VARCHAR |    |")
-    expect(stringRows[7]).toBe("| description | VARCHAR |    |")
-    expect(stringRows[8]).toBe("+-------------+---------+----+")
+    expect(stringRows[0]).toBe("+-----------------------------+")
+    expect(stringRows[1]).toBe("| product                     |")
+    expect(stringRows[2]).toBe("+-------------+----------+----+")
+    expect(stringRows[3]).toBe("| id          | Guid!    | PK |")
+    expect(stringRows[4]).toBe("| name        | String!  |    |")
+    expect(stringRows[5]).toBe("| unit_price  | Float64! |    |")
+    expect(stringRows[6]).toBe("| amount      | String!  |    |")
+    expect(stringRows[7]).toBe("| description | String!  |    |")
+    expect(stringRows[8]).toBe("+-------------+----------+----+")
     console.log(string2D)
 })
 
 test("setWorldTable2 with table offset at (5,5)", () => {
 
-
     const result = DrawScene.setWorldTable2(new Table(new Point(0, 0), "product", [
-        { name: "id", datatype: "uuid", attributes: ["PK"] },
-        { name: "name", datatype: "VARCHAR", attributes: []},
-        { name: "unit_price", datatype: "float", attributes: []},
-        { name: "amount", datatype: "VARCHAR", attributes: [] },
-        { name: "description", datatype: "VARCHAR", attributes: [] }
+        { name: "id", datatype: new TableRowDataType(DataType.guid(), [], false), attributes: ["PK"]},
+        { name: "name", datatype: new TableRowDataType(DataType.string(), [], false), attributes: []},
+        { name: "unit_price", datatype: new TableRowDataType(DataType.float64(), [], false), attributes: []},
+        { name: "amount", datatype: new TableRowDataType(DataType.string(), [], false), attributes: [] },
+        { name: "description", datatype: new TableRowDataType(DataType.string(), [], false), attributes: [] }
     ]));
 
     let string2D = result.map(x => x.join("")).join("\n");
     let stringRows = string2D.split("\n")
-    expect(stringRows[0]).toBe("+----------------------------+")
-    expect(stringRows[1]).toBe("| product                    |")
-    expect(stringRows[2]).toBe("+-------------+---------+----+")
-    expect(stringRows[3]).toBe("| id          | uuid    | PK |")
-    expect(stringRows[4]).toBe("| name        | VARCHAR |    |")
-    expect(stringRows[5]).toBe("| unit_price  | float   |    |")
-    expect(stringRows[6]).toBe("| amount      | VARCHAR |    |")
-    expect(stringRows[7]).toBe("| description | VARCHAR |    |")
-    expect(stringRows[8]).toBe("+-------------+---------+----+")
+    expect(stringRows[0]).toBe("+-----------------------------+")
+    expect(stringRows[1]).toBe("| product                     |")
+    expect(stringRows[2]).toBe("+-------------+----------+----+")
+    expect(stringRows[3]).toBe("| id          | Guid!    | PK |")
+    expect(stringRows[4]).toBe("| name        | String!  |    |")
+    expect(stringRows[5]).toBe("| unit_price  | Float64! |    |")
+    expect(stringRows[6]).toBe("| amount      | String!  |    |")
+    expect(stringRows[7]).toBe("| description | String!  |    |")
+    expect(stringRows[8]).toBe("+-------------+----------+----+")
     console.log(string2D)
 })

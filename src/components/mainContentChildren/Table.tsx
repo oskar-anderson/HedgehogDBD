@@ -5,6 +5,7 @@ import { Manager } from "../../Manager";
 import DataType, { DataTypeString } from "../../model/DataTypes/DataType";
 import { TableDTO } from "../../model/dto/TableDTO";
 import TableRowDataTypeArgumentsDTO from "../../model/dto/TableRowDataTypeArgumentsDTO";
+import TableRowDataTypeDTO from "../../model/dto/TableRowDataTypeDTO";
 import { TableRowDTO } from "../../model/dto/TableRowDTO";
 import { TableRow } from "../../model/TableRow";
 import { DrawScene } from "../../scenes/DrawScene";
@@ -24,19 +25,20 @@ export default function Table() {
         Manager.getInstance().changeScene(new DrawScene(draw))
         setAppState(AppState.DrawScene);
     }
-
+    
     const [rows, setRows] = useState(tableBeingEdited.tableRows.map((x) => {
         return {
             rowName: x.name,
             rowDatatype: {
-                name: x.datatype.name,
-                arguments: x.datatype.arguments.map(y => { 
+                id: x.datatype.id,
+                arguments: x.datatype.arguments.map(y => {
+                    const argument = DataType.getArgumentById(y.id)
                     return {
                         value: {
-                            isIncluded: y.argument.isIncluded,
+                            isIncluded: argument.isIncluded,
                             realValue: y.value,
                         },
-                        argumentId: y.argument.id
+                        argumentId: argument.id
                     }
                 }),
                 isNullable: x.datatype.isNullable,
@@ -52,14 +54,14 @@ export default function Table() {
         let oldTable = draw.schema.getTables().find(x => x.id === tableBeingEdited.id)!;
         let newTableRows = rows.map(tableRow => new TableRowDTO(
             tableRow.rowName,
-            {
-                name: tableRow.rowDatatype.name,
-                arguments: tableRow.rowDatatype.arguments.map(arg => { 
+            new TableRowDataTypeDTO(
+                tableRow.rowDatatype.id,
+                tableRow.rowDatatype.arguments.map(arg => {
                     const argument = DataType.getArgumentById(arg.argumentId);
-                    return new TableRowDataTypeArgumentsDTO(arg.value.realValue, argument) 
+                    return new TableRowDataTypeArgumentsDTO(arg.value.realValue, argument.id)
                 }),
-                isNullable: tableRow.rowDatatype.isNullable
-            },
+                tableRow.rowDatatype.isNullable
+            ),
             tableRow.rowAttributes.split(",").map(x => x.trim())
         ));
         draw.history.execute(new CommandModifyTable(
@@ -71,24 +73,23 @@ export default function Table() {
 
     const insertNewRow = (event: FormEvent<HTMLButtonElement>, index: number) => {
         if (index === -1) { index = rows.length }
-        const activeDatabase = Manager.getInstance().draw.activeDatabase.selectedDatabase.select
+        const activeDatabase = Manager.getInstance().draw.activeDatabase.select
         const newRows = [
             ...[...rows].slice(0, index),
             {
                 rowName: "",
                 rowDatatype: {
-                    name: DataType.string(),
-                    arguments: DataType.getDatabaseArgumentsSorted(activeDatabase)
-                        .filter(x => x.typeId === new DataTypeString().getId())
+                    id: DataType.string().getId(),
+                    arguments: DataType.getArgumentsByDatabaseAndByType(activeDatabase, DataType.string().getId())
                         .map(x => {
-                        return {
-                            value: {
-                                isIncluded: x.isIncluded,
-                                realValue: x.defaultValue,
-                            },
-                            argumentId: x.id
-                        }    
-                    }),
+                            return {
+                                value: {
+                                    isIncluded: x.isIncluded,
+                                    realValue: x.defaultValue,
+                                },
+                                argumentId: x.id
+                            }
+                        }),
                     isNullable: false,
                 },
                 rowAttributes: "",

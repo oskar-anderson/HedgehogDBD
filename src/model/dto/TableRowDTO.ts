@@ -2,6 +2,7 @@ import { TableRow } from "../TableRow";
 import TableRowDataType from "../TableRowDataType";
 import TableRowDataTypeDTO from "./TableRowDataTypeDTO";
 import TableRowDataTypeArguments from "../TableRowDataTypeArguments";
+import DataType from "../DataTypes/DataType";
 
 export class TableRowDTO {
     name: string;
@@ -15,14 +16,14 @@ export class TableRowDTO {
     }
 
     static hydrate(tableRow: TableRowDTO): TableRowDTO {
-        return new TableRowDTO(tableRow.name, TableRowDataTypeDTO.hydrate(tableRow.datatype), tableRow.attributes);
+        return new TableRowDTO(
+            tableRow.name,
+            TableRowDataTypeDTO.hydrate(tableRow.datatype),
+            tableRow.attributes
+        );
     }
 
     mapToTableRow() {
-        const tableRowArguments = this.datatype.arguments
-            .map(x => x.mapToTableRow())
-            .filter(x => x !== null) as TableRowDataTypeArguments[]
-        const tableRowDataType = new TableRowDataType(this.datatype.name, tableRowArguments, this.datatype.isNullable);
-        return new TableRow(this.name, tableRowDataType, [...this.attributes])
+        return new TableRow(this.name, this.datatype.mapToTableRowDatatype(), [...this.attributes])
     }
 }

@@ -1,6 +1,8 @@
 import Database from "./Database";
 import Databases from "./Databases";
 import { DataBaseSelector } from "./DataBaseSelector";
+import IDatabaseType from "./IDatabaseType";
+import { IDataType } from "./IDataType";
 
 const BOOLEAN = "Boolean"
 const BOOLEAN_ID =          "602200d9-2075-4824-b80c-6e739e503a70"
@@ -25,7 +27,7 @@ const STRING_ID =           "5b333c43-06e5-4874-8348-c3ed3a7af2d3"
 
 export default abstract class DataType {
 
-    static getTypes(): DataType[] {
+    static getTypes(): IDataType[] {
         return [
             DataType.boolean(),
             DataType.dateTimeOffset(),
@@ -67,15 +69,6 @@ export default abstract class DataType {
         return argument;
     }
 
-
-    public static getDatabaseArgumentsSorted(databaseName: DataBaseSelector): IDataTypeArgument[] {
-        return DataType.getTypes()
-            .map(x => x.getAllArguments())
-            .flat()
-            .filter(x => x.databases.some(x => x.select === databaseName))
-            .sort((a, b) => a.position - b.position)
-    }
-
     public static getArgumentsByDatabaseAndByType(databaseName: DataBaseSelector, typeId: string) {
         return DataType.getTypes()
             .map(x => x.getAllArguments())
@@ -85,10 +78,31 @@ export default abstract class DataType {
             .sort((a, b) => a.position - b.position)
     }
 
-    abstract getSelectListName(): string;
-    abstract getId(): string;
-
-    abstract getAllArguments(): IDataTypeArgument[];
+    public static getComputerMethod(databaseType: IDatabaseType, dataTypeId: string) {
+        switch (dataTypeId) {
+            case BOOLEAN_ID: 
+                return databaseType.getBooleanText;
+            case DATE_TIME_OFFSET_ID:
+                return databaseType.getDateTimeOffsetText;
+            case FLOAT128_ID:
+                return databaseType.getFloat128Text;
+            case FLOAT64_ID:
+                return databaseType.getFloat64Text;
+            case FLOAT32_ID:
+                return databaseType.getFloat32Text;
+            case GUID_ID:
+                return databaseType.getGuidText;
+            case INT16_ID:
+                return databaseType.getInt16Text;
+            case INT32_ID:
+                return databaseType.getInt32Text;
+            case INT64_ID:
+                return databaseType.getInt64Text;
+            case STRING_ID:
+                return databaseType.getStringText;
+        }
+        throw new Error(`Unknown datatypeId: ${dataTypeId}`)
+    }
 }
 
 export interface IDataTypeArgument {
@@ -136,7 +150,7 @@ export interface IDataTypeArgument {
 }
 
 
-export class DataTypeBoolean extends DataType {
+export class DataTypeBoolean implements IDataType {
     getId(): string { return BOOLEAN_ID}
     getSelectListName(): string { return BOOLEAN }
     getAllArguments(): IDataTypeArgument[] {
@@ -144,7 +158,7 @@ export class DataTypeBoolean extends DataType {
     }
 }
 
-export class DataTypeDateTimeOffset extends DataType {
+export class DataTypeDateTimeOffset implements IDataType {
     getId(): string { return DATE_TIME_OFFSET_ID}
     getSelectListName(): string { return DATE_TIME_OFFSET }
     getAllArguments(): IDataTypeArgument[] {
@@ -152,7 +166,7 @@ export class DataTypeDateTimeOffset extends DataType {
     }
 }
 
-export class DataTypeFloat128 extends DataType {
+export class DataTypeFloat128 implements IDataType {
     getId(): string { return FLOAT128_ID }
     getSelectListName(): string { return FLOAT128 }
     getAllArguments(): IDataTypeArgument[] {
@@ -160,7 +174,7 @@ export class DataTypeFloat128 extends DataType {
     }
 }
 
-export class DataTypeFloat64 extends DataType {
+export class DataTypeFloat64 implements IDataType {
     getId(): string { return FLOAT64_ID}
     getSelectListName(): string { return FLOAT64 }
     getAllArguments(): IDataTypeArgument[] {
@@ -168,7 +182,7 @@ export class DataTypeFloat64 extends DataType {
     }
 }
 
-export class DataTypeFloat32 extends DataType {
+export class DataTypeFloat32 implements IDataType {
     getId(): string { return FLOAT32_ID }
     getSelectListName(): string { return FLOAT32 }
     getAllArguments(): IDataTypeArgument[] {
@@ -176,7 +190,7 @@ export class DataTypeFloat32 extends DataType {
     }
 }
 
-export class DataTypeGuid extends DataType {
+export class DataTypeGuid implements IDataType {
     getId(): string { return GUID_ID }
     getSelectListName(): string { return GUID }
     getAllArguments(): IDataTypeArgument[] {
@@ -195,7 +209,7 @@ export class DataTypeGuid extends DataType {
     }
 }
 
-export class DataTypeInt16 extends DataType {
+export class DataTypeInt16 implements IDataType {
     getId(): string { return INT16_ID }
     getSelectListName(): string { return INT16 }
     getAllArguments(): IDataTypeArgument[] {
@@ -203,7 +217,7 @@ export class DataTypeInt16 extends DataType {
     }
 }
 
-export class DataTypeInt32 extends DataType {
+export class DataTypeInt32 implements IDataType {
     getId(): string { return INT32_ID }
     getSelectListName(): string { return INT32 }
     getAllArguments(): IDataTypeArgument[] {
@@ -211,7 +225,7 @@ export class DataTypeInt32 extends DataType {
     }
 }
 
-export class DataTypeInt64 extends DataType {
+export class DataTypeInt64 implements IDataType {
     getId(): string { return INT64_ID }
     getSelectListName(): string { return INT64 }
     getAllArguments(): IDataTypeArgument[] {
@@ -219,7 +233,7 @@ export class DataTypeInt64 extends DataType {
     }
 }
 
-export class DataTypeString extends DataType {
+export class DataTypeString implements IDataType {
     getId(): string { return STRING_ID }
     getSelectListName(): string { return STRING }
 

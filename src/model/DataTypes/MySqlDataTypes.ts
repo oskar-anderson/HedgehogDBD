@@ -3,47 +3,43 @@ import IDatabaseType from "./IDatabaseType";
 
 export default class MySqlDataTypes implements IDatabaseType {
 
-    getBooleanText(args: { value: number, name: IDataTypeArgument }[]) {
+    getBooleanText() {
         return `boolean`
     }
 
-    getDateTimeOffsetText(args: { value: number, name: IDataTypeArgument }[]) {
+    getDateTimeOffsetText() {
         return `datetime`
     }
 
-    getFloat128Text(args: { value: number, name: IDataTypeArgument }[]) {
+    getFloat128Text() {
         return `decimal`
     }
 
-    getFloat64Text(args: { value: number, name: IDataTypeArgument }[]) {
+    getFloat64Text() {
         return `double`
     }
 
-    getFloat32Text(args: { value: number, name: IDataTypeArgument }[]) {
+    getFloat32Text() {
         return `float`
     }
 
-    getGuidText(args: { value: number, name: IDataTypeArgument }[]) {
-        const charLenght = args.find(x => x.name.id === DataTypeGuid.charLenght.id);
-        if (charLenght === undefined) return "char";
-        return `char(${charLenght.value})`
+    getGuidText() {
+        return `char`
     }
 
-    getInt16Text(args: { value: number, name: IDataTypeArgument }[]) {
+    getInt16Text() {
         return `smallint`
     }
 
-    getInt32Text(args: { value: number, name: IDataTypeArgument }[]) {
+    getInt32Text() {
         return `int`
     }
 
-    getInt64Text(args: { value: number, name: IDataTypeArgument }[]) {
+    getInt64Text() {
         return `bigint`
     }
 
-    getStringText(args: { value: number, name: IDataTypeArgument }[]) {
-        const varcharLenght = args.find(x => x.name.id === DataTypeString.varcharLenght.id);
-        if (varcharLenght === undefined) return "varchar";
-        return `varchar(${varcharLenght.value})`
+    getStringText() {
+        return `varchar`
     }    
 }

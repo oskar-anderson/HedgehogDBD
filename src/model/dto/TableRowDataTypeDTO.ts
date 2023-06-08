@@ -1,23 +1,37 @@
 import DataType from "../DataTypes/DataType"
+import { IDataType } from "../DataTypes/IDataType";
+import TableRowDataType from "../TableRowDataType";
+import TableRowDataTypeArguments from "../TableRowDataTypeArguments";
 import TableRowDataTypeArgumentsDTO from "./TableRowDataTypeArgumentsDTO";
 
 export default class TableRowDataTypeDTO {
 
-    name: DataType;
+    id: string;
     arguments: TableRowDataTypeArgumentsDTO[];
     isNullable: boolean;
 
     constructor(
-        name: DataType,
+        id: string,
         _arguments: TableRowDataTypeArgumentsDTO[],
         nullable: boolean
     ) {
-        this.name = name;
+        this.id = id;
         this.arguments = _arguments;
         this.isNullable = nullable;
     }
 
     static hydrate(tableRowAttribute: TableRowDataTypeDTO): TableRowDataTypeDTO {
-        return new TableRowDataTypeDTO(tableRowAttribute.name, tableRowAttribute.arguments, tableRowAttribute.isNullable);
+        return new TableRowDataTypeDTO(
+            tableRowAttribute.id,
+            tableRowAttribute.arguments.map(x => TableRowDataTypeArgumentsDTO.hydrate(x)),
+            tableRowAttribute.isNullable
+        );
+    }
+
+    mapToTableRowDatatype() {
+        const tableRowArguments = this.arguments
+            .map(x => x.mapToTableRow())
+            .filter(x => x !== null) as TableRowDataTypeArguments[]
+        return new TableRowDataType(DataType.getTypeById(this.id), tableRowArguments, this.isNullable);
     }
 }

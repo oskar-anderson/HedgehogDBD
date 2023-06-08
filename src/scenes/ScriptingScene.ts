@@ -5,6 +5,7 @@ import dayjs from "dayjs";  // used in scripts
 import { SchemaDTO } from "../model/dto/SchemaDTO";
 import { AppState } from "../components/MainContent";
 import EnvGlobals from "../../EnvGlobals";
+import { ScriptingSchema } from "../model/scriptingDto/ScriptingSchema";
 
 
 export class ScriptingScene extends Container implements IScene {
@@ -22,7 +23,7 @@ export class ScriptingScene extends Container implements IScene {
         let errorMsg = "";
         let SHARED = await fetch(EnvGlobals.BASE_URL + '/wwwroot/scripts/SHARED.js', {cache: "no-cache"}).then(x => x.text());
         let fnBody = `"use strict";\n${SHARED}\n${value}`;
-        let schemaDTO = SchemaDTO.init(draw);
+        let schemaDTO = ScriptingSchema.init(SchemaDTO.init(draw));
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncFunction
         // https://stackoverflow.com/questions/46118496/asyncfunction-is-not-defined-yet-mdn-documents-its-usage
         const AsyncFunction = async function () {}.constructor;
@@ -42,7 +43,7 @@ export class ScriptingScene extends Container implements IScene {
         let SHARED = await fetch(EnvGlobals.BASE_URL + '/wwwroot/scripts/SHARED.js',  {cache: "no-cache"}).then(x => x.text());
         let fnBody = `"use strict";\n${SHARED}\n${value}`;
         let fn = Function("schema", fnBody);
-        let schemaDTO = SchemaDTO.init(draw);
+        let schemaDTO = ScriptingSchema.init(SchemaDTO.init(draw));
         return fn(schemaDTO);
     }
 }

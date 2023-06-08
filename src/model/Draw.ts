@@ -5,8 +5,8 @@ import { Schema } from "./Schema";
 import { ITool } from "../tools/ITool";
 import { MyRect } from "./MyRect";
 import { SelectTableTool } from "../tools/SelectTableTool";
-import DataType from "./DataTypes/DataType";
 import Databases from "./DataTypes/Databases";
+import Database from "./DataTypes/Database";
 
 export class Draw {
     history = new History();
@@ -27,7 +27,7 @@ export class Draw {
     selectedFontSize: { size: number, width: number, height: number} = Draw.fontSizes_Inconsolata.find((x => x.size === 14))!;
     schema: Schema;
     activeTool: ITool;
-    activeDatabase: Databases = new Databases();
+    activeDatabase: Database = Databases.Postgres;
     
     private world: MyRect;
 

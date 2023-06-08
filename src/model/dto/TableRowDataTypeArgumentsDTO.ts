@@ -1,16 +1,23 @@
-import { IDataTypeArgument } from "../DataTypes/DataType";
+import DataType, { IDataTypeArgument } from "../DataTypes/DataType";
 import TableRowDataTypeArguments from "../TableRowDataTypeArguments";
 
 export default class TableRowDataTypeArgumentsDTO {
     value: number;
-    argument: IDataTypeArgument;
+    id: string;
 
-    constructor(value: number, argument: IDataTypeArgument) {
+    constructor(value: number, id: string) {
         this.value = value;
-        this.argument = argument;
+        this.id = id;
+    }
+
+    static hydrate(tableRowDataTypeArguments: TableRowDataTypeArgumentsDTO): TableRowDataTypeArgumentsDTO {
+        return new TableRowDataTypeArgumentsDTO(
+            tableRowDataTypeArguments.value,
+            tableRowDataTypeArguments.id,
+        );
     }
 
     mapToTableRow(): TableRowDataTypeArguments | null {
-        return new TableRowDataTypeArguments(this.value, this.argument);
+        return new TableRowDataTypeArguments(this.value, DataType.getArgumentById(this.id));
     }
 }

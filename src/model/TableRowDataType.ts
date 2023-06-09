@@ -18,7 +18,7 @@ export default class TableRowDataType {
     }
 
     getDisplayableText() {
-        const nullabilitySymbol = this.isNullable ? "?" : "!";
+        const nullabilitySymbol = this.isNullable ? "?" : "";
         const selectListName = DataType.getTypeById(this.dataTypeId).getSelectListName();
         return `${selectListName}${nullabilitySymbol}`;
     }

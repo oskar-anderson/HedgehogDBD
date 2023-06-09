@@ -40,7 +40,6 @@ export interface TableRowProps {
 
 
 export default function TableRow({ index, row, setRows, rows, insertNewRow, moveRowUp, moveRowDown, deleteRow }: TableRowProps) {
-
     const [datatypeArguments, setDatatypeArguments] = useState<{
         value: string;
         displayName: string;
@@ -99,16 +98,31 @@ export default function TableRow({ index, row, setRows, rows, insertNewRow, move
         }))
         setDatatypeArguments(dataTypeArguements);
         const rowsCopy = [...rows];
-        rowsCopy[index].rowDatatype.id = selectedDatatypeId;
+        const activeDatabase = Manager.getInstance().draw.activeDatabase;
+        const newArguments = DataType.getArgumentsByDatabaseAndByType(activeDatabase.select, selectedDatatypeId);
+        rowsCopy[index].rowDatatype = {
+            id: selectedDatatypeId,
+            arguments: newArguments.map(x => {
+                return {
+                    value: {
+                        isIncluded: x.isIncluded,
+                        realValue: x.defaultValue,
+                    },
+                    argumentId: x.id
+                }
+            }),
+            isNullable: false
+        };
         setRows(rowsCopy);
     }
 
     const handleArgumentWillNotBeProvidedCheckbox = (isChecked: boolean, argumentIndex: number) => {
         const newArgs = [...datatypeArguments];
-        newArgs[argumentIndex].isIncluded = isChecked;
+        // every field has to be included or excluded as to not mess up the argument order
+        newArgs.map(x => x.isIncluded = isChecked);
         setDatatypeArguments(newArgs);
         const rowsCopy = [...rows];
-        rowsCopy[index].rowDatatype.arguments[argumentIndex].value.isIncluded = isChecked;
+        rowsCopy[index].rowDatatype.arguments.map(x => x.value.isIncluded = isChecked);
         setRows(rowsCopy);
     }
 
@@ -142,7 +156,7 @@ export default function TableRow({ index, row, setRows, rows, insertNewRow, move
                                 )
                             })}
                         </select>
-                        <button style={{ height: "38px", width: "38px" }} className="btn btn-light"
+                        <button style={{ height: "38px", width: "38px", border: "1px solid #ced4da" }} className="btn btn-light"
                             onClick={() => {
                                 const wasNullable = mandatoryFieldBtnText !== "!"
                                 setMandatoryFieldBtnText(wasNullable ? "!" : "?")

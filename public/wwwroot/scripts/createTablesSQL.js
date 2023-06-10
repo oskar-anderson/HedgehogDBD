@@ -3,7 +3,7 @@ RESULT_LOG.push(`CREATE SCHEMA IF NOT EXISTS ${databaseName};`)
 for (let table of schema.tables) {
     let rows = [];
     for (let row of table.tableRows) {
-        let optionalDataTypeParenthesis = row.targetDatatype.arguments.lenght === 0 ? "" : `(${row.targetDatatype.arguments.join(", ")})`
+        let optionalDataTypeParenthesis = row.targetDatatype.arguments.length === 0 ? "" : `(${row.targetDatatype.arguments.join(", ")})`
         rows.push(`${row.name} ${row.targetDatatype.name}${optionalDataTypeParenthesis} ${row.targetDatatype.isNullable ? "NULL" : "NOT NULL"}`);
     }
     for (let row of table.tableRows) {

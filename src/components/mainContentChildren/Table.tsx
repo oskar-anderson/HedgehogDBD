@@ -73,14 +73,15 @@ export default function Table() {
 
     const insertNewRow = (event: FormEvent<HTMLButtonElement>, index: number) => {
         if (index === -1) { index = rows.length }
-        const activeDatabase = Manager.getInstance().draw.activeDatabase.select
+        const activeDatabase = Manager.getInstance().draw.activeDatabase.select;
+        const newDataType = DataType.string();
         const newRows = [
             ...[...rows].slice(0, index),
             {
                 rowName: "",
                 rowDatatype: {
-                    id: DataType.string().getId(),
-                    arguments: DataType.getArgumentsByDatabaseAndByType(activeDatabase, DataType.string().getId())
+                    id: newDataType.getId(),
+                    arguments: DataType.getArgumentsByDatabaseAndByType(activeDatabase, newDataType.getId())
                         .map(x => {
                             return {
                                 value: {

@@ -12,6 +12,7 @@ export default class MySqlDataTypes implements IDatabaseType {
     }
 
     getFloat128Text() {
+        // alias is decimal
         return `numeric`
     }
 

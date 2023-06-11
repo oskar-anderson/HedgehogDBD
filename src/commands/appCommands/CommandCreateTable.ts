@@ -18,11 +18,11 @@ export class CommandCreateTable implements ICommand<CommandCreateTableArgs> {
 
     redo() {
         let newTable = this.args.table.mapToTable();
-        this.context.schema.pushAndUpdate(newTable);
+        this.context.schemaPushAndUpdate(newTable);
     }
 
     undo() {
-        this.context.schema.popAndUpdate();
+        this.context.schemaPopAndUpdate();
     }
 }
 

@@ -4,6 +4,7 @@ import { CommandModifyTable, CommandModifyTableArgs } from "./appCommands/Comman
 import { CommandCreateTable, CommandCreateTableArgs } from "./appCommands/CommandCreateTable";
 import { CommandDeleteTable, CommandDeleteTableArgs } from "./appCommands/CommandDeleteTable";
 import { ICommand } from "./ICommand";
+import { CommandSetSchema, CommandSetSchemaArgs } from "./appCommands/CommandSetSchema";
 
 
 export class History {
@@ -43,6 +44,12 @@ export class History {
             let args = new CommandDeleteTableArgs(unhydratedArgs.table, unhydratedArgs.listIndex);
             args.hydrate();
             return new CommandDeleteTable(context, args);
+        }
+        if (command.commandName === CommandSetSchema.name) {
+            let unhydratedArgs = command.args as CommandSetSchemaArgs;
+            let args = new CommandSetSchemaArgs(unhydratedArgs.oldSchema, unhydratedArgs.newSchema);
+            args.hydrate();
+            return new CommandSetSchema(context, args);
         }
         throw Error(`Unknown command given! commandName: ${command.commandName}`);
     }

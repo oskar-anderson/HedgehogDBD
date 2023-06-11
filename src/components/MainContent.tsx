@@ -29,7 +29,7 @@ export default function MainComponent() {
         setTables(tables);
     };
     useEffect(() => {
-        let draw = new Draw(new Schema([], onTablesUpdateCallbackOuterReadonly), new MyRect(0, 0, 3240, 2160));
+        let draw = new Draw(new Schema([], onTablesUpdateCallbackOuterReadonly), new MyRect(0, 0, 3240, 2160), onTablesUpdateCallbackOuterReadonly);
         Manager.constructInstance(
             3240,
             2160,
@@ -54,7 +54,7 @@ export default function MainComponent() {
             </div>
 
             { appState === AppState.LoaderScene && <Loading canvasContainerRef={canvasContainerRef} /> }
-            { appState === AppState.DrawScene && <Drawing topToolBarHeightPx={topToolBarHeightPx} tables={tables} onTablesUpdateCallbackOuterReadonly={onTablesUpdateCallbackOuterReadonly} /> }
+            { appState === AppState.DrawScene && <Drawing topToolBarHeightPx={topToolBarHeightPx} tables={tables} /> }
             { appState === AppState.ScriptingScene && <Scripting/> }
             { appState === AppState.TableScene && <Table/> }
         </>

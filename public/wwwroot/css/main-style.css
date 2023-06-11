@@ -17,6 +17,14 @@
     font-style: normal;
 }
 
+.modal-dialog.modal-w660px {
+    max-width: 660px;
+}
+
+.semi-bold {
+    font-weight: 600;
+}
+
 :root {
     --bs-btn-color: #fff;
     --bs-btn-hover-bg: #c2c2c2;

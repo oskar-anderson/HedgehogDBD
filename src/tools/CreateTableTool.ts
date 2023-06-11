@@ -8,7 +8,9 @@ import { ITool, IToolNames } from "./ITool";
 import { MyMouseEvent } from "../model/MyMouseEvent";
 import { TableDTO } from "../model/dto/TableDTO";
 import TableRowDataType from "../model/TableRowDataType";
-import DataType, { DataTypeString } from "../model/DataTypes/DataType"
+import DataType from "../model/DataTypes/DataType"
+import TableRowDataTypeArguments from "../model/TableRowDataTypeArguments";
+import Databases from "../model/DataTypes/Databases";
 
 export class CreateTableTool implements ITool {
 
@@ -23,20 +25,30 @@ export class CreateTableTool implements ITool {
         return IToolNames.newTable;
     }
 
-    init(startingPoint = new Point(0, 0)): void {
+    /**
+     * @param startingPoint Initial position of the drawn table, can be outside canvas
+     */
+    init(startingPoint = new Point(0, -10)): void {
+        const dataBase = Databases.getAll().find(x => x.id === this.draw.activeDatabase.id)!;
+        const defaultDataType = DataType.guid();
+        const tableRowDataTypeArguments = defaultDataType.getAllArguments()
+            .filter(arg => arg.databases.includes(dataBase))
+            .map(x => { 
+                return new TableRowDataTypeArguments(x.defaultValue, x)
+            });
         this.hover = new Table( 
             startingPoint, 
             "new_table", 
-            [ new TableRow("id", new TableRowDataType(DataType.string(), [{ value: 255, argument: DataTypeString.varcharLenght }], false), ["PK"])], 
+            [ new TableRow("id", new TableRowDataType(defaultDataType, tableRowDataTypeArguments, false), ["PK"])], 
             {
                 isHover: true
             }
         );
-        this.draw.schema.pushAndUpdate(this.hover);
+        this.draw.schemaPushAndUpdate(this.hover);
     }
 
     exit(): void {
-        this.draw.schema.setTablesAndUpdate(this.draw.schema.getTables().filter(x => ! x.getIsHover()))
+        this.draw.schemaSetTablesAndUpdate(this.draw.schema.getTables().filter(x => ! x.getIsHover()))
     }
 
     mouseMove(mouseCharGridX: number, mouseCharGridY: number) {
@@ -64,7 +76,7 @@ export class CreateTableTool implements ITool {
         }
 
         // Remove the table so it can be created throught command pattern
-        this.draw.schema.setTablesAndUpdate(this.draw.schema.getTables().filter(x => ! x.getIsHover()))
+        this.draw.schemaSetTablesAndUpdate(this.draw.schema.getTables().filter(x => ! x.getIsHover()))
         this.hover!.setIsHover(false, this.draw.schema.getTables());
 
         this.draw.history.execute(new CommandCreateTable(

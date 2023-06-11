@@ -17,12 +17,12 @@ export class CommandDeleteTable implements ICommand<CommandDeleteTableArgs> {
     }
 
     redo() {
-        this.context.schema.removeAtAndUpdate(this.args.listIndex);
+        this.context.schemaRemoveAtAndUpdate(this.args.listIndex);
     }
 
     undo() {
         let newTable = this.args.table.mapToTable();
-        this.context.schema.insertAtAndUpdate(this.args.listIndex, newTable);
+        this.context.schemaInsertAtAndUpdate(this.args.listIndex, newTable);
     }
 }
 

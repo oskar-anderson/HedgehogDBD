@@ -5,6 +5,9 @@ import { Schema } from "./Schema";
 import { ITool } from "../tools/ITool";
 import { MyRect } from "./MyRect";
 import { SelectTableTool } from "../tools/SelectTableTool";
+import Databases from "./DataTypes/Databases";
+import Database from "./DataTypes/Database";
+import { TableDTO } from "./dto/TableDTO";
 
 export class Draw {
     history = new History();
@@ -25,13 +28,16 @@ export class Draw {
     selectedFontSize: { size: number, width: number, height: number} = Draw.fontSizes_Inconsolata.find((x => x.size === 14))!;
     schema: Schema;
     activeTool: ITool;
+    activeDatabase: Database = Databases.Postgres;
+    public onTablesChangeCallback: (tables: TableDTO[]) => void;
     
     private world: MyRect;
 
-    constructor(schema: Schema, world: MyRect) {
+    constructor(schema: Schema, world: MyRect, onTablesChangeCallback: (tables: TableDTO[]) => void) {
         this.schema = schema;
         this.activeTool = new SelectTableTool(this);
         this.world = world
+        this.onTablesChangeCallback = onTablesChangeCallback
     }
 
     getVisibleTables() {
@@ -65,5 +71,43 @@ export class Draw {
             Math.ceil(worldSize.width / this.selectedFontSize.width),
             Math.ceil(worldSize.height / this.selectedFontSize.height), 
         );
+    }
+
+
+    schemaPopAndUpdate() {
+        let result = this.schema.tables.pop();
+        this.onTablesChangeCallback(Schema.mapTablesToDtoTables(this.schema.tables));
+        this.schema.getTables().forEach(x => x.updateRelations(this.schema.getTables()));
+        return result;
+    }
+
+    schemaPushAndUpdate(table: Table) {
+        this.schema.tables.push(table);
+        this.onTablesChangeCallback(Schema.mapTablesToDtoTables(this.schema.tables));
+        this.schema.getTables().forEach(x => x.updateRelations(this.schema.getTables()));
+    }
+
+    schemaRemoveAtAndUpdate(index: number) {
+        let removedEl = this.schema.tables.splice(index, 1);
+        this.onTablesChangeCallback(Schema.mapTablesToDtoTables(this.schema.tables));
+        this.schema.getTables().forEach(x => x.updateRelations(this.schema.getTables()));
+        return removedEl;
+    }
+
+    schemaInsertAtAndUpdate(index: number, element: Table) {
+        this.schema.tables.splice(index, 0, element);
+        this.onTablesChangeCallback(Schema.mapTablesToDtoTables(this.schema.tables));
+        this.schema.getTables().forEach(x => x.updateRelations(this.schema.getTables()));
+    }
+
+    schemaSetTableAtAndUpdate(index: number, table: Table) {
+        this.schema.tables[index] = table;
+        this.onTablesChangeCallback(Schema.mapTablesToDtoTables(this.schema.tables));
+        this.schema.getTables().forEach(x => x.updateRelations(this.schema.getTables()));
+    }
+
+    schemaSetTablesAndUpdate(tables: Table[]) {
+        this.schema.tables = tables;
+        this.onTablesChangeCallback(Schema.mapTablesToDtoTables(this.schema.tables));
     }
 }

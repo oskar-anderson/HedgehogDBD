@@ -7,8 +7,6 @@ import { Manager } from "../../Manager";
 import { Minimap } from "../Minimap";
 import { DrawScene } from "../../scenes/DrawScene";
 import { MyRect } from "../../model/MyRect";
-import { AppState } from "../MainContent";
-import { useAppStateManagement } from "../../Store";
 import CanvasSecondaryTopToolbar from "./drawingChildren/CanvasSecondaryTopToolbar";
 import { TableDTO } from "../../model/dto/TableDTO";
 import DomHelper from "../../DomHelper";
@@ -17,15 +15,13 @@ import DomHelper from "../../DomHelper";
 interface DrawingProps {
     topToolBarHeightPx: number,
     tables: TableDTO[]
-    onTablesUpdateCallbackOuterReadonly: (tables: TableDTO[]) => void
 }
 
-export default function Drawing({ topToolBarHeightPx, tables, onTablesUpdateCallbackOuterReadonly }: DrawingProps) {
+export default function Drawing({ topToolBarHeightPx, tables }: DrawingProps) {
     console.log("drawing")
     const minimap = new Minimap(new Rectangle(0, 0, 180, 120));
     const canvasContainerRef = useRef<HTMLDivElement>(null);
     const debugInfoContainer = useRef<HTMLDivElement>(null);
-    const { setAppState } = useAppStateManagement();
 
     useEffect(() => {
         canvasContainerRef.current!.appendChild(Manager.getInstance().getView());
@@ -83,7 +79,7 @@ export default function Drawing({ topToolBarHeightPx, tables, onTablesUpdateCall
     return (
         <div className="canvas-visibility-container">
             <CanvasSecondaryTopToolbar
-                setZoomFontSize={setZoomFontSize} heightPx={canvasSecondaryTopToolbarHeightPx} onTablesUpdateCallback={onTablesUpdateCallbackOuterReadonly}
+                setZoomFontSize={setZoomFontSize} heightPx={canvasSecondaryTopToolbarHeightPx}
             />
             <div style={{ display: 'flex', width: '100vw', height: `calc(100vh - ${topToolBarHeightPx}px  - ${canvasSecondaryTopToolbarHeightPx}px)` }}>
                 <CanvasSide

@@ -1,10 +1,3 @@
-import { useEffect } from "react";
-import { Manager } from "../../Manager";
-import { useAppStateManagement } from "../../Store";
-import { AppState } from "../MainContent";
-import CanvasContainer from "./drawingChildren/CanvasContainer";
-import CanvasSide from "./drawingChildren/CanvasSide";
-
 
 interface LoadingProps {
     canvasContainerRef: React.RefObject<HTMLDivElement>,

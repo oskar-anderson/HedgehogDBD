@@ -9,8 +9,6 @@ import ModalJsonDisplay, { ModelJsonDisplayProps } from "./scriptingChildren/Mod
 import ModalSaveScript, { ModalSaveScriptProps } from "./scriptingChildren/ModalSaveScript";
 import Editor from '@monaco-editor/react';
 import Giscus from '@giscus/react';
-import { AppState } from "../MainContent";
-import { useAppStateManagement } from "../../Store";
 import EnvGlobals from "../../../EnvGlobals";
 
 

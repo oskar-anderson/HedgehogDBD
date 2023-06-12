@@ -3,17 +3,13 @@ import EnvGlobals from "../../../../EnvGlobals";
 import * as PIXI from "pixi.js";
 import { Manager } from "../../../Manager";
 import { Draw } from "../../../model/Draw";
-import { MyRect } from "../../../model/MyRect";
-import { Schema } from "../../../model/Schema";
 import { TableDTO } from "../../../model/dto/TableDTO";
 import RasterModelerFormat from "../../../RasterModelerFormat";
 import { DrawScene } from "../../../scenes/DrawScene";
-import { ScriptingScene } from "../../../scenes/ScriptingScene";
 import { SchemaDTO } from "../../../model/dto/SchemaDTO";
-import { CostGrid } from "../../../model/CostGrid";
-import { History } from "../../../commands/History";
 import { IToolManager, IToolNames } from "../../../tools/ITool";
 import { useState } from "react";
+import { CommandSetSchema, CommandSetSchemaArgs } from "../../../commands/appCommands/CommandSetSchema";
 
 interface TopToolbarListElementIconProps {
     onClickAction: () => void,
@@ -33,14 +29,12 @@ function TopToolbarListElementIcon( {onClickAction, iconSrc, children}: TopToolb
 interface CanvasSecondaryTopToolbarProps {
     setZoomFontSize: (size: number) => void;
     heightPx: number;
-    onTablesUpdateCallback: (tables: TableDTO[]) => void;
 }
 
-export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx, onTablesUpdateCallback}: CanvasSecondaryTopToolbarProps) {
+export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx}: CanvasSecondaryTopToolbarProps) {
 
     const newSchema = () => {
-        const oldDraw = Manager.getInstance().draw;
-        Manager.getInstance().changeScene(new DrawScene(new Draw(new Schema([], onTablesUpdateCallback), oldDraw.getWorld())));
+        setSchemaAndUpdateUi(new SchemaDTO([]));
     }
 
     const saveAsJpg = async () => {
@@ -142,10 +136,7 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx, o
         reader.onload = (event: ProgressEvent) => {
             let file = (event.target as FileReader).result as string;
             let schemaDTO = RasterModelerFormat.parse(file);
-            let schema = schemaDTO.mapToSchema(onTablesUpdateCallback);
-            Manager.getInstance().draw.schema = schema;
-            Manager.getInstance().draw.history = new History();
-            Manager.getInstance().changeScene(new DrawScene(Manager.getInstance().draw));
+            setSchemaAndUpdateUi(schemaDTO);
         }
         let startReadingFile = (thisElement: HTMLInputElement) => {
             let inputFile = thisElement.files![0];
@@ -161,10 +152,19 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx, o
     const loadSchema = async (fileName: string) => {
         let text = await (await fetch(EnvGlobals.BASE_URL + `/wwwroot/data/${fileName}`, { cache: "no-cache" })).text();
         let schemaDTO = RasterModelerFormat.parse(text);
-        let schema = schemaDTO.mapToSchema(onTablesUpdateCallback);
-        Manager.getInstance().draw.schema = schema;
-        Manager.getInstance().draw.history = new History();
-        Manager.getInstance().changeScene(new DrawScene(Manager.getInstance().draw));
+        setSchemaAndUpdateUi(schemaDTO);
+    }
+
+    const setSchemaAndUpdateUi = (newSchema: SchemaDTO) => {
+        const oldDtoTables = Manager.getInstance().draw.schema.tables.map(x => TableDTO.initFromTable(x))
+        const command = new CommandSetSchema(
+            Manager.getInstance().draw, new CommandSetSchemaArgs(
+                new SchemaDTO(oldDtoTables), 
+                newSchema
+            )
+        )
+        Manager.getInstance().draw.history.execute(command);
+        (Manager.getInstance().getScene() as DrawScene).renderScreen();
     }
 
     const undo = (): void => {

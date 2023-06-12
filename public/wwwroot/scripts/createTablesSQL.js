@@ -3,8 +3,8 @@ RESULT_LOG.push(`CREATE SCHEMA IF NOT EXISTS ${databaseName};`)
 for (let table of schema.tables) {
     let rows = [];
     for (let row of table.tableRows) {
-        let datatype = row.datatype.slice(-1) === "?" ? `${row.datatype.slice(0, -1)} NOT NULL` : row.datatype;
-        rows.push(`${row.name} ${datatype}`);
+        let optionalDataTypeParenthesis = row.targetDatatype.arguments.length === 0 ? "" : `(${row.targetDatatype.arguments.join(", ")})`
+        rows.push(`${row.name} ${row.targetDatatype.name}${optionalDataTypeParenthesis} ${row.targetDatatype.isNullable ? "NULL" : "NOT NULL"}`);
     }
     for (let row of table.tableRows) {
         if (row.attributes.includes("PK")) {

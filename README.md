@@ -28,8 +28,8 @@ https://oskar-anderson.github.io/RasterModeler
 
 2. Start the app server
 ```
-// track changes and auto-update
-npm run dev
+// check for compiletime type errors, track changes and auto-update
+npm run start
 
 // build and run manually
 npm run build

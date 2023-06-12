@@ -1,8 +1,7 @@
 RESULT_LOG.push('Table;Name;Datatype;Nullability');
 for (let table of schema.tables) {
     for (let row of table.tableRows) {
-        let isNullable = row.datatype.slice(-1) === "?";
-        let datatype = isNullable ? row.datatype.slice(0, -1) : row.datatype;
-        RESULT_LOG.push(`${table.head};${row.name};${datatype};${isNullable ? "NULL" : "NOT NULL"}`);
+        let optionalDataTypeParenthesis = row.targetDatatype.arguments.length === 0 ? "" : `(${row.targetDatatype.arguments.join(", ")})`
+        RESULT_LOG.push(`${table.head};${row.name};${row.targetDatatype.name}${optionalDataTypeParenthesis};${row.targetDatatype.isNullable ? "NULL" : "NOT NULL"}`);
     }
 }

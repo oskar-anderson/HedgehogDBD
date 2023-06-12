@@ -2,7 +2,10 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { CommandDeleteTable, CommandDeleteTableArgs } from "../../commands/appCommands/CommandDeleteTable";
 import { CommandModifyTable, CommandModifyTableArgs } from "../../commands/appCommands/CommandModifyTable";
 import { Manager } from "../../Manager";
+import DataType, { DataTypeString } from "../../model/DataTypes/DataType";
 import { TableDTO } from "../../model/dto/TableDTO";
+import TableRowDataTypeArgumentsDTO from "../../model/dto/TableRowDataTypeArgumentsDTO";
+import TableRowDataTypeDTO from "../../model/dto/TableRowDataTypeDTO";
 import { TableRowDTO } from "../../model/dto/TableRowDTO";
 import { TableRow } from "../../model/TableRow";
 import { DrawScene } from "../../scenes/DrawScene";
@@ -10,7 +13,6 @@ import { TableScene } from "../../scenes/TableScene";
 import { useAppStateManagement } from "../../Store";
 import { AppState } from "../MainContent";
 import TableRowJSX from "./tableChildren/TableRow"
-
 
 
 export default function Table() {
@@ -23,11 +25,24 @@ export default function Table() {
         Manager.getInstance().changeScene(new DrawScene(draw))
         setAppState(AppState.DrawScene);
     }
-
-    const [rowData, setRowData] = useState(tableBeingEdited.tableRows.map((x) => {
+    
+    const [rows, setRows] = useState(tableBeingEdited.tableRows.map((x) => {
         return {
             rowName: x.name,
-            rowDatatype: x.datatype,
+            rowDatatype: {
+                id: x.datatype.id,
+                arguments: x.datatype.arguments.map(y => {
+                    const argument = DataType.getArgumentById(y.id)
+                    return {
+                        value: {
+                            isIncluded: argument.isIncluded,
+                            realValue: y.value,
+                        },
+                        argumentId: argument.id
+                    }
+                }),
+                isNullable: x.datatype.isNullable,
+            },
             rowAttributes: x.attributes.join(", ")
         }
     }));
@@ -37,9 +52,16 @@ export default function Table() {
     const saveChanges = () => {
         const draw = Manager.getInstance().draw;
         let oldTable = draw.schema.getTables().find(x => x.id === tableBeingEdited.id)!;
-        let newTableRows = rowData.map(tableRow => new TableRowDTO(
+        let newTableRows = rows.map(tableRow => new TableRowDTO(
             tableRow.rowName,
-            tableRow.rowDatatype,
+            new TableRowDataTypeDTO(
+                tableRow.rowDatatype.id,
+                tableRow.rowDatatype.arguments.map(arg => {
+                    const argument = DataType.getArgumentById(arg.argumentId);
+                    return new TableRowDataTypeArgumentsDTO(arg.value.realValue, argument.id)
+                }),
+                tableRow.rowDatatype.isNullable
+            ),
             tableRow.rowAttributes.split(",").map(x => x.trim())
         ));
         draw.history.execute(new CommandModifyTable(
@@ -49,45 +71,53 @@ export default function Table() {
         setAppState(AppState.DrawScene);
     }
 
-    const handleFormChange = (index: number, event: ChangeEvent, name: "rowName" | "rowDatatype" | "rowAttributes") => {
-        const data = [...rowData];
-        const value = (event.target as HTMLInputElement).value;
-        data[index][name] = value;
-        setRowData(data);
-    }
-
     const insertNewRow = (event: FormEvent<HTMLButtonElement>, index: number) => {
-        if (index === -1) { index = rowData.length }
+        if (index === -1) { index = rows.length }
+        const activeDatabase = Manager.getInstance().draw.activeDatabase.select;
+        const newDataType = DataType.string();
         const newRows = [
-            ...[...rowData].slice(0, index),
+            ...[...rows].slice(0, index),
             {
                 rowName: "",
-                rowDatatype: "",
+                rowDatatype: {
+                    id: newDataType.getId(),
+                    arguments: DataType.getArgumentsByDatabaseAndByType(activeDatabase, newDataType.getId())
+                        .map(x => {
+                            return {
+                                value: {
+                                    isIncluded: x.isIncluded,
+                                    realValue: x.defaultValue,
+                                },
+                                argumentId: x.id
+                            }
+                        }),
+                    isNullable: false,
+                },
                 rowAttributes: "",
             },
-            ...[...rowData].slice(index)
+            ...[...rows].slice(index)
         ]
-        setRowData(newRows)
+        setRows(newRows)
     }
 
     const moveRowUp = (index: number) => {
         if (index <= 0) return;
-        const newRows = [...rowData];
+        const newRows = [...rows];
         [newRows[index], newRows[index - 1]] = [newRows[index - 1], newRows[index]];
-        setRowData(newRows);
+        setRows(newRows);
     }
 
     const moveRowDown = (index: number) => {
-        if (index >= rowData.length - 1) return;
-        const newRows = [...rowData];
+        if (index >= rows.length - 1) return;
+        const newRows = [...rows];
         [newRows[index], newRows[index + 1]] = [newRows[index + 1], newRows[index]];
-        setRowData(newRows);
+        setRows(newRows);
     }
 
     const deleteRow = (index: number) => {
-        const newRows = [...rowData];
+        const newRows = [...rows];
         newRows.splice(index, 1);
-        setRowData(newRows);
+        setRows(newRows);
     }
 
     const deleteTable = () => {
@@ -108,9 +138,9 @@ export default function Table() {
                 <div className="modal-dialog modal-dialog-scrollable" style={{ maxWidth: "80%" }}>
                     <div className="modal-content">
                         <div className="modal-header">
-                            <p className="modal-title">
+                            <p className="modal-title" style={{ display: "flex", alignItems: "center" }}>
                                 <label htmlFor="table-name" style={{ marginRight: "6px" }}>Table</label>
-                                <input id="table-name" className="input-tablename" onChange={(e) => setTableName(e.target.value)} type="text" value={tableName} />
+                                <input id="table-name" className="form-control" style={{ display: "inline" }} onChange={(e) => setTableName(e.target.value)} type="text" value={tableName} />
                             </p>
                             <button type="button" className="btn-close" onClick={() => switchToDraw()} aria-label="Close"></button>
                         </div>
@@ -126,8 +156,8 @@ export default function Table() {
                                 </thead>
                                 <tbody>
                                     {
-                                        rowData.map((row, index) => (
-                                            <TableRowJSX key={index} index={index} numberOfTableRows={rowData.length} row={row} handleFormChange={handleFormChange} insertNewRow={insertNewRow} moveRowUp={moveRowUp} moveRowDown={moveRowDown} deleteRow={deleteRow} />
+                                        rows.map((row, index) => (
+                                            <TableRowJSX key={index} index={index} row={row} setRows={setRows} rows={rows} insertNewRow={insertNewRow} moveRowUp={moveRowUp} moveRowDown={moveRowDown} deleteRow={deleteRow} />
                                         ))
                                     }
                                     <tr>
@@ -140,16 +170,6 @@ export default function Table() {
                                     </tr>
                                 </tbody>
                             </table>
-                            <datalist id="mysql-data-types">
-                                <option value="VARCHAR(255)" />
-                                <option value="VARCHAR(255)?" />
-                                <option value="INT" />
-                                <option value="INT?" />
-                                <option value="FLOAT(14,2)" />
-                                <option value="FLOAT(14,2)?" />
-                                <option value="BOOLEAN" />
-                                <option value="BOOLEAN?" />
-                            </datalist>
                             <datalist id="attribute-suggestions">
                                 <option value="PK" />
                                 <option value='FK("TableName")' />

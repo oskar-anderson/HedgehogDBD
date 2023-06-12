@@ -19,13 +19,13 @@ export class CommandModifyTable implements ICommand<CommandModifyTableArgs> {
     redo() {
         let newTable = this.args.newTable.mapToTable();
         let index = this.context.schema.getTables().findIndex(x => x.id == this.args.oldTable.id);
-        this.context.schema.setAndUpdate(index, newTable);
+        this.context.schemaSetTableAtAndUpdate(index, newTable);
     }
 
     undo() {
         let oldTable = this.args.oldTable.mapToTable();
         let index = this.context.schema.getTables().findIndex(x => x.id == this.args.newTable.id);
-        this.context.schema.setAndUpdate(index, oldTable);
+        this.context.schemaSetTableAtAndUpdate(index, oldTable);
     }
 }
 

@@ -17,12 +17,6 @@ export class SchemaDTO {
         );
     }
 
-    static initJsonDisplayable(draw: Draw) {
-        return new SchemaDTO(
-            draw.schema.getTables().map(x => TableDTO.initFromTable(x)),
-        );
-    }
-
     getJson() {
         return JSON.stringify(this, null, 4);
     }
@@ -37,10 +31,10 @@ export class SchemaDTO {
         );
     }
 
-    mapToSchema(onTablesChangeCallback: (tables: TableDTO[]) => void) {
+    mapToSchema(schemaUpdateTables: (tables: TableDTO[]) => void) {
         return new Schema(
             this.tables.map(x => x.mapToTable()),
-            onTablesChangeCallback
+            schemaUpdateTables
         );
     }
 }

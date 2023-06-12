@@ -86,7 +86,7 @@ export class Table {
 
     getContainingRect() {
         let columnWidth = 2 + Math.max(...(this.tableRows.map(el => el.name.length))) + 3 
-            + Math.max(...(this.tableRows.map(el => el.datatype.length))) + 3 + 
+            + Math.max(...(this.tableRows.map(el => el.datatype.getDisplayableText().length))) + 3 + 
             Math.max(...(this.tableRows.map(el => el.attributes.join(", ").length))) + 2;
         let nameWidth = 2 + this.head.length + 2;
         return new MyRect(

@@ -17,10 +17,29 @@
     font-style: normal;
 }
 
+.modal-dialog.modal-w660px {
+    max-width: 660px;
+}
+
+.semi-bold {
+    font-weight: 600;
+}
+
 :root {
     --bs-btn-color: #fff;
     --bs-btn-hover-bg: #c2c2c2;
     --bs-btn-active-bg: #c2c2c2;
+}
+
+.form-select {
+    /* reduce BootStrap select down arrow size */
+    padding: .375rem 1.5rem .375rem .375rem;
+    background-position: right 0.3rem center;
+}
+
+.form-control:focus, .form-select:focus, .form-check-input:focus  {
+    /* remove large focus color shadow from form inputs */
+    box-shadow: none;
 }
 
 .dropdown-menu {

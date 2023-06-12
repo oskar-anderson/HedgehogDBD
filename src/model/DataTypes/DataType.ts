@@ -12,8 +12,8 @@ const DECIMAL = "Decimal"
 const DECIMAL_ID =          "4bde4381-61f9-4877-9d14-084978b20b28"
 const DOUBLE = "Double"
 const DOUBLE_ID =           "30767a2a-9bb4-4d2b-8af2-8b0fc84b2fc9"
-const FLOAT32 = "Float"
-const FLOAT32_ID =          "570f2fef-5b1e-4c5e-89fe-cbc385af3a6c"
+const FLOAT = "Float"
+const FLOAT_ID =            "570f2fef-5b1e-4c5e-89fe-cbc385af3a6c"
 const GUID = "Guid"
 const GUID_ID =             "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68"
 const INT16 = "Int16"
@@ -31,9 +31,9 @@ export default abstract class DataType {
         return [
             DataType.boolean(),
             DataType.dateTimeOffset(),
-            DataType.float128(),
-            DataType.float64(),
-            DataType.float32(),
+            DataType.decimal(),
+            DataType.double(),
+            DataType.float(),
             DataType.guid(),
             DataType.int64(),
             DataType.int32(),
@@ -51,9 +51,9 @@ export default abstract class DataType {
 
     static boolean() { return new DataTypeBoolean() }
     static dateTimeOffset() { return new DataTypeDateTimeOffset() }
-    static float128() { return new DataTypeFloat128() }
-    static float64() { return new DataTypeFloat64() }
-    static float32() { return  new DataTypeFloat32() }
+    static decimal() { return new DataTypeDecimal() }
+    static double() { return new DataTypeDouble() }
+    static float() { return  new DataTypeFloat() }
     static guid() { return new DataTypeGuid() }
     static int16() { return new DataTypeInt16() }
     static int32() { return new DataTypeInt32() }
@@ -88,7 +88,7 @@ export default abstract class DataType {
                 return databaseType.getFloat128Text;
             case DOUBLE_ID:
                 return databaseType.getFloat64Text;
-            case FLOAT32_ID:
+            case FLOAT_ID:
                 return databaseType.getFloat32Text;
             case GUID_ID:
                 return databaseType.getGuidText;
@@ -182,11 +182,11 @@ export class DataTypeDateTimeOffset implements IDataType {
     }
 }
 
-export class DataTypeFloat128 implements IDataType {
+export class DataTypeDecimal implements IDataType {
     getId(): string { return DECIMAL_ID }
     getSelectListName(): string { return DECIMAL }
     getAllArguments(): IDataTypeArgument[] {
-        return [DataTypeFloat128.precision, DataTypeFloat128.scale];
+        return [DataTypeDecimal.precision, DataTypeDecimal.scale];
     }
 
     static precision: IDataTypeArgument = {
@@ -212,7 +212,7 @@ export class DataTypeFloat128 implements IDataType {
     }
 }
 
-export class DataTypeFloat64 implements IDataType {
+export class DataTypeDouble implements IDataType {
     getId(): string { return DOUBLE_ID}
     getSelectListName(): string { return DOUBLE }
     getAllArguments(): IDataTypeArgument[] {
@@ -238,9 +238,9 @@ export class DataTypeFloat64 implements IDataType {
 
 }
 
-export class DataTypeFloat32 implements IDataType {
-    getId(): string { return FLOAT32_ID }
-    getSelectListName(): string { return FLOAT32 }
+export class DataTypeFloat implements IDataType {
+    getId(): string { return FLOAT_ID }
+    getSelectListName(): string { return FLOAT }
     getAllArguments(): IDataTypeArgument[] {
         return [];
     }

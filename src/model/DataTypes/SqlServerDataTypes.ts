@@ -1,4 +1,4 @@
-import { DataTypeBoolean, DataTypeDateTimeOffset, DataTypeFloat128, DataTypeFloat32, DataTypeFloat64, DataTypeGuid, DataTypeInt16, DataTypeInt32, DataTypeInt64, DataTypeString, IDataTypeArgument } from "./DataType";
+import { DataTypeBoolean, DataTypeDateTimeOffset, DataTypeDecimal, DataTypeFloat, DataTypeDouble, DataTypeGuid, DataTypeInt16, DataTypeInt32, DataTypeInt64, DataTypeString, IDataTypeArgument } from "./DataType";
 import IDatabaseType from "./IDatabaseType";
 
 export default class SqlServerDataTypes implements IDatabaseType {

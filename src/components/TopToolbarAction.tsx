@@ -69,7 +69,7 @@ export default function TopToolbarAction({ currentState, heightPx } : TopToolbar
     }
 
   return (
-    <nav className="py-1 px-4 navbar navbar-expand-lg" style={{ backgroundColor: 'rgb(255, 73, 73)', height: `${heightPx}px` }}>
+    <nav className="py-1 px-4 navbar" style={{ backgroundColor: 'rgb(255, 73, 73)', height: `${heightPx}px`, flexWrap: "inherit" }}>
         <div className="container-fluid">
                 <a className="navbar-brand" href="#">
                     <img style={{ height: '36px' }} src={EnvGlobals.BASE_URL + "/wwwroot/img/logo_compact_white.png"} />

@@ -28,6 +28,7 @@ export default function Table() {
     
     const [rows, setRows] = useState(tableBeingEdited.tableRows.map((x) => {
         return {
+            key: crypto.randomUUID(),
             rowName: x.name,
             rowDatatype: {
                 id: x.datatype.id,
@@ -75,26 +76,28 @@ export default function Table() {
         if (index === -1) { index = rows.length }
         const activeDatabase = Manager.getInstance().draw.activeDatabase.select;
         const newDataType = DataType.string();
+        const newRow = {
+            key: crypto.randomUUID(),
+            rowName: "",
+            rowDatatype: {
+                id: newDataType.getId(),
+                arguments: DataType.getArgumentsByDatabaseAndByType(activeDatabase, newDataType.getId())
+                    .map(x => {
+                        return {
+                            value: {
+                                isIncluded: x.isIncluded,
+                                realValue: x.defaultValue,
+                            },
+                            argumentId: x.id
+                        }
+                    }),
+                isNullable: false,
+            },
+            rowAttributes: "",
+        };
         const newRows = [
             ...[...rows].slice(0, index),
-            {
-                rowName: "",
-                rowDatatype: {
-                    id: newDataType.getId(),
-                    arguments: DataType.getArgumentsByDatabaseAndByType(activeDatabase, newDataType.getId())
-                        .map(x => {
-                            return {
-                                value: {
-                                    isIncluded: x.isIncluded,
-                                    realValue: x.defaultValue,
-                                },
-                                argumentId: x.id
-                            }
-                        }),
-                    isNullable: false,
-                },
-                rowAttributes: "",
-            },
+            newRow,
             ...[...rows].slice(index)
         ]
         setRows(newRows)
@@ -157,7 +160,7 @@ export default function Table() {
                                 <tbody>
                                     {
                                         rows.map((row, index) => (
-                                            <TableRowJSX key={index} index={index} row={row} setRows={setRows} rows={rows} insertNewRow={insertNewRow} moveRowUp={moveRowUp} moveRowDown={moveRowDown} deleteRow={deleteRow} />
+                                            <TableRowJSX key={row.key} index={index} row={row} setRows={setRows} rows={rows} insertNewRow={insertNewRow} moveRowUp={moveRowUp} moveRowDown={moveRowDown} deleteRow={deleteRow} />
                                         ))
                                     }
                                     <tr>

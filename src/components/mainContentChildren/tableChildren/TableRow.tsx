@@ -23,11 +23,13 @@ export interface TableRowProps {
         rowAttributes: string
     },
     rows: {
+        key: string; // this is only needed in the parent component to manage state on new row insertion
         rowName: string;
         rowDatatype: UiTableRowDatatype;
         rowAttributes: string;
     }[],
     setRows: React.Dispatch<React.SetStateAction<{
+        key: string;
         rowName: string;
         rowDatatype: UiTableRowDatatype;
         rowAttributes: string;
@@ -145,10 +147,10 @@ export default function TableRow({ index, row, setRows, rows, insertNewRow, move
                 <div>
                     <div style={{ display: "flex", alignItems: "center" }}>
                         <select style={{ width: "120px", textOverflow: "ellipsis" }}
-                            className="form-select"
+                            className={"form-select" + ` ${row.rowDatatype.id}`}
                             name="input-datatype"
                             onChange={handleSelectInputOnChange}
-                            defaultValue={row.rowDatatype.id }
+                            value={row.rowDatatype.id }
                         >
                             {DataType.getTypes().map(x => {
                                 return (

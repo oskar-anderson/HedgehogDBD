@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from "react"
+import { ChangeEvent, FormEvent, HTMLProps, useState } from "react"
 import DataType, { IDataTypeArgument } from "../../../model/DataTypes/DataType"
 import { Manager } from "../../../Manager";
 import { IDataType } from "../../../model/DataTypes/IDataType";
@@ -15,7 +15,7 @@ interface UiTableRowDatatype {
     isNullable: boolean
 }
 
-export interface TableRowProps {
+export interface TableRowProps extends HTMLProps<HTMLTableRowElement> {
     index: number,
     row: {
         rowName: string
@@ -35,13 +35,11 @@ export interface TableRowProps {
         rowAttributes: string;
     }[]>>,
     insertNewRow: (event: FormEvent<HTMLButtonElement>, index: number) => void,
-    moveRowUp: (index: number) => void,
-    moveRowDown: (index: number) => void,
     deleteRow: (index: number) => void
 }
 
 
-export default function TableRow({ index, row, setRows, rows, insertNewRow, moveRowUp, moveRowDown, deleteRow }: TableRowProps) {
+export default function TableRow({ index, row, setRows, rows, insertNewRow, deleteRow, ...restProps}: TableRowProps) {
     const [datatypeArguments, setDatatypeArguments] = useState<{
         value: string;
         displayName: string;
@@ -135,7 +133,7 @@ export default function TableRow({ index, row, setRows, rows, insertNewRow, move
     }
 
     return (
-        <tr>
+        <tr {...restProps}>
             <td>
                 <input className="form-control" style={{ display: "inline" }} onChange={(e) => {
                     const rowsCopy = [...rows];
@@ -198,8 +196,6 @@ export default function TableRow({ index, row, setRows, rows, insertNewRow, move
             <td>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
                     <button className="row-insert-btn btn btn-primary" onClick={(e) => insertNewRow(e, index)}>Insert</button>
-                    <button className="row-up-btn btn btn-primary" disabled={index === 0} onClick={(e) => moveRowUp(index)}>Up</button>
-                    <button className="row-down-btn btn btn-primary" disabled={index >= rows.length - 1} onClick={(e) => moveRowDown(index)}>Down</button>
                     <button className="row-delete-btn btn btn-danger" onClick={(e) => deleteRow(index)}>Delete</button>
                 </div>
             </td>

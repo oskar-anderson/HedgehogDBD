@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { CommandDeleteTable, CommandDeleteTableArgs } from "../../commands/appCommands/CommandDeleteTable";
 import { CommandModifyTable, CommandModifyTableArgs } from "../../commands/appCommands/CommandModifyTable";
 import { Manager } from "../../Manager";
@@ -25,7 +25,7 @@ export default function Table() {
         Manager.getInstance().changeScene(new DrawScene(draw))
         setAppState(AppState.DrawScene);
     }
-    
+
     const [rows, setRows] = useState(tableBeingEdited.tableRows.map((x) => {
         return {
             key: crypto.randomUUID(),
@@ -103,19 +103,19 @@ export default function Table() {
         setRows(newRows)
     }
 
-    const moveRowUp = (index: number) => {
-        if (index <= 0) return;
-        const newRows = [...rows];
-        [newRows[index], newRows[index - 1]] = [newRows[index - 1], newRows[index]];
-        setRows(newRows);
-    }
+    const dragItem = useRef<number | null>(null);
+    const dragOverItem = useRef<number | null>(null);
 
-    const moveRowDown = (index: number) => {
-        if (index >= rows.length - 1) return;
-        const newRows = [...rows];
-        [newRows[index], newRows[index + 1]] = [newRows[index + 1], newRows[index]];
-        setRows(newRows);
-    }
+    const dragEnd = () => {
+        if (dragItem.current === null || dragOverItem.current === null) return;
+        const copyRows = [...rows];
+        const dragItemContent = copyRows[dragItem.current];
+        copyRows.splice(dragItem.current, 1);
+        copyRows.splice(dragOverItem.current, 0, dragItemContent);
+        dragItem.current = null;
+        dragOverItem.current = null;
+        setRows(copyRows);
+    };
 
     const deleteRow = (index: number) => {
         const newRows = [...rows];
@@ -160,7 +160,19 @@ export default function Table() {
                                 <tbody>
                                     {
                                         rows.map((row, index) => (
-                                            <TableRowJSX key={row.key} index={index} row={row} setRows={setRows} rows={rows} insertNewRow={insertNewRow} moveRowUp={moveRowUp} moveRowDown={moveRowDown} deleteRow={deleteRow} />
+                                            <TableRowJSX
+                                                // dragging logic
+                                                draggable
+                                                style={{ cursor: "grabbing" }}
+                                                onDragStart={(e) => { dragItem.current = index; }}
+                                                onDragEnter={(e) => { dragOverItem.current = index }}
+                                                onDragEnd={(e) => { dragEnd(); }}
+                                                onDragOver={e => e.preventDefault()} // this is needed for correct cursor icon display for dragEnd
+                                                
+                                                // everything else
+                                                key={row.key}
+                                                index={index} row={row} setRows={setRows} rows={rows} insertNewRow={insertNewRow} deleteRow={deleteRow}
+                                            />
                                         ))
                                     }
                                     <tr>

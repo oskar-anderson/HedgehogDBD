@@ -22,7 +22,7 @@ export interface TableRowProps extends HTMLProps<HTMLTableRowElement> {
         rowDatatype: UiTableRowDatatype
         rowAttributes: string
     },
-    rows: {
+    tableRows: {  // I think this cannot be named rows because of a collision with some attribute of type number named rows or _rows
         key: string; // this is only needed in the parent component to manage state on new row insertion
         rowName: string;
         rowDatatype: UiTableRowDatatype;
@@ -39,7 +39,7 @@ export interface TableRowProps extends HTMLProps<HTMLTableRowElement> {
 }
 
 
-export default function TableRow({ index, row, setRows, rows, insertNewRow, deleteRow, ...restProps}: TableRowProps) {
+export default function TableRow({ index, row, setRows, tableRows: rows, insertNewRow, deleteRow, ...restProps}: TableRowProps) {
     const [datatypeArguments, setDatatypeArguments] = useState<{
         value: string;
         displayName: string;

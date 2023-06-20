@@ -168,10 +168,10 @@ export default function Table() {
                                                 onDragEnter={(e) => { dragOverItem.current = index }}
                                                 onDragEnd={(e) => { dragEnd(); }}
                                                 onDragOver={e => e.preventDefault()} // this is needed for correct cursor icon display for dragEnd
-                                                
+
                                                 // everything else
                                                 key={row.key}
-                                                index={index} row={row} setRows={setRows} rows={rows} insertNewRow={insertNewRow} deleteRow={deleteRow}
+                                                index={index} row={row} setRows={setRows} tableRows={rows} insertNewRow={insertNewRow} deleteRow={deleteRow}
                                             />
                                         ))
                                     }

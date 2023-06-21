@@ -2,6 +2,7 @@ import { ChangeEvent, FormEvent, HTMLProps, useState } from "react"
 import DataType, { IDataTypeArgument } from "../../../model/DataTypes/DataType"
 import { Manager } from "../../../Manager";
 import { IDataType } from "../../../model/DataTypes/IDataType";
+import { OverlayTrigger, Popover } from "react-bootstrap";
 
 interface UiTableRowDatatype {
     id: string,
@@ -39,7 +40,7 @@ export interface TableRowProps extends HTMLProps<HTMLTableRowElement> {
 }
 
 
-export default function TableRow({ index, row, setRows, tableRows: rows, insertNewRow, deleteRow, ...restProps}: TableRowProps) {
+export default function TableRow({ index, row, setRows, tableRows, insertNewRow, deleteRow, ...restProps}: TableRowProps) {
     const [datatypeArguments, setDatatypeArguments] = useState<{
         value: string;
         displayName: string;
@@ -70,7 +71,7 @@ export default function TableRow({ index, row, setRows, tableRows: rows, insertN
         const newDataTypeArgumentValueNumber = Number.parseInt(newValue);
         argumentToUpdate.value = String(newDataTypeArgumentValueNumber)
         setDatatypeArguments(newArguments);
-        const rowsCopy = [...rows];
+        const rowsCopy = [...tableRows];
         rowsCopy[index].rowDatatype.arguments = newArguments.map(x => {
             return {
                 value: {
@@ -97,7 +98,7 @@ export default function TableRow({ index, row, setRows, tableRows: rows, insertN
             value: String(x.defaultValue),
         }))
         setDatatypeArguments(dataTypeArguements);
-        const rowsCopy = [...rows];
+        const rowsCopy = [...tableRows];
         const activeDatabase = Manager.getInstance().draw.activeDatabase;
         const newArguments = DataType.getArgumentsByDatabaseAndByType(activeDatabase.select, selectedDatatypeId);
         rowsCopy[index].rowDatatype = {
@@ -121,71 +122,95 @@ export default function TableRow({ index, row, setRows, tableRows: rows, insertN
         // every field has to be included or excluded as to not mess up the argument order
         newArgs.map(x => x.isIncluded = isChecked);
         setDatatypeArguments(newArgs);
-        const rowsCopy = [...rows];
+        const rowsCopy = [...tableRows];
         rowsCopy[index].rowDatatype.arguments.map(x => x.value.isIncluded = isChecked);
         setRows(rowsCopy);
     }
 
     const handleAttributeChange = (newValue: string) => {
-        const rowsCopy = [...rows];
+        const rowsCopy = [...tableRows];
         rowsCopy[index].rowAttributes = newValue;
         setRows(rowsCopy);
     }
+
+    const popover = (
+        <Popover style={{ padding: "12px" }}>
+            {datatypeArguments.map((argument, index) => {
+                return (
+                    <div key={argument.id} style={{ display: "flex", alignItems: "center", marginTop: "0.5em" }}>
+                        <input style={{ marginRight: "6px" }} type="checkbox"
+                            onChange={(e) => { handleArgumentWillNotBeProvidedCheckbox((e.target as HTMLInputElement).checked, index) }}
+                            checked={argument.isIncluded}
+                            title={argument.isReadonly ? "Readonly" : undefined}
+                            disabled={argument.isReadonly}
+                        />
+                        <span style={{ paddingRight: "0.5em" }}>{argument.displayName}: </span>
+                        <input style={{ width: "100%" }} type="text" className="form-control"
+                            onChange={(e) => handleArgumentInputChange(e, argument.id)}
+                            value={argument.isIncluded ? argument.value : "Omited"}
+                            title={argument.isReadonly ? "Readonly" : undefined}
+                            disabled={argument.isReadonly || !argument.isIncluded}
+                        />
+                    </div>
+                )
+            })}
+        </Popover>
+    )
 
     return (
         <tr {...restProps}>
             <td>
                 <input className="form-control" style={{ display: "inline" }} onChange={(e) => {
-                    const rowsCopy = [...rows];
+                    const rowsCopy = [...tableRows];
                     rowsCopy[index].rowName = (e.target as HTMLInputElement).value
                     setRows(rowsCopy);
                 }} type="text" value={row.rowName} />
             </td>
-            <td>
-                <div>
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                        <select style={{ width: "120px", textOverflow: "ellipsis" }}
-                            className={"form-select" + ` ${row.rowDatatype.id}`}
-                            name="input-datatype"
-                            onChange={handleSelectInputOnChange}
-                            value={row.rowDatatype.id }
-                        >
-                            {DataType.getTypes().map(x => {
-                                return (
-                                    <option key={x.getId()} value={x.getId()}>{x.getSelectListName()}</option>
-                                )
-                            })}
-                        </select>
-                        <button style={{ height: "38px", width: "38px", border: "1px solid #ced4da" }} className="btn btn-light"
-                            onClick={() => {
-                                const wasNullable = mandatoryFieldBtnText !== "!"
-                                setMandatoryFieldBtnText(wasNullable ? "!" : "?")
-                                const rowsCopy = [...rows];
-                                rowsCopy[index].rowDatatype.isNullable = ! wasNullable;
-                                setRows(rowsCopy);
-                            }}>
-                            {mandatoryFieldBtnText}
+            <td style={{ width: "math(220px + 320px)"}}>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                    <select style={{ width: "180px", textOverflow: "ellipsis" }}
+                        className={"form-select" + ` ${row.rowDatatype.id}`}
+                        name="input-datatype"
+                        onChange={handleSelectInputOnChange}
+                        value={row.rowDatatype.id }
+                    >
+                        {DataType.getTypes().map(x => {
+                            let selectedOptionDisplayParameters = "";
+                            if (x.getId() === row.rowDatatype.id) {
+                                const selectedDataTypeArguments = datatypeArguments.filter(x => x.isIncluded);
+                                selectedOptionDisplayParameters = (selectedDataTypeArguments.length !== 0) ? 
+                                    `(${selectedDataTypeArguments.map(x => x.value).join(", ")})` : 
+                                    "";
+                            } else {
+                                const draw = Manager.getInstance().draw;
+                                const notSelectedDataTypeArguments = DataType.getArgumentsByDatabaseAndByType(draw.activeDatabase.select, x.getId());
+                                selectedOptionDisplayParameters = (notSelectedDataTypeArguments.length !== 0) ? 
+                                    `(${notSelectedDataTypeArguments.map(x => x.defaultValue).join(", ")})` :
+                                    "";
+                            }
+
+                            return (
+                                <option key={x.getId()} value={x.getId()}>{x.getSelectListName() + selectedOptionDisplayParameters}</option>
+                            )
+                        })}
+                    </select>
+                    <button style={{ height: "38px", width: "38px", border: "1px solid #ced4da" }} className="btn btn-light"
+                        onClick={() => {
+                            const wasNullable = mandatoryFieldBtnText !== "!"
+                            setMandatoryFieldBtnText(wasNullable ? "!" : "?")
+                            const rowsCopy = [...tableRows];
+                            rowsCopy[index].rowDatatype.isNullable = ! wasNullable;
+                            setRows(rowsCopy);
+                        }}>
+                        {mandatoryFieldBtnText}
+                    </button>
+                    <OverlayTrigger trigger="click" placement="right" overlay={popover} rootClose={true}>
+                        <button style={{ height: "38px", width: "38px", border: "1px solid #ced4da" }} className={`btn btn-light ${datatypeArguments.length === 0 ? "disabled" : ""}`} disabled={datatypeArguments.length === 0}>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                            </svg>
                         </button>
-                    </div>
-                    {datatypeArguments.map((argument, index) => {
-                        return (
-                            <div key={argument.id} style={{ display: "flex", alignItems: "center", marginTop: "0.5em" }}>
-                                <input style={{ marginRight: "6px" }} type="checkbox"
-                                    onChange={(e) => { handleArgumentWillNotBeProvidedCheckbox((e.target as HTMLInputElement).checked, index) }}
-                                    checked={argument.isIncluded}
-                                    title={argument.isReadonly ? "Readonly" : undefined}
-                                    disabled={argument.isReadonly}
-                                />
-                                <span style={{ paddingRight: "0.5em" }}>{argument.displayName}: </span>
-                                <input style={{ width: "100%" }} type="text" className="form-control"
-                                    onChange={(e) => handleArgumentInputChange(e, argument.id)}
-                                    value={argument.isIncluded ? argument.value : "Omited"}
-                                    title={argument.isReadonly ? "Readonly" : undefined}
-                                    disabled={argument.isReadonly || !argument.isIncluded}
-                                />
-                            </div>
-                        )
-                    })}
+                    </OverlayTrigger>
                 </div>
             </td>
             <td>

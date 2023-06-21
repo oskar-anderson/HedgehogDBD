@@ -47,6 +47,11 @@
     --bs-dropdown-padding-y: 0.2rem;
 }
 
+.btn-light {
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #767e85;
+}
+
 hr {
     margin: 4px 0;
     color: inherit;

@@ -50,6 +50,12 @@
 .btn-light {
     --bs-btn-disabled-color: #fff;
     --bs-btn-disabled-bg: #767e85;
+    border: 1px solid #ced4da
+}
+
+.btn-light, .btn-danger, .btn-primary, .btn-secondary {
+    /* make every button that is not a navigation button semi-bold */
+    font-weight: 600;
 }
 
 hr {
@@ -63,8 +69,6 @@ hr {
     opacity: .25;
 }
 
-h1, h2, h3, h4, h5, h6 { color: #28db00; }
-
 h1 { font-size: 2em; line-height: 25px }
 
 h2 { font-size: 1.25em; }
@@ -76,27 +80,18 @@ pre { font-family: "Courier New"; }
 p { padding: 10px 0px 5px 0px; }
 
 table {
-    font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
 }
 
+tbody tr {
+    border-top: 1px solid #dddddd;
+}
+
 td, th {
-    border: 1px solid #dddddd;
-    text-align: left;
     padding: 8px;
 }
 
 th {
-    font-weight: bold;
+    font-weight: 600;
 }
-
-
-/* General Layout
--------------------------------------------------------------- */
-
-#wrapHeader { margin: 0px; padding: 0px 0px 0px 0px; width: 912px; margin: 0 auto; position: relative; top: 0px; z-index: 10; }
-
-#wrapContent { width: 912px; margin: 0px auto 0px auto; padding: 0px 0px 0px 0px; }
-
-#footer { width: 912px; margin: 0 auto; overflow: hidden; padding: 0px 0px 20px 0px; }

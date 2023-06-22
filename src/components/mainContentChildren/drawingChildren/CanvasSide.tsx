@@ -50,8 +50,8 @@ function CanvasSide({minimap, debugInfoContainer, tables, setZoomFontSize}: Canv
                 
                 <div style={{ display: "flex", height: 0, flex: 1, flexDirection: "column" }}>
                     <div style={{ display: "flex", backgroundColor: "#d2d2d2" }}>
-                        <button style={{ padding: "0 8px", border: 0, backgroundColor: `${activeTab === TabState.Tables ? "white" : "#d2d2d2"}`, }} onClick={() => setActiveTab(TabState.Tables)}>Tables</button>
-                        <button style={{ padding: "0 8px", border: 0, backgroundColor: `${activeTab === TabState.Info ? "white" : "#d2d2d2"}`, }} onClick={() => setActiveTab(TabState.Info)}>Info</button>
+                        <button className="btn" style={{ padding: "0 8px", border: 0, backgroundColor: `${activeTab === TabState.Tables ? "white" : "#d2d2d2"}`, }} onClick={() => setActiveTab(TabState.Tables)}>Tables</button>
+                        <button className="btn" style={{ padding: "0 8px", border: 0, backgroundColor: `${activeTab === TabState.Info ? "white" : "#d2d2d2"}`, }} onClick={() => setActiveTab(TabState.Info)}>Info</button>
                     </div>
                     
                     {

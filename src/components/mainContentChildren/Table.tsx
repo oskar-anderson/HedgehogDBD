@@ -141,13 +141,22 @@ export default function Table() {
                 <div className="modal-dialog modal-dialog-scrollable" style={{ maxWidth: "80%" }}>
                     <div className="modal-content">
                         <div className="modal-header">
-                            <p className="modal-title" style={{ display: "flex", alignItems: "center" }}>
-                                <label htmlFor="table-name" style={{ marginRight: "6px" }}>Table</label>
-                                <input id="table-name" className="form-control" style={{ display: "inline" }} onChange={(e) => setTableName(e.target.value)} type="text" value={tableName} />
-                            </p>
+                            <h5>Editing table</h5>
                             <button type="button" className="btn-close" onClick={() => switchToDraw()} aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
+                            <p className="modal-title" style={{ display: "flex", gridGap: "1em" }}>
+                                <div style={{ flex: "50%", display: "flex", alignItems: "center" }}>
+                                    <label htmlFor="table-name" className="me-3">Table name</label>
+                                    <input id="table-name" className="form-control" style={{ width: "auto" }} onChange={(e) => setTableName(e.target.value)} type="text" value={tableName} />
+                                </div>
+                                <div style={{ flex: "50%", display: "flex", alignItems: "center" }}>
+                                    <label className="me-3">Table action</label>
+                                    <button className="table-delete-btn btn btn-danger" onClick={() => deleteTable()}>Delete table</button>
+                                </div>
+                            </p>
+
+                            <hr />
                             <table>
                                 <thead>
                                     <tr>
@@ -171,17 +180,17 @@ export default function Table() {
 
                                                 // everything else
                                                 key={row.key}
-                                                index={index} row={row} setRows={setRows} tableRows={rows} insertNewRow={insertNewRow} deleteRow={deleteRow}
+                                                index={index} row={row} setRows={setRows} tableRows={rows} deleteRow={deleteRow}
                                             />
                                         ))
                                     }
                                     <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
                                         <td>
-                                            <button className="row-insert-btn btn btn-primary" onClick={(e) => insertNewRow(e, -1)}>Insert</button>
+                                            <button className="row-insert-btn btn btn-light" onClick={(e) => insertNewRow(e, -1)}>Insert Row</button>
                                         </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -189,13 +198,11 @@ export default function Table() {
                                 <option value="PK" />
                                 <option value='FK("TableName")' />
                             </datalist>
+                            <hr />
                         </div>
-                        <div className="modal-footer" style={{ justifyContent: "space-between" }}>
-                            <button className="table-delete-btn btn btn-danger" onClick={() => deleteTable()}>Delete table</button>
-                            <div>
-                                <button type="button" className="btn btn-secondary" onClick={() => switchToDraw()}>Close</button>
-                                <button type="button" id="modal-save-changes" onClick={() => saveChanges()} className="btn btn-primary">Save changes</button>
-                            </div>
+                        <div className="modal-footer" style={{ display: "grid", gridTemplateColumns: "1fr 3fr" }}>
+                            <button type="button" className="btn btn-light" onClick={() => switchToDraw()}>Discard changes</button>
+                            <button type="button" id="modal-save-changes" onClick={() => saveChanges()} className="btn btn-primary">Save changes</button>
                         </div>
                     </div>
                 </div>

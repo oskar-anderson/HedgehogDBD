@@ -35,12 +35,11 @@ export interface TableRowProps extends HTMLProps<HTMLTableRowElement> {
         rowDatatype: UiTableRowDatatype;
         rowAttributes: string;
     }[]>>,
-    insertNewRow: (event: FormEvent<HTMLButtonElement>, index: number) => void,
     deleteRow: (index: number) => void
 }
 
 
-export default function TableRow({ index, row, setRows, tableRows, insertNewRow, deleteRow, ...restProps}: TableRowProps) {
+export default function TableRow({ index, row, setRows, tableRows, deleteRow, ...restProps}: TableRowProps) {
     const [datatypeArguments, setDatatypeArguments] = useState<{
         value: string;
         displayName: string;
@@ -117,7 +116,7 @@ export default function TableRow({ index, row, setRows, tableRows, insertNewRow,
         setRows(rowsCopy);
     }
 
-    const handleArgumentWillNotBeProvidedCheckbox = (isChecked: boolean, argumentIndex: number) => {
+    const handleArgumentWillNotBeProvidedCheckbox = (isChecked: boolean) => {
         const newArgs = [...datatypeArguments];
         // every field has to be included or excluded as to not mess up the argument order
         newArgs.map(x => x.isIncluded = isChecked);
@@ -135,15 +134,14 @@ export default function TableRow({ index, row, setRows, tableRows, insertNewRow,
 
     const popover = (
         <Popover style={{ padding: "12px" }}>
-            {datatypeArguments.map((argument, index) => {
+            <input id="inputIncludeCustomArguments" style={{ marginRight: "6px" }} type="checkbox"
+                onChange={(e) => { handleArgumentWillNotBeProvidedCheckbox((e.target as HTMLInputElement).checked) }} 
+                defaultChecked={true}
+            />
+            <label htmlFor="inputIncludeCustomArguments">Include optional arguments</label>
+            {datatypeArguments.map((argument) => {
                 return (
                     <div key={argument.id} style={{ display: "flex", alignItems: "center", marginTop: "0.5em" }}>
-                        <input style={{ marginRight: "6px" }} type="checkbox"
-                            onChange={(e) => { handleArgumentWillNotBeProvidedCheckbox((e.target as HTMLInputElement).checked, index) }}
-                            checked={argument.isIncluded}
-                            title={argument.isReadonly ? "Readonly" : undefined}
-                            disabled={argument.isReadonly}
-                        />
                         <span style={{ paddingRight: "0.5em" }}>{argument.displayName}: </span>
                         <input style={{ width: "100%" }} type="text" className="form-control"
                             onChange={(e) => handleArgumentInputChange(e, argument.id)}
@@ -194,7 +192,7 @@ export default function TableRow({ index, row, setRows, tableRows, insertNewRow,
                             )
                         })}
                     </select>
-                    <button style={{ height: "38px", width: "38px", border: "1px solid #ced4da" }} className="btn btn-light"
+                    <button style={{ height: "38px", width: "38px" }} className="btn btn-light"
                         onClick={() => {
                             const wasNullable = mandatoryFieldBtnText !== "!"
                             setMandatoryFieldBtnText(wasNullable ? "!" : "?")
@@ -205,7 +203,7 @@ export default function TableRow({ index, row, setRows, tableRows, insertNewRow,
                         {mandatoryFieldBtnText}
                     </button>
                     <OverlayTrigger trigger="click" placement="right" overlay={popover} rootClose={true}>
-                        <button style={{ height: "38px", width: "38px", border: "1px solid #ced4da" }} className={`btn btn-light ${datatypeArguments.length === 0 ? "disabled" : ""}`} disabled={datatypeArguments.length === 0}>
+                        <button style={{ height: "38px", width: "38px" }} className={`btn btn-light ${datatypeArguments.length === 0 ? "disabled" : ""}`} disabled={datatypeArguments.length === 0}>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"></path>
                             </svg>
@@ -220,7 +218,6 @@ export default function TableRow({ index, row, setRows, tableRows, insertNewRow,
             </td>
             <td>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
-                    <button className="row-insert-btn btn btn-primary" onClick={(e) => insertNewRow(e, index)}>Insert</button>
                     <button className="row-delete-btn btn btn-danger" onClick={(e) => deleteRow(index)}>Delete</button>
                 </div>
             </td>

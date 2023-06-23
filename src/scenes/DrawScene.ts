@@ -17,6 +17,8 @@ export class DrawScene extends Container implements IScene {
 
     canvasView: Container;
     draw: Draw;
+
+    static COST_OF_RECURSIVE_RELATION = 10;
     
     constructor(draw: Draw) {
         super();
@@ -181,7 +183,7 @@ export class DrawScene extends Container implements IScene {
         let heuristicEndPoint =  relation.target.getContainingRect().getLargestFittingSquareClosestToPoint(relation.source.getContainingRect().getCenter()).getCenter();
         let possibleEnds = relation.target.getContainingRect().getRelationAttachmentPoints(worldSize);
         if (relation.target.head === relation.source.head) {
-            possibleEnds = possibleEnds.filter((end) => { return AStarFinderCustom.euclidean(startPoint!, end) === 10 });
+            possibleEnds = possibleEnds.filter((end) => { return AStarFinderCustom.euclidean(startPoint!, end) === DrawScene.COST_OF_RECURSIVE_RELATION });
         }
         let grid = new WorldGrid(costGrid.flatten());
         let path = new AStarFinderCustom(AStarFinderCustom.manhattan).findPath(startPoint, heuristicEndPoint, possibleEnds, grid);

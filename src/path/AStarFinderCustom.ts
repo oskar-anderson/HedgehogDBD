@@ -46,7 +46,8 @@ export default class AStarFinderCustom {
             }
 
             for (let next of grid.neighbors(current.x, current.y)) {
-                let startToNextCost = costSoFar.get(grid.getPointId(current))! + grid.getNeighborCost(current, next);
+                // the multiplication makes the algorithm greedy for the endpoint which helps eliminate randomness deciding between same cost cells
+                let startToNextCost = (costSoFar.get(grid.getPointId(current))! + grid.getNeighborCost(current, next)) * 1.001; 
                 if (! costSoFar.has(grid.getPointId(next)) || startToNextCost < costSoFar.get(grid.getPointId(next))!) {
                     costSoFar.set(grid.getPointId(next), startToNextCost);
                     let priority = startToNextCost + this.heuristic(next, heuristicTarget);

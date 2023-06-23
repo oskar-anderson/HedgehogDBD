@@ -44,6 +44,7 @@ export class WorldGrid {
         let nudge = 0; // manhattan diagonal path nudge
         if ((orig.x + orig.y) % 2 == 0 && neighbor.x != orig.x) { nudge = 1 }
         if ((orig.x + orig.y) % 2 == 1 && neighbor.y != orig.y) { nudge = 1 }
-        return cost + 0.0000001 * nudge; 
+        return cost 
+            + (0.0000001 * nudge); // this makes diagonal lines more likely by creating tunnels
     }
 }

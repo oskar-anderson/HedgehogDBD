@@ -1,8 +1,11 @@
-import { ChangeEvent, FormEvent, HTMLProps, useState } from "react"
+import { ChangeEvent, FormEvent, HTMLProps, useRef, useState } from "react"
 import DataType, { IDataTypeArgument } from "../../../model/DataTypes/DataType"
 import { Manager } from "../../../Manager";
 import { IDataType } from "../../../model/DataTypes/IDataType";
 import { OverlayTrigger, Popover } from "react-bootstrap";
+import EnvGlobals from "../../../../EnvGlobals";
+import { MyRect } from "../../../model/MyRect";
+
 
 interface UiTableRowDatatype {
     id: string,
@@ -18,6 +21,9 @@ interface UiTableRowDatatype {
 
 export interface TableRowProps extends HTMLProps<HTMLTableRowElement> {
     index: number,
+    hoverInsertIndicator: React.RefObject<HTMLDivElement>,
+    dragItem: React.MutableRefObject<number | null>,
+    dragOverItem: React.MutableRefObject<number | null>,
     row: {
         rowName: string
         rowDatatype: UiTableRowDatatype
@@ -39,7 +45,7 @@ export interface TableRowProps extends HTMLProps<HTMLTableRowElement> {
 }
 
 
-export default function TableRow({ index, row, setRows, tableRows, deleteRow, ...restProps}: TableRowProps) {
+export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOverItem, row, setRows, tableRows, deleteRow, ...restProps}: TableRowProps) {
     const [datatypeArguments, setDatatypeArguments] = useState<{
         value: string;
         displayName: string;
@@ -155,8 +161,51 @@ export default function TableRow({ index, row, setRows, tableRows, deleteRow, ..
         </Popover>
     )
 
+
+    const tableRowRef = useRef<HTMLTableRowElement>(null);
+
     return (
-        <tr {...restProps}>
+        <tr {...restProps} ref={tableRowRef}
+            onMouseMove={(e) => { 
+                if (dragItem.current === null) { return; }
+                const tableRowRect = tableRowRef.current!.getBoundingClientRect();
+                const upperHalf = new MyRect(tableRowRect.x, tableRowRect.y, tableRowRect.width, tableRowRect.height / 2);
+                const lowerHalf = new MyRect(tableRowRect.x, tableRowRect.y + tableRowRect.height / 2, tableRowRect.width, tableRowRect.height / 2);
+                let extraHeightForBottomIndicator = 0;
+                if (dragItem.current > index) { // dragging up
+                    if (upperHalf.contains(e.clientX, e.clientY)) {
+                        dragOverItem.current = index;
+                    } else {
+                        dragOverItem.current = index + 1;
+                        extraHeightForBottomIndicator = tableRowRect.height;
+                    }
+                } else if (dragItem.current === index) {
+                    hoverInsertIndicator.current!.style.display = "none";
+                    return;
+                } else { // dragging down
+                    if (lowerHalf.contains(e.clientX, e.clientY)) {
+                        dragOverItem.current = index;
+                        extraHeightForBottomIndicator = tableRowRect.height;
+                    } else {
+                        dragOverItem.current = index - 1;
+                    }
+                }
+
+                hoverInsertIndicator.current!.style.display = "flex";
+                hoverInsertIndicator.current!.style.width = `${tableRowRef.current!.offsetWidth}px`;
+                hoverInsertIndicator.current!.style.top = `${tableRowRect.top + extraHeightForBottomIndicator - hoverInsertIndicator.current!.clientHeight / 2}px`;
+                hoverInsertIndicator.current!.style.left = `${tableRowRect.left + (tableRowRect.width / 2) - hoverInsertIndicator.current!.clientWidth / 2}px`;
+            }}
+        >
+            <td>
+                <button
+                    className="btn btn-light btn-icon"
+                    onMouseDown={(e) => { dragItem.current = index; }}
+                >
+                    <img draggable="false" style={{ userSelect: "none" }} data-bs-toggle="tooltip" data-bs-placement="bottom" title="drag"
+                        width={28} height={28} src={EnvGlobals.BASE_URL + "/wwwroot/img/icons/drag.png"} alt="drag" />
+                </button>
+            </td>
             <td>
                 <input className="form-control" style={{ display: "inline" }} onChange={(e) => {
                     const rowsCopy = [...tableRows];
@@ -192,7 +241,7 @@ export default function TableRow({ index, row, setRows, tableRows, deleteRow, ..
                             )
                         })}
                     </select>
-                    <button style={{ height: "38px", width: "38px" }} className="btn btn-light"
+                    <button className="btn btn-light btn-icon"
                         onClick={() => {
                             const wasNullable = mandatoryFieldBtnText !== "!"
                             setMandatoryFieldBtnText(wasNullable ? "!" : "?")
@@ -203,7 +252,7 @@ export default function TableRow({ index, row, setRows, tableRows, deleteRow, ..
                         {mandatoryFieldBtnText}
                     </button>
                     <OverlayTrigger trigger="click" placement="right" overlay={popover} rootClose={true}>
-                        <button style={{ height: "38px", width: "38px" }} className={`btn btn-light ${datatypeArguments.length === 0 ? "disabled" : ""}`} disabled={datatypeArguments.length === 0}>
+                        <button className={`btn btn-light btn-icon ${datatypeArguments.length === 0 ? "disabled" : ""}`} disabled={datatypeArguments.length === 0}>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"></path>
                             </svg>

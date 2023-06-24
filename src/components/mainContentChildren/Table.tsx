@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { CommandDeleteTable, CommandDeleteTableArgs } from "../../commands/appCommands/CommandDeleteTable";
 import { CommandModifyTable, CommandModifyTableArgs } from "../../commands/appCommands/CommandModifyTable";
 import { Manager } from "../../Manager";
@@ -19,6 +19,30 @@ export default function Table() {
     const { setAppState } = useAppStateManagement();
 
     const tableBeingEdited = (Manager.getInstance().getScene() as TableScene).tableBeingEdited;
+
+    useEffect(() => {
+        const onMouseUp = (e: MouseEvent) => {
+            dragEnd();
+            dragOverItem.current = null;
+            dragItem.current = null;
+            hoverInsertIndicator.current!.style.display = "none";
+        }
+        window.onmouseup = onMouseUp;
+        return () => {
+            window.onmouseup = null;
+        }
+    })
+
+    const dragEnd = () => {
+        if (dragItem.current === null || dragOverItem.current === null) return;
+        const copyRows = [...rows];
+        const dragItemContent = copyRows[dragItem.current];
+        copyRows.splice(dragItem.current, 1);
+        copyRows.splice(dragOverItem.current, 0, dragItemContent);
+        dragItem.current = null;
+        dragOverItem.current = null;
+        setRows(copyRows);
+    };
 
     const switchToDraw = () => {
         const draw = Manager.getInstance().draw;
@@ -106,17 +130,6 @@ export default function Table() {
     const dragItem = useRef<number | null>(null);
     const dragOverItem = useRef<number | null>(null);
 
-    const dragEnd = () => {
-        if (dragItem.current === null || dragOverItem.current === null) return;
-        const copyRows = [...rows];
-        const dragItemContent = copyRows[dragItem.current];
-        copyRows.splice(dragItem.current, 1);
-        copyRows.splice(dragOverItem.current, 0, dragItemContent);
-        dragItem.current = null;
-        dragOverItem.current = null;
-        setRows(copyRows);
-    };
-
     const deleteRow = (index: number) => {
         const newRows = [...rows];
         newRows.splice(index, 1);
@@ -133,8 +146,8 @@ export default function Table() {
         Manager.getInstance().changeScene(new DrawScene(draw))
         setAppState(AppState.DrawScene);
     }
-
-
+    const hoverInsertIndicator = useRef<HTMLDivElement>(null);
+    
     return (
         <div className="table-edit-container">
             <div className="modal" tabIndex={-1} style={{ display: "block" }}>
@@ -145,7 +158,7 @@ export default function Table() {
                             <button type="button" className="btn-close" onClick={() => switchToDraw()} aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
-                            <p className="modal-title" style={{ display: "flex", gridGap: "1em" }}>
+                            <div className="modal-title" style={{ display: "flex", gridGap: "1em" }}>
                                 <div style={{ flex: "50%", display: "flex", alignItems: "center" }}>
                                     <label htmlFor="table-name" className="me-3">Table name</label>
                                     <input id="table-name" className="form-control" style={{ width: "auto" }} onChange={(e) => setTableName(e.target.value)} type="text" value={tableName} />
@@ -154,12 +167,13 @@ export default function Table() {
                                     <label className="me-3">Table action</label>
                                     <button className="table-delete-btn btn btn-danger" onClick={() => deleteTable()}>Delete table</button>
                                 </div>
-                            </p>
+                            </div>
 
                             <hr />
                             <table>
                                 <thead>
                                     <tr>
+                                        <th>#</th>
                                         <th>Name</th>
                                         <th style={{ width: "120px" }}>Datatype</th>
                                         <th>Attributes</th>
@@ -170,30 +184,24 @@ export default function Table() {
                                     {
                                         rows.map((row, index) => (
                                             <TableRowJSX
-                                                // dragging logic
-                                                draggable
-                                                style={{ cursor: "grabbing" }}
-                                                onDragStart={(e) => { dragItem.current = index; }}
-                                                onDragEnter={(e) => { dragOverItem.current = index }}
-                                                onDragEnd={(e) => { dragEnd(); }}
-                                                onDragOver={e => e.preventDefault()} // this is needed for correct cursor icon display for dragEnd
-
-                                                // everything else
                                                 key={row.key}
-                                                index={index} row={row} setRows={setRows} tableRows={rows} deleteRow={deleteRow}
+                                                dragItem={dragItem}
+                                                dragOverItem={dragOverItem}
+                                            
+                                                index={index} hoverInsertIndicator={hoverInsertIndicator} row={row} setRows={setRows} tableRows={rows} deleteRow={deleteRow}
                                             />
                                         ))
                                     }
                                     <tr>
-                                        <td>
-                                            <button className="row-insert-btn btn btn-light" onClick={(e) => insertNewRow(e, -1)}>Insert Row</button>
+                                        <td colSpan={5}>
+                                            <button className="row-insert-btn btn btn-light" style={{ width: "100%" }} onClick={(e) => insertNewRow(e, -1)}>Insert Row</button>
                                         </td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
                                     </tr>
                                 </tbody>
                             </table>
+                            <div ref={hoverInsertIndicator} className="horizontal-strike" style={{ position: "fixed", display: "none", justifyContent: "center", pointerEvents: "none" }}>
+                                Drop
+                            </div>
                             <datalist id="attribute-suggestions">
                                 <option value="PK" />
                                 <option value='FK("TableName")' />

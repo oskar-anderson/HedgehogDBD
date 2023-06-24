@@ -95,3 +95,43 @@ td, th {
 th {
     font-weight: 600;
 }
+
+/**
+.horizontal-strike:before, .horizontal-strike:after {
+    content: '';
+    position: relative;
+    top: 50%;
+    left: 0;
+    height: 1px;
+    background: black;
+    width: 50%;
+    transform: translateY(-50%);
+}
+*/ 
+
+/*
+https://stackoverflow.com/questions/5214127/css-technique-for-a-horizontal-line-with-words-in-the-middle
+*/
+.horizontal-strike {
+    display: flex;
+    flex-direction: row;
+  }
+.horizontal-strike:before, .horizontal-strike:after{
+    content: "";
+    flex: 1 1;
+    border-bottom: 2px solid;
+    margin: auto;
+}
+.horizontal-strike:before {
+    margin-right: 10px
+}
+.horizontal-strike:after {
+    margin-left: 10px
+}
+
+.btn-icon {
+    --bs-btn-padding-x: 4px;
+    --bs-btn-padding-y: 4px;
+    width: 38px;
+    height: 38px;
+}

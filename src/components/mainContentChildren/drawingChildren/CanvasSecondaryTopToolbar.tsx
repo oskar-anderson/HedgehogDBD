@@ -249,6 +249,9 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx}: 
                         <TopToolbarListElementIcon onClickAction={() => loadSchema("Bookit.json")}>
                             Bookit
                         </TopToolbarListElementIcon>
+                        <TopToolbarListElementIcon onClickAction={() => loadSchema("BorderGuard.json")}>
+                            BorderGuard
+                        </TopToolbarListElementIcon>
                         <TopToolbarListElementIcon onClickAction={() => loadSchema("ChickenCoop.json")}>
                             Chicken Coop
                         </TopToolbarListElementIcon>

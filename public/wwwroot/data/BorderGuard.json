@@ -1,0 +1,1659 @@
+{
+    "tables": [
+        {
+            "id": "26125904-055d-4fdd-932c-0bf1f888b642",
+            "position": {
+                "x": 12,
+                "y": 7
+            },
+            "head": "house",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "cordon_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"cordon\")"
+                    ]
+                },
+                {
+                    "name": "code",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "0a10acc8-7599-4c1f-be8d-3742a3dfe913",
+            "position": {
+                "x": 103,
+                "y": 7
+            },
+            "head": "room",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "house_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"house\")"
+                    ]
+                },
+                {
+                    "name": "cordon_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"cordon\")"
+                    ]
+                },
+                {
+                    "name": "code",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "6f9368e7-1b21-4823-91da-994dd99b9872",
+            "position": {
+                "x": 103,
+                "y": 28
+            },
+            "head": "cordon",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "code",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "b1fec98c-be18-4a1f-b5ab-d8e9fe95f05e",
+            "position": {
+                "x": 182,
+                "y": 7
+            },
+            "head": "place",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "room_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"room\")"
+                    ]
+                },
+                {
+                    "name": "cordon_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"cordon\")"
+                    ]
+                },
+                {
+                    "name": "code",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "4b8acdf6-90b2-4b67-8292-d00224113ca7",
+            "position": {
+                "x": 14,
+                "y": 29
+            },
+            "head": "watchguard",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "cordon_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"cordon\")"
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "code",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "98e3dc81-c0a7-4ef1-b72b-e5508bd41fd2",
+            "position": {
+                "x": 37,
+                "y": 58
+            },
+            "head": "watchguard_in_patrol",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "watchguard_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"watchguard\")"
+                    ]
+                },
+                {
+                    "name": "border_section_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"border_section\")"
+                    ]
+                },
+                {
+                    "name": "since",
+                    "datatype": {
+                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "until",
+                    "datatype": {
+                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "485d8649-1624-40bb-b6b5-fca264fadc04",
+            "position": {
+                "x": 168,
+                "y": 70
+            },
+            "head": "person",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "first_name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "last_name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "phone",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": true
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "028acc4d-aa37-4d73-bbb8-4f94c6642e05",
+            "position": {
+                "x": 239,
+                "y": 28
+            },
+            "head": "military_unit",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "code",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "b9c1a4b2-5e35-4069-a6e7-41775dce3ac0",
+            "position": {
+                "x": 157,
+                "y": 28
+            },
+            "head": "cordon_in_service_by_military_unit",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "military_unit_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"military_unit\")"
+                    ]
+                },
+                {
+                    "name": "cordon_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"cordon\")"
+                    ]
+                },
+                {
+                    "name": "since",
+                    "datatype": {
+                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "until",
+                    "datatype": {
+                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "486b60be-510c-41a8-a640-d638a6b0b7c9",
+            "position": {
+                "x": 139,
+                "y": 45
+            },
+            "head": "person_in_xxx",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "person_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"person\")"
+                    ]
+                },
+                {
+                    "name": "military_unit_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": true
+                    },
+                    "attributes": [
+                        "FK(\"military_unit\")"
+                    ]
+                },
+                {
+                    "name": "cordon_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": true
+                    },
+                    "attributes": [
+                        "FK(\"cordon\")"
+                    ]
+                },
+                {
+                    "name": "watchguard_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": true
+                    },
+                    "attributes": [
+                        "FK(\"watchguard\")"
+                    ]
+                },
+                {
+                    "name": "title_or_role",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "since",
+                    "datatype": {
+                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "until",
+                    "datatype": {
+                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "679f85d8-449c-4f30-8d01-a9b12a79ed01",
+            "position": {
+                "x": 316,
+                "y": 50
+            },
+            "head": "person_living_in_room",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "person_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"person\")"
+                    ]
+                },
+                {
+                    "name": "place_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"place\")"
+                    ]
+                },
+                {
+                    "name": "since",
+                    "datatype": {
+                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "until",
+                    "datatype": {
+                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "e308b14e-f291-4b87-aee5-2f0e3050b9a8",
+            "position": {
+                "x": 67,
+                "y": 78
+            },
+            "head": "border_section",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "border_section_master_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"border_section\")"
+                    ]
+                },
+                {
+                    "name": "cordon_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"cordon\")"
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "6021d8b4-bdbd-4c2d-a534-1ef3fa253d46",
+            "position": {
+                "x": 90,
+                "y": 108
+            },
+            "head": "map_list_item",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "border_section_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"border_section\")"
+                    ]
+                },
+                {
+                    "name": "x",
+                    "datatype": {
+                        "id": "4bde4381-61f9-4877-9d14-084978b20b28",
+                        "arguments": [
+                            {
+                                "value": 5,
+                                "id": "f44703fe-0e0e-451f-872c-1278cc77df3e"
+                            },
+                            {
+                                "value": 5,
+                                "id": "278da857-3740-43bf-a8c5-894319355e5a"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "y",
+                    "datatype": {
+                        "id": "4bde4381-61f9-4877-9d14-084978b20b28",
+                        "arguments": [
+                            {
+                                "value": 5,
+                                "id": "f44703fe-0e0e-451f-872c-1278cc77df3e"
+                            },
+                            {
+                                "value": 5,
+                                "id": "278da857-3740-43bf-a8c5-894319355e5a"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "order",
+                    "datatype": {
+                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "aed511c3-1df4-4d49-be68-49b01167547c",
+            "position": {
+                "x": 323,
+                "y": 71
+            },
+            "head": "person_rank",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "person_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"person\")"
+                    ]
+                },
+                {
+                    "name": "rank_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"rank\")"
+                    ]
+                },
+                {
+                    "name": "since",
+                    "datatype": {
+                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "until",
+                    "datatype": {
+                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "6efb29d0-3383-441d-a6b9-2431bbc6343f",
+            "position": {
+                "x": 394,
+                "y": 72
+            },
+            "head": "rank",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "fullname",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "shortname",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "code",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "order",
+                    "datatype": {
+                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "d5e34ed7-c27c-489a-8b6d-7be4a08e7068",
+            "position": {
+                "x": 326,
+                "y": 105
+            },
+            "head": "person_absentness",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "person_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"person\")"
+                    ]
+                },
+                {
+                    "name": "absentness_type_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"generic_type\")"
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "description",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 25555,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "since",
+                    "datatype": {
+                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "until",
+                    "datatype": {
+                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ba173400-ecde-4ecc-8d68-d4f08ea70ed4",
+            "position": {
+                "x": 251,
+                "y": 107
+            },
+            "head": "reward",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "person_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"person\")"
+                    ]
+                },
+                {
+                    "name": "reward_type_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"generic_type\")"
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "description",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 25555,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "date",
+                    "datatype": {
+                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "065b770d-13df-443d-93a4-656831bc1aba",
+            "position": {
+                "x": 156,
+                "y": 107
+            },
+            "head": "punishment",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "person_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"person\")"
+                    ]
+                },
+                {
+                    "name": "punishment_type_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"generic_type\")"
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "description",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 25555,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "date",
+                    "datatype": {
+                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "da551d58-b684-48d7-8ca5-93853ab1492d",
+            "position": {
+                "x": 326,
+                "y": 88
+            },
+            "head": "person_replacement",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "person_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"person\")"
+                    ]
+                },
+                {
+                    "name": "person_absentness_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"person_absentness\")"
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "description",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 25555,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "since",
+                    "datatype": {
+                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "until",
+                    "datatype": {
+                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "0d00643c-9de0-486b-b717-4af10cf9d8dd",
+            "position": {
+                "x": 262,
+                "y": 127
+            },
+            "head": "generic_type",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "group_unique_name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "order",
+                    "datatype": {
+                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "e7d0eca7-53fa-402c-8f9c-3f7e2a72e214",
+            "position": {
+                "x": 6,
+                "y": 105
+            },
+            "head": "incident",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "border_section_id",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"border_section\")"
+                    ]
+                },
+                {
+                    "name": "incident_type_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"generic_type\")"
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "description",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 25555,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "date",
+                    "datatype": {
+                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "48ebb254-d0a1-408f-92a1-fbec6aefc071",
+            "position": {
+                "x": 9,
+                "y": 125
+            },
+            "head": "incident_creature",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "incident_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"incident\")"
+                    ]
+                },
+                {
+                    "name": "national_id",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": true
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "firstname",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "lastname",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": true
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "description",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 25555,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -66,7 +66,7 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
             }
         })
     );
-    const [mandatoryFieldBtnText, setMandatoryFieldBtnText] = useState(row.rowDatatype.isNullable ? "?" : "!");
+
     const handleArgumentInputChange = (e: ChangeEvent, argumentId: string) => {
         const newValue = (e.target! as HTMLInputElement).value;
         const newArguments = [...datatypeArguments];
@@ -106,7 +106,8 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
         const rowsCopy = [...tableRows];
         const activeDatabase = Manager.getInstance().draw.activeDatabase;
         const newArguments = DataType.getArgumentsByDatabaseAndByType(activeDatabase.select, selectedDatatypeId);
-        rowsCopy[index].rowDatatype = {
+        const rowCopy = rowsCopy[index];
+        rowCopy.rowDatatype = {
             id: selectedDatatypeId,
             arguments: newArguments.map(x => {
                 return {
@@ -117,7 +118,7 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
                     argumentId: x.id
                 }
             }),
-            isNullable: false
+            isNullable: rowCopy.rowDatatype.isNullable
         };
         setRows(rowsCopy);
     }
@@ -243,13 +244,11 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
                     </select>
                     <button className="btn btn-light btn-icon"
                         onClick={() => {
-                            const wasNullable = mandatoryFieldBtnText !== "!"
-                            setMandatoryFieldBtnText(wasNullable ? "!" : "?")
                             const rowsCopy = [...tableRows];
-                            rowsCopy[index].rowDatatype.isNullable = ! wasNullable;
+                            rowsCopy[index].rowDatatype.isNullable = ! row.rowDatatype.isNullable;
                             setRows(rowsCopy);
                         }}>
-                        {mandatoryFieldBtnText}
+                        {row.rowDatatype.isNullable ? "?" : "!"}
                     </button>
                     <OverlayTrigger trigger="click" placement="right" overlay={popover} rootClose={true}>
                         <button className={`btn btn-light btn-icon ${datatypeArguments.length === 0 ? "disabled" : ""}`} disabled={datatypeArguments.length === 0}>

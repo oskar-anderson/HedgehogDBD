@@ -20,6 +20,17 @@
                     ]
                 },
                 {
+                    "name": "company_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": true
+                    },
+                    "attributes": [
+                        "FK(\"company\")"
+                    ]
+                },
+                {
                     "name": "driver_code",
                     "datatype": {
                         "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
@@ -105,7 +116,7 @@
                         "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
                         "arguments": [
                             {
-                                "value": 255,
+                                "value": 25555,
                                 "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
                             }
                         ],
@@ -125,28 +136,6 @@
                                 "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
                             }
                         ],
-                        "isNullable": false
-                    },
-                    "attributes": [
-                        ""
-                    ]
-                },
-                {
-                    "name": "insurance_expiration_date",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
-                    "attributes": [
-                        ""
-                    ]
-                },
-                {
-                    "name": "authorized_to_drive_until",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
                         "isNullable": false
                     },
                     "attributes": [
@@ -175,11 +164,22 @@
                     ]
                 },
                 {
-                    "name": "driver_id",
+                    "name": "owner_company_id",
                     "datatype": {
                         "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
                         "arguments": [],
-                        "isNullable": false
+                        "isNullable": true
+                    },
+                    "attributes": [
+                        "FK(\"company\")"
+                    ]
+                },
+                {
+                    "name": "owner_person_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": true
                     },
                     "attributes": [
                         "FK(\"driver\")"
@@ -281,14 +281,25 @@
                     "attributes": [
                         ""
                     ]
+                },
+                {
+                    "name": "insurance_expiration_date",
+                    "datatype": {
+                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
                 }
             ]
         },
         {
             "id": "260a8f8f-59de-4a0b-928f-e7f8561d0373",
             "position": {
-                "x": 275,
-                "y": 56
+                "x": 226,
+                "y": 74
             },
             "head": "driver_working",
             "tableRows": [
@@ -414,7 +425,7 @@
         {
             "id": "b929d6ba-bb39-4802-899f-6c56febf51ca",
             "position": {
-                "x": 393,
+                "x": 398,
                 "y": 36
             },
             "head": "price",
@@ -564,8 +575,8 @@
         {
             "id": "28c20c93-48b9-4336-ac7b-cabbfd2ed8fd",
             "position": {
-                "x": 340,
-                "y": 41
+                "x": 355,
+                "y": 40
             },
             "head": "dd_vehicle_type",
             "tableRows": [
@@ -628,8 +639,8 @@
         {
             "id": "c7cca8e0-cc9a-4dbe-a815-a8c8b5241dae",
             "position": {
-                "x": 276,
-                "y": 81
+                "x": 243,
+                "y": 98
             },
             "head": "geozone",
             "tableRows": [
@@ -665,8 +676,8 @@
         {
             "id": "6a06db06-dccb-45af-8847-ec41ae2d1f96",
             "position": {
-                "x": 276,
-                "y": 99
+                "x": 239,
+                "y": 120
             },
             "head": "geozone_point",
             "tableRows": [
@@ -1312,7 +1323,7 @@
                 "x": 95,
                 "y": 17
             },
-            "head": "user",
+            "head": "user_mti_base",
             "tableRows": [
                 {
                     "name": "id",
@@ -1330,7 +1341,7 @@
                     "datatype": {
                         "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
                         "arguments": [],
-                        "isNullable": false
+                        "isNullable": true
                     },
                     "attributes": [
                         "FK(\"driver\")"
@@ -1341,10 +1352,21 @@
                     "datatype": {
                         "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
                         "arguments": [],
-                        "isNullable": false
+                        "isNullable": true
                     },
                     "attributes": [
                         "FK(\"client\")"
+                    ]
+                },
+                {
+                    "name": "sub_company_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": true
+                    },
+                    "attributes": [
+                        "FK(\"company\")"
                     ]
                 },
                 {
@@ -1462,6 +1484,108 @@
                     },
                     "attributes": [
                         "PK"
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "63d349a9-f685-45ac-b5a5-4206ced68b47",
+            "position": {
+                "x": 236,
+                "y": 55
+            },
+            "head": "driving_rights_for_vehicle",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "vehicle_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"vehicle\")"
+                    ]
+                },
+                {
+                    "name": "driver_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"driver\")"
+                    ]
+                },
+                {
+                    "name": "from",
+                    "datatype": {
+                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "until",
+                    "datatype": {
+                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "280b1a9a-b8a9-40d6-993d-284be413bfbd",
+            "position": {
+                "x": 239,
+                "y": 22
+            },
+            "head": "company",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
                     ]
                 }
             ]

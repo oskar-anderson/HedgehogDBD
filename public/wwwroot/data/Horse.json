@@ -988,11 +988,22 @@
                     ]
                 },
                 {
-                    "name": "end_time",
+                    "name": "end_time_milliseconds",
                     "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                         "arguments": [],
-                        "isNullable": false
+                        "isNullable": true
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "is_disqualified",
+                    "datatype": {
+                        "id": "602200d9-2075-4824-b80c-6e739e503a70",
+                        "arguments": [],
+                        "isNullable": true
                     },
                     "attributes": [
                         ""

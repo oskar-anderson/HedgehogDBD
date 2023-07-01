@@ -254,8 +254,8 @@
         {
             "id": "b5c49d85-c140-4c0e-9f64-32ee366792c5",
             "position": {
-                "x": 101,
-                "y": 18
+                "x": 244,
+                "y": 20
             },
             "head": "person",
             "tableRows": [
@@ -282,14 +282,14 @@
                     ]
                 },
                 {
-                    "name": "master_person_id",
+                    "name": "manager_id",
                     "datatype": {
                         "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
                         "arguments": [],
-                        "isNullable": false
+                        "isNullable": true
                     },
                     "attributes": [
-                        "FK(\"person\")"
+                        "FK(\"business_user\")"
                     ]
                 },
                 {
@@ -686,14 +686,14 @@
                     ]
                 },
                 {
-                    "name": "bed_id",
+                    "name": "bed_type_id",
                     "datatype": {
                         "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
                         "arguments": [],
                         "isNullable": false
                     },
                     "attributes": [
-                        "FK(\"dd_bed\")"
+                        "FK(\"dd_bed_type\")"
                     ]
                 },
                 {
@@ -726,7 +726,7 @@
                 "x": 13,
                 "y": 96
             },
-            "head": "dd_bed",
+            "head": "dd_bed_type",
             "tableRows": [
                 {
                     "name": "id",
@@ -771,10 +771,10 @@
         {
             "id": "c9b31b2d-9598-4509-b453-d7babdd10711",
             "position": {
-                "x": 76,
-                "y": 94
+                "x": 103,
+                "y": 125
             },
-            "head": "room_type_picture",
+            "head": "sellable_picture",
             "tableRows": [
                 {
                     "name": "id",
@@ -788,14 +788,14 @@
                     ]
                 },
                 {
-                    "name": "room_type_id",
+                    "name": "sellable_id",
                     "datatype": {
                         "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
                         "arguments": [],
                         "isNullable": false
                     },
                     "attributes": [
-                        "FK(\"room_type\")"
+                        "FK(\"sellable\")"
                     ]
                 },
                 {
@@ -819,10 +819,10 @@
         {
             "id": "11bea5d2-1fde-4ad6-9d5b-02d7bcb3b574",
             "position": {
-                "x": 113,
-                "y": 81
+                "x": 157,
+                "y": 125
             },
-            "head": "room_type_reservable_price",
+            "head": "sellable_price",
             "tableRows": [
                 {
                     "name": "id",
@@ -836,22 +836,67 @@
                     ]
                 },
                 {
-                    "name": "room_type_id",
+                    "name": "sellable_variation_id",
                     "datatype": {
                         "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
                         "arguments": [],
                         "isNullable": false
                     },
                     "attributes": [
-                        "FK(\"room_type\")"
+                        "FK(\"sellable_variation\")"
                     ]
                 },
                 {
-                    "name": "price",
+                    "name": "normal_price",
                     "datatype": {
-                        "id": "30767a2a-9bb4-4d2b-8af2-8b0fc84b2fc9",
-                        "arguments": [],
+                        "id": "4bde4381-61f9-4877-9d14-084978b20b28",
+                        "arguments": [
+                            {
+                                "value": 10,
+                                "id": "f44703fe-0e0e-451f-872c-1278cc77df3e"
+                            },
+                            {
+                                "value": 2,
+                                "id": "278da857-3740-43bf-a8c5-894319355e5a"
+                            }
+                        ],
                         "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "discount_price",
+                    "datatype": {
+                        "id": "4bde4381-61f9-4877-9d14-084978b20b28",
+                        "arguments": [
+                            {
+                                "value": 10,
+                                "id": "f44703fe-0e0e-451f-872c-1278cc77df3e"
+                            },
+                            {
+                                "value": 2,
+                                "id": "278da857-3740-43bf-a8c5-894319355e5a"
+                            }
+                        ],
+                        "isNullable": true
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "code_for_discount",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": true
                     },
                     "attributes": [
                         ""
@@ -912,35 +957,14 @@
                     ]
                 },
                 {
-                    "name": "name",
+                    "name": "sellable_id",
                     "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
                         "isNullable": false
                     },
                     "attributes": [
-                        ""
-                    ]
-                },
-                {
-                    "name": "description",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 25555,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
-                    "attributes": [
-                        ""
+                        "FK(\"sellable\")"
                     ]
                 },
                 {
@@ -993,7 +1017,7 @@
                     ]
                 },
                 {
-                    "name": "bed_is_extra_beds",
+                    "name": "number_of_extra_beds",
                     "datatype": {
                         "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                         "arguments": [],
@@ -1025,14 +1049,14 @@
                     ]
                 },
                 {
-                    "name": "person_id",
+                    "name": "manager_id",
                     "datatype": {
                         "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
                         "arguments": [],
                         "isNullable": false
                     },
                     "attributes": [
-                        "FK(\"person\")"
+                        "FK(\"business_user\")"
                     ]
                 },
                 {
@@ -1061,6 +1085,17 @@
                                 "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
                             }
                         ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "number_of_stars",
+                    "datatype": {
+                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                        "arguments": [],
                         "isNullable": false
                     },
                     "attributes": [
@@ -1152,8 +1187,8 @@
         {
             "id": "38dbd8bb-4197-4d4a-b83d-7f17ae85dfb9",
             "position": {
-                "x": 172,
-                "y": 21
+                "x": 231,
+                "y": 34
             },
             "head": "reservation",
             "tableRows": [
@@ -1270,8 +1305,8 @@
         {
             "id": "1be0326a-ea71-4014-adf5-f0c340b622e0",
             "position": {
-                "x": 173,
-                "y": 41
+                "x": 307,
+                "y": 45
             },
             "head": "purchase",
             "tableRows": [
@@ -1447,8 +1482,8 @@
         {
             "id": "c9ce8b46-60a0-41a9-83e3-04ebc88c96fb",
             "position": {
-                "x": 234,
-                "y": 41
+                "x": 377,
+                "y": 45
             },
             "head": "purchase_line",
             "tableRows": [
@@ -1626,6 +1661,327 @@
                         "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                         "arguments": [],
                         "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "is_cancelled",
+                    "datatype": {
+                        "id": "602200d9-2075-4824-b80c-6e739e503a70",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "9fc4aaa8-ba1c-4c60-856f-8d9c03fb6af4",
+            "position": {
+                "x": 105,
+                "y": 20
+            },
+            "head": "business_user",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "user_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"user\")"
+                    ]
+                },
+                {
+                    "name": "business_name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "registration_code",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "e713783e-9c4f-48aa-affb-4ed8e3e5e397",
+            "position": {
+                "x": 128,
+                "y": 77
+            },
+            "head": "sellable",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "category_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"sellable_category\")"
+                    ]
+                },
+                {
+                    "name": "hotel_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"hotel\")"
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "description",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 25555,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "08756e67-1dc8-47af-a5be-c535f4e071a1",
+            "position": {
+                "x": 38,
+                "y": 125
+            },
+            "head": "sellable_category",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "master_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": true
+                    },
+                    "attributes": [
+                        "FK(\"sellable_category\")"
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "4ff179e5-fe3f-4d42-8fe0-6f4d96de4544",
+            "position": {
+                "x": 142,
+                "y": 100
+            },
+            "head": "sellable_variation",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "sellable_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"sellable\")"
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "color",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": true
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "size",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": true
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "quantity_number",
+                    "datatype": {
+                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                        "arguments": [],
+                        "isNullable": true
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "quantity_api_calc_name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": true
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "quantity_contact_for_quantity",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": true
                     },
                     "attributes": [
                         ""

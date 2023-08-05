@@ -48,9 +48,8 @@ export default function ModalScriptListItem({
                 <p className="modal-title">{script.name}</p>
                 <button type="button" className="btn-close" onClick={() => { setScriptModalState(false) }} aria-label="Close"></button>
             </div>
-            <pre className="modal-body colored-code mb-0" style={{ maxHeight: '76vh', overflow: 'auto' }}
-                dangerouslySetInnerHTML={{ __html: highlightedContent }}>
-            </pre>
+            <pre className="modal-body colored-code mb-0 p-2" style={{ maxHeight: '76vh', overflow: 'auto' }}
+                dangerouslySetInnerHTML={{ __html: highlightedContent }} />
             <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" onClick={() => { setScriptModalState(false) }}>Close</button>
                 {!script.tags.includes("builtin") &&

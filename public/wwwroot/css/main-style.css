@@ -135,3 +135,8 @@ https://stackoverflow.com/questions/5214127/css-technique-for-a-horizontal-line-
     width: 38px;
     height: 38px;
 }
+
+.modal-body {
+    max-height: 76vh;
+    overflow: auto;
+}

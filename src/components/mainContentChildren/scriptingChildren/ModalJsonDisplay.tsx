@@ -23,17 +23,24 @@ export default function ModalJsonDisplay({ setJsonDisplayModelState }: ModelJson
 
 
     return (
-        <div className="modal-content">
-            <div className="modal-header">
-                <p className="modal-title">Schema JSON</p>
-                <button type="button" className="btn-close" onClick={() => { setJsonDisplayModelState(false) }} aria-label="Close"></button>
+        <>
+            <div className="modal" tabIndex={-1} style={{ display: "block" }}>
+                <div className="modal-dialog modal-dialog-scrollable">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <p className="modal-title">Schema JSON</p>
+                            <button type="button" className="btn-close" onClick={() => { setJsonDisplayModelState(false) }} aria-label="Close"></button>
+                        </div>
+                        <pre className="modal-body colored-code mb-0 p-2" data-lang="json" 
+                            dangerouslySetInnerHTML={{ __html: content }}>
+                        </pre>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" onClick={() => { setJsonDisplayModelState(false) }}>Close</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div className="modal-body">
-                <pre className="colored-code" data-lang="javascript" dangerouslySetInnerHTML={{ __html: content }}></pre>
-            </div>
-            <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => { setJsonDisplayModelState(false) }}>Close</button>
-            </div>
-        </div>
+            <div className="modal-backdrop fade show"></div>
+        </>
     )
 }

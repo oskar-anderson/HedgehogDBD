@@ -203,42 +203,34 @@ export default function Scripting() {
                     </div>
                 </div>
             </div>
-            {isScriptListItemModalVisible && <div className="modal" tabIndex={-1} style={{ display: "block" }}>
-                <div className="modal-dialog">
-                    <ModalScriptListItem
-                        script={mainModalProps!.script}
-                        highlightedContent={mainModalProps!.highlightedContent}
-                        switchToExecuteModel={switchToExecuteModel}
-                        setScriptModalState={setIsScriptListItemModalVisible}
-                        setExecuteModalState={setIsExecuteModalVisible}
-                        setEditorValue={setEditorValue}
-                        removeScriptFromLocalStorage={removeScriptFromLocalStorage}
-                    ></ModalScriptListItem>
-                </div>
-            </div>}
-            {isExecuteModalVisible && <div className="modal" tabIndex={-1} style={{ display: "block" }}>
-                <div className="modal-dialog">
-                    <ModalScriptExecute
-                        isSuccess={executeModalProps!.isSuccess}
-                        content={executeModalProps!.content}
-                        setModalState={executeModalProps!.setModalState}
-                    />
-                </div>
-            </div>}
-            {isJsonDisplayModalVisible && <div className="modal" tabIndex={-1} style={{ display: "block" }}>
-                <div className="modal-dialog">
-                    <ModalJsonDisplay
-                        setJsonDisplayModelState={setIsJsonDisplayModalVisible}
-                    />
-                </div>
-            </div>}
-            {isSaveScriptModalVisible && <div className="modal" tabIndex={-1} style={{ display: "block" }}>
-                <div className="modal-dialog">
-                    <ModalSaveScript
-                        {...saveScriptModalProps!}
-                    />
-                </div>
-            </div>}
+            {isScriptListItemModalVisible && 
+                <ModalScriptListItem
+                    script={mainModalProps!.script}
+                    highlightedContent={mainModalProps!.highlightedContent}
+                    switchToExecuteModel={switchToExecuteModel}
+                    setScriptModalState={setIsScriptListItemModalVisible}
+                    setExecuteModalState={setIsExecuteModalVisible}
+                    setEditorValue={setEditorValue}
+                    removeScriptFromLocalStorage={removeScriptFromLocalStorage}
+                ></ModalScriptListItem>
+            }
+            {isExecuteModalVisible && 
+                <ModalScriptExecute
+                    isSuccess={executeModalProps!.isSuccess}
+                    content={executeModalProps!.content}
+                    setModalState={executeModalProps!.setModalState}
+                />
+            }
+            {isJsonDisplayModalVisible && 
+                <ModalJsonDisplay
+                    setJsonDisplayModelState={setIsJsonDisplayModalVisible}
+                />
+            }
+            {isSaveScriptModalVisible && 
+                <ModalSaveScript
+                    {...saveScriptModalProps!}
+                />
+            }
         </>
     );
 }

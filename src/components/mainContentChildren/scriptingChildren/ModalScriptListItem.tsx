@@ -43,26 +43,33 @@ export default function ModalScriptListItem({
         setScriptModalState(false);
     }
     return (
-        <div className="modal-content">
-            <div className="modal-header">
-                <p className="modal-title">{script.name}</p>
-                <button type="button" className="btn-close" onClick={() => { setScriptModalState(false) }} aria-label="Close"></button>
-            </div>
-            <pre className="modal-body colored-code mb-0 p-2" style={{ maxHeight: '76vh', overflow: 'auto' }}
-                dangerouslySetInnerHTML={{ __html: highlightedContent }} />
-            <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => { setScriptModalState(false) }}>Close</button>
-                {!script.tags.includes("builtin") &&
-                    <button onClick={() => onClickDeleteScript()} type="button" className="btn btn-danger">Delete</button>
-                }
+        <>
+            <div className="modal" tabIndex={-1} style={{ display: "block" }}>
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <p className="modal-title">{script.name}</p>
+                            <button type="button" className="btn-close" onClick={() => { setScriptModalState(false) }} aria-label="Close"></button>
+                        </div>
+                        <pre className="modal-body colored-code mb-0 p-2"
+                            dangerouslySetInnerHTML={{ __html: highlightedContent }} />
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" onClick={() => { setScriptModalState(false) }}>Close</button>
+                            {!script.tags.includes("builtin") &&
+                                <button onClick={() => onClickDeleteScript()} type="button" className="btn btn-danger">Delete</button>
+                            }
 
-                {!script.tags.includes("readonly") &&
-                    <>
-                        <button onClick={async () => { switchToExecuteModel(await execute(script.content, Manager.getInstance().draw)) }} type="button" className="btn btn-primary">⚡ Execute</button>
-                        <button onClick={() => onClickCopyToEditor()} type="button" className="btn btn-primary">Paste to editor</button>
-                    </>
-                }
+                            {!script.tags.includes("readonly") &&
+                                <>
+                                    <button onClick={async () => { switchToExecuteModel(await execute(script.content, Manager.getInstance().draw)) }} type="button" className="btn btn-primary">⚡ Execute</button>
+                                    <button onClick={() => onClickCopyToEditor()} type="button" className="btn btn-primary">Paste to editor</button>
+                                </>
+                            }
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+            <div className="modal-backdrop fade show"></div>
+        </>
     );
 }

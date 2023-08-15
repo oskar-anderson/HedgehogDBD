@@ -264,6 +264,9 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx}: 
                         <TopToolbarListElementIcon onClickAction={() => loadSchema("OrderingSystem.json")}>
                             Ordering System
                         </TopToolbarListElementIcon>
+                        <TopToolbarListElementIcon onClickAction={() => loadSchema("Prescription.json")}>
+                            Prescription
+                        </TopToolbarListElementIcon>
                     </li>
                 </ul>
             </div>

@@ -1,0 +1,651 @@
+{
+    "tables": [
+        {
+            "id": "6c644fac-17b9-4014-8fc0-b7b9f8872fc4",
+            "position": {
+                "x": 24,
+                "y": 11
+            },
+            "head": "prescription",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "composer_facility-name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "composer_facility-registration_code",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "composer_person-name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "composer_person-code",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "composer_person-telephone",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "composer_person-e_post",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "composer_person-job_title",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": true
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "issuer_facility-name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": true
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "issuer_facility-registration_code",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": true
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "issuer_person-name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": true
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "issuer_person-code",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": true
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "patient-personal_id_code",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "patient-firstname",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "patient-lastname",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "patient-birthdate",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "patient-registered_place_of_residence",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "patient-is_insured",
+                    "datatype": {
+                        "id": "602200d9-2075-4824-b80c-6e739e503a70",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "patient-insurance_name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": true
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "prescription-code",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "prescription-requires_a_special_sales_license_from_ravimiamet",
+                    "datatype": {
+                        "id": "602200d9-2075-4824-b80c-6e739e503a70",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "prescription-valid_from",
+                    "datatype": {
+                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "prescription-valid_to",
+                    "datatype": {
+                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "prescription-status",
+                    "datatype": {
+                        "id": "71ccfd31-47c8-472c-bc80-4ca5df29e939",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "prescription-is_no_buyer_limit",
+                    "datatype": {
+                        "id": "602200d9-2075-4824-b80c-6e739e503a70",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "prescription-diagnosis",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 25555,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "prescription-medicine_form",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "prescription-atc_code",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "prescription-name",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "prescription-single_administration_amount_value",
+                    "datatype": {
+                        "id": "4bde4381-61f9-4877-9d14-084978b20b28",
+                        "arguments": [
+                            {
+                                "value": 10,
+                                "id": "f44703fe-0e0e-451f-872c-1278cc77df3e"
+                            },
+                            {
+                                "value": 2,
+                                "id": "278da857-3740-43bf-a8c5-894319355e5a"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "prescription-single_administration_amount_value_suffix",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "prescription-administration_amount_piece",
+                    "datatype": {
+                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "prescription_dosage_treatment_type",
+                    "datatype": {
+                        "id": "71ccfd31-47c8-472c-bc80-4ca5df29e939",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "prescription_dosage_treatment_duration_days",
+                    "datatype": {
+                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "prescription_dosage_amount_value",
+                    "datatype": {
+                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "prescription_dosage_amount_value_suffix",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "prescription_dosage_amount_repetition",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "prescription_dosage_description",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 25555,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": true
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "7acf31b6-6f4c-437a-872d-c05947b43313",
+            "position": {
+                "x": 133,
+                "y": 11
+            },
+            "head": "prescription_allowed_buyers",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "prescription_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"prescription\")"
+                    ]
+                },
+                {
+                    "name": "personal_id_code",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "firstname",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                },
+                {
+                    "name": "lastname",
+                    "datatype": {
+                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                        "arguments": [
+                            {
+                                "value": 255,
+                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                            }
+                        ],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        ""
+                    ]
+                }
+            ]
+        }
+    ]
+}

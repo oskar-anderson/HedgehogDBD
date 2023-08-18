@@ -246,6 +246,9 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx}: 
                 </button>
                 <ul className="dropdown-menu" style={{ position: 'absolute' }}>
                     <li>
+                        <TopToolbarListElementIcon onClickAction={() => loadSchema("Elron.json")}>
+                            Elron
+                        </TopToolbarListElementIcon>
                         <TopToolbarListElementIcon onClickAction={() => loadSchema("Bookit.json")}>
                             Bookit
                         </TopToolbarListElementIcon>

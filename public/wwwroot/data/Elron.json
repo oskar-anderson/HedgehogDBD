@@ -274,7 +274,7 @@
         {
             "id": "7ff2bbe6-f403-48d6-b4b6-5cb340a9cd9d",
             "position": {
-                "x": 182,
+                "x": 169,
                 "y": 27
             },
             "head": "route_stop",
@@ -306,21 +306,10 @@
                     "datatype": {
                         "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
                         "arguments": [],
-                        "isNullable": true
+                        "isNullable": false
                     },
                     "attributes": [
                         "FK(\"route\")"
-                    ]
-                },
-                {
-                    "name": "route_template_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": true
-                    },
-                    "attributes": [
-                        "FK(\"route_template\")"
                     ]
                 },
                 {
@@ -361,8 +350,8 @@
         {
             "id": "3c086765-47d6-4e53-aaa0-0f9b92736b7f",
             "position": {
-                "x": 182,
-                "y": 9
+                "x": 256,
+                "y": 27
             },
             "head": "stop",
             "tableRows": [
@@ -439,7 +428,7 @@
             "id": "105344c7-ac37-4429-a898-1d8ff0cb2cf7",
             "position": {
                 "x": 98,
-                "y": 9
+                "y": 10
             },
             "head": "route_template",
             "tableRows": [
@@ -469,11 +458,54 @@
                     "attributes": [
                         ""
                     ]
+                }
+            ]
+        },
+        {
+            "id": "cad1a6ca-25a6-46b4-bedc-a91bf5253229",
+            "position": {
+                "x": 163,
+                "y": 10
+            },
+            "head": "route_stop_template",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "PK"
+                    ]
                 },
                 {
-                    "name": "scheduled_start_time",
+                    "name": "stop_id",
                     "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"stop\")"
+                    ]
+                },
+                {
+                    "name": "route_template_id",
+                    "datatype": {
+                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                        "arguments": [],
+                        "isNullable": false
+                    },
+                    "attributes": [
+                        "FK(\"route_template\")"
+                    ]
+                },
+                {
+                    "name": "rank",
+                    "datatype": {
+                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                         "arguments": [],
                         "isNullable": false
                     },
@@ -482,9 +514,9 @@
                     ]
                 },
                 {
-                    "name": "scheduled_end_time",
+                    "name": "duration_minutes_from_start",
                     "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
+                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                         "arguments": [],
                         "isNullable": false
                     },

@@ -15,13 +15,15 @@
     "@pixi/math-extras": "^6.5.8",
     "bootstrap": "^5.2.3",
     "dayjs": "^1.11.6",
+    "demo-dom-to-image--dom-to-image": "npm:dom-to-image@^2.6.0",
     "fontfaceobserver": "^2.3.0",
     "monaco-editor": "^0.34.1",
     "npm-run-all": "^4.1.5",
     "pixi.js": "^6.5.6",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.15.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.21.5",

@@ -125,7 +125,7 @@ export default function Scripting() {
     }
 
     return (
-        <>
+        <div className="bg-grey">
             <div className="scripting-container">
                 <div>
                     <div style={{ display: "flex", justifyContent: "center" }}>
@@ -185,7 +185,7 @@ export default function Scripting() {
                 </div>
             </div>
             <div className="comment-container">
-                <div className="giscus" style={{ margin: "1em 0", display: "flex", justifyContent: "center" }}>
+                <div className="giscus" style={{ padding: "1em 0", display: "flex", justifyContent: "center" }}>
                     <div style={{ width: "90%" }}>
                         <Giscus
                             repo="oskar-anderson/RasterModeler"
@@ -231,6 +231,6 @@ export default function Scripting() {
                     {...saveScriptModalProps!}
                 />
             }
-        </>
+        </div>
     );
 }

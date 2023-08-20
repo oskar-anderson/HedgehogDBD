@@ -150,7 +150,7 @@ export default function Table() {
     
     return (
         <div className="table-edit-container">
-            <div className="modal" tabIndex={-1} style={{ display: "block" }}>
+            <div className="modal bg-grey" tabIndex={-1} style={{ display: "block" }}>
                 <div className="modal-dialog modal-dialog-scrollable" style={{ maxWidth: "80%" }}>
                     <div className="modal-content">
                         <div className="modal-header">

@@ -140,3 +140,7 @@ https://stackoverflow.com/questions/5214127/css-technique-for-a-horizontal-line-
     max-height: 76vh;
     overflow: auto;
 }
+
+.bg-grey {
+    background-color: #eee;
+}

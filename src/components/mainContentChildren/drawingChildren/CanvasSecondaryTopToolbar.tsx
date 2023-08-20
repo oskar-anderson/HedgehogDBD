@@ -190,7 +190,7 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx}: 
     };
 
     return (
-        <div className="navbar-nav me-auto" style={{ flexDirection: 'row', height: `${heightPx}px`, borderBottomWidth: "1px", borderStyle: "solid", alignItems: "center" }}>
+        <div className="navbar-nav me-auto bg-grey" style={{ flexDirection: 'row', height: `${heightPx}px`, borderBottomWidth: "1px", borderStyle: "solid", alignItems: "center" }}>
             <div className="nav-item dropdown">
                 <button className="btn" data-bs-toggle="dropdown" style={{ borderRadius: "0px" }}>
                     File

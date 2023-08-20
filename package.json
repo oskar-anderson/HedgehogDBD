@@ -16,6 +16,7 @@
     "bootstrap": "^5.2.3",
     "dayjs": "^1.11.6",
     "demo-dom-to-image--dom-to-image": "npm:dom-to-image@^2.6.0",
+    "demo-reactflow--reactflow": "npm:reactflow@^11.8.2",
     "fontfaceobserver": "^2.3.0",
     "monaco-editor": "^0.34.1",
     "npm-run-all": "^4.1.5",

@@ -28,8 +28,8 @@ export default function DomToImage() {
         tables: [
             {
                 position: {
-                    x: "600",
-                    y: "300"
+                    x: 600,
+                    y: 300
                 },
                 title: "person",
                 rows: [
@@ -53,8 +53,8 @@ export default function DomToImage() {
             },
             {
                 position: {
-                    x: "900",
-                    y: "650"
+                    x: 900,
+                    y: 650
                 },
                 title: "registrations",
                 rows: [
@@ -78,8 +78,8 @@ export default function DomToImage() {
             },
             {
                 position: {
-                    x: "1200",
-                    y: "300"
+                    x: 1200,
+                    y: 300
                 },
                 title: "service",
                 rows: [

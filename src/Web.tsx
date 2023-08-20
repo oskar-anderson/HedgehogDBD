@@ -11,6 +11,7 @@ export default function Web() {
     return (
         <Routes>
             <Route path="/" element={<App />} ></Route>
+            <Route path="/RasterModeler" element={<App />} ></Route>
             <Route path="/internal" element={<Internal />} ></Route>
             <Route path="/internal/demo/dom-to-image" element={<DomToImage />} ></Route>
             <Route path="/internal/demo/react-flow-1" element={<ReactFlow1 />} ></Route>

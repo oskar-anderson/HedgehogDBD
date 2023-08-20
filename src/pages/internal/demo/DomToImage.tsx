@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom/dist/index";
 import { useRef } from "react"
+/* @ts-ignore types do not work for this library it seems */
 import domtoimage from 'demo-dom-to-image--dom-to-image';
 
 export default function DomToImage() {

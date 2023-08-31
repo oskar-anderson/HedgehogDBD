@@ -5,7 +5,6 @@ import Scripting from "./mainContentChildren/Scripting";
 import { useAppStateManagement } from "../Store";
 import TopToolbarAction from "./TopToolbarAction";
 import { Draw } from "../model/Draw";
-import { IScene, Manager } from "../Manager";
 import { LoaderScene } from "../scenes/LoaderScene";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Schema } from "../model/Schema";
@@ -21,7 +20,6 @@ export enum AppState {
 }
 
 export default function MainComponent() {
-    const { appState, setAppState } = useAppStateManagement();
     const canvasContainerRef = useRef<HTMLDivElement>(null);
     const [tables, setTables] = useState<TableDTO[]>([]);
     
@@ -29,7 +27,10 @@ export default function MainComponent() {
         setTables(tables);
     };
     useEffect(() => {
-        let draw = new Draw(new Schema([], onTablesUpdateCallbackOuterReadonly), new MyRect(0, 0, 3240, 2160), onTablesUpdateCallbackOuterReadonly);
+        let schema = new Schema(tables.map(x => x.mapToTable()));
+        let draw = new Draw(schema, new MyRect(0, 0, 3240, 2160), onTablesUpdateCallbackOuterReadonly);
+        draw.onTablesChangeCallback(tables)
+
         Manager.constructInstance(
             3240,
             2160,
@@ -49,8 +50,8 @@ export default function MainComponent() {
 
     return (
         <>
-            <div className="top-menu-action-container" >
-                { optionalTopToolbar }
+            <div>
+                <TopToolbarAction currentState={appState} heightPx={topToolBarHeightPx} />
             </div>
 
             { appState === AppState.LoaderScene && <Loading canvasContainerRef={canvasContainerRef} /> }

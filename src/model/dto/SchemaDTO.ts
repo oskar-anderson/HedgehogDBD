@@ -30,11 +30,4 @@ export class SchemaDTO {
             jsonObject.tables.map(x => TableDTO.hydrate(x))
         );
     }
-
-    mapToSchema(schemaUpdateTables: (tables: TableDTO[]) => void) {
-        return new Schema(
-            this.tables.map(x => x.mapToTable()),
-            schemaUpdateTables
-        );
-    }
 }

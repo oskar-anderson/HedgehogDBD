@@ -27,39 +27,13 @@ function TopToolbarListElementIcon( {onClickAction, iconSrc, children}: TopToolb
 }
 
 interface CanvasSecondaryTopToolbarProps {
-    setZoomFontSize: (size: number) => void;
     heightPx: number;
 }
 
-export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx}: CanvasSecondaryTopToolbarProps) {
+export default function CanvasSecondaryTopToolbar({ heightPx}: CanvasSecondaryTopToolbarProps) {
 
     const newSchema = () => {
         setSchemaAndUpdateUi(new SchemaDTO([]));
-    }
-
-    const saveAsJpg = async () => {
-        let app = Manager.getInstance().getApp();
-        let oldFontSize = Manager.getInstance().draw.selectedFontSize.size;
-        let maxFontSize = Math.max(...Draw.fontSizes_Inconsolata.map(x => x.size))
-        setZoomFontSize(maxFontSize);
-        const containerSize = app.stage.getBounds();
-        const container = new PIXI.Container();
-
-        const background = new PIXI.Graphics();
-        background.beginFill(0xFFFFFF);
-        background.drawRect(containerSize.x, containerSize.y, containerSize.width, containerSize.height)
-        background.endFill();
-
-        container.addChild(background);
-        container.addChild(app.stage);
-        const img = app.renderer.plugins.extract.image(container);
-        const a = document.createElement('a');
-        document.body.append(a);
-        a.download = `RasterModeler_${dayjs().format('YYYY-MM-DD-HH-mm-ss')}_screenshot.jpg`;
-        a.href = img.src;
-        a.click();
-        a.remove();
-        setZoomFontSize(oldFontSize);
     }
 
     const saveToClipboard = async () => {
@@ -207,7 +181,7 @@ export default function CanvasSecondaryTopToolbar({ setZoomFontSize, heightPx}: 
                         </TopToolbarListElementIcon>
                     </li>
                     <li>
-                        <TopToolbarListElementIcon onClickAction={() => saveAsJpg()} iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/image-download.svg"} >
+                        <TopToolbarListElementIcon onClickAction={() => { /* TODO */}} iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/image-download.svg"} >
                             Export image
                         </TopToolbarListElementIcon>
                     </li>

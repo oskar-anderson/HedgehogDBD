@@ -18,12 +18,14 @@ export class CommandSetSchema implements ICommand<CommandSetSchemaArgs> {
 
     redo() {
         let newSchema = this.args.newSchema;
-        this.context.schema = new Schema(newSchema.tables.map(x => x.mapToTable()), this.context.onTablesChangeCallback);
+        this.context.schema.reset(newSchema.tables.map(x => x.mapToTable()));
+        this.context.onTablesChangeCallback(newSchema.tables)
     }
 
     undo() {
         let oldSchema = this.args.oldSchema;
-        this.context.schema = new Schema(oldSchema.tables.map(x => x.mapToTable()), this.context.onTablesChangeCallback);
+        this.context.schema.reset(oldSchema.tables.map(x => x.mapToTable()));
+        this.context.onTablesChangeCallback(oldSchema.tables)
     }
 }
 

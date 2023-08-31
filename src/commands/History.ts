@@ -3,7 +3,7 @@ import { CommandMoveTableRelative, CommandMoveTableRelativeArgs } from "./appCom
 import { CommandModifyTable, CommandModifyTableArgs } from "./appCommands/CommandModifyTable";
 import { CommandCreateTable, CommandCreateTableArgs } from "./appCommands/CommandCreateTable";
 import { CommandDeleteTable, CommandDeleteTableArgs } from "./appCommands/CommandDeleteTable";
-import { ICommand } from "./ICommand";
+import { ICommand, IHydratable } from "./ICommand";
 import { CommandSetSchema, CommandSetSchemaArgs } from "./appCommands/CommandSetSchema";
 
 
@@ -20,7 +20,7 @@ export class History {
         commandInstance.redo();
     }
 
-    private getICommandInstance(command: CommandPattern, context: Draw): ICommand<any> {
+    private getICommandInstance(command: CommandPattern<any>, context: Draw): ICommand<any> {
         if (command.commandName === CommandMoveTableRelative.name) {
             let unhydratedArgs = command.args as CommandMoveTableRelativeArgs;
             let args = new CommandMoveTableRelativeArgs(unhydratedArgs.id, unhydratedArgs.x, unhydratedArgs.y);
@@ -56,20 +56,20 @@ export class History {
 
     redo(context: Draw) {
         if (this.redoHistory.length === 0) return;
-        let command = JSON.parse(this.redoHistory.pop()!) as CommandPattern;
+        let command = JSON.parse(this.redoHistory.pop()!) as CommandPattern<any>;
         this.undoHistory.push(JSON.stringify(command));
         this.getICommandInstance(command, context).redo();
     }
 
     undo(context: Draw) {
         if (this.undoHistory.length === 0) return;
-        let command = JSON.parse(this.undoHistory.pop()!) as CommandPattern;
+        let command = JSON.parse(this.undoHistory.pop()!) as CommandPattern<any>;
         this.redoHistory.push(JSON.stringify(command));
         this.getICommandInstance(command, context).undo();
     }
 }
 
-interface CommandPattern {
+interface CommandPattern<T extends IHydratable<T>> {
     commandName: string;
-    args: unknown
+    args: T;
 }

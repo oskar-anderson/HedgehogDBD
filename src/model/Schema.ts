@@ -6,10 +6,9 @@ export class Schema {
 
     public tables: Table[];
     
-    constructor(tables: Table[], schemaUpdateTables: (tables: TableDTO[]) => void) {
+    constructor(tables: Table[]) {
         this.tables = tables;
         this.tables.forEach(x => x.updateRelations(tables.filter(x => ! x.getIsHover())))
-        schemaUpdateTables(Schema.mapTablesToDtoTables(this.tables));
     }
 
     getTables(): Table[] {
@@ -18,5 +17,10 @@ export class Schema {
 
     static mapTablesToDtoTables(tables: Table[]) {
         return tables.filter(x => ! x.getIsHover()).map(x => TableDTO.initFromTable(x))
+    }
+
+    reset(tables: Table[]) {
+        this.tables = tables;
+        this.tables.forEach(x => x.updateRelations(tables.filter(x => ! x.getIsHover())))
     }
 }

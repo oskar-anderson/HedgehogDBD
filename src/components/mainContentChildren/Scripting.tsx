@@ -10,6 +10,8 @@ import ModalSaveScript, { ModalSaveScriptProps } from "./scriptingChildren/Modal
 import Editor from '@monaco-editor/react';
 import Giscus from '@giscus/react';
 import EnvGlobals from "../../../EnvGlobals";
+import TopToolbarAction from "../TopToolbarAction";
+import { AppState } from "../MainContent";
 
 
 export default function Scripting() {
@@ -125,112 +127,115 @@ export default function Scripting() {
     }
 
     return (
-        <div className="bg-grey">
-            <div className="scripting-container">
-                <div>
-                    <div style={{ display: "flex", justifyContent: "center" }}>
-                        <div className="mt-4" style={{ width: "90%" }}>
-                            <div className="h4">Scripts</div>
-                            <ul className="list-group" style={{ maxHeight: "calc(41px * 6)", overflowY: "scroll" }}>
-                                {
-                                    areScriptsLoaded ?
-                                        scripts.map((script, i) => (
-                                            <li key={i} onClick={() => onClickScriptListItem(script)} className="script-modal list-group-item d-flex justify-content-between">
-                                                <span>{script.name}</span>
-                                                <div>
-                                                    {
-                                                        script.tags.map((tag, j) => (
-                                                            <span key={j} className="badge bg-info rounded-pill">{tag}</span>
-                                                        ))
-                                                    }
-                                                </div>
-                                            </li>
-                                        ))
-                                        : (() => {
-                                            const placeholderElements = [];
-                                            for (let i = 0; i < 6; i++) {
-                                                placeholderElements.push(
-                                                    <li key={i} className="script-modal list-group-item d-flex justify-content-between">
-                                                        <span>Loading ...</span>
-                                                        <div></div>
-                                                    </li>
-                                                );
-                                            }
-                                            return placeholderElements;
-                                        })()
-                                }
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div style={{ display: "flex", justifyContent: "center" }}>
-                        <div className="mt-4" style={{ width: "90%" }}>
-                            <div className="h4">Editor</div>
-                            <div>
-                                <button type="button" onClick={() => displaySaveModal()} className="save-btn btn btn-light">Save</button>
-                                <button type="button" onClick={() => executeEditorCode()} className="execute-btn btn btn-light">Execute</button>
-                                <button type="button" onClick={() => setIsJsonDisplayModalVisible(true)} className="show-json btn btn-light">Show JSON</button>
+        <>
+            <TopToolbarAction currentState={AppState.ScriptingScene} heightPx={54} />
+            <div className="bg-grey">
+                <div className="scripting-container">
+                    <div>
+                        <div style={{ display: "flex", justifyContent: "center" }}>
+                            <div className="mt-4" style={{ width: "90%" }}>
+                                <div className="h4">Scripts</div>
+                                <ul className="list-group" style={{ maxHeight: "calc(41px * 6)", overflowY: "scroll" }}>
+                                    {
+                                        areScriptsLoaded ?
+                                            scripts.map((script, i) => (
+                                                <li key={i} onClick={() => onClickScriptListItem(script)} className="script-modal list-group-item d-flex justify-content-between">
+                                                    <span>{script.name}</span>
+                                                    <div>
+                                                        {
+                                                            script.tags.map((tag, j) => (
+                                                                <span key={j} className="badge bg-info rounded-pill">{tag}</span>
+                                                            ))
+                                                        }
+                                                    </div>
+                                                </li>
+                                            ))
+                                            : (() => {
+                                                const placeholderElements = [];
+                                                for (let i = 0; i < 6; i++) {
+                                                    placeholderElements.push(
+                                                        <li key={i} className="script-modal list-group-item d-flex justify-content-between">
+                                                            <span>Loading ...</span>
+                                                            <div></div>
+                                                        </li>
+                                                    );
+                                                }
+                                                return placeholderElements;
+                                            })()
+                                    }
+                                </ul>
                             </div>
+                        </div>
 
-                            <div>
-                                <Editor
-                                    height={"400px"}
-                                    defaultLanguage="javascript"
-                                    defaultValue=""
-                                    onMount={handleEditorDidMount}
-                                />
+                        <div style={{ display: "flex", justifyContent: "center" }}>
+                            <div className="mt-4" style={{ width: "90%" }}>
+                                <div className="h4">Editor</div>
+                                <div>
+                                    <button type="button" onClick={() => displaySaveModal()} className="save-btn btn btn-light">Save</button>
+                                    <button type="button" onClick={() => executeEditorCode()} className="execute-btn btn btn-light">Execute</button>
+                                    <button type="button" onClick={() => setIsJsonDisplayModalVisible(true)} className="show-json btn btn-light">Show JSON</button>
+                                </div>
+
+                                <div>
+                                    <Editor
+                                        height={"400px"}
+                                        defaultLanguage="javascript"
+                                        defaultValue=""
+                                        onMount={handleEditorDidMount}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="comment-container">
-                <div className="giscus" style={{ padding: "1em 0", display: "flex", justifyContent: "center" }}>
-                    <div style={{ width: "90%" }}>
-                        <Giscus
-                            repo="oskar-anderson/RasterModeler"
-                            repoId="R_kgDOISKZkQ="
-                            categoryId="DIC_kwDOISKZkc4CTY-q"
-                            mapping="specific"
-                            term="Comments - Scripting"
-                            strict="0"
-                            reactionsEnabled="0"
-                            emitMetadata="0"
-                            inputPosition="top"
-                            theme="preferred_color_scheme"
-                            lang="en"
-                        />
+                <div className="comment-container">
+                    <div className="giscus" style={{ padding: "1em 0", display: "flex", justifyContent: "center" }}>
+                        <div style={{ width: "90%" }}>
+                            <Giscus
+                                repo="oskar-anderson/RasterModeler"
+                                repoId="R_kgDOISKZkQ="
+                                categoryId="DIC_kwDOISKZkc4CTY-q"
+                                mapping="specific"
+                                term="Comments - Scripting"
+                                strict="0"
+                                reactionsEnabled="0"
+                                emitMetadata="0"
+                                inputPosition="top"
+                                theme="preferred_color_scheme"
+                                lang="en"
+                            />
+                        </div>
                     </div>
                 </div>
+                {isScriptListItemModalVisible && 
+                    <ModalScriptListItem
+                        script={mainModalProps!.script}
+                        highlightedContent={mainModalProps!.highlightedContent}
+                        switchToExecuteModel={switchToExecuteModel}
+                        setScriptModalState={setIsScriptListItemModalVisible}
+                        setExecuteModalState={setIsExecuteModalVisible}
+                        setEditorValue={setEditorValue}
+                        removeScriptFromLocalStorage={removeScriptFromLocalStorage}
+                    ></ModalScriptListItem>
+                }
+                {isExecuteModalVisible && 
+                    <ModalScriptExecute
+                        isSuccess={executeModalProps!.isSuccess}
+                        content={executeModalProps!.content}
+                        setModalState={executeModalProps!.setModalState}
+                    />
+                }
+                {isJsonDisplayModalVisible && 
+                    <ModalJsonDisplay
+                        setJsonDisplayModelState={setIsJsonDisplayModalVisible}
+                    />
+                }
+                {isSaveScriptModalVisible && 
+                    <ModalSaveScript
+                        {...saveScriptModalProps!}
+                    />
+                }
             </div>
-            {isScriptListItemModalVisible && 
-                <ModalScriptListItem
-                    script={mainModalProps!.script}
-                    highlightedContent={mainModalProps!.highlightedContent}
-                    switchToExecuteModel={switchToExecuteModel}
-                    setScriptModalState={setIsScriptListItemModalVisible}
-                    setExecuteModalState={setIsExecuteModalVisible}
-                    setEditorValue={setEditorValue}
-                    removeScriptFromLocalStorage={removeScriptFromLocalStorage}
-                ></ModalScriptListItem>
-            }
-            {isExecuteModalVisible && 
-                <ModalScriptExecute
-                    isSuccess={executeModalProps!.isSuccess}
-                    content={executeModalProps!.content}
-                    setModalState={executeModalProps!.setModalState}
-                />
-            }
-            {isJsonDisplayModalVisible && 
-                <ModalJsonDisplay
-                    setJsonDisplayModelState={setIsJsonDisplayModalVisible}
-                />
-            }
-            {isSaveScriptModalVisible && 
-                <ModalSaveScript
-                    {...saveScriptModalProps!}
-                />
-            }
-        </div>
+        </>
     );
 }

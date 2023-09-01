@@ -3,37 +3,40 @@ import CanvasContainer from "./drawingChildren/CanvasContainer";
 import { Draw } from "../../model/Draw";
 import { useEffect, useRef, useState } from "react";
 import { Point, Rectangle } from "pixi.js";
-import { DrawScene } from "../../scenes/DrawScene";
 import { MyRect } from "../../model/MyRect";
 import CanvasSecondaryTopToolbar from "./drawingChildren/CanvasSecondaryTopToolbar";
 import { TableDTO } from "../../model/dto/TableDTO";
-import DomHelper from "../../DomHelper";
 import TopToolbarAction from "../TopToolbarAction";
 import { AppState } from "../MainContent";
 
 
 interface DrawingProps {
-    tables: TableDTO[]
+    draw: Draw
+    switchToTableView: (table: TableDTO) => void
 }
 
-export default function Drawing({ tables }: DrawingProps) {
+export default function Drawing({ draw, switchToTableView }: DrawingProps) {
     console.log("drawing")
     const canvasContainerRef = useRef<HTMLDivElement>(null);
     const debugInfoContainer = useRef<HTMLDivElement>(null);
+    const [isScreenDirty, setIsScreenDirty] = useState(false);
 
+    const TopToolbarHeightPx = 54;
     const canvasSecondaryTopToolbarHeightPx = 38;
     return (
         <>
-            <TopToolbarAction currentState={AppState.DrawScene} heightPx={54} />
             <div className="canvas-visibility-container">
-                <CanvasSecondaryTopToolbar heightPx={canvasSecondaryTopToolbarHeightPx}/>
-                <div style={{ display: 'flex', width: '100vw', height: `calc(100vh - ${54}px  - ${canvasSecondaryTopToolbarHeightPx}px)` }}>
+                <CanvasSecondaryTopToolbar draw={draw} setIsScreenDirty={setIsScreenDirty} heightPx={canvasSecondaryTopToolbarHeightPx}/>
+                <div style={{ display: 'flex', width: '100vw', height: `calc(100vh - ${TopToolbarHeightPx}px - ${canvasSecondaryTopToolbarHeightPx}px)` }}>
                     <CanvasSide
-                        tables={tables}
+                        tables={draw.schema.tables.map(x => TableDTO.initFromTable(x))}
                         /* TODO add minimap */
                         debugInfoContainer={debugInfoContainer}
                     />
                     <CanvasContainer
+                        draw={draw}
+                        switchToTableView={switchToTableView}
+                        setIsScreenDirty={setIsScreenDirty}
                         canvasContainerScrollableRef={canvasContainerRef}
                         debugInfoContainer={debugInfoContainer}
                     />

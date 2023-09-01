@@ -1,20 +1,20 @@
-import { Manager } from "../Manager";
-import { DrawScene } from "../scenes/DrawScene";
-import { ScriptingScene } from "../scenes/ScriptingScene";
 import { AppState } from "./MainContent";
 import EnvGlobals from "../../EnvGlobals";
 import { useEffect, useRef, useState } from "react";
 import { Tooltip } from 'bootstrap'
 import SettingsModal from "./SettingsModal";
+import { Draw } from "../model/Draw";
 
 
 interface TopToolbarActionProps {
-    currentState: AppState
+    draw: Draw
+    setAppState: React.Dispatch<React.SetStateAction<AppState>>
+    appState: AppState
     heightPx: number
 }
 
 
-export default function TopToolbarAction({ currentState, heightPx } : TopToolbarActionProps) {
+export default function TopToolbarAction({ draw, setAppState, appState, heightPx } : TopToolbarActionProps) {
     const [isDrawIconFocused, setIsDrawIconFocused] = useState(false)
     const [isScriptIconFocused, setIsScriptIconFocused] = useState(false)
     const [isSettingsIconFocused, setIsSettingsIconFocused] = useState(false)
@@ -50,12 +50,10 @@ export default function TopToolbarAction({ currentState, heightPx } : TopToolbar
     }, [])
 
     const changeSceneToScripting = async () => {
-        if (Manager.getInstance().getScene()!.getState() === AppState.ScriptingScene) { return; }
-        Manager.getInstance().changeScene(new ScriptingScene());
+        setAppState(AppState.ScriptingScene);
     }
     const changeSceneToDraw = async () => {
-        if (Manager.getInstance().getScene()!.getState() === AppState.DrawScene) { return; }
-        Manager.getInstance().changeScene(new DrawScene(Manager.getInstance().draw));
+        setAppState(AppState.DrawScene);
     }
 
     const linkStyles = {
@@ -76,11 +74,11 @@ export default function TopToolbarAction({ currentState, heightPx } : TopToolbar
                 </a>
             <ul className="navbar-nav me-auto flex-row ms-3 gap-3">
                 <li>
-                    <img ref={drawTooltipIcon} data-bs-toggle="tooltip" data-bs-placement="bottom" title="Draw" style={(currentState === AppState.DrawScene || isDrawIconFocused) ? linkStyles.selectedLinkColor_f1f1f1 : linkStyles.defaultLinkColor_515151} 
+                    <img ref={drawTooltipIcon} data-bs-toggle="tooltip" data-bs-placement="bottom" title="Draw" style={(appState === AppState.DrawScene || isDrawIconFocused) ? linkStyles.selectedLinkColor_f1f1f1 : linkStyles.defaultLinkColor_515151} 
                     width={42} height={42} src={EnvGlobals.BASE_URL + "/wwwroot/img/icons/erd-icon.png"} alt="Draw" onClick={() => changeSceneToDraw()} />
                 </li>
                 <li>
-                    <img ref={scriptingIconRef} data-bs-toggle="tooltip" data-bs-placement="bottom" title="Scripting" style={(currentState === AppState.ScriptingScene || isScriptIconFocused) ? linkStyles.selectedLinkColor_f1f1f1 : linkStyles.defaultLinkColor_515151} 
+                    <img ref={scriptingIconRef} data-bs-toggle="tooltip" data-bs-placement="bottom" title="Scripting" style={(appState === AppState.ScriptingScene || isScriptIconFocused) ? linkStyles.selectedLinkColor_f1f1f1 : linkStyles.defaultLinkColor_515151} 
                         width={42} height={42} src={EnvGlobals.BASE_URL + "/wwwroot/img/icons/code-icon.png"} alt="Scripting" onClick={() => changeSceneToScripting()} />
                 </li>
             </ul>
@@ -90,7 +88,7 @@ export default function TopToolbarAction({ currentState, heightPx } : TopToolbar
                 width={42} height={42} src={EnvGlobals.BASE_URL + "/wwwroot/img/icons/settings.png"} alt="Settings" onClick={() => setIsSettingsModalVisible(! isSettingsModalVisible) } />
         </div>
 
-        <SettingsModal isSettingsModalVisible={isSettingsModalVisible} setIsSettingsModalVisible={setIsSettingsModalVisible} />
+        <SettingsModal draw={draw} isSettingsModalVisible={isSettingsModalVisible} setIsSettingsModalVisible={setIsSettingsModalVisible} />
     </nav>
   )
 }

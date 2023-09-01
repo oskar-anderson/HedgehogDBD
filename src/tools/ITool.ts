@@ -8,7 +8,7 @@ export interface ITool {
     exit(): void;
     isDirty: boolean;
     getName(): IToolNames;
-    mouseEventHandler(event: MyMouseEvent): void
+    mouseEventHandler(event: MyMouseEvent): void | { type: string, payload: any }
 }
 
 export enum IToolNames {

@@ -1,4 +1,4 @@
-import { Manager } from "../../Manager";
+import Database from "../DataTypes/Database";
 import DataType from "../DataTypes/DataType";
 import TableRowDataTypeDTO from "../dto/TableRowDataTypeDTO";
 import { TableRowDTO } from "../dto/TableRowDTO";
@@ -18,9 +18,8 @@ export class ScriptingTableRow {
         this.attributes = attributes;
     }
 
-    static initTableRow(tableRow: TableRowDTO) {
-        const activeDatabase = Manager.getInstance().draw.activeDatabase.types;
-        const getComputedTypeName = DataType.getComputerMethod(activeDatabase, tableRow.datatype.id)
+    static initTableRow(tableRow: TableRowDTO, database: Database) {
+        const getComputedTypeName = DataType.getComputerMethod(database.types, tableRow.datatype.id)
         const dataTypeComputedName = getComputedTypeName()
         const newDataType = { name: dataTypeComputedName, arguments: [...tableRow.datatype.arguments.map(x => x.value)], isNullable: tableRow.datatype.isNullable};
         return new ScriptingTableRow(tableRow.name, tableRow.datatype, newDataType, [...tableRow.attributes]);

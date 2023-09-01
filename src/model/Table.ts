@@ -3,7 +3,6 @@ import { MyRect } from "./MyRect";
 import { CostGrid, CostGridTileTypes } from "./CostGrid";
 import { TableRow } from "./TableRow";
 import { Relation } from "./Relation";
-import AStarFinderCustom from "../path/AStarFinderCustom";
 
 export class Table {
     displayable: Text = new Text("", { fontFamily: `Inconsolata` });
@@ -66,22 +65,6 @@ export class Table {
 
     equals(other: Table) {
         return this.id === other.id;
-    }
-
-    getRelationStartingPoint(worldSize: MyRect, targetTable: Table): Point | null {
-        let referenceCenter =  targetTable.getContainingRect().getLargestFittingSquareClosestToPoint(this.getContainingRect().getCenter()).getCenter();
-        let closestFromTablePoint: Point | null = null;
-        let containingRect = this.getContainingRect();
-        let relationAttachmentPoints = containingRect.getRelationAttachmentPoints(worldSize);
-        for (let point of relationAttachmentPoints) {
-            if ((closestFromTablePoint === null || 
-                AStarFinderCustom.euclidean(closestFromTablePoint, referenceCenter) > 
-                AStarFinderCustom.euclidean(point, referenceCenter))
-            ) {
-                closestFromTablePoint = point;
-            }
-        }
-        return closestFromTablePoint
     }
 
     getContainingRect() {

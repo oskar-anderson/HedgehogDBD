@@ -1,10 +1,10 @@
 import { ChangeEvent, FormEvent, HTMLProps, useRef, useState } from "react"
 import DataType, { IDataTypeArgument } from "../../../model/DataTypes/DataType"
-import { Manager } from "../../../Manager";
 import { IDataType } from "../../../model/DataTypes/IDataType";
 import { OverlayTrigger, Popover } from "react-bootstrap";
 import EnvGlobals from "../../../../EnvGlobals";
 import { MyRect } from "../../../model/MyRect";
+import Database from "../../../model/DataTypes/Database";
 
 
 interface UiTableRowDatatype {
@@ -41,11 +41,12 @@ export interface TableRowProps extends HTMLProps<HTMLTableRowElement> {
         rowDatatype: UiTableRowDatatype;
         rowAttributes: string;
     }[]>>,
-    deleteRow: (index: number) => void
+    deleteRow: (index: number) => void,
+    database: Database
 }
 
 
-export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOverItem, row, setRows, tableRows, deleteRow, ...restProps}: TableRowProps) {
+export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOverItem, row, setRows, tableRows, deleteRow, database, ...restProps}: TableRowProps) {
     const [datatypeArguments, setDatatypeArguments] = useState<{
         value: string;
         displayName: string;
@@ -91,8 +92,7 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
 
     const handleSelectInputOnChange = (e: ChangeEvent) => {
         const selectedDatatypeId = (e.target as HTMLSelectElement).value;
-        const draw = Manager.getInstance().draw;
-        const args = DataType.getArgumentsByDatabaseAndByType(draw.activeDatabase.select, selectedDatatypeId)
+        const args = DataType.getArgumentsByDatabaseAndByType(database.select, selectedDatatypeId)
         
         const dataTypeArguements = args.map(x => ({
             displayName: x.displayName,
@@ -104,8 +104,7 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
         }))
         setDatatypeArguments(dataTypeArguements);
         const rowsCopy = [...tableRows];
-        const activeDatabase = Manager.getInstance().draw.activeDatabase;
-        const newArguments = DataType.getArgumentsByDatabaseAndByType(activeDatabase.select, selectedDatatypeId);
+        const newArguments = DataType.getArgumentsByDatabaseAndByType(database.select, selectedDatatypeId);
         const rowCopy = rowsCopy[index];
         rowCopy.rowDatatype = {
             id: selectedDatatypeId,
@@ -230,8 +229,7 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
                                     `(${selectedDataTypeArguments.map(x => x.value).join(", ")})` : 
                                     "";
                             } else {
-                                const draw = Manager.getInstance().draw;
-                                const notSelectedDataTypeArguments = DataType.getArgumentsByDatabaseAndByType(draw.activeDatabase.select, x.getId());
+                                const notSelectedDataTypeArguments = DataType.getArgumentsByDatabaseAndByType(database.select, x.getId());
                                 selectedOptionDisplayParameters = (notSelectedDataTypeArguments.length !== 0) ? 
                                     `(${notSelectedDataTypeArguments.map(x => x.defaultValue).join(", ")})` :
                                     "";

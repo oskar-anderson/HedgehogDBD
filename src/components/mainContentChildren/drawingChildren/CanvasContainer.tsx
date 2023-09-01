@@ -1,16 +1,23 @@
 import { Point } from "pixi.js";
 import { useEffect } from "react";
-import { Manager } from "../../../Manager";
 import DomHelper from "../../../DomHelper";
-import { DrawScene } from "../../../scenes/DrawScene";
 import { MyMouseEvent } from "../../../model/MyMouseEvent";
+import { Draw } from "../../../model/Draw";
+import { TableDTO } from "../../../model/dto/TableDTO";
+import { AppState } from "../../MainContent";
 
 interface CanvasContainerProps {
+    draw: Draw,
+    switchToTableView: (table: TableDTO) => void,
+    setIsScreenDirty: React.Dispatch<React.SetStateAction<boolean>>
     canvasContainerScrollableRef: React.RefObject<HTMLDivElement>
     debugInfoContainer: React.RefObject<HTMLDivElement>
 }
 
 export default function CanvasContainer({
+    draw,
+    switchToTableView,
+    setIsScreenDirty,
     canvasContainerScrollableRef,
     debugInfoContainer
 }: CanvasContainerProps) {
@@ -20,7 +27,7 @@ export default function CanvasContainer({
     useEffect(() => {
         const handleScroll = (position: Point) => {
             canvasContainerScrollableRef.current!.scrollTo(position.x, position.y);
-            Manager.getInstance().draw.canvasScrollPosition = position;
+            draw.canvasScrollPosition = position;
         };
 
         canvasContainerScrollableRef.current!.addEventListener("scroll", (e) => {
@@ -32,17 +39,21 @@ export default function CanvasContainer({
         // set scroll initial position, will not work outside setTimeout
         setTimeout(() => {
             canvasContainerScrollableRef.current!.style.display = "grid";
-            handleScroll(Manager.getInstance().draw.canvasScrollPosition)
+            handleScroll(draw.canvasScrollPosition)
         }, 0);
     }, [])
 
     useEffect(() => {
         const activeToolMouseEventHandler = (event: MyMouseEvent) => {
-            const drawScene = (Manager.getInstance().getScene() as DrawScene);
-            drawScene.draw.activeTool.mouseEventHandler(event);
-            if (drawScene.draw.activeTool.isDirty) {
-                drawScene.draw.activeTool.isDirty = false;
-                drawScene.renderScreen();
+            let mouseEventResult = draw.activeTool.mouseEventHandler(event);
+            if (mouseEventResult && mouseEventResult.type === "changeScene") {
+                let selectedTable = mouseEventResult.payload as TableDTO;
+                switchToTableView(selectedTable);
+            }
+
+            if (draw.activeTool.isDirty) {
+                draw.activeTool.isDirty = false;
+                setIsScreenDirty(true)
             }
         };
 
@@ -56,9 +67,8 @@ export default function CanvasContainer({
         }
 
         const mouseMoveEventHandler = (mouseEvent: MyMouseEvent) => {
-            const drawScene = (Manager.getInstance().getScene() as DrawScene);
             lastMousePosition = mouseEvent;
-            const charGridPoint = drawScene.draw.getWorldToCharGridPoint(mouseEvent.worldX, mouseEvent.worldY);
+            const charGridPoint = draw.getWorldToCharGridPoint(mouseEvent.worldX, mouseEvent.worldY);
             // using useState would cause a lot of rerenders and make the app unresponsive
             if (debugInfoContainer.current !== null) {
                 debugInfoContainer.current.innerHTML = `
@@ -93,18 +103,17 @@ export default function CanvasContainer({
             activeToolMouseEventHandler(DomHelper.mapMouseEvent(event, canvasContainerScrollableRef))
         }
 
-        Manager.getInstance().getView().addEventListener("click", wrappedActiveToolMouseEventHandler);
-        Manager.getInstance().getView().addEventListener("mousedown", wrappedActiveToolMouseEventHandler);
-        Manager.getInstance().getView().addEventListener("mouseup", wrappedActiveToolMouseEventHandler);
-        Manager.getInstance().getView().addEventListener('mousemove', wrappedMouseMoveEventHandler);
+        canvasContainerScrollableRef.current!.addEventListener("click", wrappedActiveToolMouseEventHandler);
+        canvasContainerScrollableRef.current!.addEventListener("mousedown", wrappedActiveToolMouseEventHandler);
+        canvasContainerScrollableRef.current!.addEventListener("mouseup", wrappedActiveToolMouseEventHandler);
+        canvasContainerScrollableRef.current!.addEventListener('mousemove', wrappedMouseMoveEventHandler);
         canvasContainerScrollableRef.current!.addEventListener("scroll", scrollEventHandler)
 
         return () => {
-            Manager.getInstance().getView().removeEventListener("click", wrappedActiveToolMouseEventHandler);
-            Manager.getInstance().getView().removeEventListener("mousedown", wrappedActiveToolMouseEventHandler);
-            Manager.getInstance().getView().removeEventListener("mouseup", wrappedActiveToolMouseEventHandler);
-            Manager.getInstance().getView().removeEventListener("mousemove", wrappedMouseMoveEventHandler);
-            // canvasContainerScrollableRef events are removed automatically
+            canvasContainerScrollableRef.current!.removeEventListener("click", wrappedActiveToolMouseEventHandler);
+            canvasContainerScrollableRef.current!.removeEventListener("mousedown", wrappedActiveToolMouseEventHandler);
+            canvasContainerScrollableRef.current!.removeEventListener("mouseup", wrappedActiveToolMouseEventHandler);
+            canvasContainerScrollableRef.current!.removeEventListener("mousemove", wrappedMouseMoveEventHandler);
         }
     }, []);
     return (

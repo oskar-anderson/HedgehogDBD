@@ -1,15 +1,19 @@
-import { Manager } from "../../../Manager";
 import { SchemaDTO } from "../../../model/dto/SchemaDTO";
 import * as monaco from 'monaco-editor';
 import { useEffect, useState } from "react";
 import { ScriptingSchema } from "../../../model/scriptingDto/ScriptingSchema";
+import { Draw } from "../../../model/Draw";
 
 export interface ModelJsonDisplayProps {
     setJsonDisplayModelState: React.Dispatch<React.SetStateAction<boolean>>
+    draw: Draw
 }
 
 
-export default function ModalJsonDisplay({ setJsonDisplayModelState }: ModelJsonDisplayProps) {
+export default function ModalJsonDisplay({ 
+    setJsonDisplayModelState,
+    draw
+ }: ModelJsonDisplayProps) {
     const [content, setContent] = useState("");
 
     useEffect(() => {
@@ -17,7 +21,7 @@ export default function ModalJsonDisplay({ setJsonDisplayModelState }: ModelJson
             const result = await monaco.editor.colorize(content, "json", { tabSize: 4 });
             setContent(result);
         }
-        const schemaDTO = ScriptingSchema.initJsonDisplayable(SchemaDTO.init(Manager.getInstance().draw))
+        const schemaDTO = ScriptingSchema.initJsonDisplayable(SchemaDTO.init(draw))
         setContentColorization(JSON.stringify(schemaDTO, null, 4));
     })
 

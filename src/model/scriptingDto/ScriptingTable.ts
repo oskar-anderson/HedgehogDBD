@@ -1,4 +1,5 @@
 import { Point } from "pixi.js";
+import Database from "../DataTypes/Database";
 import { TableDTO } from "../dto/TableDTO";
 import { ScriptingTableRow } from "./ScriptingTableRow";
 
@@ -15,7 +16,12 @@ export class ScriptingTable {
         this.tableRows = tableRows;
     }
 
-    static initFromTable(table: TableDTO) {
-        return new ScriptingTable(table.id, table.position, table.head, table.tableRows.map(x => ScriptingTableRow.initTableRow(x)))
+    static initFromTable(table: TableDTO, activeDatabase: Database) {
+        return new ScriptingTable(
+            table.id, 
+            table.position, 
+            table.head, 
+            table.tableRows.map(x => ScriptingTableRow.initTableRow(x, activeDatabase)), 
+        );
     }
 }

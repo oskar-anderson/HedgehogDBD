@@ -1,11 +1,9 @@
 import dayjs from "dayjs";
 import EnvGlobals from "../../../../EnvGlobals";
 import * as PIXI from "pixi.js";
-import { Manager } from "../../../Manager";
 import { Draw } from "../../../model/Draw";
 import { TableDTO } from "../../../model/dto/TableDTO";
 import RasterModelerFormat from "../../../RasterModelerFormat";
-import { DrawScene } from "../../../scenes/DrawScene";
 import { SchemaDTO } from "../../../model/dto/SchemaDTO";
 import { IToolManager, IToolNames } from "../../../tools/ITool";
 import { useState } from "react";
@@ -28,74 +26,19 @@ function TopToolbarListElementIcon( {onClickAction, iconSrc, children}: TopToolb
 
 interface CanvasSecondaryTopToolbarProps {
     heightPx: number;
+    draw: Draw;
+    setIsScreenDirty: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function CanvasSecondaryTopToolbar({ heightPx}: CanvasSecondaryTopToolbarProps) {
+export default function CanvasSecondaryTopToolbar({ heightPx, draw, setIsScreenDirty }: CanvasSecondaryTopToolbarProps) {
 
     const newSchema = () => {
         setSchemaAndUpdateUi(new SchemaDTO([]));
     }
 
-    const saveToClipboard = async () => {
-        let draw = Manager.getInstance().draw;
-
-        let worldRect = draw.getWorldCharGrid();
-        let drawArea: string[][] = [];
-        for (let y = 0; y < worldRect.height; y++) {
-            let row: string[] = [];
-            for (let x = 0; x < worldRect.width; x++) {
-                row.push(' ');
-            }
-            drawArea.push(row);
-        }
-        for (let table of draw.schema.getTables()) {
-            let table2D = DrawScene.setWorldTable2(table);
-            for (let y = 0; y < table2D.length; y++) {
-                for (let x = 0; x < table2D[0].length; x++) {
-                    drawArea[y + table.getPosition().y][x + table.getPosition().x] = table2D[y][x];
-                }
-            }
-            for (let relation of table.relations) {
-                for (let path of relation.points) {
-                    drawArea[path.y][path.x] = "*";
-                }
-            }
-        }
-
-        let content2D = trim(drawArea);
-        let content = content2D.map(x => x.join("")).join("\n")
-        navigator.clipboard.writeText(content)
-    }
-
-    function trim<T>(drawArea: T[][]): T[][] {
-        let result: T[][] = [];
-        let xMax = 0;
-        let xMin = Number.MAX_VALUE;
-        let yMax = 0;
-        let yMin = Number.MAX_VALUE;
-        for (let y = 0; y < drawArea.length; y++) {
-            for (let x = 0; x < drawArea[0].length; x++) {
-                if (drawArea[y][x] !== " ") {
-                    xMin = Math.min(xMin, x);
-                    xMax = Math.max(xMax, x);
-                    yMin = Math.min(yMin, y);
-                    yMax = Math.max(yMax, y);
-                }
-            }
-        }
-        for (let y = yMin; y <= yMax; y++) {
-            let row: T[] = []
-            for (let x = xMin; x <= xMax; x++) {
-                row.push(drawArea[y][x]);
-            }
-            result.push(row);
-        }
-        return result;
-    }
-
     const saveAsJson = async () => {
         let element = document.createElement('a');
-        let schema = SchemaDTO.init(Manager.getInstance().draw)
+        let schema = SchemaDTO.init(draw)
         // encodeURIComponent is needed to maintain newlines
         element.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(schema.getJson()));
         element.setAttribute('download', `RasterModeler_${dayjs().format('YYYY-MM-DD_HH-mm-ss')}.json`);
@@ -130,37 +73,34 @@ export default function CanvasSecondaryTopToolbar({ heightPx}: CanvasSecondaryTo
     }
 
     const setSchemaAndUpdateUi = (newSchema: SchemaDTO) => {
-        const oldDtoTables = Manager.getInstance().draw.schema.tables.map(x => TableDTO.initFromTable(x))
+        const oldDtoTables = draw.schema.tables.map(x => TableDTO.initFromTable(x))
         const command = new CommandSetSchema(
-            Manager.getInstance().draw, new CommandSetSchemaArgs(
+            draw, new CommandSetSchemaArgs(
                 new SchemaDTO(oldDtoTables), 
                 newSchema
             )
         )
-        Manager.getInstance().draw.history.execute(command);
-        (Manager.getInstance().getScene() as DrawScene).renderScreen();
+        draw.history.execute(command);
+        setIsScreenDirty(true);
     }
 
     const undo = (): void => {
-        const draw = Manager.getInstance().draw;
         draw.history.undo(draw);
-        (Manager.getInstance().getScene() as DrawScene).renderScreen();
+        setIsScreenDirty(true);
     }
 
     const redo = (): void => {
-        const draw = Manager.getInstance().draw;
         draw.history.redo(draw);
-        (Manager.getInstance().getScene() as DrawScene).renderScreen();
+        setIsScreenDirty(true);
     }
 
     const [highlightActiveSideToolbarTool, setHighlightActiveSideToolbarTool] = useState(IToolNames.select);
 
 
     const onToolSelectClick = (selectedTool: IToolNames): void => {
-        const draw = Manager.getInstance().draw;
         setHighlightActiveSideToolbarTool(selectedTool);
         IToolManager.toolActivate(draw, selectedTool);
-        (Manager.getInstance().getScene() as DrawScene).renderScreen();  // clean up new table hover
+        setIsScreenDirty(true);  // clean up new table hover
     };
 
     return (
@@ -183,11 +123,6 @@ export default function CanvasSecondaryTopToolbar({ heightPx}: CanvasSecondaryTo
                     <li>
                         <TopToolbarListElementIcon onClickAction={() => { /* TODO */}} iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/image-download.svg"} >
                             Export image
-                        </TopToolbarListElementIcon>
-                    </li>
-                    <li>
-                        <TopToolbarListElementIcon onClickAction={() => saveToClipboard()} iconSrc={EnvGlobals.BASE_URL + "/wwwroot/img/svg/copy.svg"} >
-                            Add to clipboard
                         </TopToolbarListElementIcon>
                     </li>
                     <li>

@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Draw } from "../../../model/Draw";
 import { TableDTO } from "../../../model/dto/TableDTO";
-import { DrawScene } from "../../../scenes/DrawScene";
-import { TableScene } from "../../../scenes/TableScene";
 import { IToolManager, IToolNames } from "../../../tools/ITool";
 
 

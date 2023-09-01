@@ -2,8 +2,6 @@ import { Draw } from "../model/Draw";
 import { CommandMoveTableRelative, CommandMoveTableRelativeArgs } from "../commands/appCommands/CommandMoveTableRelative";
 import { Table } from "../model/Table";
 import { ITool, IToolNames } from "./ITool";
-import { Manager } from "../Manager";
-import { TableScene } from "../scenes/TableScene";
 import { MyMouseEvent } from "../model/MyMouseEvent";
 import { Point } from "pixi.js";
 import { TableDTO } from "../model/dto/TableDTO";
@@ -99,7 +97,7 @@ export class SelectTableTool implements ITool {
         mouseUpDone();
     }
 
-    mouseEventHandler(event: MyMouseEvent): void {
+    mouseEventHandler(event: MyMouseEvent): void | { type: string, payload: TableDTO } {
         let mouseCharGrid = this.draw.getWorldToCharGridPoint(event.worldX, event.worldY);
         switch (event.type) {
             case "mousedown":
@@ -113,7 +111,7 @@ export class SelectTableTool implements ITool {
                 if (event.detail === 2) {  // double click
                     let selectedTable = this.draw.schema.getTables().find(table => table.getContainingRect().contains(mouseCharGrid.x, mouseCharGrid.y))
                     if (! selectedTable) { break; }
-                    Manager.getInstance().changeScene(new TableScene(TableDTO.initFromTable(selectedTable)));
+                    return { type: "changeScene", payload: TableDTO.initFromTable(selectedTable) };
                 }
                 break;
             case "mousemove":

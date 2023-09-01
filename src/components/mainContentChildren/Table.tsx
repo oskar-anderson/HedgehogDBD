@@ -1,24 +1,26 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { CommandDeleteTable, CommandDeleteTableArgs } from "../../commands/appCommands/CommandDeleteTable";
 import { CommandModifyTable, CommandModifyTableArgs } from "../../commands/appCommands/CommandModifyTable";
-import { Manager } from "../../Manager";
 import DataType, { DataTypeString } from "../../model/DataTypes/DataType";
+import { Draw } from "../../model/Draw";
 import { TableDTO } from "../../model/dto/TableDTO";
 import TableRowDataTypeArgumentsDTO from "../../model/dto/TableRowDataTypeArgumentsDTO";
 import TableRowDataTypeDTO from "../../model/dto/TableRowDataTypeDTO";
 import { TableRowDTO } from "../../model/dto/TableRowDTO";
 import { TableRow } from "../../model/TableRow";
-import { DrawScene } from "../../scenes/DrawScene";
-import { TableScene } from "../../scenes/TableScene";
 import { useAppStateManagement } from "../../Store";
 import { AppState } from "../MainContent";
 import TableRowJSX from "./tableChildren/TableRow"
 
 
-export default function Table() {
-    const { setAppState } = useAppStateManagement();
+type TableProps = {
+    draw: Draw;
+    tableBeingEdited: TableDTO;
+    switchToDrawView: (draw: Draw) => void;
+}
 
-    const tableBeingEdited = (Manager.getInstance().getScene() as TableScene).tableBeingEdited;
+
+export default function Table({ draw, tableBeingEdited, switchToDrawView }: TableProps ) {
 
     useEffect(() => {
         const onMouseUp = (e: MouseEvent) => {
@@ -43,12 +45,6 @@ export default function Table() {
         dragOverItem.current = null;
         setRows(copyRows);
     };
-
-    const switchToDraw = () => {
-        const draw = Manager.getInstance().draw;
-        Manager.getInstance().changeScene(new DrawScene(draw))
-        setAppState(AppState.DrawScene);
-    }
 
     const [rows, setRows] = useState(tableBeingEdited.tableRows.map((x) => {
         return {
@@ -75,7 +71,6 @@ export default function Table() {
     const [tableName, setTableName] = useState(tableBeingEdited.head);
 
     const saveChanges = () => {
-        const draw = Manager.getInstance().draw;
         let oldTable = draw.schema.getTables().find(x => x.id === tableBeingEdited.id)!;
         let newTableRows = rows.map(tableRow => new TableRowDTO(
             tableRow.rowName,
@@ -92,13 +87,12 @@ export default function Table() {
         draw.history.execute(new CommandModifyTable(
             draw, new CommandModifyTableArgs(TableDTO.initFromTable(oldTable), new TableDTO(tableBeingEdited.id, tableBeingEdited.position, tableName, newTableRows))
         ));
-        Manager.getInstance().changeScene(new DrawScene(draw))
-        setAppState(AppState.DrawScene);
+        switchToDrawView(draw)
     }
 
     const insertNewRow = (event: FormEvent<HTMLButtonElement>, index: number) => {
         if (index === -1) { index = rows.length }
-        const activeDatabase = Manager.getInstance().draw.activeDatabase.select;
+        const activeDatabase = draw.activeDatabase.select;
         const newDataType = DataType.string();
         const newRow = {
             key: crypto.randomUUID(),
@@ -137,14 +131,12 @@ export default function Table() {
     }
 
     const deleteTable = () => {
-        const draw = Manager.getInstance().draw;
         draw.history.execute(
             new CommandDeleteTable(
                 draw, new CommandDeleteTableArgs(tableBeingEdited!, draw.schema.getTables().findIndex(x => x.id === tableBeingEdited.id))
             )
         )
-        Manager.getInstance().changeScene(new DrawScene(draw))
-        setAppState(AppState.DrawScene);
+        switchToDrawView(draw)
     }
     const hoverInsertIndicator = useRef<HTMLDivElement>(null);
     
@@ -155,7 +147,7 @@ export default function Table() {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5>Editing table</h5>
-                            <button type="button" className="btn-close" onClick={() => switchToDraw()} aria-label="Close"></button>
+                            <button type="button" className="btn-close" onClick={() => switchToDrawView(draw)} aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
                             <div className="modal-title" style={{ display: "flex", gridGap: "1em" }}>
@@ -189,6 +181,7 @@ export default function Table() {
                                                 dragOverItem={dragOverItem}
                                             
                                                 index={index} hoverInsertIndicator={hoverInsertIndicator} row={row} setRows={setRows} tableRows={rows} deleteRow={deleteRow}
+                                                database={draw.activeDatabase}
                                             />
                                         ))
                                     }
@@ -209,7 +202,7 @@ export default function Table() {
                             <hr />
                         </div>
                         <div className="modal-footer" style={{ display: "grid", gridTemplateColumns: "1fr 3fr" }}>
-                            <button type="button" className="btn btn-light" onClick={() => switchToDraw()}>Discard changes</button>
+                            <button type="button" className="btn btn-light" onClick={() => switchToDrawView(draw)}>Discard changes</button>
                             <button type="button" id="modal-save-changes" onClick={() => saveChanges()} className="btn btn-primary">Save changes</button>
                         </div>
                     </div>

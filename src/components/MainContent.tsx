@@ -1,11 +1,9 @@
 import Table from "./mainContentChildren/Table";
 import Drawing from "./mainContentChildren/Drawing";
-import Loading from "./mainContentChildren/Loading"
 import Scripting from "./mainContentChildren/Scripting";
 import { useAppStateManagement } from "../Store";
 import TopToolbarAction from "./TopToolbarAction";
 import { Draw } from "../model/Draw";
-import { LoaderScene } from "../scenes/LoaderScene";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Schema } from "../model/Schema";
 import { MyRect } from "../model/MyRect";
@@ -20,44 +18,33 @@ export enum AppState {
 }
 
 export default function MainComponent() {
-    const canvasContainerRef = useRef<HTMLDivElement>(null);
+    const { appState, setAppState } = useAppStateManagement();
     const [tables, setTables] = useState<TableDTO[]>([]);
+    const [tableBeingEdited, setTableBeingEdited] = useState<TableDTO | null>(null);
     
     const onTablesUpdateCallbackOuterReadonly = (tables: TableDTO[]) => {
         setTables(tables);
     };
-    useEffect(() => {
-        let schema = new Schema(tables.map(x => x.mapToTable()));
-        let draw = new Draw(schema, new MyRect(0, 0, 3240, 2160), onTablesUpdateCallbackOuterReadonly);
-        draw.onTablesChangeCallback(tables)
+    let schema = new Schema(tables.map(x => x.mapToTable()));
+    let draw = new Draw(schema, new MyRect(0, 0, 3240, 2160), onTablesUpdateCallbackOuterReadonly);
+    draw.onTablesChangeCallback(tables);
 
-        Manager.constructInstance(
-            3240,
-            2160,
-            0xffffff,
-            draw,
-            (newScene: IScene) => { setAppState(newScene.getState()); }
-        );
-        canvasContainerRef.current!.appendChild(Manager.getInstance().getView());
-        let scene = new LoaderScene(canvasContainerRef.current!.offsetWidth, 720, draw);
-        Manager.getInstance().changeScene(scene);
-    }, [])
+    const switchToTableView = (table: TableDTO) => { 
+        setTableBeingEdited(table);
+        setAppState(AppState.TableScene);
+    }
 
-    const topToolBarHeightPx = 54;
-    const optionalTopToolbar = (appState === AppState.DrawScene || appState === AppState.ScriptingScene) ? 
-        <TopToolbarAction currentState={appState} heightPx={topToolBarHeightPx} /> : 
-        null
+    const switchToDrawView = (_draw: Draw) => {
+        draw = _draw;
+        setAppState(AppState.DrawScene);
+    }
 
     return (
         <>
-            <div>
-                <TopToolbarAction currentState={appState} heightPx={topToolBarHeightPx} />
-            </div>
-
-            { appState === AppState.LoaderScene && <Loading canvasContainerRef={canvasContainerRef} /> }
-            { appState === AppState.DrawScene && <Drawing topToolBarHeightPx={topToolBarHeightPx} tables={tables} /> }
-            { appState === AppState.ScriptingScene && <Scripting/> }
-            { appState === AppState.TableScene && <Table/> }
+            <TopToolbarAction draw={draw} setAppState={setAppState} appState={AppState.ScriptingScene} heightPx={54} />
+            { appState === AppState.DrawScene && <Drawing draw={draw} switchToTableView={switchToTableView} /> }
+            { appState === AppState.ScriptingScene && <Scripting draw={draw} /> }
+            { appState === AppState.TableScene && <Table draw={draw} switchToDrawView={switchToDrawView} tableBeingEdited={tableBeingEdited!} /> }
         </>
     );
 }

@@ -1,7 +1,5 @@
-import { Manager } from "../../Manager";
 import { LocalStorageData, Script } from "../../model/LocalStorageData";
 import * as Monaco from 'monaco-editor';
-import { ScriptingScene } from "../../scenes/ScriptingScene";
 import ModalScriptListItem, { ModalScriptListItemProps } from "./scriptingChildren/ModalScriptListItem";
 import { SetStateAction, useCallback, useEffect, useReducer, useRef, useState } from "react";
 import ModalScriptExecute, { ModalScriptExecuteProps } from "./scriptingChildren/ModalScriptExecute";
@@ -12,9 +10,17 @@ import Giscus from '@giscus/react';
 import EnvGlobals from "../../../EnvGlobals";
 import TopToolbarAction from "../TopToolbarAction";
 import { AppState } from "../MainContent";
+import { Draw } from "../../model/Draw";
+import dayjs from "dayjs";
+import { SchemaDTO } from "../../model/dto/SchemaDTO";
+import { ScriptingSchema } from "../../model/scriptingDto/ScriptingSchema";
 
 
-export default function Scripting() {
+type ScriptingProps = {
+    draw: Draw
+}
+
+export default function Scripting({ draw } : ScriptingProps) {
     console.log("scripting")
 
     let [builtinScripts, setBuiltinScripts] = useState<Script[]>([]);
@@ -78,6 +84,35 @@ export default function Scripting() {
         setLocalStorageScripts([...LocalStorageData.getStorage().scripts])
     }, [])
 
+    const executeWithLogAsync = async (value: string, draw: Draw) => {
+        let resultLog: string[] = [];
+        let errorMsg = "";
+        let SHARED = await fetch(EnvGlobals.BASE_URL + '/wwwroot/scripts/SHARED.js', {cache: "no-cache"}).then(x => x.text());
+        let fnBody = `"use strict";\n${SHARED}\n${value}`;
+        let schemaDTO = ScriptingSchema.init(SchemaDTO.init(draw));
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncFunction
+        // https://stackoverflow.com/questions/46118496/asyncfunction-is-not-defined-yet-mdn-documents-its-usage
+        const AsyncFunction = async function () {}.constructor;
+        let fn = AsyncFunction("RESULT_LOG", "schema", "dayjs", "BASE_URL", fnBody);
+        try {
+            await fn(resultLog, schemaDTO, dayjs, EnvGlobals.BASE_URL);
+        } catch (error: any) {
+            errorMsg = `${error.name}: ${error.message}`;
+        }
+        return {
+            error: errorMsg,
+            resultLog: resultLog
+        }
+    }
+
+    const executeAndReturn = async (value: string, draw: Draw) => {
+        let SHARED = await fetch(EnvGlobals.BASE_URL + '/wwwroot/scripts/SHARED.js',  {cache: "no-cache"}).then(x => x.text());
+        let fnBody = `"use strict";\n${SHARED}\n${value}`;
+        let fn = Function("schema", fnBody);
+        let schemaDTO = ScriptingSchema.init(SchemaDTO.init(draw));
+        return fn(schemaDTO);
+    }
+
 
     const switchToExecuteModel = useCallback((executeModelProps: ModalScriptExecuteProps) => {
         setIsScriptListItemModalVisible(false);
@@ -89,13 +124,15 @@ export default function Scripting() {
         // highlighting replaces regular space with nbsp;
         let html = (await Monaco.editor.colorize(script.content, "javascript", {})).replaceAll("\u00a0", " ");
         setMainModalProps({
-            script: script,
+            script,
             highlightedContent: html,
             setExecuteModalState: setIsExecuteModalVisible,
             setScriptModalState: setIsScriptListItemModalVisible,
-            switchToExecuteModel: switchToExecuteModel,
-            setEditorValue: setEditorValue,
-            removeScriptFromLocalStorage: removeScriptFromLocalStorage
+            switchToExecuteModel,
+            setEditorValue,
+            removeScriptFromLocalStorage,
+            executeWithLogAsync,
+            draw
         });
         setIsScriptListItemModalVisible(true);
     }
@@ -113,10 +150,10 @@ export default function Scripting() {
         setIsSaveScriptModalVisible(true);
     }
 
-    const executeEditorCode = async () => {
-        const result = await ScriptingScene.executeWithLog(
+    const executeEditorCodeAsync = async () => {
+        const result = await executeWithLogAsync(
             editorRef.current!.getValue(),
-            Manager.getInstance().draw
+            draw
         );
         setExecuteModalProps({
             isSuccess: result.error === "",
@@ -128,7 +165,6 @@ export default function Scripting() {
 
     return (
         <>
-            <TopToolbarAction currentState={AppState.ScriptingScene} heightPx={54} />
             <div className="bg-grey">
                 <div className="scripting-container">
                     <div>
@@ -172,7 +208,7 @@ export default function Scripting() {
                                 <div className="h4">Editor</div>
                                 <div>
                                     <button type="button" onClick={() => displaySaveModal()} className="save-btn btn btn-light">Save</button>
-                                    <button type="button" onClick={() => executeEditorCode()} className="execute-btn btn btn-light">Execute</button>
+                                    <button type="button" onClick={() => executeEditorCodeAsync()} className="execute-btn btn btn-light">Execute</button>
                                     <button type="button" onClick={() => setIsJsonDisplayModalVisible(true)} className="show-json btn btn-light">Show JSON</button>
                                 </div>
 
@@ -216,6 +252,8 @@ export default function Scripting() {
                         setExecuteModalState={setIsExecuteModalVisible}
                         setEditorValue={setEditorValue}
                         removeScriptFromLocalStorage={removeScriptFromLocalStorage}
+                        executeWithLogAsync={executeWithLogAsync}
+                        draw={draw}
                     ></ModalScriptListItem>
                 }
                 {isExecuteModalVisible && 
@@ -228,6 +266,7 @@ export default function Scripting() {
                 {isJsonDisplayModalVisible && 
                     <ModalJsonDisplay
                         setJsonDisplayModelState={setIsJsonDisplayModalVisible}
+                        draw={draw}
                     />
                 }
                 {isSaveScriptModalVisible && 

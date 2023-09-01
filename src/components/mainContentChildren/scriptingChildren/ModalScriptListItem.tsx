@@ -1,8 +1,6 @@
 import { SetStateAction, useState } from "react";
-import { Manager } from "../../../Manager";
 import { Draw } from "../../../model/Draw";
 import { Script } from "../../../model/LocalStorageData";
-import { ScriptingScene } from "../../../scenes/ScriptingScene";
 import { ModalScriptExecuteProps } from "./ModalScriptExecute";
 
 export interface ModalScriptListItemProps {
@@ -13,6 +11,8 @@ export interface ModalScriptListItemProps {
     setExecuteModalState: React.Dispatch<React.SetStateAction<boolean>>
     setEditorValue: (content: string) => void
     removeScriptFromLocalStorage: (script: Script) => void
+    executeWithLogAsync: (value: string, draw: Draw) => Promise<{ error: string; resultLog: string[]; }>
+    draw: Draw
 }
 
 
@@ -23,11 +23,13 @@ export default function ModalScriptListItem({
     switchToExecuteModel,
     setExecuteModalState,
     setEditorValue,
-    removeScriptFromLocalStorage
+    removeScriptFromLocalStorage,
+    executeWithLogAsync,
+    draw
 }: ModalScriptListItemProps) {
 
     const execute = async (value: string, draw: Draw): Promise<ModalScriptExecuteProps> => {
-        let executeResult = await ScriptingScene.executeWithLog(value, draw);
+        let executeResult = await executeWithLogAsync(value, draw);
         return {
             isSuccess: executeResult.error === "",
             content: executeResult.resultLog.join("\n"),
@@ -61,7 +63,7 @@ export default function ModalScriptListItem({
 
                             {!script.tags.includes("readonly") &&
                                 <>
-                                    <button onClick={async () => { switchToExecuteModel(await execute(script.content, Manager.getInstance().draw)) }} type="button" className="btn btn-primary">⚡ Execute</button>
+                                    <button onClick={async () => { switchToExecuteModel(await execute(script.content, draw)) }} type="button" className="btn btn-primary">⚡ Execute</button>
                                     <button onClick={() => onClickCopyToEditor()} type="button" className="btn btn-primary">Paste to editor</button>
                                 </>
                             }

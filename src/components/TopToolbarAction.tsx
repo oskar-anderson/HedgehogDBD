@@ -7,6 +7,8 @@ interface TopToolbarActionProps {
     currentlyLoadedLink: "Settings" | "Scripting" | "Draw";
 }
 
+export const TOP_TOOLBAR_HEIGHT_PX = 54;
+
 export default function TopToolbarAction({ currentlyLoadedLink } : TopToolbarActionProps) {
     const drawTooltipIcon = useRef<HTMLImageElement>(null);
     const scriptingIconRef = useRef<HTMLImageElement>(null);
@@ -29,7 +31,7 @@ export default function TopToolbarAction({ currentlyLoadedLink } : TopToolbarAct
 
 
     return (
-        <nav className="py-1 px-4 navbar" style={{ backgroundColor: 'rgb(255, 73, 73)', height: "54px", flexWrap: "inherit" }}>
+        <nav className="py-1 px-4 navbar" style={{ backgroundColor: 'rgb(255, 73, 73)', height: `${TOP_TOOLBAR_HEIGHT_PX}px`, flexWrap: "inherit" }}>
             <div className="container-fluid">
                 <a className="navbar-brand" href="#">
                     <img style={{ height: '36px' }} src={ROOT_URL + "/wwwroot/img/logo_compact_white.png"} />

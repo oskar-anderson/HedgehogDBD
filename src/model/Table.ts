@@ -8,7 +8,7 @@ export default class Table {
 
     
     constructor(
-        private position: Point, 
+        public position: Point, 
         public head: string, 
         {
             id = crypto.randomUUID(),

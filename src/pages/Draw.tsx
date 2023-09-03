@@ -9,6 +9,11 @@ import SecondaryTopToolbar, { SECONDARY_TOOLBAR_HEIGHT_PX } from "../components/
 import CommandMoveTableRelative, { CommandMoveTableRelativeArgs } from "../commands/appCommands/CommandMoveTableRelative"
 import ManagerSingleton from "../ManagerSingleton";
 import DrawSide from "../components/drawChildren/DrawSide";
+import Table from "../model/Table";
+import TableRow from "../model/TableRow";
+import Databases from "../model/DataTypes/Databases";
+import DataType from "../model/DataTypes/DataType";
+import TableRowDataType from "../model/TableRowDataType";
 
 
 // nodeTypes need to be defined outside the render function or using memo
@@ -16,112 +21,103 @@ const nodeTypes = {
     tableNode: DrawTable
 }
 
-const initialNodes = [
-    { 
-        id: 'person',
-        type: "tableNode", 
-        position: { x: 100, y: 200 },
-        data: 
-        {
-            table: {
-                position: {
-                    x: 0,
-                    y: 0
-                },
-                title: "person",
-                rows: [
-                    {
-                        name: "id",
-                        type: "int",
-                        attributes: ["PK"]
-                    },
-                    {
-                        name: "firstname",
-                        type: "string",
-                        attributes: []
-                    },
-                    {
-                        name: "lastname",
-                        type: "string",
-                        attributes: []
-                    },
-                    {
-                        name: "email",
-                        type: "string",
-                        attributes: []
-                    },
-                ]
-            }
+
+const personTable = new Table(
+    { x: 100, y: 200 }, 
+    "person", 
+    [
+        new TableRow(
+            "id", 
+            new TableRowDataType(DataType.guid(), [], false), 
+            ["PK"]
+        ),
+        new TableRow(
+            "firstname", 
+            new TableRowDataType(DataType.string(), [], false), 
+            []
+        ),
+        new TableRow(
+            "lastname", 
+            new TableRowDataType(DataType.string(), [], false), 
+            []
+        ),
+        new TableRow(
+            "email", 
+            new TableRowDataType(DataType.string(), [], false), 
+            []
+        )
+    ]
+);
+const registrationTable = new Table(
+    { x: 500, y: 200},
+    "registration",
+    [
+        new TableRow(
+            "id", 
+            new TableRowDataType(DataType.guid(), [], false), 
+            ["PK"]
+        ),
+        new TableRow(
+            "person_id", 
+            new TableRowDataType(DataType.guid(), [], false), 
+            ['FK("person")']
+        ),
+        new TableRow(
+            "service_id", 
+            new TableRowDataType(DataType.guid(), [], false), 
+            ['FK("service")']
+        )
+    ]
+);
+const serviceTable = new Table(
+    { x: 900, y: 200 },
+    "service",
+    [
+        new TableRow(
+            "id",
+            new TableRowDataType(DataType.guid(), [], false),
+            ["PK"]
+        ),
+        new TableRow(
+            "name",
+            new TableRowDataType(DataType.string(), [], false),
+            []
+        ),
+    ]
+);
+
+const tables = [personTable, registrationTable, serviceTable];
+tables.forEach(table => table.updateRelations(tables));
+const initialNodes2: Node<{table: Table}>[] = tables.map(table => (
+    {
+        id: table.id,
+        type: "tableNode",
+        position: table.position,
+        data: {
+            table: table
         }
-    },
-    { 
-        id: 'registration', 
-        type: "tableNode", 
-        position: { x: 500, y: 200 }, 
-        data: { 
-            table: {
-                position: {
-                    x: 0,
-                    y: 100
-                },
-                title: "registration",
-                rows: [
-                    {
-                        name: "id",
-                        type: "int",
-                        attributes: ["PK"]
-                    },
-                    {
-                        name: "person_id",
-                        type: "int",
-                        attributes: ["FK"]
-                    },
-                    {
-                        name: "service_id",
-                        type: "int",
-                        attributes: ["FK"]
-                    }
-                ]
-            } 
-      } 
-    },
-    { 
-        id: 'service',
-        type: "tableNode", 
-        position: { x: 900, y: 200 },
-        data: 
-        { 
-            table: {  
-                position: {
-                    x: 0,
-                    y: 200
-                },
-                title: "service",
-                rows: [
-                    {
-                        name: "id",
-                        type: "int",
-                        attributes: ["PK"]
-                    },
-                    {
-                        name: "name",
-                        type: "string",
-                        attributes: []
-                    }
-                ]
-            }
-        } 
     }
-];
-const initialEdges: Edge[] = [
-    { id: 'e1-2', source: 'registration', sourceHandle: "registration-person_id-left", target: 'person', targetHandle: "person-id-right" },
-    { id: 'e2-3', source: 'registration', sourceHandle: "registration-service_id-right", target: 'service', targetHandle: "service-id-left" }
-];
+));
+
+const initialEdges2: Edge[] = tables
+    .flatMap(table => table.relations)
+    .filter(relation => {
+        const targetRow = relation.target.tableRows.find(x => x.attributes.includes("PK"));
+        return targetRow;
+    }).map(relation => {   
+        return {
+            id: `${relation.source.head}(${relation.sourceRow.name}) references ${relation.target.head}(${relation.targetRow.name})`,
+            source: relation.source.id,
+            sourceHandle: `${relation.source.head}-${relation.sourceRow.name}-left`,
+            target: relation.target.id,
+            targetHandle: `${relation.target.head}-${relation.targetRow.name}-left`,
+        }
+    });
 
 export default function draw() {
     const draw = ManagerSingleton.getDraw();
-    const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+    const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes2);
+    const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges2);
 
     let nodeDraggedChanges: NodePositionChange[] = [];
     const onNodesChangeAfterListener = (nodeChanges: NodeChange[]) => {

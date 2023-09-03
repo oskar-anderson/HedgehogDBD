@@ -1,15 +1,11 @@
 import React, { memo, useRef } from 'react';
 import ReactFlow, { NodeProps, Handle, Position } from 'demo-reactflow--reactflow';
+import TableRow from '../../model/TableRow';
+import Table from '../../model/Table';
 
-
-type DrawTableRow = {
-    name: string,
-    type: string,
-    attributes: string[]
-}
 
 type DrawTableRowProps = {
-    row: DrawTableRow,
+    row: TableRow,
     rowStartY: number,
     height: number,
     tableName: string
@@ -19,42 +15,22 @@ function DrawTableRow( { row, rowStartY, height, tableName }: DrawTableRowProps)
     const handleStyle: React.CSSProperties = { opacity: 0, background: "#555", border: "none", cursor: "inherit" }
     return (
         <div>
-            {row.attributes.includes("PK") && 
-                <Handle type="target" id={`${tableName}-${row.name}-left`} position={Position.Left} style={{ top: `${rowStartY}px`, left: '2px', ...handleStyle }} />
-            }
-            {row.attributes.includes("FK") && 
-                <Handle type="source" id={`${tableName}-${row.name}-left`} position={Position.Left} style={{ top: `${rowStartY}px`, left: '2px', ...handleStyle }} />
-            }
+            <Handle type="target" id={`${tableName}-${row.name}-left`} position={Position.Left} style={{ top: `${rowStartY}px`, left: '2px', ...handleStyle }} />
+            <Handle type="source" id={`${tableName}-${row.name}-left`} position={Position.Left} style={{ top: `${rowStartY}px`, left: '2px', ...handleStyle }} />
+            
             <div className="d-flex" style={{ gap: "16px", justifyContent: "space-between", height: `${height}px` }}>
                 <div style={{ paddingRight: "6px" }}>{row.name}</div>
-                <div style={{ color: "#b0b8c4" }}>{row.type}</div>
+                <div style={{ color: "#b0b8c4" }}>{row.datatype.getDisplayableText()}</div>
             </div>
-            {row.attributes.includes("PK") && 
-                <Handle type="target" id={`${tableName}-${row.name}-right`} position={Position.Right} style={{ top: `${rowStartY}px`, right: '2px', ...handleStyle}} />
-            }
-            {row.attributes.includes("FK") && 
-                <Handle type="source" id={`${tableName}-${row.name}-right`} position={Position.Right} style={{ top: `${rowStartY}px`, right: '2px', ...handleStyle}} />
-            }
+
+            <Handle type="target" id={`${tableName}-${row.name}-right`} position={Position.Right} style={{ top: `${rowStartY}px`, right: '2px', ...handleStyle}} />
+            <Handle type="source" id={`${tableName}-${row.name}-right`} position={Position.Right} style={{ top: `${rowStartY}px`, right: '2px', ...handleStyle}} />
         </div>
     );
 }
 
-type DrawTableProps = {
-    id: string, 
-    type: string, 
-    position: { x: number, y: number }, 
-    table: {
-        position: {
-            x: number,
-            y: number
-        },
-        title: string,
-        rows: DrawTableRow[]
-    }
-}
 
-
-export default function DrawTable(node: NodeProps<DrawTableProps>) {
+export default function DrawTable(node: NodeProps<{ table: Table }>) {
     const tableRef = useRef(null)
     const table = node.data.table;
 
@@ -83,15 +59,15 @@ export default function DrawTable(node: NodeProps<DrawTableProps>) {
             }}>
                 <div className="tableHeader" style={{ borderRadius: "4px",  backgroundColor: "#eee" }}>
                     <div className="d-flex" style={headingStyle}>
-                        <div className="w-100 d-flex justify-content-center" style={{ fontWeight: "500" }}>{table.title}</div>
+                        <div className="w-100 d-flex justify-content-center" style={{ fontWeight: "500" }}>{table.head}</div>
                     </div>
                     <div style={{ borderRadius: "0 0 4px 4px", backgroundColor: "white", padding: `0 4px`, ...contentBorderStyle }}>
                         {
-                            table.rows.map((row, i) => {
+                            table.tableRows.map((row, i) => {
                                 const alignCenterTweak = 2;
                                 const rowStartY = (outerBorderWidth + 2 * innerBorderWidth + rowHeight + 2*headingPaddingY) + (rowHeight / 2) + (i * rowHeight) + alignCenterTweak;  
                                 return (
-                                    <DrawTableRow key={row.name} tableName={table.title} row={row} rowStartY={rowStartY} height={rowHeight} />
+                                    <DrawTableRow key={row.name} tableName={table.head} row={row} rowStartY={rowStartY} height={rowHeight} />
                                 );
                             })
                         }

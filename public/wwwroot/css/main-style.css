@@ -144,3 +144,8 @@ https://stackoverflow.com/questions/5214127/css-technique-for-a-horizontal-line-
 .bg-grey {
     background-color: #eee;
 }
+
+.react-flow__panel > svg {
+    width: 100%;
+    height: auto;
+}

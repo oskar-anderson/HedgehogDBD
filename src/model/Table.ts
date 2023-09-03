@@ -1,5 +1,5 @@
 import Point from "./Point";
-
+import Relation from "./Relation";
 
 export default class Table {
     readonly id: string = crypto.randomUUID();
@@ -9,10 +9,11 @@ export default class Table {
     
     constructor(
         public position: Point, 
-        public head: string, 
+        public head: string,
+        public relations: Relation[], 
         {
             id = crypto.randomUUID(),
-            isHover = false
+            isHover = false,
         }
         ) {
         this.id = id;

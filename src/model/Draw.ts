@@ -9,6 +9,4 @@ export default class Draw {
     activeDatabase = Databases.Postgres.id;
     schemaTables: Table[] = [];
 
-
-
 }

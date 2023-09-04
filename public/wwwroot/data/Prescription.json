@@ -3,8 +3,8 @@
         {
             "id": "6c644fac-17b9-4014-8fc0-b7b9f8872fc4",
             "position": {
-                "x": 24,
-                "y": 11
+                "x": 168,
+                "y": 154
             },
             "head": "prescription",
             "tableRows": [
@@ -570,8 +570,8 @@
         {
             "id": "7acf31b6-6f4c-437a-872d-c05947b43313",
             "position": {
-                "x": 133,
-                "y": 11
+                "x": 931,
+                "y": 154
             },
             "head": "prescription_allowed_buyers",
             "tableRows": [

@@ -1,5 +1,8 @@
 import dayjs from "dayjs";
 import { ROOT_URL } from "../../Main"
+import DomainDraw from "../../model/domain/DomainDraw";
+import ManagerSingleton from "../../ManagerSingleton";
+import { CommandSetSchema, CommandSetSchemaArgs } from "../../commands/appCommands/CommandSetSchema";
 
 interface TopToolbarListElementIconProps {
     onClickAction: () => void,
@@ -18,15 +21,16 @@ function TopToolbarListElementIcon( {onClickAction, iconSrc, children}: TopToolb
 
 export const SECONDARY_TOOLBAR_HEIGHT_PX = 38;
 
-export default function SecondaryTopToolbar() {
+type SecondaryTopToolbarProps = {
+    exportPngImage: () => void
+}
+
+export default function SecondaryTopToolbar( { exportPngImage } : SecondaryTopToolbarProps) {
 
     const newSchema = () => {
 
     }
     const saveAsJson = () => {
-
-    }
-    const exportImage = () => {
 
     }
     const importFile = () => {
@@ -40,11 +44,33 @@ export default function SecondaryTopToolbar() {
 
     }
 
+    console.log("SecondaryTopToolbar")
+
 
     const loadSchema = async (fileName: string) => {
-        // let text = await (await fetch(`${ROOT_URL}/wwwroot/data/${fileName}`, { cache: "no-cache" })).text();
-        // let schemaDTO = RasterModelerFormat.parse(text);
-        // setSchemaAndUpdateUi(schemaDTO);
+        let text = await (await fetch(`${ROOT_URL}/wwwroot/data/${fileName}`, { cache: "no-cache" })).text();
+        let newDomainDraw = DomainDraw.parse(text)
+        let vmDraw = newDomainDraw.mapToVm(
+            ManagerSingleton.getDraw().history,
+            ManagerSingleton.getDraw().activeDatabase,
+        );
+        /*
+        let oldDomainDraw = DomainDraw.init(ManagerSingleton.getDraw())
+        const command = new CommandSetSchema(
+            oldDomainDraw, 
+            new CommandSetSchemaArgs(
+                oldDomainDraw, 
+                newDomainDraw
+            )
+        )
+        ManagerSingleton.getDraw().history.execute(command);
+        */
+
+        ManagerSingleton.getDraw().schemaTables = vmDraw.schemaTables;
+        ManagerSingleton.getDraw().schemaTables.forEach(x => x.isDirty = true);
+        ManagerSingleton.getDraw().schemaRelations = vmDraw.schemaTables.flatMap(table => table.getRelations(vmDraw.schemaTables));
+        ManagerSingleton.getDraw().schemaRelations.forEach(x => x.isDirty = true);
+        console.log(ManagerSingleton.getDraw().schemaTables)
     }
 
     return (
@@ -65,7 +91,7 @@ export default function SecondaryTopToolbar() {
                         </TopToolbarListElementIcon>
                     </li>
                     <li>
-                        <TopToolbarListElementIcon onClickAction={() => exportImage()} iconSrc={`${ROOT_URL}/wwwroot/img/svg/image-download.svg`} >
+                        <TopToolbarListElementIcon onClickAction={() => exportPngImage()} iconSrc={`${ROOT_URL}/wwwroot/img/svg/image-download.svg`} >
                             Export image
                         </TopToolbarListElementIcon>
                     </li>

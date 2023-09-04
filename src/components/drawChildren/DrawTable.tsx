@@ -1,11 +1,11 @@
 import React, { memo, useRef } from 'react';
-import ReactFlow, { NodeProps, Handle, Position } from 'demo-reactflow--reactflow';
-import TableRow from '../../model/TableRow';
-import Table from '../../model/Table';
+import ReactFlow, { NodeProps, Handle, Position } from 'reactflow';
+import VmTableRow from '../../model/viewModel/VmTableRow';
+import VmTable from '../../model/viewModel/VmTable';
 
 
 type DrawTableRowProps = {
-    row: TableRow,
+    row: VmTableRow,
     rowStartY: number,
     height: number,
     tableName: string
@@ -18,7 +18,7 @@ function DrawTableRow( { row, rowStartY, height, tableName }: DrawTableRowProps)
             <Handle type="target" id={`${tableName}-${row.name}-left`} position={Position.Left} style={{ top: `${rowStartY}px`, left: '2px', ...handleStyle }} />
             <Handle type="source" id={`${tableName}-${row.name}-left`} position={Position.Left} style={{ top: `${rowStartY}px`, left: '2px', ...handleStyle }} />
             
-            <div className="d-flex" style={{ gap: "16px", justifyContent: "space-between", height: `${height}px` }}>
+            <div className="d-flex" style={{ gap: "16px", justifyContent: "space-between", height: `${height}px`, whiteSpace: "nowrap" }}>
                 <div style={{ paddingRight: "6px" }}>{row.name}</div>
                 <div style={{ color: "#b0b8c4" }}>{row.datatype.getDisplayableText()}</div>
             </div>
@@ -30,7 +30,7 @@ function DrawTableRow( { row, rowStartY, height, tableName }: DrawTableRowProps)
 }
 
 
-export default function DrawTable(node: NodeProps<{ table: Table }>) {
+export default function DrawTable(node: NodeProps<{ table: VmTable }>) {
     const tableRef = useRef(null)
     const table = node.data.table;
 

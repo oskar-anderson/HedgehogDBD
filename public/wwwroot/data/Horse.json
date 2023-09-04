@@ -3,8 +3,8 @@
         {
             "id": "48c68028-b27c-4cef-84fe-a57cee3e9651",
             "position": {
-                "x": 279,
-                "y": 13
+                "x": 1953,
+                "y": 182
             },
             "head": "hippodrome",
             "tableRows": [
@@ -51,8 +51,8 @@
         {
             "id": "348f189d-2057-4218-bc4a-912336e94ae2",
             "position": {
-                "x": 208,
-                "y": 13
+                "x": 1456,
+                "y": 182
             },
             "head": "stable",
             "tableRows": [
@@ -99,8 +99,8 @@
         {
             "id": "c3027c1e-99b9-4921-9630-91df26874910",
             "position": {
-                "x": 145,
-                "y": 47
+                "x": 1015,
+                "y": 658
             },
             "head": "horse",
             "tableRows": [
@@ -147,8 +147,8 @@
         {
             "id": "e2677179-71db-4320-9327-5cdb82cf288b",
             "position": {
-                "x": 96,
-                "y": 31
+                "x": 672,
+                "y": 434
             },
             "head": "dd_breed",
             "tableRows": [
@@ -179,8 +179,8 @@
         {
             "id": "6a66c186-4ba6-47f9-a45d-427c2a891816",
             "position": {
-                "x": 145,
-                "y": 13
+                "x": 1015,
+                "y": 182
             },
             "head": "stall",
             "tableRows": [
@@ -227,8 +227,8 @@
         {
             "id": "54f123d6-7f61-41e0-812c-ce908d95b63f",
             "position": {
-                "x": 166,
-                "y": 64
+                "x": 1162,
+                "y": 896
             },
             "head": "horse_owner",
             "tableRows": [
@@ -290,8 +290,8 @@
         {
             "id": "ce49a103-b0dd-4afc-8e89-e77a112940de",
             "position": {
-                "x": 147,
-                "y": 84
+                "x": 1029,
+                "y": 1176
             },
             "head": "person",
             "tableRows": [
@@ -343,8 +343,8 @@
         {
             "id": "7ef472fe-6c3f-4011-a05a-de0ff4184316",
             "position": {
-                "x": 145,
-                "y": 30
+                "x": 1015,
+                "y": 420
             },
             "head": "horse_in_stall",
             "tableRows": [
@@ -418,8 +418,8 @@
         {
             "id": "7da9e8df-2639-414e-8746-63ca7b54bb86",
             "position": {
-                "x": 102,
-                "y": 64
+                "x": 714,
+                "y": 896
             },
             "head": "horse_worker",
             "tableRows": [
@@ -494,8 +494,8 @@
         {
             "id": "772f35be-2de0-4ae5-8936-df21af2a6487",
             "position": {
-                "x": 102,
-                "y": 52
+                "x": 714,
+                "y": 728
             },
             "head": "dd_worker_type",
             "tableRows": [
@@ -542,8 +542,8 @@
         {
             "id": "0446e84d-e1d9-4115-8e34-31bc3d1b0770",
             "position": {
-                "x": 21,
-                "y": 81
+                "x": 147,
+                "y": 1134
             },
             "head": "training",
             "tableRows": [
@@ -627,8 +627,8 @@
         {
             "id": "ea344efb-3e5a-48e2-9df6-998fd73c8fb6",
             "position": {
-                "x": 21,
-                "y": 98
+                "x": 147,
+                "y": 1372
             },
             "head": "dd_training_type",
             "tableRows": [
@@ -664,8 +664,8 @@
         {
             "id": "bfe8c905-c8fe-4ee2-9ed2-fac445d74db8",
             "position": {
-                "x": 90,
-                "y": 82
+                "x": 630,
+                "y": 1148
             },
             "head": "training_participant",
             "tableRows": [
@@ -734,8 +734,8 @@
         {
             "id": "2e4cf69a-9fca-425a-8f24-74b687538252",
             "position": {
-                "x": 235,
-                "y": 64
+                "x": 1645,
+                "y": 896
             },
             "head": "registation",
             "tableRows": [
@@ -799,8 +799,8 @@
         {
             "id": "834e2a23-b2d6-4e19-aec0-740d35b9b273",
             "position": {
-                "x": 317,
-                "y": 64
+                "x": 2219,
+                "y": 896
             },
             "head": "competition",
             "tableRows": [
@@ -863,8 +863,8 @@
         {
             "id": "57effdcc-7574-4f5a-a57c-4d96db5243bd",
             "position": {
-                "x": 401,
-                "y": 64
+                "x": 2807,
+                "y": 896
             },
             "head": "race",
             "tableRows": [
@@ -922,8 +922,8 @@
         {
             "id": "2fd6cd47-207e-4581-a40e-a0248b60080c",
             "position": {
-                "x": 401,
-                "y": 91
+                "x": 2807,
+                "y": 1274
             },
             "head": "horse_in_race",
             "tableRows": [
@@ -1014,8 +1014,8 @@
         {
             "id": "178bc1eb-e0c9-4478-a31c-160e8d48ae96",
             "position": {
-                "x": 347,
-                "y": 12
+                "x": 2429,
+                "y": 168
             },
             "head": "company",
             "tableRows": [
@@ -1051,8 +1051,8 @@
         {
             "id": "db4342b1-4dec-4b44-a39e-5a6e09530b5a",
             "position": {
-                "x": 339,
-                "y": 29
+                "x": 2373,
+                "y": 406
             },
             "head": "rent_contract",
             "tableRows": [

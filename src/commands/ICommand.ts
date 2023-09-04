@@ -1,4 +1,4 @@
-import Draw from "../model/Draw";
+import Draw from "../model/domain/DomainDraw";
 
 export interface ICommand<T extends IHydratable<T>> {
     context: Draw;

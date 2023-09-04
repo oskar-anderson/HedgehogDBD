@@ -1,4 +1,4 @@
-import Draw from "../model/Draw";
+import DomainDraw from "../model/domain/DomainDraw";
 import CommandMoveTableRelative from "./appCommands/CommandMoveTableRelative";
 import { ICommand, IHydratable } from "./ICommand";
 
@@ -17,7 +17,7 @@ export default class History {
         commandInstance.redo();
     }
 
-    private getICommandInstance(command: CommandPattern<any>, context: Draw): ICommand<any> {
+    private getICommandInstance(command: CommandPattern<any>, context: DomainDraw): ICommand<any> {
         const args = command.args.hydrate();
         switch (command.commandName) {
             case CommandMoveTableRelative.name:
@@ -37,14 +37,14 @@ export default class History {
         }
     }
 
-    redo(context: Draw) {
+    redo(context: DomainDraw) {
         if (this.redoHistory.length === 0) return;
         let command = JSON.parse(this.redoHistory.pop()!) as CommandPattern<any>;
         this.undoHistory.push(JSON.stringify(command));
         this.getICommandInstance(command, context).redo();
     }
 
-    undo(context: Draw) {
+    undo(context: DomainDraw) {
         if (this.undoHistory.length === 0) return;
         let command = JSON.parse(this.undoHistory.pop()!) as CommandPattern<any>;
         this.redoHistory.push(JSON.stringify(command));

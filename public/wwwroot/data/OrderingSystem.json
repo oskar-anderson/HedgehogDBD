@@ -3,8 +3,8 @@
         {
             "id": "e909089d-7f82-456a-898b-5a017e0f3756",
             "position": {
-                "x": 18,
-                "y": 5
+                "x": 126,
+                "y": 70
             },
             "head": "order_items",
             "tableRows": [
@@ -73,8 +73,8 @@
         {
             "id": "aa6db814-dfc8-4be0-94a7-8a2fa0ba9fd4",
             "position": {
-                "x": 13,
-                "y": 21
+                "x": 91,
+                "y": 294
             },
             "head": "products",
             "tableRows": [
@@ -169,8 +169,8 @@
         {
             "id": "d2b680e4-7626-4fdb-a41f-0c6f8516fc7e",
             "position": {
-                "x": 14,
-                "y": 37
+                "x": 98,
+                "y": 518
             },
             "head": "product_types",
             "tableRows": [
@@ -233,8 +233,8 @@
         {
             "id": "b03cdb5e-d9cf-49c4-89e2-a0c43d79e850",
             "position": {
-                "x": 90,
-                "y": 8
+                "x": 630,
+                "y": 112
             },
             "head": "orders",
             "tableRows": [
@@ -297,8 +297,8 @@
         {
             "id": "0ffc1d2d-553a-4756-93a7-0c6e0b6dda67",
             "position": {
-                "x": 102,
-                "y": 22
+                "x": 714,
+                "y": 308
             },
             "head": "invoices",
             "tableRows": [
@@ -361,8 +361,8 @@
         {
             "id": "e5cce12e-9e0c-4d42-b579-81e98bf3eea4",
             "position": {
-                "x": 172,
-                "y": 4
+                "x": 1204,
+                "y": 56
             },
             "head": "customers",
             "tableRows": [

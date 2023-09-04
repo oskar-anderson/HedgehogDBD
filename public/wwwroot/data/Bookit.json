@@ -3,8 +3,8 @@
         {
             "id": "1bfa3dfb-b792-4b31-9bee-2bd4c5b04b4f",
             "position": {
-                "x": 15,
-                "y": 6
+                "x": 105,
+                "y": 84
             },
             "head": "permission",
             "tableRows": [
@@ -40,8 +40,8 @@
         {
             "id": "ed961322-237b-404c-a77a-7667a776f0ca",
             "position": {
-                "x": 53,
-                "y": 6
+                "x": 371,
+                "y": 84
             },
             "head": "authgroup_permission",
             "tableRows": [
@@ -83,8 +83,8 @@
         {
             "id": "39e4477d-5e8e-46f1-95ce-8bc3a8746a31",
             "position": {
-                "x": 114,
-                "y": 6
+                "x": 798,
+                "y": 84
             },
             "head": "authgroup",
             "tableRows": [
@@ -120,8 +120,8 @@
         {
             "id": "64f4aa0b-05ec-471b-b1df-6cf956bbe64e",
             "position": {
-                "x": 156,
-                "y": 5
+                "x": 1092,
+                "y": 70
             },
             "head": "user_in_group",
             "tableRows": [
@@ -163,8 +163,8 @@
         {
             "id": "5ec0f4d6-62e3-4c51-a791-328bb3093828",
             "position": {
-                "x": 222,
-                "y": 5
+                "x": 1554,
+                "y": 70
             },
             "head": "user",
             "tableRows": [
@@ -254,8 +254,8 @@
         {
             "id": "b5c49d85-c140-4c0e-9f64-32ee366792c5",
             "position": {
-                "x": 244,
-                "y": 20
+                "x": 1708,
+                "y": 280
             },
             "head": "person",
             "tableRows": [
@@ -361,8 +361,8 @@
         {
             "id": "5e42b3de-97dd-446f-8182-e57032a80eb3",
             "position": {
-                "x": 15,
-                "y": 22
+                "x": 105,
+                "y": 308
             },
             "head": "picture",
             "tableRows": [
@@ -453,8 +453,8 @@
         {
             "id": "4364bbb7-563d-44d6-bb14-d96116ebf6a7",
             "position": {
-                "x": 15,
-                "y": 52
+                "x": 105,
+                "y": 728
             },
             "head": "dd_comfort",
             "tableRows": [
@@ -539,8 +539,8 @@
         {
             "id": "8db22403-8db4-47f8-9b96-34fc4eab0100",
             "position": {
-                "x": 13,
-                "y": 67
+                "x": 91,
+                "y": 938
             },
             "head": "room_type_comfort",
             "tableRows": [
@@ -626,8 +626,8 @@
         {
             "id": "47b0613b-be72-4641-bce7-2566c4268c52",
             "position": {
-                "x": 15,
-                "y": 39
+                "x": 105,
+                "y": 546
             },
             "head": "hotel_comfort",
             "tableRows": [
@@ -669,8 +669,8 @@
         {
             "id": "0e6a1c80-a110-4b92-ab8f-f90083ab86e8",
             "position": {
-                "x": 13,
-                "y": 82
+                "x": 91,
+                "y": 1148
             },
             "head": "room_type_beds",
             "tableRows": [
@@ -723,8 +723,8 @@
         {
             "id": "03174ed2-d0eb-480b-b30e-05695f0f0a13",
             "position": {
-                "x": 13,
-                "y": 96
+                "x": 91,
+                "y": 1344
             },
             "head": "dd_bed_type",
             "tableRows": [
@@ -771,8 +771,8 @@
         {
             "id": "c9b31b2d-9598-4509-b453-d7babdd10711",
             "position": {
-                "x": 103,
-                "y": 125
+                "x": 721,
+                "y": 1750
             },
             "head": "sellable_picture",
             "tableRows": [
@@ -819,8 +819,8 @@
         {
             "id": "11bea5d2-1fde-4ad6-9d5b-02d7bcb3b574",
             "position": {
-                "x": 157,
-                "y": 125
+                "x": 1099,
+                "y": 1750
             },
             "head": "sellable_price",
             "tableRows": [
@@ -929,8 +929,8 @@
         {
             "id": "88f60c56-9355-4335-9c1c-8f1ab182af63",
             "position": {
-                "x": 91,
-                "y": 55
+                "x": 637,
+                "y": 770
             },
             "head": "room_type",
             "tableRows": [
@@ -1032,8 +1032,8 @@
         {
             "id": "d5aada62-4b2a-4b29-a477-601d1c4dffa4",
             "position": {
-                "x": 92,
-                "y": 37
+                "x": 644,
+                "y": 518
             },
             "head": "hotel",
             "tableRows": [
@@ -1187,8 +1187,8 @@
         {
             "id": "38dbd8bb-4197-4d4a-b83d-7f17ae85dfb9",
             "position": {
-                "x": 231,
-                "y": 34
+                "x": 1617,
+                "y": 476
             },
             "head": "reservation",
             "tableRows": [
@@ -1305,8 +1305,8 @@
         {
             "id": "1be0326a-ea71-4014-adf5-f0c340b622e0",
             "position": {
-                "x": 307,
-                "y": 45
+                "x": 2149,
+                "y": 630
             },
             "head": "purchase",
             "tableRows": [
@@ -1423,8 +1423,8 @@
         {
             "id": "fcc85226-7ad4-4534-9fcd-aba0b3d94502",
             "position": {
-                "x": 156,
-                "y": 57
+                "x": 1092,
+                "y": 798
             },
             "head": "room",
             "tableRows": [
@@ -1482,8 +1482,8 @@
         {
             "id": "c9ce8b46-60a0-41a9-83e3-04ebc88c96fb",
             "position": {
-                "x": 377,
-                "y": 45
+                "x": 2639,
+                "y": 630
             },
             "head": "purchase_line",
             "tableRows": [
@@ -1568,8 +1568,8 @@
         {
             "id": "7ab92518-50f2-40be-9b80-5ef5d6130c62",
             "position": {
-                "x": 232,
-                "y": 57
+                "x": 1624,
+                "y": 798
             },
             "head": "room_occupancy",
             "tableRows": [
@@ -1682,8 +1682,8 @@
         {
             "id": "9fc4aaa8-ba1c-4c60-856f-8d9c03fb6af4",
             "position": {
-                "x": 105,
-                "y": 20
+                "x": 735,
+                "y": 280
             },
             "head": "business_user",
             "tableRows": [
@@ -1746,8 +1746,8 @@
         {
             "id": "e713783e-9c4f-48aa-affb-4ed8e3e5e397",
             "position": {
-                "x": 128,
-                "y": 77
+                "x": 896,
+                "y": 1078
             },
             "head": "sellable",
             "tableRows": [
@@ -1821,8 +1821,8 @@
         {
             "id": "08756e67-1dc8-47af-a5be-c535f4e071a1",
             "position": {
-                "x": 38,
-                "y": 125
+                "x": 266,
+                "y": 1750
             },
             "head": "sellable_category",
             "tableRows": [
@@ -1869,8 +1869,8 @@
         {
             "id": "4ff179e5-fe3f-4d42-8fe0-6f4d96de4544",
             "position": {
-                "x": 142,
-                "y": 100
+                "x": 994,
+                "y": 1400
             },
             "head": "sellable_variation",
             "tableRows": [

@@ -1,20 +1,22 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "./../components/Layout"
-import ReactFlow, { ReactFlowProvider, useNodesState, useEdgesState, addEdge, MiniMap, Background, Controls, Position, BackgroundVariant, NodeChange, NodePositionChange, Edge, Node } from 'demo-reactflow--reactflow';
+import ReactFlow, { ReactFlowProvider, useNodesState, useEdgesState, addEdge, MiniMap, Background, Controls, Position, BackgroundVariant, NodeChange, NodePositionChange, Edge, Node, getRectOfNodes, getTransformForBounds, useReactFlow } from 'reactflow';
 import DrawTable from "../components/drawChildren/DrawTable";
-import 'demo-reactflow--reactflow/dist/style.css';
+import 'reactflow/dist/style.css';
 import { TOP_TOOLBAR_HEIGHT_PX } from "../components/TopToolbarAction"
 import SecondaryTopToolbar, { SECONDARY_TOOLBAR_HEIGHT_PX } from "../components/drawChildren/SecondaryTopToolbar";
 import CommandMoveTableRelative, { CommandMoveTableRelativeArgs } from "../commands/appCommands/CommandMoveTableRelative"
 import ManagerSingleton from "../ManagerSingleton";
 import DrawSide from "../components/drawChildren/DrawSide";
-import Table from "../model/Table";
-import TableRow from "../model/TableRow";
+import VmTable from "../model/viewModel/VmTable";
+import VmTableRow from "../model/viewModel/VmTableRow";
 import Databases from "../model/DataTypes/Databases";
 import DataType from "../model/DataTypes/DataType";
-import TableRowDataType from "../model/TableRowDataType";
-
+import VmTableRowDataType from "../model/viewModel/VmTableRowDataType";
+import { toPng } from 'html-to-image';
+import DomainDraw from "../model/domain/DomainDraw";
+import VmRelation from "../model/viewModel/VmRelation";
 
 // nodeTypes need to be defined outside the render function or using memo
 const nodeTypes = { 
@@ -22,74 +24,8 @@ const nodeTypes = {
 }
 
 
-const personTable = new Table(
-    { x: 100, y: 200 }, 
-    "person", 
-    [
-        new TableRow(
-            "id", 
-            new TableRowDataType(DataType.guid(), [], false), 
-            ["PK"]
-        ),
-        new TableRow(
-            "firstname", 
-            new TableRowDataType(DataType.string(), [], false), 
-            []
-        ),
-        new TableRow(
-            "lastname", 
-            new TableRowDataType(DataType.string(), [], false), 
-            []
-        ),
-        new TableRow(
-            "email", 
-            new TableRowDataType(DataType.string(), [], false), 
-            []
-        )
-    ]
-);
-const registrationTable = new Table(
-    { x: 500, y: 200},
-    "registration",
-    [
-        new TableRow(
-            "id", 
-            new TableRowDataType(DataType.guid(), [], false), 
-            ["PK"]
-        ),
-        new TableRow(
-            "person_id", 
-            new TableRowDataType(DataType.guid(), [], false), 
-            ['FK("person")']
-        ),
-        new TableRow(
-            "service_id", 
-            new TableRowDataType(DataType.guid(), [], false), 
-            ['FK("service")']
-        )
-    ]
-);
-const serviceTable = new Table(
-    { x: 900, y: 200 },
-    "service",
-    [
-        new TableRow(
-            "id",
-            new TableRowDataType(DataType.guid(), [], false),
-            ["PK"]
-        ),
-        new TableRow(
-            "name",
-            new TableRowDataType(DataType.string(), [], false),
-            []
-        ),
-    ]
-);
-
-const tables = [personTable, registrationTable, serviceTable];
-tables.forEach(table => table.updateRelations(tables));
-const initialNodes2: Node<{table: Table}>[] = tables.map(table => (
-    {
+const convertTableToNode = (table: VmTable) => {
+    return {
         id: table.id,
         type: "tableNode",
         position: table.position,
@@ -97,27 +33,51 @@ const initialNodes2: Node<{table: Table}>[] = tables.map(table => (
             table: table
         }
     }
-));
+}
 
-const initialEdges2: Edge[] = tables
-    .flatMap(table => table.relations)
-    .filter(relation => {
-        const targetRow = relation.target.tableRows.find(x => x.attributes.includes("PK"));
-        return targetRow;
-    }).map(relation => {   
-        return {
-            id: `${relation.source.head}(${relation.sourceRow.name}) references ${relation.target.head}(${relation.targetRow.name})`,
-            source: relation.source.id,
-            sourceHandle: `${relation.source.head}-${relation.sourceRow.name}-left`,
-            target: relation.target.id,
-            targetHandle: `${relation.target.head}-${relation.targetRow.name}-left`,
-        }
-    });
+const convertRelationToEdge = (relation: VmRelation) => {
+    return {
+        id: `${relation.source.head}(${relation.sourceRow.name}) references ${relation.target.head}(${relation.targetRow.name})`,
+        source: relation.source.id,
+        sourceHandle: `${relation.source.head}-${relation.sourceRow.name}-left`,
+        target: relation.target.id,
+        targetHandle: `${relation.target.head}-${relation.targetRow.name}-left`,
+    }
+}
 
 export default function draw() {
     const draw = ManagerSingleton.getDraw();
-    const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes2);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges2);
+    const [nodes, setNodes, onNodesChange] = useNodesState([]);
+    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            
+            const nodesNeedRerendering = draw.schemaTables.some(table => table.isDirty);
+            const edgesNeedRerendering = draw.schemaRelations.some(relation => relation.isDirty);
+            if (nodesNeedRerendering) {
+                setEdges([]);
+                let newTables = draw.schemaTables.map(table => {
+                    return table.isDirty ? 
+                        table.setIsDirty(false).clone() : 
+                        table;
+                });
+                setNodes(newTables.map(table => convertTableToNode(table)));    
+            }
+            
+            if (edgesNeedRerendering) {
+                let newRelations = draw.schemaRelations.map(relation => {
+                    return relation.isDirty ? 
+                        relation.setIsDirty(false).clone() : 
+                        relation;
+                });
+                setEdges(
+                    newRelations.map(relation => convertRelationToEdge(relation))
+                );
+            }
+        }, 1000/30);
+        return () => clearInterval(intervalId);
+    }, [])
 
     let nodeDraggedChanges: NodePositionChange[] = [];
     const onNodesChangeAfterListener = (nodeChanges: NodeChange[]) => {
@@ -126,14 +86,13 @@ export default function draw() {
             let nodeChange = nodeChanges[0] as NodePositionChange;
             nodeDraggedChanges.push(nodeChange);
 
-            // console.log(nodeChange);
             if (! nodeChange.dragging) {
                 if (nodeDraggedChanges.length <= 2) {
                     return
                 }
                 const startPosition = nodeDraggedChanges[0];
                 const endPosition = nodeDraggedChanges[nodeChanges.length - 2];
-                const command = new CommandMoveTableRelative(draw, new CommandMoveTableRelativeArgs(
+                const command = new CommandMoveTableRelative(DomainDraw.init(draw), new CommandMoveTableRelativeArgs(
                     nodeChange.id, 
                     startPosition.position!.x - endPosition.position!.x, 
                     startPosition.position!.y - endPosition.position!.y
@@ -149,21 +108,45 @@ export default function draw() {
         }
     }
 
+    const downloadImagePng = () => {
+        const nodesBounds = getRectOfNodes(nodes);
+        const viewportElement = document.querySelector('.react-flow__viewport') as HTMLElement;
+        const imageWidth = viewportElement.offsetWidth;
+        const imageHeight = viewportElement.offsetHeight;
+        console.log(imageWidth, imageHeight)
+        const transform = getTransformForBounds(nodesBounds, imageWidth, imageHeight, 0.5, 2);
+    
+        toPng(viewportElement, {
+            width: imageWidth / transform[2],
+            height: imageHeight / transform[2],
+            pixelRatio: 4,
+            style: {
+                width: `${imageWidth}px`,
+                height: `${imageHeight}px`,
+                transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`
+            },
+        },
+        ).then(dataUrl => {
+            const a = document.createElement('a');
+            a.setAttribute('download', 'hedgehogDBD.png');
+            a.setAttribute('href', dataUrl);
+            a.click();
+        });
+    }
+
     useEffect(() => {
         const attribution = document.querySelector(".react-flow__attribution");
         const attribuitionTextElement = attribution?.children[0] as HTMLLinkElement;
         attribuitionTextElement!.innerHTML = "HedgehogDBD uses React Flow";
-        // attribuitionTextElement!.href = "https://github.com/oskar-anderson/RasterModeler";
     }, [])
 
     return <>
-        
         <Layout currentlyLoadedLink={"Draw"}>
             <ReactFlowProvider>
-                <SecondaryTopToolbar />
+                <SecondaryTopToolbar exportPngImage={ downloadImagePng }  />
                 <div style={{ display: 'flex', width: '100vw', height: `calc(100vh - ${TOP_TOOLBAR_HEIGHT_PX}px  - ${SECONDARY_TOOLBAR_HEIGHT_PX}px)` }}>
                     <DrawSide tables={[]}>
-                        <MiniMap style={{ position: "relative", margin: 0 }} pannable maskColor="rgb(213, 213, 213)" nodeColor="#ffc8c8" />
+                        <MiniMap style={{ position: "relative", margin: 0 }} pannable maskColor="rgba(213, 213, 213, 0.7)" nodeColor="#ffc8c8" />
                     </DrawSide>
                     <ReactFlow
                         nodes={nodes}

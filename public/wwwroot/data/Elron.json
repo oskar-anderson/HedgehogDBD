@@ -3,8 +3,8 @@
         {
             "id": "6be18940-46fd-4c41-9635-2e4b931fec9e",
             "position": {
-                "x": 24,
-                "y": 27
+                "x": 168,
+                "y": 378
             },
             "head": "vehicle",
             "tableRows": [
@@ -99,8 +99,8 @@
         {
             "id": "198410e4-203b-42b4-8bef-48ed4cca1a36",
             "position": {
-                "x": 24,
-                "y": 48
+                "x": 168,
+                "y": 672
             },
             "head": "location_reading",
             "tableRows": [
@@ -204,8 +204,8 @@
         {
             "id": "10a0e951-57a5-47bd-a9fe-932ffe86e09d",
             "position": {
-                "x": 97,
-                "y": 27
+                "x": 679,
+                "y": 378
             },
             "head": "route",
             "tableRows": [
@@ -274,8 +274,8 @@
         {
             "id": "7ff2bbe6-f403-48d6-b4b6-5cb340a9cd9d",
             "position": {
-                "x": 169,
-                "y": 27
+                "x": 1183,
+                "y": 378
             },
             "head": "route_stop",
             "tableRows": [
@@ -350,8 +350,8 @@
         {
             "id": "3c086765-47d6-4e53-aaa0-0f9b92736b7f",
             "position": {
-                "x": 256,
-                "y": 27
+                "x": 1792,
+                "y": 378
             },
             "head": "stop",
             "tableRows": [
@@ -427,8 +427,8 @@
         {
             "id": "105344c7-ac37-4429-a898-1d8ff0cb2cf7",
             "position": {
-                "x": 98,
-                "y": 10
+                "x": 686,
+                "y": 140
             },
             "head": "route_template",
             "tableRows": [
@@ -464,8 +464,8 @@
         {
             "id": "cad1a6ca-25a6-46b4-bedc-a91bf5253229",
             "position": {
-                "x": 163,
-                "y": 10
+                "x": 1141,
+                "y": 140
             },
             "head": "route_stop_template",
             "tableRows": [

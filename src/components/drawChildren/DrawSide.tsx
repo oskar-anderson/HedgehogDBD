@@ -1,7 +1,7 @@
-import Table from "../../model/Table"
+import VmTable from "../../model/viewModel/VmTable"
 
 type DrawSide = {
-    tables: Table[],
+    tables: VmTable[],
     children: JSX.Element
 }
 

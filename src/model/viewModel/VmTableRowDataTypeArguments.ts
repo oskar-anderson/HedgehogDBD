@@ -1,4 +1,4 @@
-import { IDataTypeArgument } from "./DataTypes/DataType";
+import { IDataTypeArgument } from "../DataTypes/DataType";
 
 
 export default class TableRowDataTypeArguments {
@@ -8,5 +8,12 @@ export default class TableRowDataTypeArguments {
     constructor(value: number, argument: IDataTypeArgument) {
         this.value = value;
         this.argument = argument;
+    }
+
+    clone() {
+        return new TableRowDataTypeArguments(
+            this.value,
+            {...this.argument}
+        )
     }
 }

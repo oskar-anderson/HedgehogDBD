@@ -3,8 +3,8 @@
         {
             "id": "26125904-055d-4fdd-932c-0bf1f888b642",
             "position": {
-                "x": 12,
-                "y": 7
+                "x": 84,
+                "y": 98
             },
             "head": "house",
             "tableRows": [
@@ -67,8 +67,8 @@
         {
             "id": "0a10acc8-7599-4c1f-be8d-3742a3dfe913",
             "position": {
-                "x": 103,
-                "y": 7
+                "x": 721,
+                "y": 98
             },
             "head": "room",
             "tableRows": [
@@ -142,8 +142,8 @@
         {
             "id": "6f9368e7-1b21-4823-91da-994dd99b9872",
             "position": {
-                "x": 103,
-                "y": 28
+                "x": 721,
+                "y": 392
             },
             "head": "cordon",
             "tableRows": [
@@ -195,8 +195,8 @@
         {
             "id": "b1fec98c-be18-4a1f-b5ab-d8e9fe95f05e",
             "position": {
-                "x": 182,
-                "y": 7
+                "x": 1274,
+                "y": 98
             },
             "head": "place",
             "tableRows": [
@@ -270,8 +270,8 @@
         {
             "id": "4b8acdf6-90b2-4b67-8292-d00224113ca7",
             "position": {
-                "x": 14,
-                "y": 29
+                "x": 98,
+                "y": 406
             },
             "head": "watchguard",
             "tableRows": [
@@ -334,8 +334,8 @@
         {
             "id": "98e3dc81-c0a7-4ef1-b72b-e5508bd41fd2",
             "position": {
-                "x": 37,
-                "y": 58
+                "x": 259,
+                "y": 812
             },
             "head": "watchguard_in_patrol",
             "tableRows": [
@@ -399,8 +399,8 @@
         {
             "id": "485d8649-1624-40bb-b6b5-fca264fadc04",
             "position": {
-                "x": 168,
-                "y": 70
+                "x": 1176,
+                "y": 980
             },
             "head": "person",
             "tableRows": [
@@ -468,8 +468,8 @@
         {
             "id": "028acc4d-aa37-4d73-bbb8-4f94c6642e05",
             "position": {
-                "x": 239,
-                "y": 28
+                "x": 1673,
+                "y": 392
             },
             "head": "military_unit",
             "tableRows": [
@@ -521,8 +521,8 @@
         {
             "id": "b9c1a4b2-5e35-4069-a6e7-41775dce3ac0",
             "position": {
-                "x": 157,
-                "y": 28
+                "x": 1099,
+                "y": 392
             },
             "head": "cordon_in_service_by_military_unit",
             "tableRows": [
@@ -586,8 +586,8 @@
         {
             "id": "486b60be-510c-41a8-a640-d638a6b0b7c9",
             "position": {
-                "x": 139,
-                "y": 45
+                "x": 973,
+                "y": 630
             },
             "head": "person_in_xxx",
             "tableRows": [
@@ -689,8 +689,8 @@
         {
             "id": "679f85d8-449c-4f30-8d01-a9b12a79ed01",
             "position": {
-                "x": 316,
-                "y": 50
+                "x": 2212,
+                "y": 700
             },
             "head": "person_living_in_room",
             "tableRows": [
@@ -754,8 +754,8 @@
         {
             "id": "e308b14e-f291-4b87-aee5-2f0e3050b9a8",
             "position": {
-                "x": 67,
-                "y": 78
+                "x": 469,
+                "y": 1092
             },
             "head": "border_section",
             "tableRows": [
@@ -813,8 +813,8 @@
         {
             "id": "6021d8b4-bdbd-4c2d-a534-1ef3fa253d46",
             "position": {
-                "x": 90,
-                "y": 108
+                "x": 630,
+                "y": 1512
             },
             "head": "map_list_item",
             "tableRows": [
@@ -896,8 +896,8 @@
         {
             "id": "aed511c3-1df4-4d49-be68-49b01167547c",
             "position": {
-                "x": 323,
-                "y": 71
+                "x": 2261,
+                "y": 994
             },
             "head": "person_rank",
             "tableRows": [
@@ -961,8 +961,8 @@
         {
             "id": "6efb29d0-3383-441d-a6b9-2431bbc6343f",
             "position": {
-                "x": 394,
-                "y": 72
+                "x": 2758,
+                "y": 1008
             },
             "head": "rank",
             "tableRows": [
@@ -1041,8 +1041,8 @@
         {
             "id": "d5e34ed7-c27c-489a-8b6d-7be4a08e7068",
             "position": {
-                "x": 326,
-                "y": 105
+                "x": 2282,
+                "y": 1470
             },
             "head": "person_absentness",
             "tableRows": [
@@ -1138,8 +1138,8 @@
         {
             "id": "ba173400-ecde-4ecc-8d68-d4f08ea70ed4",
             "position": {
-                "x": 251,
-                "y": 107
+                "x": 1757,
+                "y": 1498
             },
             "head": "reward",
             "tableRows": [
@@ -1224,8 +1224,8 @@
         {
             "id": "065b770d-13df-443d-93a4-656831bc1aba",
             "position": {
-                "x": 156,
-                "y": 107
+                "x": 1092,
+                "y": 1498
             },
             "head": "punishment",
             "tableRows": [
@@ -1310,8 +1310,8 @@
         {
             "id": "da551d58-b684-48d7-8ca5-93853ab1492d",
             "position": {
-                "x": 326,
-                "y": 88
+                "x": 2282,
+                "y": 1232
             },
             "head": "person_replacement",
             "tableRows": [
@@ -1407,8 +1407,8 @@
         {
             "id": "0d00643c-9de0-486b-b717-4af10cf9d8dd",
             "position": {
-                "x": 262,
-                "y": 127
+                "x": 1834,
+                "y": 1778
             },
             "head": "generic_type",
             "tableRows": [
@@ -1471,8 +1471,8 @@
         {
             "id": "e7d0eca7-53fa-402c-8f9c-3f7e2a72e214",
             "position": {
-                "x": 6,
-                "y": 105
+                "x": 42,
+                "y": 1470
             },
             "head": "incident",
             "tableRows": [
@@ -1562,8 +1562,8 @@
         {
             "id": "48ebb254-d0a1-408f-92a1-fbec6aefc071",
             "position": {
-                "x": 9,
-                "y": 125
+                "x": 63,
+                "y": 1750
             },
             "head": "incident_creature",
             "tableRows": [

@@ -18,6 +18,7 @@ export class CommandCreateTable implements ICommand<CommandCreateTableArgs> {
     redo() {
         let newTable = this.args.table.mapToVm();
         this.context.schemaTables.push(newTable);
+        this.context.areTablesDirty = true;
     }
 
     undo() {

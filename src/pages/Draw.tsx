@@ -129,13 +129,15 @@ export const WrappedDraw = () => {
         if (nodeChanges.every(x => x.type === "position")) {
             if (nodeChanges.length !== 1) throw Error("Unexpected nodeChanges array lenght!")
             let nodeChange = nodeChanges[0] as NodePositionChange;
-            if (! nodeDraggedChangesStart) {
-                setNodeDraggedChangesStart(nodeChange);
-            } else {
-                setNodeDraggedChangesEnd(nodeChange)
+            if (nodeChange.position) {
+                if (nodeChange.position) {
+                    setNodeDraggedChangesStart(nodeChange);
+                } else {
+                    setNodeDraggedChangesEnd(nodeChange)
+                }
             }
 
-            if (! nodeChange.dragging) {
+            if (! nodeChange.dragging && nodeDraggedChangesStart && nodeDraggedChangesEnd) {
                 if (!nodeDraggedChangesStart || !nodeDraggedChangesEnd) {
                     return
                 }

@@ -1,5 +1,7 @@
 import VmDraw from "../model/viewModel/VmDraw";
 import { CommandCreateTable, CommandCreateTableArgs } from "./appCommands/CommandCreateTable";
+import { CommandDeleteTable, CommandDeleteTableArgs } from "./appCommands/CommandDeleteTable";
+import { CommandModifyTable, CommandModifyTableArgs } from "./appCommands/CommandModifyTableArgs";
 import CommandMoveTableRelative, { CommandMoveTableRelativeArgs } from "./appCommands/CommandMoveTableRelative";
 import { CommandSetSchema, CommandSetSchemaArgs } from "./appCommands/CommandSetSchema";
 import { ICommand, IHydratable } from "./ICommand";
@@ -26,28 +28,24 @@ export default class History {
             args.hydrate();
             return new CommandMoveTableRelative(context, args);    
         }
-        /*
         if (command.commandName === CommandModifyTable.name) {
             let unhydratedArgs = command.args as CommandModifyTableArgs;
             let args = new CommandModifyTableArgs(unhydratedArgs.oldTable, unhydratedArgs.newTable);
             args.hydrate();
             return new CommandModifyTable(context, args);
         }
-        */
         if (command.commandName === CommandCreateTable.name) {
             let unhydratedArgs = command.args as CommandCreateTableArgs;
             let args = new CommandCreateTableArgs(unhydratedArgs.table);
             args.hydrate();
             return new CommandCreateTable(context, args);
         }
-        /*
         if (command.commandName === CommandDeleteTable.name) {
             let unhydratedArgs = command.args as CommandDeleteTableArgs;
             let args = new CommandDeleteTableArgs(unhydratedArgs.table, unhydratedArgs.listIndex);
             args.hydrate();
             return new CommandDeleteTable(context, args);
         }
-        */
         if (command.commandName === CommandSetSchema.name) {
             let unhydratedArgs = command.args as CommandSetSchemaArgs;
             let args = new CommandSetSchemaArgs(unhydratedArgs.oldDraw, unhydratedArgs.newDraw);

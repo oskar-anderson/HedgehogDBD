@@ -19,7 +19,6 @@ export class CommandSetSchema implements ICommand<CommandSetSchemaArgs> {
         let newDraw = this.args.newDraw;
         this.context.schemaTables = newDraw.tables.map(x => x.mapToVm());
         this.context.schemaRelations = this.context.schemaTables.flatMap(table => table.getRelations(this.context.schemaTables));
-        this.context.schemaTables.forEach(x => x.isDirty = true);
         this.context.areTablesDirty = true;
     }
 
@@ -27,7 +26,6 @@ export class CommandSetSchema implements ICommand<CommandSetSchemaArgs> {
         let oldDraw = this.args.oldDraw;
         this.context.schemaTables = oldDraw.tables.map(x => x.mapToVm());
         this.context.schemaRelations = this.context.schemaTables.flatMap(table => table.getRelations(this.context.schemaTables));
-        this.context.schemaTables.forEach(x => x.isDirty = true);
         this.context.areTablesDirty = true;
     }
 }

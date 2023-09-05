@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import VmTable from "../../model/viewModel/VmTable"
 
 type DrawSide = {
@@ -7,6 +8,7 @@ type DrawSide = {
 }
 
 export default function CanvasSide({ tables, createNewTable, children }: DrawSide) {
+    const navigate = useNavigate();
     return (
         <div className="canvas-side" style={{ display: 'flex', backgroundColor: '#f5f5f5', borderRightWidth: "1px", borderStyle: "solid" }}>
             <div style={{ display: "flex", flexDirection: "column", width: "184px" }}>
@@ -28,7 +30,7 @@ export default function CanvasSide({ tables, createNewTable, children }: DrawSid
                     { [...tables].sort((a, b) => Number(a.head > b.head)).map((table, i) => {
                         return (
                             <div key={table.id} 
-                                onClick={() => { /* TODO */ } } 
+                                onClick={() => navigate( `/table/${table.id}`) } 
                                 className="ps-3 pe-2 btn" style={{ width: "100%", display: "flex" }}>
                                 <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{table.head}</span>
                             </div>

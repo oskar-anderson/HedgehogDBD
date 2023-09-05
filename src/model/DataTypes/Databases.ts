@@ -15,4 +15,8 @@ export default class Databases {
     static getAll(): Database[] {
         return [Databases.MySql, Databases.Postgres, Databases.SqlServer];
     }
+
+    static get(id: string) {
+        return this.getAll().find(database => database.id === id)!;
+    }
 }

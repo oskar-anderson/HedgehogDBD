@@ -10,16 +10,19 @@ export default class VmDraw {
     activeDatabase = Databases.Postgres.id;
     schemaTables: VmTable[] = [];
     schemaRelations: VmRelation[] = [];
+    isDirty: boolean = true;
 
     constructor(
         history: History,
         activeDatabase: string,
         tables: VmTable[],
-        relations: VmRelation[]
+        relations: VmRelation[],
+        isDirty: boolean
         ) {
         this.history = history;
         this.activeDatabase = activeDatabase;
         this.schemaTables = tables;
         this.schemaRelations = relations;
+        this.isDirty = isDirty;
     }
 }

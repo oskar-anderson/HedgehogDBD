@@ -1,7 +1,7 @@
-import Draw from "../model/domain/DomainDraw";
+import VmDraw from "../model/viewModel/VmDraw";
 
 export interface ICommand<T extends IHydratable<T>> {
-    context: Draw;
+    context: VmDraw;
     args: T;
     redo(): void; 
     undo(): void;

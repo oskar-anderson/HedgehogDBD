@@ -13,7 +13,8 @@ export default class ManagerSingleton {
                     new History(), 
                     DataBases.Postgres.id,
                     [],
-                    []
+                    [],
+                    true
                 )
             );
         }

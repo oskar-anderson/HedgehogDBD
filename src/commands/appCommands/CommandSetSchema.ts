@@ -1,12 +1,12 @@
-import DomainTable from "../../model/domain/DomainTable";
-import DomainDraw from "../../model/domain/DomainDraw";
+import DomainDraw from "../../model/domain/DomainDraw"
+import VmDraw from "../../model/viewModel/VmDraw"
 import { ICommand } from "../ICommand";
 
 export class CommandSetSchema implements ICommand<CommandSetSchemaArgs> {
-    context: DomainDraw;
+    context: VmDraw;
     args: CommandSetSchemaArgs;
 
-    constructor(context: DomainDraw, args: CommandSetSchemaArgs) {
+    constructor(context: VmDraw, args: CommandSetSchemaArgs) {
         this.context = context;
         this.args = args;
     }
@@ -17,12 +17,20 @@ export class CommandSetSchema implements ICommand<CommandSetSchemaArgs> {
 
     redo() {
         let newDraw = this.args.newDraw;
-        this.context.tables = newDraw.tables;
+        this.context.schemaTables = newDraw.tables.map(x => x.mapToVm());
+        this.context.schemaRelations = this.context.schemaTables.flatMap(table => table.getRelations(this.context.schemaTables));
+        this.context.schemaRelations.forEach(x => x.isDirty = true);
+        this.context.schemaTables.forEach(x => x.isDirty = true);
+        this.context.isDirty = true;
     }
 
     undo() {
         let oldDraw = this.args.oldDraw;
-        this.context.tables = oldDraw.tables;
+        this.context.schemaTables = oldDraw.tables.map(x => x.mapToVm());
+        this.context.schemaRelations = this.context.schemaTables.flatMap(table => table.getRelations(this.context.schemaTables));
+        this.context.schemaRelations.forEach(x => x.isDirty = true);
+        this.context.schemaTables.forEach(x => x.isDirty = true);
+        this.context.isDirty = true;
     }
 }
 

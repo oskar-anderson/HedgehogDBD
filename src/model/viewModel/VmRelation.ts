@@ -15,15 +15,6 @@ export default class VmRelation {
          
     }
 
-    clone() {
-        return new VmRelation(
-            this.target.clone(),
-            this.targetRow.clone(),
-            this.source.clone(),
-            this.sourceRow.clone()
-        );
-    }
-
     setIsDirty(value: boolean) {
         this.isDirty = value;
         return this;

@@ -42,19 +42,6 @@ export default class VmTable {
         });
     }
 
-    clone() {
-        return new VmTable(
-            { ...this.position },
-            this.head,
-            this.tableRows.map(row => row.clone()),
-            {
-                // @ts-ignore
-                id: this.id,
-                isHover: this.isHover,
-            }
-        );
-    }
-
     setIsDirty(value: boolean) {
         this.isDirty = value;
         return this;

@@ -38,40 +38,33 @@ export default function SecondaryTopToolbar( { exportPngImage } : SecondaryTopTo
     }
 
     const undo = () => {
-
+        const draw = ManagerSingleton.getDraw();
+        console.log(draw.history.undoHistory.length);
+        draw.history.undo(draw);
+        console.log(draw.history.undoHistory.length);
     }
     const redo = () => {
-
+        const draw = ManagerSingleton.getDraw();
+        draw.history.redo(draw);
     }
 
     console.log("SecondaryTopToolbar")
 
 
     const loadSchema = async (fileName: string) => {
+        let draw = ManagerSingleton.getDraw();
         let text = await (await fetch(`${ROOT_URL}/wwwroot/data/${fileName}`, { cache: "no-cache" })).text();
         let newDomainDraw = DomainDraw.parse(text)
-        let vmDraw = newDomainDraw.mapToVm(
-            ManagerSingleton.getDraw().history,
-            ManagerSingleton.getDraw().activeDatabase,
-        );
-        /*
         let oldDomainDraw = DomainDraw.init(ManagerSingleton.getDraw())
         const command = new CommandSetSchema(
-            oldDomainDraw, 
+            ManagerSingleton.getDraw(), 
             new CommandSetSchemaArgs(
                 oldDomainDraw, 
                 newDomainDraw
             )
         )
-        ManagerSingleton.getDraw().history.execute(command);
-        */
-
-        ManagerSingleton.getDraw().schemaTables = vmDraw.schemaTables;
-        ManagerSingleton.getDraw().schemaTables.forEach(x => x.isDirty = true);
-        ManagerSingleton.getDraw().schemaRelations = vmDraw.schemaTables.flatMap(table => table.getRelations(vmDraw.schemaTables));
-        ManagerSingleton.getDraw().schemaRelations.forEach(x => x.isDirty = true);
-        console.log(ManagerSingleton.getDraw().schemaTables)
-    }
+        draw.history.execute(command);
+   }
 
     return (
         <div className="navbar-nav me-auto bg-grey" style={{ flexDirection: 'row', height: `${SECONDARY_TOOLBAR_HEIGHT_PX}px`, borderBottomWidth: "1px", borderStyle: "solid", alignItems: "center" }}>

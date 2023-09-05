@@ -37,6 +37,7 @@ export default class DomainDraw {
             selectedDatabaseId,
             tables,
             tables.flatMap(x => x.getRelations(tables)),
+            true
         );
     }
 }

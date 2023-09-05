@@ -52,53 +52,43 @@ export default function draw() {
 
     useEffect(() => {
         const intervalId = setInterval(() => {
-            
-            const nodesNeedRerendering = draw.schemaTables.some(table => table.isDirty);
-            const edgesNeedRerendering = draw.schemaRelations.some(relation => relation.isDirty);
-            if (nodesNeedRerendering) {
+            if (draw.isDirty || draw.schemaTables.some(table => table.isDirty)) {
                 setEdges([]);
-                let newTables = draw.schemaTables.map(table => {
-                    return table.isDirty ? 
-                        table.setIsDirty(false).clone() : 
-                        table;
-                });
-                setNodes(newTables.map(table => convertTableToNode(table)));    
+                setNodes(draw.schemaTables.map(table => convertTableToNode(table.setIsDirty(false))));    
+                setEdges(draw.schemaRelations.map(relation => convertRelationToEdge(relation.setIsDirty(false))));
             }
-            
-            if (edgesNeedRerendering) {
-                let newRelations = draw.schemaRelations.map(relation => {
-                    return relation.isDirty ? 
-                        relation.setIsDirty(false).clone() : 
-                        relation;
-                });
-                setEdges(
-                    newRelations.map(relation => convertRelationToEdge(relation))
-                );
-            }
+            draw.isDirty = false;
         }, 1000/30);
         return () => clearInterval(intervalId);
     }, [])
 
-    let nodeDraggedChanges: NodePositionChange[] = [];
-    const onNodesChangeAfterListener = (nodeChanges: NodeChange[]) => {
+    const [nodeDraggedChangesStart, setNodeDraggedChangesStart] = 
+        useState<NodePositionChange | null>(null);
+    const [nodeDraggedChangesEnd, setNodeDraggedChangesEnd] = 
+        useState<NodePositionChange | null>(null);
+    const onNodesChangeCommandListener = (nodeChanges: NodeChange[]) => {
         if (nodeChanges.every(x => x.type === "position")) {
             if (nodeChanges.length !== 1) throw Error("Unexpected nodeChanges array lenght!")
             let nodeChange = nodeChanges[0] as NodePositionChange;
-            nodeDraggedChanges.push(nodeChange);
+            if (! nodeDraggedChangesStart) {
+                setNodeDraggedChangesStart(nodeChange);
+            } else {
+                setNodeDraggedChangesEnd(nodeChange)
+            }
 
             if (! nodeChange.dragging) {
-                if (nodeDraggedChanges.length <= 2) {
+                if (!nodeDraggedChangesStart || !nodeDraggedChangesEnd) {
                     return
                 }
-                const startPosition = nodeDraggedChanges[0];
-                const endPosition = nodeDraggedChanges[nodeChanges.length - 2];
-                const command = new CommandMoveTableRelative(DomainDraw.init(draw), new CommandMoveTableRelativeArgs(
+                const command = new CommandMoveTableRelative(draw, new CommandMoveTableRelativeArgs(
                     nodeChange.id, 
-                    startPosition.position!.x - endPosition.position!.x, 
-                    startPosition.position!.y - endPosition.position!.y
+                    nodeDraggedChangesEnd.position!.x - nodeDraggedChangesStart.position!.x, 
+                    nodeDraggedChangesEnd.position!.y - nodeDraggedChangesStart.position!.y
                 ));
+                console.log("move")
+                setNodeDraggedChangesStart(null);
+                setNodeDraggedChangesEnd(null);
                 draw.history.execute(command);
-                nodeDraggedChanges = [];
             } else {
               onNodesChange(nodeChanges);
             }
@@ -152,7 +142,7 @@ export default function draw() {
                         nodes={nodes}
                         edges={edges}
                         nodeTypes={nodeTypes}
-                        onNodesChange={onNodesChangeAfterListener}
+                        onNodesChange={onNodesChangeCommandListener}
                         onEdgesChange={onEdgesChange}
                         disableKeyboardA11y={true}  // keyboard arrow key movement is not supported
                     >

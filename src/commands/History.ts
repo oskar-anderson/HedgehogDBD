@@ -1,4 +1,5 @@
 import VmDraw from "../model/viewModel/VmDraw";
+import { CommandCreateTable, CommandCreateTableArgs } from "./appCommands/CommandCreateTable";
 import CommandMoveTableRelative, { CommandMoveTableRelativeArgs } from "./appCommands/CommandMoveTableRelative";
 import { CommandSetSchema, CommandSetSchemaArgs } from "./appCommands/CommandSetSchema";
 import { ICommand, IHydratable } from "./ICommand";
@@ -32,12 +33,14 @@ export default class History {
             args.hydrate();
             return new CommandModifyTable(context, args);
         }
+        */
         if (command.commandName === CommandCreateTable.name) {
             let unhydratedArgs = command.args as CommandCreateTableArgs;
             let args = new CommandCreateTableArgs(unhydratedArgs.table);
             args.hydrate();
             return new CommandCreateTable(context, args);
         }
+        /*
         if (command.commandName === CommandDeleteTable.name) {
             let unhydratedArgs = command.args as CommandDeleteTableArgs;
             let args = new CommandDeleteTableArgs(unhydratedArgs.table, unhydratedArgs.listIndex);

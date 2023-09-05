@@ -39,17 +39,12 @@ export default function SecondaryTopToolbar( { exportPngImage } : SecondaryTopTo
 
     const undo = () => {
         const draw = ManagerSingleton.getDraw();
-        console.log(draw.history.undoHistory.length);
         draw.history.undo(draw);
-        console.log(draw.history.undoHistory.length);
     }
     const redo = () => {
         const draw = ManagerSingleton.getDraw();
         draw.history.redo(draw);
     }
-
-    console.log("SecondaryTopToolbar")
-
 
     const loadSchema = async (fileName: string) => {
         let draw = ManagerSingleton.getDraw();

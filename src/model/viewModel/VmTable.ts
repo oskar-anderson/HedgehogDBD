@@ -4,7 +4,6 @@ import VmTableRow from "./VmTableRow";
 
 export default class VmTable {
     readonly id: string = crypto.randomUUID();
-    isHover: boolean = false;
     isDirty = true;
     
     constructor(
@@ -13,11 +12,11 @@ export default class VmTable {
         public tableRows: VmTableRow[], 
         {
             id = crypto.randomUUID(),
-            isHover = false,
+            isDirty = true,
         } = {}
         ) {
         this.id = id;
-        this.isHover = isHover;
+        this.isDirty = isDirty;
     }
 
 

@@ -4,8 +4,6 @@ import VmTableRow from "./VmTableRow";
 
 export default class VmRelation {
 
-    isDirty: boolean = true;
-
     constructor(
         public target: VmTable,
         public targetRow: VmTableRow,
@@ -13,10 +11,5 @@ export default class VmRelation {
         public sourceRow: VmTableRow
     ) {
          
-    }
-
-    setIsDirty(value: boolean) {
-        this.isDirty = value;
-        return this;
     }
 }

@@ -14,13 +14,11 @@ export default class CommandMoveTableRelative implements ICommand<CommandMoveTab
 
     redo() {
         let table = this.context.schemaTables.find(x => x.id === this.args.id)!;
-        console.log("before", table)
         table.position = { 
             x: table.position.x + this.args.x, 
             y: table.position.y + this.args.y
         };
         table.isDirty = true;
-        console.log("after", table)
     }
 
     undo() {

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "./../components/Layout"
-import ReactFlow, { ReactFlowProvider, useNodesState, useEdgesState, addEdge, MiniMap, Background, Controls, Position, BackgroundVariant, NodeChange, NodePositionChange, Edge, Node, getRectOfNodes, getTransformForBounds, useReactFlow } from 'reactflow';
+import ReactFlow, { ReactFlowProvider, useNodesState, useEdgesState, addEdge, MiniMap, Background, Controls, Position, BackgroundVariant, NodeChange, NodePositionChange, Edge, Node, getRectOfNodes, getTransformForBounds, useReactFlow, useViewport, useOnViewportChange, Viewport, useStore, ReactFlowState, useStoreApi } from 'reactflow';
 import DrawTable from "../components/drawChildren/DrawTable";
 import 'reactflow/dist/style.css';
 import { TOP_TOOLBAR_HEIGHT_PX } from "../components/TopToolbarAction"
@@ -17,6 +17,12 @@ import VmTableRowDataType from "../model/viewModel/VmTableRowDataType";
 import { toPng } from 'html-to-image';
 import DomainDraw from "../model/domain/DomainDraw";
 import VmRelation from "../model/viewModel/VmRelation";
+import VmTableRowDataTypeArguments from "../model/viewModel/VmTableRowDataTypeArguments";
+import { CommandCreateTable, CommandCreateTableArgs } from "../commands/appCommands/CommandCreateTable";
+import DomainTable from "../model/domain/DomainTable";
+import DomainTableRow from "../model/domain/DomainTableRow";
+import DomainTableRowDataType from "../model/domain/DomainTableRowDataType";
+import DomainTableRowDataTypeArguments from "../model/domain/DomainTableRowDataTypeArguments";
 
 // nodeTypes need to be defined outside the render function or using memo
 const nodeTypes = { 
@@ -35,9 +41,13 @@ const convertTableToNode = (table: VmTable) => {
     }
 }
 
+const convertRelationToEdgeId = (relation: VmRelation) => {
+    return `${relation.source.head}(${relation.sourceRow.name}) references ${relation.target.head}(${relation.targetRow.name})`;
+}
+
 const convertRelationToEdge = (relation: VmRelation) => {
     return {
-        id: `${relation.source.head}(${relation.sourceRow.name}) references ${relation.target.head}(${relation.targetRow.name})`,
+        id:convertRelationToEdgeId(relation),
         source: relation.source.id,
         sourceHandle: `${relation.source.head}-${relation.sourceRow.name}-left`,
         target: relation.target.id,
@@ -45,22 +55,71 @@ const convertRelationToEdge = (relation: VmRelation) => {
     }
 }
 
-export default function draw() {
+export const WrappedDraw = () => {
     const draw = ManagerSingleton.getDraw();
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+    const { x, y, zoom } = useViewport();
+    const reactFlowInstance = useReactFlow();
+    
+    useEffect(() => {
+        draw.areTablesDirty = true;
+    }, []);
 
     useEffect(() => {
         const intervalId = setInterval(() => {
-            if (draw.isDirty || draw.schemaTables.some(table => table.isDirty)) {
+            if (draw.areTablesDirty || draw.schemaTables.some(table => table.isDirty)) {
                 setEdges([]);
-                setNodes(draw.schemaTables.map(table => convertTableToNode(table.setIsDirty(false))));    
-                setEdges(draw.schemaRelations.map(relation => convertRelationToEdge(relation.setIsDirty(false))));
+                setNodes(draw.schemaTables.map(table => {
+                    const node = nodes.find(node => table.id === node.id);
+                    return table.isDirty || !node ? 
+                        convertTableToNode(table.setIsDirty(false)) : 
+                        node;
+                }));    
+                setEdges(draw.schemaRelations.map(relation => {
+                    const edge = edges.find(edge => convertRelationToEdgeId(relation) === edge.id);
+                    return !edge ? 
+                        convertRelationToEdge(relation) : 
+                        edge;
+                }));
+                draw.areTablesDirty = false;
             }
-            draw.isDirty = false;
         }, 1000/30);
         return () => clearInterval(intervalId);
-    }, [])
+    }, [nodes, edges])
+
+    const createNewTable = () =>  {
+        const dataBase = Databases.getAll().find(x => x.id === draw.activeDatabaseId)!;
+        const defaultPkDataType = DataType.guid();
+        const tableRowDataTypeArguments = defaultPkDataType.getAllArguments()
+            .filter(arg => arg.databases.includes(dataBase))
+            .map(x => new DomainTableRowDataTypeArguments(x.defaultValue, x.id)
+        );
+        const newTable = new DomainTable(
+            crypto.randomUUID(),
+            { 
+                x: -x / zoom + 20, 
+                y: -y / zoom + 20
+            }, 
+            "new_table", 
+            [
+                new DomainTableRow(
+                    "id", 
+                    new DomainTableRowDataType(
+                        defaultPkDataType.getId(),
+                        tableRowDataTypeArguments,
+                        false
+                    ), 
+                    ["PK"]
+                )
+            ]
+        );
+        draw.history.execute(
+            new CommandCreateTable(
+                draw, new CommandCreateTableArgs(newTable)
+            )
+        );
+    }
 
     const [nodeDraggedChangesStart, setNodeDraggedChangesStart] = 
         useState<NodePositionChange | null>(null);
@@ -85,7 +144,6 @@ export default function draw() {
                     nodeDraggedChangesEnd.position!.x - nodeDraggedChangesStart.position!.x, 
                     nodeDraggedChangesEnd.position!.y - nodeDraggedChangesStart.position!.y
                 ));
-                console.log("move")
                 setNodeDraggedChangesStart(null);
                 setNodeDraggedChangesEnd(null);
                 draw.history.execute(command);
@@ -132,25 +190,31 @@ export default function draw() {
 
     return <>
         <Layout currentlyLoadedLink={"Draw"}>
-            <ReactFlowProvider>
-                <SecondaryTopToolbar exportPngImage={ downloadImagePng }  />
-                <div style={{ display: 'flex', width: '100vw', height: `calc(100vh - ${TOP_TOOLBAR_HEIGHT_PX}px  - ${SECONDARY_TOOLBAR_HEIGHT_PX}px)` }}>
-                    <DrawSide tables={[]}>
-                        <MiniMap style={{ position: "relative", margin: 0 }} pannable maskColor="rgba(213, 213, 213, 0.7)" nodeColor="#ffc8c8" />
-                    </DrawSide>
-                    <ReactFlow
-                        nodes={nodes}
-                        edges={edges}
-                        nodeTypes={nodeTypes}
-                        onNodesChange={onNodesChangeCommandListener}
-                        onEdgesChange={onEdgesChange}
-                        disableKeyboardA11y={true}  // keyboard arrow key movement is not supported
-                    >
-                        <Controls />
-                        <Background variant={BackgroundVariant.Dots} gap={36} size={1} style={{ backgroundColor: "#f8fafc"}} />
-                    </ReactFlow>
-                </div>
-            </ReactFlowProvider>
+            <SecondaryTopToolbar exportPngImage={ downloadImagePng }  />
+            <div style={{ display: 'flex', width: '100vw', height: `calc(100vh - ${TOP_TOOLBAR_HEIGHT_PX}px  - ${SECONDARY_TOOLBAR_HEIGHT_PX}px)` }}>
+                <DrawSide tables={draw.schemaTables} createNewTable={createNewTable}>
+                    <MiniMap style={{ position: "relative", margin: 0 }} pannable maskColor="rgba(213, 213, 213, 0.7)" nodeColor="#ffc8c8" />
+                </DrawSide>
+                <ReactFlow
+                    nodes={nodes}
+                    edges={edges}
+                    nodeTypes={nodeTypes}
+                    onNodesChange={onNodesChangeCommandListener}
+                    onEdgesChange={onEdgesChange}
+                    disableKeyboardA11y={true}  // keyboard arrow key movement is not supported
+                >
+                    <Controls />
+                    <Background variant={BackgroundVariant.Dots} gap={36} size={1} style={{ backgroundColor: "#f8fafc"}} />
+                </ReactFlow>
+            </div>
         </Layout>
     </>
+}
+
+export default function draw() {
+    return (
+        <ReactFlowProvider>
+            <WrappedDraw />
+        </ReactFlowProvider>
+    )
 }

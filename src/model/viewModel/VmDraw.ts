@@ -7,22 +7,22 @@ import VmRelation from "./VmRelation";
 
 export default class VmDraw {
     history = new History();
-    activeDatabase = Databases.Postgres.id;
+    activeDatabaseId = Databases.Postgres.id;
     schemaTables: VmTable[] = [];
     schemaRelations: VmRelation[] = [];
-    isDirty: boolean = true;
+    areTablesDirty: boolean = true;
 
     constructor(
         history: History,
-        activeDatabase: string,
+        activeDatabaseId: string,
         tables: VmTable[],
         relations: VmRelation[],
-        isDirty: boolean
+        areTablesDirty: boolean
         ) {
         this.history = history;
-        this.activeDatabase = activeDatabase;
+        this.activeDatabaseId = activeDatabaseId;
         this.schemaTables = tables;
         this.schemaRelations = relations;
-        this.isDirty = isDirty;
+        this.areTablesDirty = areTablesDirty;
     }
 }

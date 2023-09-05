@@ -65,7 +65,7 @@ export default function Table() {
                     return {
                         value: {
                             isIncluded: argument.isIncluded,
-                            realValue: y.value,
+                            realValue: String(y.value),
                         },
                         argumentId: argument.id
                     }
@@ -85,8 +85,9 @@ export default function Table() {
             new DomainTableRowDataType(
                 tableRow.rowDatatype.id,
                 tableRow.rowDatatype.arguments.map(arg => {
+                    const value = arg.value.realValue === "" ? 0 : parseInt(arg.value.realValue);
                     const argument = DataType.getArgumentById(arg.argumentId);
-                    return new DomainTableRowDataTypeArguments(arg.value.realValue, argument.id)
+                    return new DomainTableRowDataTypeArguments(value, argument.id)
                 }),
                 tableRow.rowDatatype.isNullable
             ),
@@ -122,7 +123,7 @@ export default function Table() {
                         return {
                             value: {
                                 isIncluded: x.isIncluded,
-                                realValue: x.defaultValue,
+                                realValue: String(x.defaultValue),
                             },
                             argumentId: x.id
                         }

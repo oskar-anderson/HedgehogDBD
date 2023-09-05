@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import Layout from "./../components/Layout"
 import ReactFlow, { ReactFlowProvider, useNodesState, useEdgesState, addEdge, MiniMap, Background, Controls, Position, BackgroundVariant, NodeChange, NodePositionChange, Edge, Node, getRectOfNodes, getTransformForBounds, useReactFlow, useViewport, useOnViewportChange, Viewport, useStore, ReactFlowState, useStoreApi } from 'reactflow';
 import DrawTable from "../components/drawChildren/DrawTable";
@@ -61,6 +61,7 @@ export const WrappedDraw = () => {
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const { x, y, zoom } = useViewport();
     const reactFlowInstance = useReactFlow();
+    const navigate = useNavigate();
     
     useEffect(() => {
         draw.areTablesDirty = true;
@@ -87,6 +88,10 @@ export const WrappedDraw = () => {
         }, 1000/30);
         return () => clearInterval(intervalId);
     }, [nodes, edges])
+
+    const onNodeClick = (event: React.MouseEvent, node: Node) => {
+        navigate(`/table/${node.data.table.id}`);
+    }
 
     const createNewTable = () =>  {
         const dataBase = Databases.getAll().find(x => x.id === draw.activeDatabaseId)!;
@@ -203,6 +208,7 @@ export const WrappedDraw = () => {
                     nodeTypes={nodeTypes}
                     onNodesChange={onNodesChangeCommandListener}
                     onEdgesChange={onEdgesChange}
+                    onNodeClick={onNodeClick}
                     disableKeyboardA11y={true}  // keyboard arrow key movement is not supported
                 >
                     <Controls />

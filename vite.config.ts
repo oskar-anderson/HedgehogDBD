@@ -13,6 +13,7 @@ export default defineConfig(({ command, mode }) => {
       // Enables better console errors messages (name of React component error occured in) on built app
       minify: false
     },
+    base: "./", // needed for Github Pages to look for transpiled assets folder relative to index.html not the GHP project root.
     server: {
       port: 8080
     },

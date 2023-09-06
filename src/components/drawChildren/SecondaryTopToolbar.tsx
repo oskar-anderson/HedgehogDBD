@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { ROOT_URL } from "../../Main"
+import { ROOT_URL } from "../../Global"
 import DomainDraw from "../../model/domain/DomainDraw";
 import ManagerSingleton from "../../ManagerSingleton";
 import { CommandSetSchema, CommandSetSchemaArgs } from "../../commands/appCommands/CommandSetSchema";

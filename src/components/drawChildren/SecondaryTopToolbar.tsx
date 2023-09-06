@@ -3,6 +3,7 @@ import { ROOT_URL } from "../../Main"
 import DomainDraw from "../../model/domain/DomainDraw";
 import ManagerSingleton from "../../ManagerSingleton";
 import { CommandSetSchema, CommandSetSchemaArgs } from "../../commands/appCommands/CommandSetSchema";
+import { useEffect } from "react";
 
 interface TopToolbarListElementIconProps {
     onClickAction: () => void,
@@ -12,7 +13,7 @@ interface TopToolbarListElementIconProps {
 
 function TopToolbarListElementIcon( {onClickAction, iconSrc, children}: TopToolbarListElementIconProps) {
     return (
-        <button onClick={onClickAction} className="dropdown-item d-flex">
+        <button onClick={onClickAction} className="dropdown-item d-flex w-100">
             {iconSrc !== undefined ? <img className="me-2" src={iconSrc} /> : null }
             <span>{children}</span>
         </button>
@@ -69,6 +70,19 @@ export default function SecondaryTopToolbar( { exportPngImage } : SecondaryTopTo
         draw.history.redo(draw);
     }
 
+    useEffect(() => {
+        const keyboardEventHandlers = (e: KeyboardEvent) => { 
+            if (e.key.toLocaleLowerCase() === "z" && e.ctrlKey && !e.shiftKey) {
+                undo();
+            }
+            if (e.key.toLowerCase() === "z" && e.ctrlKey && e.shiftKey) {
+                redo();
+            }
+        }
+        window.addEventListener('keydown', keyboardEventHandlers);
+        return () => window.removeEventListener('keydown', keyboardEventHandlers)
+    }, [])
+
     const loadSchema = async (fileName: string) => {
         let text = await (await fetch(`${ROOT_URL}/wwwroot/data/${fileName}`, { cache: "no-cache" })).text();
         let newDomainDraw = DomainDraw.parse(text)
@@ -89,50 +103,34 @@ export default function SecondaryTopToolbar( { exportPngImage } : SecondaryTopTo
 
     return (
         <div className="navbar-nav me-auto bg-grey" style={{ flexDirection: 'row', height: `${SECONDARY_TOOLBAR_HEIGHT_PX}px`, borderBottomWidth: "1px", borderStyle: "solid", alignItems: "center" }}>
-            <div className="nav-item dropdown">
-                <button className="btn" data-bs-toggle="dropdown" style={{ borderRadius: "0px" }}>
-                    File
-                </button>
-                <ul className="dropdown-menu" style={{ position: 'absolute' }}>
-                    <li>
-                        <TopToolbarListElementIcon onClickAction={() => newSchema()} iconSrc={`${ROOT_URL}/wwwroot/img/svg/file-line.svg`} >
-                            New schema
-                        </TopToolbarListElementIcon>
-                    </li>
-                    <li>
-                        <TopToolbarListElementIcon onClickAction={() => saveAsJson()} iconSrc={`${ROOT_URL}/wwwroot/img/svg/file-download.svg`} >
-                            Save
-                        </TopToolbarListElementIcon>
-                    </li>
-                    <li>
-                        <TopToolbarListElementIcon onClickAction={() => exportPngImage()} iconSrc={`${ROOT_URL}/wwwroot/img/svg/image-download.svg`} >
-                            Export image
-                        </TopToolbarListElementIcon>
-                    </li>
-                    <li>
-                        <TopToolbarListElementIcon onClickAction={() => importFile()} iconSrc={`${ROOT_URL}/wwwroot/img/svg/import.svg`}>
-                            Import
-                        </TopToolbarListElementIcon>
-                    </li>
-                </ul>
-            </div>
-            <div className="nav-item dropdown">
-                <button className="btn" data-bs-toggle="dropdown" style={{ borderRadius: "0px" }}>
-                    Edit
-                </button>
-                <ul className="dropdown-menu" style={{ position: 'absolute' }}>
-                    <li>
-                        <TopToolbarListElementIcon onClickAction={() => undo()} iconSrc={`${ROOT_URL}/wwwroot/img/svg/undo.svg`}>
-                            Undo
-                        </TopToolbarListElementIcon>
-                    </li>
-                    <li>
-                        <TopToolbarListElementIcon onClickAction={() => redo()} iconSrc={`${ROOT_URL}/wwwroot/img/svg/redo.svg`}>
-                            Redo
-                        </TopToolbarListElementIcon>
-                    </li>
-                </ul>
-            </div>
+            <button className="btn rounded-0" onClick={() => newSchema()}>
+                <img className="me-2" src={`${ROOT_URL}/wwwroot/img/svg/file-line.svg`} />
+                New
+            </button>
+            <button className="btn rounded-0" onClick={() => saveAsJson()}>
+                <img className="me-2" src={`${ROOT_URL}/wwwroot/img/svg/file-download.svg`} />
+                Save
+            </button>
+            <button className="btn rounded-0" onClick={() => importFile()}>
+                <img className="me-2" src={`${ROOT_URL}/wwwroot/img/svg/import.svg`} />
+                Import
+            </button>
+            <button className="btn rounded-0" onClick={() => exportPngImage()}>
+                <img className="me-2" src={`${ROOT_URL}/wwwroot/img/svg/image-download.svg`} />
+                Export
+            </button>
+
+            <div className="border-start border-dark h-100"></div>
+
+            <button className="btn rounded-0" onClick={() => undo()}>
+                <img src={`${ROOT_URL}/wwwroot/img/svg/undo.svg`} />
+            </button>
+            <button className="btn rounded-0" onClick={() => redo()}>
+                <img src={`${ROOT_URL}/wwwroot/img/svg/redo.svg`} />
+            </button>
+
+            <div className="border-start border-dark h-100"></div>
+
             <div className="nav-item dropdown">
                 <button className="btn" data-bs-toggle="dropdown" style={{ borderRadius: "0px" }}>
                     Samples

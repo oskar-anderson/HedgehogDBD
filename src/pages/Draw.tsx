@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import Layout from "./../components/Layout"
 import ReactFlow, { ReactFlowProvider, useNodesState, useEdgesState, addEdge, MiniMap, Background, Controls, Position, BackgroundVariant, NodeChange, NodePositionChange, Edge, Node, getRectOfNodes, getTransformForBounds, useReactFlow, useViewport, useOnViewportChange, Viewport, useStore, ReactFlowState, useStoreApi } from 'reactflow';
@@ -30,14 +30,15 @@ const nodeTypes = {
 }
 
 
-const convertTableToNode = (table: VmTable) => {
+const convertTableToNode = (table: VmTable, node: undefined|Node) => {
     return {
         id: table.id,
         type: "tableNode",
         position: table.position,
         data: {
             table: table
-        }
+        },
+        width: node?.width
     }
 }
 
@@ -46,12 +47,14 @@ const convertRelationToEdgeId = (relation: VmRelation) => {
 }
 
 const convertRelationToEdge = (relation: VmRelation) => {
+    let sourceSide: 'left' | 'right' = relation.source.position.x > relation.target.position.x ? "left" : "right";
+    let targetSide: 'left' | 'right' = relation.source.position.x > relation.target.position.x ? "right" : "left";
     return {
         id:convertRelationToEdgeId(relation),
         source: relation.source.id,
-        sourceHandle: `${relation.source.head}-${relation.sourceRow.name}-left`,
+        sourceHandle: `${relation.source.head}-${relation.sourceRow.name}-${sourceSide}`,
         target: relation.target.id,
-        targetHandle: `${relation.target.head}-${relation.targetRow.name}-left`,
+        targetHandle: `${relation.target.head}-${relation.targetRow.name}-${targetSide}`,
     }
 }
 
@@ -73,15 +76,13 @@ export const WrappedDraw = () => {
                 setEdges([]);
                 setNodes(draw.schemaTables.map(table => {
                     const node = nodes.find(node => table.id === node.id);
+                    // console.log(node?.data.table.head, "node: ", node, "witdh: ", node?.width, "converted node: ", convertTableToNode(table, node));
                     return table.isDirty || !node ? 
-                        convertTableToNode(table.setIsDirty(false)) : 
+                        convertTableToNode(table.setIsDirty(false), node) : 
                         node;
                 }));    
                 setEdges(draw.schemaRelations.map(relation => {
-                    const edge = edges.find(edge => convertRelationToEdgeId(relation) === edge.id);
-                    return !edge ? 
-                        convertRelationToEdge(relation) : 
-                        edge;
+                    return convertRelationToEdge(relation)
                 }));
                 draw.areTablesDirty = false;
             }
@@ -126,33 +127,28 @@ export const WrappedDraw = () => {
         );
     }
 
-    const [nodeDraggedChangesStart, setNodeDraggedChangesStart] = 
-        useState<NodePositionChange | null>(null);
-    const [nodeDraggedChangesEnd, setNodeDraggedChangesEnd] = 
-        useState<NodePositionChange | null>(null);
+    let nodeDraggedChangesStart = useRef<NodePositionChange | null>(null);
+    let nodeDraggedChangesEnd = useRef<NodePositionChange | null>(null);
     const onNodesChangeCommandListener = (nodeChanges: NodeChange[]) => {
         if (nodeChanges.every(x => x.type === "position")) {
             if (nodeChanges.length !== 1) throw Error("Unexpected nodeChanges array lenght!")
             let nodeChange = nodeChanges[0] as NodePositionChange;
             if (nodeChange.position) {
-                if (nodeChange.position) {
-                    setNodeDraggedChangesStart(nodeChange);
+                if (!nodeDraggedChangesStart.current) {
+                    nodeDraggedChangesStart.current = nodeChange;
                 } else {
-                    setNodeDraggedChangesEnd(nodeChange)
+                    nodeDraggedChangesEnd.current = nodeChange;
                 }
             }
 
             if (! nodeChange.dragging && nodeDraggedChangesStart && nodeDraggedChangesEnd) {
-                if (!nodeDraggedChangesStart || !nodeDraggedChangesEnd) {
-                    return
-                }
                 const command = new CommandMoveTableRelative(draw, new CommandMoveTableRelativeArgs(
                     nodeChange.id, 
-                    nodeDraggedChangesEnd.position!.x - nodeDraggedChangesStart.position!.x, 
-                    nodeDraggedChangesEnd.position!.y - nodeDraggedChangesStart.position!.y
+                    nodeDraggedChangesEnd.current!.position!.x - nodeDraggedChangesStart.current!.position!.x, 
+                    nodeDraggedChangesEnd.current!.position!.y - nodeDraggedChangesStart.current!.position!.y
                 ));
-                setNodeDraggedChangesStart(null);
-                setNodeDraggedChangesEnd(null);
+                nodeDraggedChangesStart.current = null;
+                nodeDraggedChangesEnd.current = null;
                 draw.history.execute(command);
             } else {
               onNodesChange(nodeChanges);

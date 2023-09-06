@@ -19,6 +19,7 @@ export default class CommandMoveTableRelative implements ICommand<CommandMoveTab
             y: table.position.y + this.args.y
         };
         table.isDirty = true;
+        this.context.areTablesDirty = true;  // for recalculating relationship edges
     }
 
     undo() {
@@ -28,6 +29,7 @@ export default class CommandMoveTableRelative implements ICommand<CommandMoveTab
             y: table.position.y - this.args.y
         };
         table.isDirty = true;
+        this.context.areTablesDirty = true;
     }
 }
 

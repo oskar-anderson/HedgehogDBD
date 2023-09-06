@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { HOST_SUFFIX, ROOT_URL } from "../Main";
 import useIsElementFocused from "./UseIsElementFocused";
 import { useNavigate } from "react-router";

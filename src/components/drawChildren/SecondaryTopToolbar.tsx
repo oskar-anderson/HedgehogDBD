@@ -26,15 +26,38 @@ type SecondaryTopToolbarProps = {
 }
 
 export default function SecondaryTopToolbar( { exportPngImage } : SecondaryTopToolbarProps) {
+    const draw = ManagerSingleton.getDraw();
 
     const newSchema = () => {
-
+        setSchema(new DomainDraw([]));
     }
     const saveAsJson = () => {
-
+        let element = document.createElement('a');
+        let domainDraw = DomainDraw.init(draw)
+        // encodeURIComponent is needed to maintain newlines
+        element.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(domainDraw.getJson()));
+        element.setAttribute('download', `RasterModeler_${dayjs().format('YYYY-MM-DD_HH-mm-ss')}.json`);
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
     }
     const importFile = () => {
-
+        let reader = new FileReader();
+        reader.onload = (event: ProgressEvent) => {
+            let file = (event.target as FileReader).result as string;
+            let domainDraw = DomainDraw.parse(file);
+            setSchema(domainDraw);
+        }
+        let startReadingFile = (thisElement: HTMLInputElement) => {
+            let inputFile = thisElement.files![0];
+            reader.readAsText(inputFile);
+        }
+        let input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.addEventListener("change", () => startReadingFile(input));
+        input.click();
     }
 
     const undo = () => {
@@ -47,9 +70,12 @@ export default function SecondaryTopToolbar( { exportPngImage } : SecondaryTopTo
     }
 
     const loadSchema = async (fileName: string) => {
-        let draw = ManagerSingleton.getDraw();
         let text = await (await fetch(`${ROOT_URL}/wwwroot/data/${fileName}`, { cache: "no-cache" })).text();
         let newDomainDraw = DomainDraw.parse(text)
+        setSchema(newDomainDraw);
+   }
+
+   const setSchema = (newDomainDraw: DomainDraw) => {
         let oldDomainDraw = DomainDraw.init(ManagerSingleton.getDraw())
         const command = new CommandSetSchema(
             ManagerSingleton.getDraw(), 

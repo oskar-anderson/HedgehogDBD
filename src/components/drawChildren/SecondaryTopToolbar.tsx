@@ -30,7 +30,7 @@ export default function SecondaryTopToolbar( { exportPngImage } : SecondaryTopTo
     const draw = ManagerSingleton.getDraw();
 
     const newSchema = () => {
-        setSchema(new DomainDraw([]));
+        setSchema(new DomainDraw([], ManagerSingleton.getDraw().activeDatabaseId));
     }
     const saveAsJson = () => {
         let element = document.createElement('a');

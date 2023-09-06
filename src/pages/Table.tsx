@@ -225,7 +225,7 @@ export default function Table() {
                         </div>
                         <div className="modal-footer" style={{ display: "grid", gridTemplateColumns: "1fr 3fr" }}>
                             <button type="button" className="btn btn-light" onClick={() => navigate("/draw")}>Discard changes</button>
-                            <button type="button" className="btn btn-create" id="modal-save-changes" onClick={() => saveChanges()} style={{ fontWeight: 600}}>Save changes</button>
+                            <button type="button" className="btn btn-light btn-create" id="modal-save-changes" onClick={() => saveChanges()} style={{ fontWeight: 600}}>Save changes</button>
                         </div>
                     </div>
                 </div>

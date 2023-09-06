@@ -19,8 +19,8 @@ export default function CanvasSide({ tables, createNewTable, children }: DrawSid
 
                 <div style={{ overflowY: "auto" }}>
                     <div className="p-1 d-flex flex-row align-items-center justify-content-between">
-                        <h2 className="px-1 my-0" style={{ fontWeight: 600 }}>Tables</h2>
-                            <button className="btn btn-create d-flex align-items-center py-1 px-1" onClick={createNewTable}>
+                        <h2 className="px-1 my-0">Tables</h2>
+                            <button className="btn btn-light btn-create d-flex align-items-center py-1 px-1" onClick={createNewTable}>
                             <svg width="20px" height="20px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none">
                                 <path fill="#ffffff" fillRule="evenodd" d="M9 17a1 1 0 102 0v-6h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H3a1 1 0 000 2h6v6z"/>
                             </svg>

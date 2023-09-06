@@ -1,18 +1,22 @@
 import DomainTable from "./DomainTable";
 import VmDraw from "../viewModel/VmDraw"
 import History from "../../commands/History";
+import Databases from "../DataTypes/Databases";
 
 export default class DomainDraw {
 
     tables: DomainTable[];
+    activeDatabaseId: string
 
-    constructor(tables: DomainTable[]) {
-        this.tables = tables
+    constructor(tables: DomainTable[], activeDatabaseId: string) {
+        this.tables = tables;
+        this.activeDatabaseId = activeDatabaseId
     }
 
     static init(draw: VmDraw) {
         return new DomainDraw(
             draw.schemaTables.map(x => DomainTable.init(x)),
+            draw.activeDatabaseId
         );
     }
 
@@ -26,7 +30,8 @@ export default class DomainDraw {
 
     static hydrate(jsonObject: DomainDraw) {
         return new DomainDraw(
-            jsonObject.tables.map(x => DomainTable.hydrate(x))
+            jsonObject.tables.map(x => DomainTable.hydrate(x)),
+            jsonObject.activeDatabaseId ?? Databases.Postgres.id
         );
     }
 

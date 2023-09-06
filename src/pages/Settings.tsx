@@ -2,8 +2,15 @@ import { Modal } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import Databases from "../model/DataTypes/Databases";
+import { useState } from "react";
+import ManagerSingleton from "../ManagerSingleton";
+
 
 export default function Settings() {
+    const draw = ManagerSingleton.getDraw()
+    const handleActiveDatabaseChange = (e: any) => draw.activeDatabaseId = e.target.value;
+
+
     return (
         <>
             <Layout currentlyLoadedLink={"Settings"}>
@@ -20,7 +27,7 @@ export default function Settings() {
                                 <div className="semi-bold">
                                     Database
                                 </div>
-                                <select className="form-select" >
+                                <select onChange={handleActiveDatabaseChange} defaultValue={draw.activeDatabaseId} className="form-select" >
                                     { 
                                         Databases.getAll().map(x => {
                                             return <option key={x.id} value={x.id}>{x.select}</option> 

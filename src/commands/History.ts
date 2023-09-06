@@ -1,13 +1,14 @@
-import { Draw } from "../model/Draw";
-import { CommandMoveTableRelative, CommandMoveTableRelativeArgs } from "./appCommands/CommandMoveTableRelative";
-import { CommandModifyTable, CommandModifyTableArgs } from "./appCommands/CommandModifyTable";
+import VmDraw from "../model/viewModel/VmDraw";
 import { CommandCreateTable, CommandCreateTableArgs } from "./appCommands/CommandCreateTable";
 import { CommandDeleteTable, CommandDeleteTableArgs } from "./appCommands/CommandDeleteTable";
-import { ICommand } from "./ICommand";
+import { CommandModifyTable, CommandModifyTableArgs } from "./appCommands/CommandModifyTableArgs";
+import CommandMoveTableRelative, { CommandMoveTableRelativeArgs } from "./appCommands/CommandMoveTableRelative";
 import { CommandSetSchema, CommandSetSchemaArgs } from "./appCommands/CommandSetSchema";
+import { ICommand, IHydratable } from "./ICommand";
 
 
-export class History {
+export default class History {
+    
     undoHistory: string[] = [];
     redoHistory: string[] = [];
     
@@ -20,7 +21,7 @@ export class History {
         commandInstance.redo();
     }
 
-    private getICommandInstance(command: CommandPattern, context: Draw): ICommand<any> {
+    private getICommandInstance(command: CommandPattern<any>, context: VmDraw): ICommand<any> {
         if (command.commandName === CommandMoveTableRelative.name) {
             let unhydratedArgs = command.args as CommandMoveTableRelativeArgs;
             let args = new CommandMoveTableRelativeArgs(unhydratedArgs.id, unhydratedArgs.x, unhydratedArgs.y);
@@ -47,29 +48,31 @@ export class History {
         }
         if (command.commandName === CommandSetSchema.name) {
             let unhydratedArgs = command.args as CommandSetSchemaArgs;
-            let args = new CommandSetSchemaArgs(unhydratedArgs.oldSchema, unhydratedArgs.newSchema);
+            let args = new CommandSetSchemaArgs(unhydratedArgs.oldDraw, unhydratedArgs.newDraw);
             args.hydrate();
             return new CommandSetSchema(context, args);
         }
         throw Error(`Unknown command given! commandName: ${command.commandName}`);
+
     }
 
-    redo(context: Draw) {
+    redo(context: VmDraw) {
         if (this.redoHistory.length === 0) return;
-        let command = JSON.parse(this.redoHistory.pop()!) as CommandPattern;
+        let command = JSON.parse(this.redoHistory.pop()!) as CommandPattern<any>;
         this.undoHistory.push(JSON.stringify(command));
         this.getICommandInstance(command, context).redo();
     }
 
-    undo(context: Draw) {
+    undo(context: VmDraw) {
         if (this.undoHistory.length === 0) return;
-        let command = JSON.parse(this.undoHistory.pop()!) as CommandPattern;
+        let command = JSON.parse(this.undoHistory.pop()!) as CommandPattern<any>;
         this.redoHistory.push(JSON.stringify(command));
         this.getICommandInstance(command, context).undo();
     }
 }
 
-interface CommandPattern {
+
+interface CommandPattern<T extends IHydratable<T>> {
     commandName: string;
-    args: unknown
+    args: T;
 }

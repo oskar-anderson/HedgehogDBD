@@ -1,12 +1,12 @@
-import { Draw } from "../model/Draw";
+import VmDraw from "../model/viewModel/VmDraw";
 
 export interface ICommand<T extends IHydratable<T>> {
-    context: Draw;
+    context: VmDraw;
     args: T;
     redo(): void; 
-    undo(): void
+    undo(): void;
 }
 
 export interface IHydratable<T> {
-    hydrate(): T
+    hydrate(): T;
 }

@@ -1,13 +1,12 @@
-import { Draw } from "../../model/Draw";
-import { SchemaDTO } from "../../model/dto/SchemaDTO";
-import { Schema } from "../../model/Schema";
+import DomainDraw from "../../model/domain/DomainDraw"
+import VmDraw from "../../model/viewModel/VmDraw"
 import { ICommand } from "../ICommand";
 
 export class CommandSetSchema implements ICommand<CommandSetSchemaArgs> {
-    context: Draw;
+    context: VmDraw;
     args: CommandSetSchemaArgs;
 
-    constructor(context: Draw, args: CommandSetSchemaArgs) {
+    constructor(context: VmDraw, args: CommandSetSchemaArgs) {
         this.context = context;
         this.args = args;
     }
@@ -17,30 +16,34 @@ export class CommandSetSchema implements ICommand<CommandSetSchemaArgs> {
     }
 
     redo() {
-        let newSchema = this.args.newSchema;
-        this.context.schema = new Schema(newSchema.tables.map(x => x.mapToTable()), this.context.onTablesChangeCallback);
+        let newDraw = this.args.newDraw;
+        this.context.schemaTables = newDraw.tables.map(x => x.mapToVm());
+        this.context.schemaRelations = this.context.schemaTables.flatMap(table => table.getRelations(this.context.schemaTables));
+        this.context.areTablesDirty = true;
     }
 
     undo() {
-        let oldSchema = this.args.oldSchema;
-        this.context.schema = new Schema(oldSchema.tables.map(x => x.mapToTable()), this.context.onTablesChangeCallback);
+        let oldDraw = this.args.oldDraw;
+        this.context.schemaTables = oldDraw.tables.map(x => x.mapToVm());
+        this.context.schemaRelations = this.context.schemaTables.flatMap(table => table.getRelations(this.context.schemaTables));
+        this.context.areTablesDirty = true;
     }
 }
 
 export class CommandSetSchemaArgs {
-    oldSchema: SchemaDTO;
-    newSchema: SchemaDTO;
+    oldDraw: DomainDraw;
+    newDraw: DomainDraw;
 
 
-    constructor(oldSchema: SchemaDTO, newSchema: SchemaDTO) {
-        this.oldSchema = oldSchema;
-        this.newSchema = newSchema;
+    constructor(oldDraw: DomainDraw, newDraw: DomainDraw) {
+        this.oldDraw = oldDraw;
+        this.newDraw = newDraw;
     }
 
 
     hydrate() {
-        this.oldSchema = SchemaDTO.hydrate(this.oldSchema)
-        this.newSchema = SchemaDTO.hydrate(this.newSchema)
+        this.oldDraw = DomainDraw.hydrate(this.oldDraw)
+        this.newDraw = DomainDraw.hydrate(this.newDraw)
         return this;
     }
 }

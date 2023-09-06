@@ -107,7 +107,7 @@ export default abstract class DataType {
 
 export interface IDataTypeArgument {
     /** 
-     * Unique identifier because for this argument, because displayName is not unique
+     * Unique identifier, because displayName is not unique
     */ 
     id: string,
     /** 

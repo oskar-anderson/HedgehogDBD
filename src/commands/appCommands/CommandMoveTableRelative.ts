@@ -1,30 +1,39 @@
-import { Point } from "pixi.js";
-import { Draw } from "../../model/Draw";
-import { ICommand } from "../ICommand";
+import DomainDraw from "../../model/domain/DomainDraw";
+import VmDraw from "../../model/viewModel/VmDraw"
+import { ICommand, IHydratable } from "../ICommand";
+import Point from "../../model/Point"
 
-export class CommandMoveTableRelative implements ICommand<CommandMoveTableRelativeArgs> {
-    context: Draw;
+export default class CommandMoveTableRelative implements ICommand<CommandMoveTableRelativeArgs> {
+    context: VmDraw;
     args: CommandMoveTableRelativeArgs;
 
-    constructor(context: Draw, args: CommandMoveTableRelativeArgs) {
+    constructor(context: VmDraw, args: CommandMoveTableRelativeArgs) {
         this.context = context;
         this.args = args;
     }
 
     redo() {
-        let table = this.context.schema.getTables().find(x => x.id === this.args.id)!;
-        table.setPosition(new Point(table.getPosition().x + this.args.x, table.getPosition().y + this.args.y), this.context.selectedFontSize)
-        this.context.schema.getTables().forEach(x => x.updateRelations(this.context.schema.getTables()));
+        let table = this.context.schemaTables.find(x => x.id === this.args.id)!;
+        table.position = { 
+            x: table.position.x + this.args.x, 
+            y: table.position.y + this.args.y
+        };
+        table.isDirty = true;
+        this.context.areTablesDirty = true;  // for recalculating relationship edges
     }
 
     undo() {
-        let table = this.context.schema.getTables().find(x => x.id === this.args.id)!;
-        table.setPosition(new Point(table.getPosition().x - this.args.x, table.getPosition().y - this.args.y), this.context.selectedFontSize)
-        this.context.schema.getTables().forEach(x => x.updateRelations(this.context.schema.getTables()));
+        let table = this.context.schemaTables.find(x => x.id === this.args.id)!;
+        table.position = {
+            x: table.position.x - this.args.x, 
+            y: table.position.y - this.args.y
+        };
+        table.isDirty = true;
+        this.context.areTablesDirty = true;
     }
 }
 
-export class CommandMoveTableRelativeArgs {
+export class CommandMoveTableRelativeArgs implements IHydratable<CommandMoveTableRelativeArgs> {
     id: string;
     x: number;
     y: number;

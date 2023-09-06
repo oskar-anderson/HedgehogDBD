@@ -3,8 +3,8 @@
         {
             "id": "94399ceb-aedb-4b81-9c09-749704170c93",
             "position": {
-                "x": 182,
-                "y": 36
+                "x": 1274,
+                "y": 504
             },
             "head": "driver",
             "tableRows": [
@@ -147,8 +147,8 @@
         {
             "id": "9a89565f-7989-43fe-a043-b2d89f59d76e",
             "position": {
-                "x": 274,
-                "y": 36
+                "x": 1918,
+                "y": 504
             },
             "head": "vehicle",
             "tableRows": [
@@ -298,8 +298,8 @@
         {
             "id": "260a8f8f-59de-4a0b-928f-e7f8561d0373",
             "position": {
-                "x": 226,
-                "y": 74
+                "x": 1582,
+                "y": 1036
             },
             "head": "driver_working",
             "tableRows": [
@@ -425,8 +425,8 @@
         {
             "id": "b929d6ba-bb39-4802-899f-6c56febf51ca",
             "position": {
-                "x": 398,
-                "y": 36
+                "x": 2786,
+                "y": 504
             },
             "head": "price",
             "tableRows": [
@@ -575,8 +575,8 @@
         {
             "id": "28c20c93-48b9-4336-ac7b-cabbfd2ed8fd",
             "position": {
-                "x": 355,
-                "y": 40
+                "x": 2485,
+                "y": 560
             },
             "head": "dd_vehicle_type",
             "tableRows": [
@@ -639,8 +639,8 @@
         {
             "id": "c7cca8e0-cc9a-4dbe-a815-a8c8b5241dae",
             "position": {
-                "x": 243,
-                "y": 98
+                "x": 1701,
+                "y": 1372
             },
             "head": "geozone",
             "tableRows": [
@@ -676,8 +676,8 @@
         {
             "id": "6a06db06-dccb-45af-8847-ec41ae2d1f96",
             "position": {
-                "x": 239,
-                "y": 120
+                "x": 1673,
+                "y": 1680
             },
             "head": "geozone_point",
             "tableRows": [
@@ -759,8 +759,8 @@
         {
             "id": "3776bf69-48a3-4f42-8c46-bffb0dffad20",
             "position": {
-                "x": 95,
-                "y": 37
+                "x": 665,
+                "y": 518
             },
             "head": "reservation",
             "tableRows": [
@@ -860,8 +860,8 @@
         {
             "id": "a2bdf101-8618-411a-af14-ab00e0aa05ae",
             "position": {
-                "x": 100,
-                "y": 55
+                "x": 700,
+                "y": 770
             },
             "head": "stops",
             "tableRows": [
@@ -970,8 +970,8 @@
         {
             "id": "dec55643-1a06-490c-a25e-6220df9c2006",
             "position": {
-                "x": 98,
-                "y": 74
+                "x": 686,
+                "y": 1036
             },
             "head": "drive",
             "tableRows": [
@@ -1046,8 +1046,8 @@
         {
             "id": "7469ea57-07e8-43ac-94d0-9983086a4acb",
             "position": {
-                "x": 96,
-                "y": 94
+                "x": 672,
+                "y": 1316
             },
             "head": "order",
             "tableRows": [
@@ -1165,8 +1165,8 @@
         {
             "id": "d24541c0-b893-48f6-96f2-63c18dabad90",
             "position": {
-                "x": 94,
-                "y": 127
+                "x": 658,
+                "y": 1778
             },
             "head": "order_line",
             "tableRows": [
@@ -1320,8 +1320,8 @@
         {
             "id": "b1105b2d-3f3a-4640-9c78-90489724d9b3",
             "position": {
-                "x": 95,
-                "y": 17
+                "x": 665,
+                "y": 238
             },
             "head": "user_mti_base",
             "tableRows": [
@@ -1470,8 +1470,8 @@
         {
             "id": "95c0fb36-cc3a-4772-8612-15b033792dbd",
             "position": {
-                "x": 34,
-                "y": 38
+                "x": 238,
+                "y": 532
             },
             "head": "client",
             "tableRows": [
@@ -1491,8 +1491,8 @@
         {
             "id": "63d349a9-f685-45ac-b5a5-4206ced68b47",
             "position": {
-                "x": 236,
-                "y": 55
+                "x": 1652,
+                "y": 770
             },
             "head": "driving_rights_for_vehicle",
             "tableRows": [
@@ -1556,8 +1556,8 @@
         {
             "id": "280b1a9a-b8a9-40d6-993d-284be413bfbd",
             "position": {
-                "x": 239,
-                "y": 22
+                "x": 1673,
+                "y": 308
             },
             "head": "company",
             "tableRows": [

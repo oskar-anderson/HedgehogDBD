@@ -1,4 +1,6 @@
-export class LocalStorageData {
+import Script from "./Script";
+
+export default class LocalStorageData {
     
     scripts: Script[]
     constructor(scripts: Script[]) {
@@ -6,11 +8,11 @@ export class LocalStorageData {
     }
 
     setStorage() {
-        localStorage.setItem("RasterModeler", JSON.stringify(this));
+        localStorage.setItem("HedgehogDBD", JSON.stringify(this));
     }
 
     static getStorage() {
-        let result = localStorage.getItem("RasterModeler");
+        let result = localStorage.getItem("HedgehogDBD");
         if (! result) {
             return new LocalStorageData([]);
         }
@@ -27,18 +29,5 @@ export class LocalStorageData {
             this.scripts.findIndex(x => JSON.stringify(x) === JSON.stringify(script)), 
             1);
         this.setStorage();
-    }
-}
-
-export class Script {
-
-    name: string;
-    content: string;
-    tags: string[] = [];
-    
-    constructor(name: string, content: string, tags: string[]) {
-        this.name = name;
-        this.content = content;
-        this.tags = tags;
     }
 }

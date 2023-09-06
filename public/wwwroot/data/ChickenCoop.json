@@ -3,8 +3,8 @@
         {
             "id": "26acc0c4-f6aa-4263-b97d-e90c30ccc595",
             "position": {
-                "x": 39,
-                "y": 38
+                "x": 273,
+                "y": 532
             },
             "head": "dd_chicken_end_type",
             "tableRows": [
@@ -62,8 +62,8 @@
         {
             "id": "969aa424-987b-4609-8d66-dec128af4859",
             "position": {
-                "x": 31,
-                "y": 53
+                "x": 217,
+                "y": 742
             },
             "head": "chicken_end_group",
             "tableRows": [
@@ -137,8 +137,8 @@
         {
             "id": "1621fcd4-89fc-49be-8953-e82768afff9b",
             "position": {
-                "x": 31,
-                "y": 69
+                "x": 217,
+                "y": 966
             },
             "head": "chicken_end_group_transaction_row",
             "tableRows": [
@@ -216,8 +216,8 @@
         {
             "id": "701163fa-040b-4c36-a28c-1d41324f2835",
             "position": {
-                "x": 123,
-                "y": 53
+                "x": 861,
+                "y": 742
             },
             "head": "chicken",
             "tableRows": [
@@ -286,8 +286,8 @@
         {
             "id": "8f14e307-3037-45c7-836e-4e4981f145c1",
             "position": {
-                "x": 127,
-                "y": 70
+                "x": 889,
+                "y": 980
             },
             "head": "breed",
             "tableRows": [
@@ -350,8 +350,8 @@
         {
             "id": "f3d4b4da-d2b9-4c2a-b87c-82a7cab279b2",
             "position": {
-                "x": 126,
-                "y": 83
+                "x": 882,
+                "y": 1162
             },
             "head": "breed_food_mix",
             "tableRows": [
@@ -404,8 +404,8 @@
         {
             "id": "69d375e1-3d95-4c12-b2b2-0e928b7d78a3",
             "position": {
-                "x": 125,
-                "y": 98
+                "x": 875,
+                "y": 1372
             },
             "head": "food_mix",
             "tableRows": [
@@ -473,8 +473,8 @@
         {
             "id": "abfd74ef-70ae-40d9-b54f-520564be2d6b",
             "position": {
-                "x": 221,
-                "y": 97
+                "x": 1547,
+                "y": 1358
             },
             "head": "feeding_sys_log",
             "tableRows": [
@@ -538,8 +538,8 @@
         {
             "id": "7792f976-efd7-4a5f-b15d-d83e409c9fdb",
             "position": {
-                "x": 258,
-                "y": 75
+                "x": 1806,
+                "y": 1050
             },
             "head": "cage_weighter_egg",
             "tableRows": [
@@ -566,7 +566,7 @@
                     ]
                 },
                 {
-                    "name": "egg_weight_code",
+                    "name": "egg_weight_name",
                     "datatype": {
                         "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
                         "arguments": [
@@ -635,8 +635,8 @@
         {
             "id": "c3dd6c2f-edae-4be6-ae6a-634c297bb65a",
             "position": {
-                "x": 242,
-                "y": 54
+                "x": 1694,
+                "y": 756
             },
             "head": "cage",
             "tableRows": [
@@ -710,8 +710,8 @@
         {
             "id": "cbec5bc1-138d-41ac-8245-a65573712ba6",
             "position": {
-                "x": 242,
-                "y": 39
+                "x": 1694,
+                "y": 546
             },
             "head": "coop",
             "tableRows": [
@@ -747,8 +747,8 @@
         {
             "id": "b3f00d99-cbe8-4ee8-a276-e52e175d3b6c",
             "position": {
-                "x": 330,
-                "y": 39
+                "x": 2310,
+                "y": 546
             },
             "head": "egg_weight_category",
             "tableRows": [
@@ -822,8 +822,8 @@
         {
             "id": "81bbd945-4ab9-424b-9075-e0b3db940511",
             "position": {
-                "x": 330,
-                "y": 53
+                "x": 2310,
+                "y": 742
             },
             "head": "weighter",
             "tableRows": [
@@ -875,8 +875,8 @@
         {
             "id": "66a8bc5f-220c-473c-88f4-7b10be9d5584",
             "position": {
-                "x": 330,
-                "y": 65
+                "x": 2310,
+                "y": 910
             },
             "head": "dd_cage_type",
             "tableRows": [

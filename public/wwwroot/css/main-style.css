@@ -144,3 +144,25 @@ https://stackoverflow.com/questions/5214127/css-technique-for-a-horizontal-line-
 .bg-grey {
     background-color: #eee;
 }
+
+.react-flow__panel > svg {
+    width: 100%;
+    height: auto;
+}
+
+.btn-create {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #58B785;
+    --bs-btn-border-color: #58B785;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #429e6d;
+    --bs-btn-hover-border-color: #296846;
+    --bs-btn-focus-shadow-rgb: 49,132,253;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #429e6d;
+    --bs-btn-active-border-color: #296846;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #58B785;
+    --bs-btn-disabled-border-color: #58B785;
+}

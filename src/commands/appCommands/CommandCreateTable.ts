@@ -1,13 +1,12 @@
-import { Draw } from "../../model/Draw";
+import VmDraw from "../../model/viewModel/VmDraw";
 import { ICommand } from "../ICommand";
-import { Table } from "../../model/Table";
-import { TableDTO } from "../../model/dto/TableDTO";
+import DomainTable from "../../model/domain/DomainTable";
 
 export class CommandCreateTable implements ICommand<CommandCreateTableArgs> {
-    context: Draw;
+    context: VmDraw;
     args: CommandCreateTableArgs;
 
-    constructor(context: Draw, args: CommandCreateTableArgs) {
+    constructor(context: VmDraw, args: CommandCreateTableArgs) {
         this.context = context;
         this.args = args;
     }
@@ -17,25 +16,28 @@ export class CommandCreateTable implements ICommand<CommandCreateTableArgs> {
     }
 
     redo() {
-        let newTable = this.args.table.mapToTable();
-        this.context.schemaPushAndUpdate(newTable);
+        let newTable = this.args.table.mapToVm();
+        this.context.schemaTables.push(newTable);
+        this.context.areTablesDirty = true;
     }
 
     undo() {
-        this.context.schemaPopAndUpdate();
+        this.context.schemaTables = this.context.schemaTables
+            .filter(x => x.id !== this.args.table.id);
+        this.context.areTablesDirty = true;
     }
 }
 
 export class CommandCreateTableArgs {
-    table: TableDTO;
+    table: DomainTable;
 
-    constructor(table: TableDTO) {
+    constructor(table: DomainTable) {
         this.table = table;
     }
 
 
     hydrate() {
-        this.table = TableDTO.hydrate(this.table)
+        this.table = DomainTable.hydrate(this.table)
         return this;
     }
 }

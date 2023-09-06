@@ -1,13 +1,13 @@
-import { Draw } from "../../model/Draw";
+import DomainTable from "../../model/domain/DomainTable";
+import VmDraw from "../../model/viewModel/VmDraw";
 import { ICommand } from "../ICommand";
-import { Table } from "../../model/Table";
-import { TableDTO } from "../../model/dto/TableDTO";
+
 
 export class CommandDeleteTable implements ICommand<CommandDeleteTableArgs> {
-    context: Draw;
+    context: VmDraw;
     args: CommandDeleteTableArgs;
 
-    constructor(context: Draw, args: CommandDeleteTableArgs) {
+    constructor(context: VmDraw, args: CommandDeleteTableArgs) {
         this.context = context;
         this.args = args;
     }
@@ -17,27 +17,29 @@ export class CommandDeleteTable implements ICommand<CommandDeleteTableArgs> {
     }
 
     redo() {
-        this.context.schemaRemoveAtAndUpdate(this.args.listIndex);
+        this.context.schemaTables.splice(this.args.listIndex, 1);
+        this.context.areTablesDirty = true;
     }
 
     undo() {
-        let newTable = this.args.table.mapToTable();
-        this.context.schemaInsertAtAndUpdate(this.args.listIndex, newTable);
+        let newTable = this.args.table.mapToVm();
+        this.context.schemaTables.splice(this.args.listIndex, 0, newTable);
+        this.context.areTablesDirty = true;
     }
 }
 
 export class CommandDeleteTableArgs {
-    table: TableDTO;
+    table: DomainTable;
     listIndex: number;
 
-    constructor(table: TableDTO, listIndex: number) {
+    constructor(table: DomainTable, listIndex: number) {
         this.table = table;
         this.listIndex = listIndex;
     }
 
 
     hydrate() {
-        this.table = TableDTO.hydrate(this.table)
+        this.table = DomainTable.hydrate(this.table)
         return this;
     }
 }

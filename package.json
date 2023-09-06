@@ -8,23 +8,17 @@
     "test": "jest"
   },
   "dependencies": {
-    "@datastructures-js/priority-queue": "^6.1.4",
     "@giscus/react": "^2.2.8",
     "@monaco-editor/react": "^4.5.0",
-    "@pixi/events": "^6.5.8",
-    "@pixi/math-extras": "^6.5.8",
     "bootstrap": "^5.2.3",
     "dayjs": "^1.11.6",
-    "demo-dom-to-image--dom-to-image": "npm:dom-to-image@^2.6.0",
-    "demo-reactflow--reactflow": "npm:reactflow@^11.8.2",
-    "fontfaceobserver": "^2.3.0",
+    "html-to-image": "^1.11.11",
     "monaco-editor": "^0.34.1",
-    "npm-run-all": "^4.1.5",
-    "pixi.js": "^6.5.6",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.15.0"
+    "react-router-dom": "^6.15.0",
+    "reactflow": "^11.8.3"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.21.5",
@@ -32,13 +26,13 @@
     "@babel/preset-typescript": "^7.21.5",
     "@jest/globals": "^29.5.0",
     "@types/bootstrap": "^5.2.3",
-    "@types/fontfaceobserver": "^2.1.0",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react": "^3.1.0",
     "jest": "^29.5.0",
     "jest-canvas-mock": "^2.5.1",
     "jest-environment-jsdom": "^29.5.0",
+    "npm-run-all": "^4.1.5",
     "typescript": "^4.9.3",
     "vite": "^4.1.0",
     "vite-plugin-monaco-editor": "^1.1.0"

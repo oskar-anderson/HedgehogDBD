@@ -37,7 +37,7 @@ export default function SecondaryTopToolbar( { exportPngImage } : SecondaryTopTo
         let domainDraw = DomainDraw.init(draw)
         // encodeURIComponent is needed to maintain newlines
         element.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(domainDraw.getJson()));
-        element.setAttribute('download', `RasterModeler_${dayjs().format('YYYY-MM-DD_HH-mm-ss')}.json`);
+        element.setAttribute('download', `HedgehogDBD_${dayjs().format('YYYY-MM-DD_HH-mm-ss')}.json`);
         element.style.display = 'none';
         document.body.appendChild(element);
         element.click();
@@ -133,12 +133,18 @@ export default function SecondaryTopToolbar( { exportPngImage } : SecondaryTopTo
 
             <div className="nav-item dropdown">
                 <button className="btn" data-bs-toggle="dropdown" style={{ borderRadius: "0px" }}>
-                    Samples
+                    Examples
                 </button>
                 <ul className="dropdown-menu" style={{ position: 'absolute' }}>
                     <li>
                         <TopToolbarListElementIcon onClickAction={() => loadSchema("Elron.json")}>
                             Elron
+                        </TopToolbarListElementIcon>
+                        <TopToolbarListElementIcon onClickAction={() => loadSchema("Prescription.json")}>
+                            Prescription
+                        </TopToolbarListElementIcon>
+                        <TopToolbarListElementIcon onClickAction={() => loadSchema("OrderingSystem.json")}>
+                            Ordering System
                         </TopToolbarListElementIcon>
                         {/*
                         <TopToolbarListElementIcon onClickAction={() => loadSchema("Bookit.json")}>
@@ -155,12 +161,6 @@ export default function SecondaryTopToolbar( { exportPngImage } : SecondaryTopTo
                         </TopToolbarListElementIcon>
                         <TopToolbarListElementIcon onClickAction={() => loadSchema("TaxIT.json")}>
                             TaxIT
-                        </TopToolbarListElementIcon>
-                        <TopToolbarListElementIcon onClickAction={() => loadSchema("OrderingSystem.json")}>
-                            Ordering System
-                        </TopToolbarListElementIcon>
-                        <TopToolbarListElementIcon onClickAction={() => loadSchema("Prescription.json")}>
-                            Prescription
                         </TopToolbarListElementIcon>
                         */
                         }

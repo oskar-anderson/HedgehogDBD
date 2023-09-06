@@ -49,8 +49,14 @@ const convertRelationToEdgeId = (relation: VmRelation) => {
 const convertRelationToEdge = (relation: VmRelation) => {
     let sourceSide: 'left' | 'right' = relation.source.position.x > relation.target.position.x ? "left" : "right";
     let targetSide: 'left' | 'right' = relation.source.position.x > relation.target.position.x ? "right" : "left";
+    let type: 'default' | 'straight' | 'step' | 'smoothstep' | 'simplebezier' = 'default';
+    if (relation.source.id === relation.target.id) { 
+        targetSide = sourceSide;
+        type = "smoothstep";
+    }
     return {
         id:convertRelationToEdgeId(relation),
+        type: type,
         source: relation.source.id,
         sourceHandle: `${relation.source.head}-${relation.sourceRow.name}-${sourceSide}`,
         target: relation.target.id,

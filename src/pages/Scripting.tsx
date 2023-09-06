@@ -19,8 +19,7 @@ import ModalJsonDisplay from '../components/scriptingChildren/ModalJsonDisplay';
 export async function executeWithLog(value: string, draw: DomainDraw) {
     let resultLog: string[] = [];
     let errorMsg = "";
-    let SHARED = await fetch(ROOT_URL + '/wwwroot/scripts/SHARED.js', {cache: "no-cache"}).then(x => x.text());
-    let fnBody = `"use strict";\n${SHARED}\n${value}`;
+    let fnBody = `"use strict";\n${value}`;
     let scriptingDraw = ScriptingDraw.init(draw);
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncFunction
     // https://stackoverflow.com/questions/46118496/asyncfunction-is-not-defined-yet-mdn-documents-its-usage
@@ -38,8 +37,7 @@ export async function executeWithLog(value: string, draw: DomainDraw) {
 }
 
 export async function executeAndReturn(value: string, draw: DomainDraw) {
-    let SHARED = await fetch(ROOT_URL + '/wwwroot/scripts/SHARED.js',  {cache: "no-cache"}).then(x => x.text());
-    let fnBody = `"use strict";\n${SHARED}\n${value}`;
+    let fnBody = `"use strict";\n${value}`;
     let fn = Function("schema", fnBody);
     let scriptingDraw = ScriptingDraw.init(draw);
     return fn(scriptingDraw);
@@ -222,7 +220,7 @@ export default function Scripting() {
                         <div className="giscus" style={{ padding: "1em 0", display: "flex", justifyContent: "center" }}>
                             <div style={{ width: "90%" }}>
                                 <Giscus
-                                    repo="oskar-anderson/RasterModeler"
+                                    repo="oskar-anderson/HedgehogDBD"
                                     repoId="R_kgDOISKZkQ="
                                     categoryId="DIC_kwDOISKZkc4CTY-q"
                                     mapping="specific"

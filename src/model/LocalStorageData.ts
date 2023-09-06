@@ -8,11 +8,11 @@ export default class LocalStorageData {
     }
 
     setStorage() {
-        localStorage.setItem("RasterModeler", JSON.stringify(this));
+        localStorage.setItem("HedgehogDBD", JSON.stringify(this));
     }
 
     static getStorage() {
-        let result = localStorage.getItem("RasterModeler");
+        let result = localStorage.getItem("HedgehogDBD");
         if (! result) {
             return new LocalStorageData([]);
         }

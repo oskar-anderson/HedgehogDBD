@@ -4,11 +4,35 @@ import Layout from "../components/Layout";
 import Databases from "../model/DataTypes/Databases";
 import { useState } from "react";
 import ManagerSingleton from "../ManagerSingleton";
+import DataType from "../model/DataTypes/DataType";
+import VmTableRowDataTypeArguments from "../model/viewModel/VmTableRowDataTypeArguments";
+import History from "../commands/History"
 
 
 export default function Settings() {
     const draw = ManagerSingleton.getDraw()
-    const handleActiveDatabaseChange = (e: any) => draw.activeDatabaseId = e.target.value;
+    const handleActiveDatabaseChange = (newActiveDatabaseId: string) => {
+
+        draw.schemaTables.forEach(table => {
+            table.tableRows.forEach(tableRow => {
+                tableRow.datatype.arguments = tableRow.datatype.arguments
+                    .filter(x => x.argument.databases.find(database => database.id === newActiveDatabaseId))  // remove type arguments new database does not need
+                    .concat(                                                                    // add type arguements new database needs that are marked readonly
+                        DataType.getTypeById(tableRow.datatype.dataTypeId).getAllArguments()
+                            .filter(argument => 
+                                argument.isReadonly 
+                                && argument.databases.find(database => database.id === newActiveDatabaseId)
+                            )
+                            .map(argument => {
+                                return new VmTableRowDataTypeArguments(argument.defaultValue, argument)
+                            })
+                    )
+                    .sort((a, b) => a.argument.position - b.argument.position) // sort ascending just in case
+            })
+        });
+        draw.history = new History();
+        draw.activeDatabaseId = newActiveDatabaseId;
+    }
 
 
     return (
@@ -27,7 +51,7 @@ export default function Settings() {
                                 <div className="semi-bold">
                                     Database
                                 </div>
-                                <select onChange={handleActiveDatabaseChange} defaultValue={draw.activeDatabaseId} className="form-select" >
+                                <select onChange={(e) => handleActiveDatabaseChange(e.target.value)} defaultValue={draw.activeDatabaseId} className="form-select" >
                                     { 
                                         Databases.getAll().map(x => {
                                             return <option key={x.id} value={x.id}>{x.select}</option> 

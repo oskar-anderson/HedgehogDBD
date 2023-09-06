@@ -80,7 +80,7 @@ export const WrappedDraw = () => {
                     return table.isDirty || !node ? 
                         convertTableToNode(table.setIsDirty(false), node) : 
                         node;
-                }));    
+                }));
                 setEdges(draw.schemaRelations.map(relation => {
                     return convertRelationToEdge(relation)
                 }));
@@ -141,7 +141,7 @@ export const WrappedDraw = () => {
                 }
             }
 
-            if (! nodeChange.dragging && nodeDraggedChangesStart && nodeDraggedChangesEnd) {
+            if (! nodeChange.dragging && nodeDraggedChangesStart.current && nodeDraggedChangesEnd.current) {
                 const command = new CommandMoveTableRelative(draw, new CommandMoveTableRelativeArgs(
                     nodeChange.id, 
                     nodeDraggedChangesEnd.current!.position!.x - nodeDraggedChangesStart.current!.position!.x, 

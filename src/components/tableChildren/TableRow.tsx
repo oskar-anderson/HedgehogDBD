@@ -3,7 +3,7 @@ import ManagerSingleton from "../../ManagerSingleton"
 import DataType from "../../model/DataTypes/DataType"
 import Databases from "../../model/DataTypes/Databases"
 import { OverlayTrigger, Popover } from "react-bootstrap"
-import { ROOT_URL } from "../../Main"
+import { ROOT_URL } from "../../Global"
 
 
 interface UiTableRowDatatype {

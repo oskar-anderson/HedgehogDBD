@@ -3,7 +3,7 @@ import Layout from "../components/Layout";
 import LocalStorageData from '../model/LocalStorageData';
 import Script from '../model/Script';
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { ROOT_URL } from '../Main';
+import { ROOT_URL } from '../Global';
 import ModalScriptListItem, { ModalScriptListItemProps } from "../components/scriptingChildren/ModalScriptListItem" 
 import DomainDraw from '../model/domain/DomainDraw';
 import dayjs from 'dayjs';

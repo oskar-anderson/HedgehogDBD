@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import { ROOT_URL } from "../Global";
 import useIsElementFocused from "./UseIsElementFocused";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
@@ -34,23 +33,23 @@ export default function TopToolbarAction({ currentlyLoadedLink } : TopToolbarAct
     return (
         <nav className="py-1 px-4 navbar" style={{ backgroundColor: 'rgb(255, 73, 73)', height: `${TOP_TOOLBAR_HEIGHT_PX}px`, flexWrap: "inherit" }}>
             <div className="container-fluid">
-                <Link className="navbar-brand" to={ROOT_URL}>
-                    <img style={{ height: '36px' }} src={ROOT_URL + "/wwwroot/img/logo_with_name_white.png"} />
+                <Link className="navbar-brand" to={"/"}>
+                    <img style={{ height: '36px' }} src={"/wwwroot/img/logo_with_name_white.png"} />
                 </Link>
                 <ul className="navbar-nav me-auto flex-row ms-3 gap-3">
                     <li>
                         <img ref={drawTooltipIcon} data-bs-toggle="tooltip" data-bs-placement="bottom" title="Draw" style={(currentlyLoadedLink === "Draw" || drawIconIsFocused) ? linkStyles.selectedLinkColor_f1f1f1 : linkStyles.defaultLinkColor_515151} 
-                            width={42} height={42} src={ROOT_URL + "/wwwroot/img/icons/erd-icon.png"} alt="Draw" onClick={() => navigate(`/draw`)} />
+                            width={42} height={42} src={"/wwwroot/img/icons/erd-icon.png"} alt="Draw" onClick={() => navigate(`/draw`)} />
                     </li>
                     <li>
                         <img ref={scriptingIconRef} data-bs-toggle="tooltip" data-bs-placement="bottom" title="Scripting" style={(currentlyLoadedLink === "Scripting" || scriptingIconIsFocused) ? linkStyles.selectedLinkColor_f1f1f1 : linkStyles.defaultLinkColor_515151} 
-                            width={42} height={42} src={ROOT_URL + "/wwwroot/img/icons/code-icon.png"} alt="Scripting" onClick={() => navigate(`/scripting`)} />
+                            width={42} height={42} src={"/wwwroot/img/icons/code-icon.png"} alt="Scripting" onClick={() => navigate(`/scripting`)} />
                     </li>
                 </ul>
             </div>
             <div>
                 <img ref={settingsIconRef} data-bs-toggle="tooltip" data-bs-placement="bottom" title="Settings" style={currentlyLoadedLink === "Settings" || settingsIconIsFocused ? linkStyles.selectedLinkColor_f1f1f1 : linkStyles.defaultLinkColor_515151} 
-                    width={42} height={42} src={ROOT_URL + "/wwwroot/img/icons/settings.png"} 
+                    width={42} height={42} src={"/wwwroot/img/icons/settings.png"} 
                         onClick={() => navigate(`/settings`) } 
                     />
             </div>

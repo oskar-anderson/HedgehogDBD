@@ -3,7 +3,6 @@ import ManagerSingleton from "../../ManagerSingleton"
 import DataType from "../../model/DataTypes/DataType"
 import Databases from "../../model/DataTypes/Databases"
 import { OverlayTrigger, Popover } from "react-bootstrap"
-import { ROOT_URL } from "../../Global"
 
 
 interface UiTableRowDatatype {
@@ -217,7 +216,7 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
                     onMouseDown={(e) => { dragItem.current = index; }}
                 >
                     <img draggable="false" style={{ userSelect: "none" }} data-bs-toggle="tooltip" data-bs-placement="bottom" title="drag"
-                        width={28} height={28} src={ROOT_URL + "/wwwroot/img/icons/drag.png"} alt="drag" />
+                        width={28} height={28} src={"/wwwroot/img/icons/drag.png"} alt="drag" />
                 </button>
             </td>
             <td>

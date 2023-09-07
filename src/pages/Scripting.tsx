@@ -3,7 +3,6 @@ import Layout from "../components/Layout";
 import LocalStorageData from '../model/LocalStorageData';
 import Script from '../model/Script';
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { ROOT_URL } from '../Global';
 import ModalScriptListItem, { ModalScriptListItemProps } from "../components/scriptingChildren/ModalScriptListItem" 
 import DomainDraw from '../model/domain/DomainDraw';
 import dayjs from 'dayjs';
@@ -24,9 +23,9 @@ export async function executeWithLog(value: string, draw: DomainDraw) {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncFunction
     // https://stackoverflow.com/questions/46118496/asyncfunction-is-not-defined-yet-mdn-documents-its-usage
     const AsyncFunction = async function () {}.constructor;
-    let fn = AsyncFunction("RESULT_LOG", "schema", "dayjs", "BASE_URL", fnBody);
+    let fn = AsyncFunction("RESULT_LOG", "schema", "dayjs", fnBody);
     try {
-        await fn(resultLog, scriptingDraw, dayjs, ROOT_URL);
+        await fn(resultLog, scriptingDraw, dayjs);
     } catch (error: any) {
         errorMsg = `${error.name}: ${error.message}`;
     }
@@ -60,17 +59,17 @@ export default function Scripting() {
             const fetchedScripts = [
                 new Script(
                     "List tables",
-                    await fetch(ROOT_URL + '/wwwroot/scripts/listAllTables.js', { cache: "no-cache" }).then(x => x.text()),
+                    await fetch('/wwwroot/scripts/listAllTables.js', { cache: "no-cache" }).then(x => x.text()),
                     ["builtin"]
                 ),
                 new Script(
                     "List tables and rows",
-                    await fetch(ROOT_URL + '/wwwroot/scripts/listAllTableRows.js', { cache: "no-cache" }).then(x => x.text()),
+                    await fetch('/wwwroot/scripts/listAllTableRows.js', { cache: "no-cache" }).then(x => x.text()),
                     ['builtin', 'CSV']
                 ),
                 new Script(
                     "SQL CREATE",
-                    await fetch(ROOT_URL + '/wwwroot/scripts/createTablesSQL.js', { cache: "no-cache" }).then(x => x.text()),
+                    await fetch('/wwwroot/scripts/createTablesSQL.js', { cache: "no-cache" }).then(x => x.text()),
                     ["builtin", "SQL"]
                 )
             ];

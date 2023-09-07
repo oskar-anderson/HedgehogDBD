@@ -1,4 +1,4 @@
-import React, { memo, useRef } from 'react';
+import React, { useRef } from 'react';
 import ReactFlow, { NodeProps, Handle, Position } from 'reactflow';
 import VmTableRow from '../../model/viewModel/VmTableRow';
 import VmTable from '../../model/viewModel/VmTable';

@@ -1,7 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { HOST_SUFFIX, ROOT_URL } from "../Global";
 import useIsElementFocused from "./UseIsElementFocused";
 import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 interface TopToolbarActionProps {
     currentlyLoadedLink: "Settings" | "Scripting" | "Draw";
@@ -33,9 +34,9 @@ export default function TopToolbarAction({ currentlyLoadedLink } : TopToolbarAct
     return (
         <nav className="py-1 px-4 navbar" style={{ backgroundColor: 'rgb(255, 73, 73)', height: `${TOP_TOOLBAR_HEIGHT_PX}px`, flexWrap: "inherit" }}>
             <div className="container-fluid">
-                <a className="navbar-brand" href="#">
+                <Link className="navbar-brand" to="/">
                     <img style={{ height: '36px' }} src={ROOT_URL + "/wwwroot/img/logo_with_name_white.png"} />
-                </a>
+                </Link>
                 <ul className="navbar-nav me-auto flex-row ms-3 gap-3">
                     <li>
                         <img ref={drawTooltipIcon} data-bs-toggle="tooltip" data-bs-placement="bottom" title="Draw" style={(currentlyLoadedLink === "Draw" || drawIconIsFocused) ? linkStyles.selectedLinkColor_f1f1f1 : linkStyles.defaultLinkColor_515151} 

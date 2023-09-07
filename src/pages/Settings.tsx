@@ -1,8 +1,5 @@
-import { Modal } from "react-bootstrap";
-import { useLocation, useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import Databases from "../model/DataTypes/Databases";
-import { useState } from "react";
 import ManagerSingleton from "../ManagerSingleton";
 import DataType from "../model/DataTypes/DataType";
 import VmTableRowDataTypeArguments from "../model/viewModel/VmTableRowDataTypeArguments";

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Layout from "./../components/Layout"
-import ReactFlow, { ReactFlowProvider, useNodesState, useEdgesState, addEdge, MiniMap, Background, Controls, Position, BackgroundVariant, NodeChange, NodePositionChange, Edge, Node, getRectOfNodes, getTransformForBounds, useReactFlow, useViewport, useOnViewportChange, Viewport, useStore, ReactFlowState, useStoreApi } from 'reactflow';
+import ReactFlow, { ReactFlowProvider, useNodesState, useEdgesState, MiniMap, Background, Controls, BackgroundVariant, NodeChange, NodePositionChange, Node, getRectOfNodes, getTransformForBounds, useReactFlow, useViewport } from 'reactflow';
 import DrawTable from "../components/drawChildren/DrawTable";
 import 'reactflow/dist/style.css';
 import { TOP_TOOLBAR_HEIGHT_PX } from "../components/TopToolbarAction"
@@ -10,14 +10,10 @@ import CommandMoveTableRelative, { CommandMoveTableRelativeArgs } from "../comma
 import ManagerSingleton from "../ManagerSingleton";
 import DrawSide from "../components/drawChildren/DrawSide";
 import VmTable from "../model/viewModel/VmTable";
-import VmTableRow from "../model/viewModel/VmTableRow";
 import Databases from "../model/DataTypes/Databases";
 import DataType from "../model/DataTypes/DataType";
-import VmTableRowDataType from "../model/viewModel/VmTableRowDataType";
 import { toPng } from 'html-to-image';
-import DomainDraw from "../model/domain/DomainDraw";
 import VmRelation from "../model/viewModel/VmRelation";
-import VmTableRowDataTypeArguments from "../model/viewModel/VmTableRowDataTypeArguments";
 import { CommandCreateTable, CommandCreateTableArgs } from "../commands/appCommands/CommandCreateTable";
 import DomainTable from "../model/domain/DomainTable";
 import DomainTableRow from "../model/domain/DomainTableRow";
@@ -69,7 +65,6 @@ export const WrappedDraw = () => {
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const { x, y, zoom } = useViewport();
-    const reactFlowInstance = useReactFlow();
     const navigate = useNavigate();
     
     useEffect(() => {

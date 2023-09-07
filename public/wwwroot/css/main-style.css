@@ -1,22 +1,3 @@
-@import url(https://fonts.googleapis.com/css?family=Share+Tech+Mono);
-
-
-@font-face {
-    /* this is named like this to prevent sneaky conflicts with using Windows system Consolas font 
-    that behaves slightly differently in terms of width for some reason */
-    font-family: 'RealReal_Consolas';
-    src: url("../font/Consolas.ttf");
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Inconsolata';
-    src: url("../font/Inconsolata.ttf");
-    font-weight: normal;
-    font-style: normal;
-}
-
 .modal-dialog.modal-w660px {
     max-width: 660px;
 }

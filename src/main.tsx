@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { BrowserRouter, Routes, Route, HashRouter } from "react-router-dom"
 import Draw from "./pages/Draw";
 import Info from "./pages/system/Info";
 import Settings from './pages/Settings';
@@ -10,7 +10,7 @@ import { HOST_SUFFIX } from './Global';
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 root.render(
-    <BrowserRouter>
+    <HashRouter>
         <Routes>
             <Route path={`${HOST_SUFFIX}/`} element={<Draw />}></Route>
             <Route path={`${HOST_SUFFIX}/draw`} element={<Draw />}></Route>
@@ -19,5 +19,5 @@ root.render(
             <Route path={`${HOST_SUFFIX}/scripting`} element={<Scripting />}></Route>
             <Route path={`${HOST_SUFFIX}/system/info`} element={<Info />}></Route>
         </Routes>
-    </BrowserRouter>
+    </HashRouter>
 )

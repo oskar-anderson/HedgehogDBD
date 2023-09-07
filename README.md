@@ -1,6 +1,6 @@
 # HedgehogDBD
 
-Open source ERD schema drawing tool with scripting support. Start modeling in your browser [here](https://oskar-anderson.github.io/HedgehogDBD) 📐
+Open source ERD schema drawing tool with scripting support. Start modeling in your browser [here](https://hedgehog-dbd.vercel.app/) 📐
 
 ## About
 Webapp for ERD schema creation. Allows for quick visualization of Database model by compact table editing view and automatic relation connections. The app allows users to create JavaScript scripts and execute them based on the schema. Contains built-in scripts and user created scripts shared as comments.

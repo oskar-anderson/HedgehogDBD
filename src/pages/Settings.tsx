@@ -40,7 +40,7 @@ export default function Settings() {
                         Settings
                     </h4>
                     <div style={{ padding: "1rem" }}>
-                        <div style={{ display: "flex" }}>
+                        <div className="mb-3" style={{ display: "flex" }}>
                             <div className="fs-5" style={{ flexBasis: "33.33%" }}>
                                 Schema properties
                             </div>
@@ -57,6 +57,7 @@ export default function Settings() {
                                 </select>
                             </div>
                         </div>
+                        <a href="https://github.com/oskar-anderson/HedgehogDBD">Source code</a>
                     </div>
                 </div>
             </Layout>

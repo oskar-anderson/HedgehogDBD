@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import VmTable from "../../model/viewModel/VmTable"
-import { HOST_SUFFIX } from "../../Global";
 
 type DrawSide = {
     tables: VmTable[],
@@ -31,7 +30,7 @@ export default function CanvasSide({ tables, createNewTable, children }: DrawSid
                     { [...tables].sort((a, b) => Number(a.head > b.head)).map((table, i) => {
                         return (
                             <div key={table.id} 
-                                onClick={() => navigate(`${HOST_SUFFIX}/table/${table.id}`) } 
+                                onClick={() => navigate(`/table/${table.id}`) } 
                                 className="ps-3 pe-2 btn" style={{ width: "100%", display: "flex" }}>
                                 <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{table.head}</span>
                             </div>

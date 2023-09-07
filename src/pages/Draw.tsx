@@ -19,6 +19,7 @@ import DomainTable from "../model/domain/DomainTable";
 import DomainTableRow from "../model/domain/DomainTableRow";
 import DomainTableRowDataType from "../model/domain/DomainTableRowDataType";
 import DomainTableRowDataTypeArguments from "../model/domain/DomainTableRowDataTypeArguments";
+import { HOST_SUFFIX } from "../Global";
 
 // nodeTypes need to be defined outside the render function or using memo
 const nodeTypes = { 
@@ -92,7 +93,7 @@ export const WrappedDraw = () => {
     }, [nodes, edges])
 
     const onNodeClick = (event: React.MouseEvent, node: Node) => {
-        navigate(`/table/${node.data.table.id}`);
+        navigate(`${HOST_SUFFIX}/table/${node.data.table.id}`);
     }
 
     const createNewTable = () =>  {

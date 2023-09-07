@@ -10,6 +10,7 @@ import DomainTableRowDataTypeArguments from "../model/domain/DomainTableRowDataT
 import DomainTable from "../model/domain/DomainTable";
 import TableRow from "../components/tableChildren/TableRow"
 import { CommandModifyTable, CommandModifyTableArgs } from "../commands/appCommands/CommandModifyTableArgs";
+import { HOST_SUFFIX } from "../Global";
 
 
 export default function Table() {
@@ -22,7 +23,7 @@ export default function Table() {
     useEffect(() => {
         if (!tableBeingEditedNullable){
             console.error("No table could be selected!");
-            navigate("/");
+            navigate(`${HOST_SUFFIX}/`);
         }
     }, []);
     if (!tableBeingEditedNullable){
@@ -106,7 +107,7 @@ export default function Table() {
             )
         ));
         
-        navigate("/draw")
+        navigate(`${HOST_SUFFIX}/draw`)
     }
 
     const insertNewRow = (event: FormEvent<HTMLButtonElement>, index: number) => {
@@ -158,7 +159,7 @@ export default function Table() {
                 )
             )
         )
-        navigate("/draw")
+        navigate(`${HOST_SUFFIX}/draw`)
     }
 
     const hoverInsertIndicator = useRef<HTMLDivElement>(null);
@@ -170,7 +171,7 @@ export default function Table() {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5>Editing table</h5>
-                            <button type="button" className="btn-close" onClick={() => navigate("/draw")} aria-label="Close"></button>
+                            <button type="button" className="btn-close" onClick={() => navigate(`${HOST_SUFFIX}/draw`)} aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
                             <div className="modal-title" style={{ display: "flex", gridGap: "1em" }}>
@@ -224,7 +225,7 @@ export default function Table() {
                             <hr />
                         </div>
                         <div className="modal-footer" style={{ display: "grid", gridTemplateColumns: "1fr 3fr" }}>
-                            <button type="button" className="btn btn-light" onClick={() => navigate("/draw")}>Discard changes</button>
+                            <button type="button" className="btn btn-light" onClick={() => navigate(`${HOST_SUFFIX}/draw`)}>Discard changes</button>
                             <button type="button" className="btn btn-light btn-create" id="modal-save-changes" onClick={() => saveChanges()} style={{ fontWeight: 600}}>Save changes</button>
                         </div>
                     </div>

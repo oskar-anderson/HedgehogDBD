@@ -34,7 +34,7 @@ export default function TopToolbarAction({ currentlyLoadedLink } : TopToolbarAct
     return (
         <nav className="py-1 px-4 navbar" style={{ backgroundColor: 'rgb(255, 73, 73)', height: `${TOP_TOOLBAR_HEIGHT_PX}px`, flexWrap: "inherit" }}>
             <div className="container-fluid">
-                <Link className="navbar-brand" to="/">
+                <Link className="navbar-brand" to={ROOT_URL}>
                     <img style={{ height: '36px' }} src={ROOT_URL + "/wwwroot/img/logo_with_name_white.png"} />
                 </Link>
                 <ul className="navbar-nav me-auto flex-row ms-3 gap-3">

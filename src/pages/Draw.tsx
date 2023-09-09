@@ -7,7 +7,7 @@ import 'reactflow/dist/style.css';
 import { TOP_TOOLBAR_HEIGHT_PX } from "../components/TopToolbarAction"
 import SecondaryTopToolbar, { SECONDARY_TOOLBAR_HEIGHT_PX } from "../components/drawChildren/SecondaryTopToolbar";
 import CommandMoveTableRelative, { CommandMoveTableRelativeArgs } from "../commands/appCommands/CommandMoveTableRelative"
-import ManagerSingleton from "../ManagerSingleton";
+import ManagerSingleton, {useApplicationState} from "../ManagerSingleton";
 import DrawSide from "../components/drawChildren/DrawSide";
 import VmTable from "../model/viewModel/VmTable";
 import Databases from "../model/DataTypes/Databases";
@@ -61,35 +61,26 @@ const convertRelationToEdge = (relation: VmRelation) => {
 }
 
 export const WrappedDraw = () => {
-    const draw = ManagerSingleton.getDraw();
+    const draw = useApplicationState.getState();
+    
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const { x, y, zoom } = useViewport();
     const navigate = useNavigate();
     
     useEffect(() => {
-        draw.areTablesDirty = true;
-    }, []);
-
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            if (draw.areTablesDirty || draw.schemaTables.some(table => table.isDirty)) {
-                setEdges([]);
-                setNodes(draw.schemaTables.map(table => {
-                    const node = nodes.find(node => table.id === node.id);
-                    // console.log(node?.data.table.head, "node: ", node, "witdh: ", node?.width, "converted node: ", convertTableToNode(table, node));
-                    return table.isDirty || !node ? 
-                        convertTableToNode(table.setIsDirty(false), node) : 
-                        node;
-                }));
-                setEdges(draw.schemaRelations.map(relation => {
-                    return convertRelationToEdge(relation)
-                }));
-                draw.areTablesDirty = false;
-            }
-        }, 1000/30);
-        return () => clearInterval(intervalId);
-    }, [nodes, edges])
+        setEdges([]);
+        setNodes(draw.schemaTables.map(table => {
+            const node = nodes.find(node => table.id === node.id);
+            // console.log(node?.data.table.head, "node: ", node, "witdh: ", node?.width, "converted node: ", convertTableToNode(table, node));
+            return table.isDirty || !node ? 
+                convertTableToNode(table.setIsDirty(false), node) : 
+                node;
+        }));
+        setEdges(draw.schemaRelations.map(relation => {
+            return convertRelationToEdge(relation)
+        }));
+    }, [draw.schemaTables])
 
     const onNodeClick = (event: React.MouseEvent, node: Node) => {
         navigate(`/table/${node.data.table.id}`);

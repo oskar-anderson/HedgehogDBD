@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import DomainDraw from "../../model/domain/DomainDraw";
-import ManagerSingleton from "../../ManagerSingleton";
+import ManagerSingleton, { useApplicationState } from "../../ManagerSingleton";
 import { CommandSetSchema, CommandSetSchemaArgs } from "../../commands/appCommands/CommandSetSchema";
 import { useEffect } from "react";
 
@@ -26,10 +26,10 @@ type SecondaryTopToolbarProps = {
 }
 
 export default function SecondaryTopToolbar( { exportPngImage } : SecondaryTopToolbarProps) {
-    const draw = ManagerSingleton.getDraw();
+    const draw = useApplicationState.getState();
 
     const newSchema = () => {
-        setSchema(new DomainDraw([], ManagerSingleton.getDraw().activeDatabaseId));
+        setSchema(new DomainDraw([], draw.activeDatabaseId));
     }
     const saveAsJson = () => {
         let element = document.createElement('a');
@@ -61,11 +61,9 @@ export default function SecondaryTopToolbar( { exportPngImage } : SecondaryTopTo
     }
 
     const undo = () => {
-        const draw = ManagerSingleton.getDraw();
         draw.history.undo(draw);
     }
     const redo = () => {
-        const draw = ManagerSingleton.getDraw();
         draw.history.redo(draw);
     }
 
@@ -89,9 +87,9 @@ export default function SecondaryTopToolbar( { exportPngImage } : SecondaryTopTo
    }
 
    const setSchema = (newDomainDraw: DomainDraw) => {
-        let oldDomainDraw = DomainDraw.init(ManagerSingleton.getDraw())
+        let oldDomainDraw = DomainDraw.init(draw)
         const command = new CommandSetSchema(
-            ManagerSingleton.getDraw(), 
+            draw, 
             new CommandSetSchemaArgs(
                 oldDomainDraw, 
                 newDomainDraw

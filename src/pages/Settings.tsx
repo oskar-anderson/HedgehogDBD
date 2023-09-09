@@ -1,13 +1,13 @@
 import Layout from "../components/Layout";
 import Databases from "../model/DataTypes/Databases";
-import ManagerSingleton from "../ManagerSingleton";
+import ManagerSingleton, { useApplicationState } from "../ManagerSingleton";
 import DataType from "../model/DataTypes/DataType";
 import VmTableRowDataTypeArguments from "../model/viewModel/VmTableRowDataTypeArguments";
 import History from "../commands/History"
 
 
 export default function Settings() {
-    const draw = ManagerSingleton.getDraw()
+    const draw = useApplicationState.getState();
     const handleActiveDatabaseChange = (newActiveDatabaseId: string) => {
 
         draw.schemaTables.forEach(table => {

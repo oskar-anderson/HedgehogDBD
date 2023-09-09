@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import ReactFlow, { NodeProps, Handle, Position } from 'reactflow';
 import VmTableRow from '../../model/viewModel/VmTableRow';
 import VmTable from '../../model/viewModel/VmTable';
-import ManagerSingleton from '../../ManagerSingleton';
+import ManagerSingleton, { useApplicationState } from '../../ManagerSingleton';
 
 
 type DrawTableRowProps = {
@@ -13,8 +13,10 @@ type DrawTableRowProps = {
 }
 
 function DrawTableRow( { row, rowStartY, height, tableName }: DrawTableRowProps) {
+    useApplicationState.setState()
+    const relations = useApplicationState(state => state.schemaRelations);
     const handleStyle: React.CSSProperties = { opacity: 0, background: "#555", border: "none", cursor: "inherit" }
-    const relation = ManagerSingleton.getDraw().schemaRelations
+    const relation = relations
                         .filter(relation => relation.source.head === tableName)
                         .find(relation => relation.sourceRow.name === row.name);
                          

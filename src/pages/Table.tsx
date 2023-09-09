@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import ManagerSingleton from "../ManagerSingleton";
+import ManagerSingleton, { useApplicationState } from "../ManagerSingleton";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { CommandDeleteTable, CommandDeleteTableArgs } from "../commands/appCommands/CommandDeleteTable";
 import DataType from "../model/DataTypes/DataType";
@@ -14,7 +14,7 @@ import { CommandModifyTable, CommandModifyTableArgs } from "../commands/appComma
 
 export default function Table() {
     const { id } = useParams();
-    const draw = ManagerSingleton.getDraw();
+    const draw = useApplicationState.getState();
     const navigate = useNavigate();
 
     // Figure out why a simple argument not found is so difficult to implement in React

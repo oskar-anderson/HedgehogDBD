@@ -18,7 +18,8 @@
     "react-bootstrap": "^2.7.4",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.15.0",
-    "reactflow": "^11.8.3"
+    "reactflow": "^11.8.3",
+    "zustand": "^4.4.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.21.5",

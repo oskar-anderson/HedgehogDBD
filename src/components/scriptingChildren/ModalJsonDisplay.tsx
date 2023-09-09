@@ -1,6 +1,6 @@
 import * as monaco from 'monaco-editor';
 import { useEffect, useState } from "react";
-import ManagerSingleton from '../../ManagerSingleton';
+import ManagerSingleton, { useApplicationState } from '../../ManagerSingleton';
 import DomainDraw from '../../model/domain/DomainDraw';
 
 
@@ -10,6 +10,7 @@ export interface ModelJsonDisplayProps {
 
 
 export default function ModalJsonDisplay({ setJsonDisplayModelState }: ModelJsonDisplayProps) {
+    const draw = useApplicationState.getState();
     const [content, setContent] = useState("");
 
     useEffect(() => {
@@ -17,7 +18,7 @@ export default function ModalJsonDisplay({ setJsonDisplayModelState }: ModelJson
             const result = await monaco.editor.colorize(content, "json", { tabSize: 4 });
             setContent(result);
         }
-        setContentColorization(DomainDraw.init(ManagerSingleton.getDraw()).getJson());
+        setContentColorization(DomainDraw.init(draw).getJson());
     })
 
 

@@ -2,7 +2,7 @@ import { SetStateAction, useState } from "react";
 import Script from "../../model/Script";
 import DomainDraw from "../../model/domain/DomainDraw";
 import { executeWithLog } from "../../pages/Scripting";
-import ManagerSingleton from "../../ManagerSingleton";
+import ManagerSingleton, { useApplicationState } from "../../ManagerSingleton";
 import { ModalScriptExecuteProps } from "./ModalScriptExecute";
 
 
@@ -26,6 +26,7 @@ export default function ModalScriptListItem({
     setEditorValue,
     removeScriptFromLocalStorage
 }: ModalScriptListItemProps) {
+    const draw = useApplicationState.getState();
 
     const execute = async (value: string, draw: DomainDraw): Promise<ModalScriptExecuteProps> => {
         let executeResult = await executeWithLog(value, draw);
@@ -62,7 +63,7 @@ export default function ModalScriptListItem({
 
                             {!script.tags.includes("readonly") &&
                                 <>
-                                    <button onClick={async () => { switchToExecuteModel(await execute(script.content, DomainDraw.init(ManagerSingleton.getDraw()))) }} type="button" className="btn btn-primary">⚡ Execute</button>
+                                    <button onClick={async () => { switchToExecuteModel(await execute(script.content, DomainDraw.init(draw))) }} type="button" className="btn btn-primary">⚡ Execute</button>
                                     <button onClick={() => onClickCopyToEditor()} type="button" className="btn btn-primary">Paste to editor</button>
                                 </>
                             }

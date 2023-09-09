@@ -1,5 +1,5 @@
 import { ChangeEvent, HTMLProps, useRef, useState } from "react"
-import ManagerSingleton from "../../ManagerSingleton"
+import ManagerSingleton, { useApplicationState } from "../../ManagerSingleton"
 import DataType from "../../model/DataTypes/DataType"
 import Databases from "../../model/DataTypes/Databases"
 import { OverlayTrigger, Popover } from "react-bootstrap"
@@ -64,7 +64,7 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
         })
     );
 
-    const draw = ManagerSingleton.getDraw();
+    const draw = useApplicationState.getState();
     
     const handleArgumentInputChange = (e: ChangeEvent, argumentId: string) => {
         const newValue = (e.target! as HTMLInputElement).value;
@@ -243,7 +243,7 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
                                     "";
                             } else {
                                 const notSelectedDataTypeArguments = DataType.getArgumentsByDatabaseAndByType(
-                                    Databases.get(ManagerSingleton.getDraw().activeDatabaseId).select,
+                                    Databases.get(draw.activeDatabaseId).select,
                                     x.getId());
                                 selectedOptionDisplayParameters = (notSelectedDataTypeArguments.length !== 0) ? 
                                     `(${notSelectedDataTypeArguments.map(x => x.defaultValue).join(", ")})` :

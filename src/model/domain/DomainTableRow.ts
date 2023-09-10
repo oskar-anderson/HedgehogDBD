@@ -21,11 +21,11 @@ export default class DomainTableRow {
         );
     }
 
-    mapToVM() {
-        return new VmTableRow(
-            this.name, 
-            this.datatype.mapToVm(), 
-            [...this.attributes]
-        );
+    mapToVM(): VmTableRow {
+        return {
+            name: this.name, 
+            datatype: this.datatype.mapToVm(), 
+            attributes: [...this.attributes]
+        }
     }
 }

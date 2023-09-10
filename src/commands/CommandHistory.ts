@@ -1,4 +1,5 @@
 import VmDraw from "../model/viewModel/VmDraw";
+import VmTable from "../model/viewModel/VmTable";
 import { CommandCreateTable, CommandCreateTableArgs } from "./appCommands/CommandCreateTable";
 import { CommandDeleteTable, CommandDeleteTableArgs } from "./appCommands/CommandDeleteTable";
 import { CommandModifyTable, CommandModifyTableArgs } from "./appCommands/CommandModifyTableArgs";
@@ -7,21 +8,21 @@ import { CommandSetSchema, CommandSetSchemaArgs } from "./appCommands/CommandSet
 import { ICommand, IHydratable } from "./ICommand";
 
 
-export default class History {
-    
-    undoHistory: string[] = [];
-    redoHistory: string[] = [];
-    
-    constructor() {}
+export default class CommandHistory {
 
-    execute(commandInstance: ICommand<any>) {
+    static execute(history: {
+        undoHistory: string[], 
+        redoHistory: string[]
+    }, commandInstance: ICommand<any>, setTables: (tables: VmTable[]) => void) {
         let command = { commandName: commandInstance.constructor.name, args: commandInstance.args};
-        this.undoHistory.push(JSON.stringify(command));
-        this.redoHistory = [];
-        commandInstance.redo();
+        history.undoHistory.push(JSON.stringify(command));
+        history.redoHistory = [];
+        commandInstance.redo(setTables);
     }
 
-    private getICommandInstance(command: CommandPattern<any>, context: VmDraw): ICommand<any> {
+    private static getICommandInstance(command: CommandPattern<any>, context: {
+        tables: VmTable[]
+    }): ICommand<any> {
         if (command.commandName === CommandMoveTableRelative.name) {
             let unhydratedArgs = command.args as CommandMoveTableRelativeArgs;
             let args = new CommandMoveTableRelativeArgs(unhydratedArgs.id, unhydratedArgs.x, unhydratedArgs.y);
@@ -56,18 +57,28 @@ export default class History {
 
     }
 
-    redo(context: VmDraw) {
-        if (this.redoHistory.length === 0) return;
-        let command = JSON.parse(this.redoHistory.pop()!) as CommandPattern<any>;
-        this.undoHistory.push(JSON.stringify(command));
-        this.getICommandInstance(command, context).redo();
+    static redo(history: {
+        undoHistory: string[], 
+        redoHistory: string[]
+    }, context: {
+        tables: VmTable[]
+    }, setTables: (tables: VmTable[]) => void) {
+        if (history.redoHistory.length === 0) return;
+        let command = JSON.parse(history.redoHistory.pop()!) as CommandPattern<any>;
+        history.undoHistory.push(JSON.stringify(command));
+        CommandHistory.getICommandInstance(command, context).redo(setTables);
     }
 
-    undo(context: VmDraw) {
-        if (this.undoHistory.length === 0) return;
-        let command = JSON.parse(this.undoHistory.pop()!) as CommandPattern<any>;
-        this.redoHistory.push(JSON.stringify(command));
-        this.getICommandInstance(command, context).undo();
+    static undo(history: {
+        undoHistory: string[], 
+        redoHistory: string[]
+    }, context: {
+        tables: VmTable[]
+    }, setTables: (tables: VmTable[]) => void) {
+        if (history.undoHistory.length === 0) return;
+        let command = JSON.parse(history.undoHistory.pop()!) as CommandPattern<any>;
+        history.redoHistory.push(JSON.stringify(command));
+        CommandHistory.getICommandInstance(command, context).undo(setTables);
     }
 }
 

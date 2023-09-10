@@ -1,16 +1,19 @@
 import Layout from "../components/Layout";
 import Databases from "../model/DataTypes/Databases";
-import ManagerSingleton, { useApplicationState } from "../ManagerSingleton";
+import { useApplicationState } from "../Store";
 import DataType from "../model/DataTypes/DataType";
 import VmTableRowDataTypeArguments from "../model/viewModel/VmTableRowDataTypeArguments";
-import History from "../commands/History"
+import History from "../commands/CommandHistory"
 
 
 export default function Settings() {
-    const draw = useApplicationState.getState();
+    const tables = useApplicationState(state => state.schemaTables);
+    const activeDatabaseId = useApplicationState(state => state.activeDatabaseId);
+    const setActiveDatabaseId = useApplicationState(state => state.setActiveDatabaseId);
+    const setHistory = useApplicationState(state => state.setHistory);
     const handleActiveDatabaseChange = (newActiveDatabaseId: string) => {
 
-        draw.schemaTables.forEach(table => {
+        tables.forEach(table => {
             table.tableRows.forEach(tableRow => {
                 tableRow.datatype.arguments = tableRow.datatype.arguments
                     .filter(x => x.argument.databases.find(database => database.id === newActiveDatabaseId))  // remove type arguments new database does not need
@@ -20,15 +23,19 @@ export default function Settings() {
                                 argument.isReadonly 
                                 && argument.databases.find(database => database.id === newActiveDatabaseId)
                             )
-                            .map(argument => {
-                                return new VmTableRowDataTypeArguments(argument.defaultValue, argument)
-                            })
+                            .map(argument => ({
+                                value: argument.defaultValue, 
+                                argument: argument
+                            }))
                     )
                     .sort((a, b) => a.argument.position - b.argument.position) // sort ascending just in case
             })
         });
-        draw.history = new History();
-        draw.activeDatabaseId = newActiveDatabaseId;
+        setHistory({
+            undoHistory: [],
+            redoHistory: [],
+        });
+        setActiveDatabaseId(newActiveDatabaseId);
     }
 
 
@@ -48,7 +55,7 @@ export default function Settings() {
                                 <div className="semi-bold">
                                     Database
                                 </div>
-                                <select onChange={(e) => handleActiveDatabaseChange(e.target.value)} defaultValue={draw.activeDatabaseId} className="form-select" >
+                                <select onChange={(e) => handleActiveDatabaseChange(e.target.value)} defaultValue={activeDatabaseId} className="form-select" >
                                     { 
                                         Databases.getAll().map(x => {
                                             return <option key={x.id} value={x.id}>{x.select}</option> 

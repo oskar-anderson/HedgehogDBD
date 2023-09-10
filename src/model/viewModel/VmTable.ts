@@ -4,7 +4,6 @@ import VmTableRow from "./VmTableRow";
 
 export default class VmTable {
     readonly id: string = crypto.randomUUID();
-    isDirty = true;
     
     constructor(
         public position: Point, 
@@ -12,19 +11,17 @@ export default class VmTable {
         public tableRows: VmTableRow[], 
         {
             id = crypto.randomUUID(),
-            isDirty = true,
         } = {}
         ) {
         this.id = id;
-        this.isDirty = isDirty;
     }
 
 
-    getRelations(tables: VmTable[]): VmRelation[] {
+    static GetRelations(table: VmTable, tables: VmTable[]): VmRelation[] {
         let references = [];
-        let pkRow = this.tableRows.filter(row => row.attributes.includes("PK"))[0];
+        let pkRow = table.tableRows.filter(row => row.attributes.includes("PK"))[0];
         if (! pkRow) { return []; }
-        for (let tableRow of this.tableRows) {
+        for (let tableRow of table.tableRows) {
             let matches = [...tableRow.attributes.join('').matchAll(/FK\("(\w+)"\)/g)];
             if (matches.length !== 1 || matches[0].length !== 2) {
                 continue;
@@ -36,13 +33,11 @@ export default class VmTable {
             if (! targetTableRow) { continue; }
             references.push({ targetTable: targetTable, targetTableRow: targetTableRow, sourceTableRow: tableRow });
         }
-        return references.map(ref => {
-            return new VmRelation(ref.targetTable, ref.targetTableRow, this, ref.sourceTableRow)
-        });
-    }
-
-    setIsDirty(value: boolean) {
-        this.isDirty = value;
-        return this;
+        return references.map(ref => ({
+            target: ref.targetTable, 
+            targetRow: ref.targetTableRow, 
+            source: table, 
+            sourceRow: ref.sourceTableRow
+        }));
     }
 }

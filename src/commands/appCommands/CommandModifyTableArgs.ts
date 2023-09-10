@@ -1,12 +1,17 @@
 import DomainTable from "../../model/domain/DomainTable";
 import VmDraw from "../../model/viewModel/VmDraw";
+import VmTable from "../../model/viewModel/VmTable";
 import { ICommand } from "../ICommand";
 
 export class CommandModifyTable implements ICommand<CommandModifyTableArgs> {
-    context: VmDraw;
+    context: {
+        tables: VmTable[]
+    };
     args: CommandModifyTableArgs;
 
-    constructor(context: VmDraw, args: CommandModifyTableArgs) {
+    constructor(context: {
+        tables: VmTable[]
+    }, args: CommandModifyTableArgs) {
         this.context = context;
         this.args = args;
     }
@@ -15,18 +20,24 @@ export class CommandModifyTable implements ICommand<CommandModifyTableArgs> {
         return this.args;
     }
 
-    redo() {
+    redo(setTables: (tables: VmTable[]) => void) {
         let newTable = this.args.newTable.mapToVm();
-        let index = this.context.schemaTables.findIndex(x => x.id == this.args.newTable.id);
-        this.context.schemaTables[index] = newTable;
-        this.context.areTablesDirty = true;
+        setTables(this.context.tables
+            .map(table => table.id === this.args.oldTable.id ? 
+                newTable
+                : table
+            )
+        )
     }
 
-    undo() {
+    undo(setTables: (tables: VmTable[]) => void) {
         let oldTable = this.args.oldTable.mapToVm();
-        let index = this.context.schemaTables.findIndex(x => x.id == this.args.newTable.id);
-        this.context.schemaTables[index] = oldTable;
-        this.context.areTablesDirty = true;
+        setTables(this.context.tables
+            .map(table => table.id === this.args.oldTable.id ? 
+                oldTable
+                : table
+            )
+        )
     }
 }
 

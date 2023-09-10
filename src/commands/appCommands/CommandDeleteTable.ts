@@ -1,13 +1,18 @@
 import DomainTable from "../../model/domain/DomainTable";
 import VmDraw from "../../model/viewModel/VmDraw";
+import VmTable from "../../model/viewModel/VmTable";
 import { ICommand } from "../ICommand";
 
 
 export class CommandDeleteTable implements ICommand<CommandDeleteTableArgs> {
-    context: VmDraw;
+    context: {
+        tables: VmTable[]
+    };
     args: CommandDeleteTableArgs;
 
-    constructor(context: VmDraw, args: CommandDeleteTableArgs) {
+    constructor(context: {
+        tables: VmTable[]
+    }, args: CommandDeleteTableArgs) {
         this.context = context;
         this.args = args;
     }
@@ -16,15 +21,19 @@ export class CommandDeleteTable implements ICommand<CommandDeleteTableArgs> {
         return this.args;
     }
 
-    redo() {
-        this.context.schemaTables.splice(this.args.listIndex, 1);
-        this.context.areTablesDirty = true;
+    redo(setTables: (tables: VmTable[]) => void) {
+        setTables(this.context.tables.filter((_, i) => i !== this.args.listIndex));
     }
 
-    undo() {
+    undo(setTables: (tables: VmTable[]) => void) {
         let newTable = this.args.table.mapToVm();
-        this.context.schemaTables.splice(this.args.listIndex, 0, newTable);
-        this.context.areTablesDirty = true;
+        setTables(
+            [
+                ...this.context.tables.slice(0, this.args.listIndex),
+                newTable,
+                ...this.context.tables.slice(this.args.listIndex)
+            ]
+        );
     }
 }
 

@@ -1,12 +1,17 @@
 import VmDraw from "../../model/viewModel/VmDraw";
 import { ICommand } from "../ICommand";
 import DomainTable from "../../model/domain/DomainTable";
+import VmTable from "../../model/viewModel/VmTable";
 
 export class CommandCreateTable implements ICommand<CommandCreateTableArgs> {
-    context: VmDraw;
+    context: {
+        tables: VmTable[]
+    };
     args: CommandCreateTableArgs;
 
-    constructor(context: VmDraw, args: CommandCreateTableArgs) {
+    constructor(context: {
+        tables: VmTable[]
+    }, args: CommandCreateTableArgs) {
         this.context = context;
         this.args = args;
     }
@@ -15,16 +20,14 @@ export class CommandCreateTable implements ICommand<CommandCreateTableArgs> {
         return this.args;
     }
 
-    redo() {
+    redo(setTables: (tables: VmTable[]) => void) {
         let newTable = this.args.table.mapToVm();
-        this.context.schemaTables.push(newTable);
-        this.context.areTablesDirty = true;
+        setTables([...this.context.tables, newTable])
     }
 
-    undo() {
-        this.context.schemaTables = this.context.schemaTables
-            .filter(x => x.id !== this.args.table.id);
-        this.context.areTablesDirty = true;
+    undo(setTables: (tables: VmTable[]) => void) {
+        setTables(this.context.tables
+            .filter(x => x.id !== this.args.table.id));
     }
 }
 

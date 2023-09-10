@@ -1,19 +1,7 @@
 import { IDataTypeArgument } from "../DataTypes/DataType";
 
 
-export default class TableRowDataTypeArguments {
+export default interface TableRowDataTypeArguments {
     value: number;
     argument: IDataTypeArgument;
-
-    constructor(value: number, argument: IDataTypeArgument) {
-        this.value = value;
-        this.argument = argument;
-    }
-
-    clone() {
-        return new TableRowDataTypeArguments(
-            this.value,
-            {...this.argument}
-        )
-    }
 }

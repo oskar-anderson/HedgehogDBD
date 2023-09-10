@@ -1,8 +1,9 @@
 import dayjs from "dayjs";
 import DomainDraw from "../../model/domain/DomainDraw";
-import ManagerSingleton, { useApplicationState } from "../../ManagerSingleton";
+import { useApplicationState } from "../../Store";
 import { CommandSetSchema, CommandSetSchemaArgs } from "../../commands/appCommands/CommandSetSchema";
 import { useEffect } from "react";
+import CommandHistory from "../../commands/CommandHistory";
 
 interface TopToolbarListElementIconProps {
     onClickAction: () => void,
@@ -26,14 +27,20 @@ type SecondaryTopToolbarProps = {
 }
 
 export default function SecondaryTopToolbar( { exportPngImage } : SecondaryTopToolbarProps) {
-    const draw = useApplicationState.getState();
+    const tables = useApplicationState(state => state.schemaTables)
+    const setTables = useApplicationState(state => state.setTables)
+    const history = useApplicationState(state => state.history)
+    const activeDatabaseId = useApplicationState(state => state.activeDatabaseId)
 
     const newSchema = () => {
-        setSchema(new DomainDraw([], draw.activeDatabaseId));
+        setSchema(new DomainDraw([], activeDatabaseId));
     }
     const saveAsJson = () => {
         let element = document.createElement('a');
-        let domainDraw = DomainDraw.init(draw)
+        let domainDraw = DomainDraw.init({
+            tables,
+            activeDatabaseId
+        })
         // encodeURIComponent is needed to maintain newlines
         element.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(domainDraw.getJson()));
         element.setAttribute('download', `HedgehogDBD_${dayjs().format('YYYY-MM-DD_HH-mm-ss')}.json`);
@@ -61,10 +68,10 @@ export default function SecondaryTopToolbar( { exportPngImage } : SecondaryTopTo
     }
 
     const undo = () => {
-        draw.history.undo(draw);
+        CommandHistory.undo(history, {tables}, setTables);
     }
     const redo = () => {
-        draw.history.redo(draw);
+        CommandHistory.redo(history, {tables}, setTables);
     }
 
     useEffect(() => {
@@ -87,15 +94,15 @@ export default function SecondaryTopToolbar( { exportPngImage } : SecondaryTopTo
    }
 
    const setSchema = (newDomainDraw: DomainDraw) => {
-        let oldDomainDraw = DomainDraw.init(draw)
+        let oldDomainDraw = DomainDraw.init({tables, activeDatabaseId})
         const command = new CommandSetSchema(
-            draw, 
+            {tables}, 
             new CommandSetSchemaArgs(
                 oldDomainDraw, 
                 newDomainDraw
             )
         )
-        draw.history.execute(command);
+        CommandHistory.execute(history, command, setTables);
    }
 
     return (

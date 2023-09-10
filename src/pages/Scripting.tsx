@@ -6,7 +6,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import ModalScriptListItem, { ModalScriptListItemProps } from "../components/scriptingChildren/ModalScriptListItem" 
 import DomainDraw from '../model/domain/DomainDraw';
 import dayjs from 'dayjs';
-import ManagerSingleton, { useApplicationState } from '../ManagerSingleton';
+import { useApplicationState } from '../Store';
 import ModalScriptExecute, { ModalScriptExecuteProps } from '../components/scriptingChildren/ModalScriptExecute';
 import ModalSaveScript, { ModalSaveScriptProps } from '../components/scriptingChildren/ModalSaveScript';
 import ScriptingDraw from "../model/dto/scripting/ScriptingDraw"
@@ -44,11 +44,15 @@ export async function executeAndReturn(value: string, draw: DomainDraw) {
 
 
 export default function Scripting() {
-    const draw = useApplicationState.getState();
+    const tables = useApplicationState(state => state.schemaTables);
+    const activeDatabaseId = useApplicationState(state => state.activeDatabaseId);
     let [builtinScripts, setBuiltinScripts] = useState<Script[]>([]);
     let [areScriptsLoaded, setAreScriptsLoaded] = useState(false);
     const editorRef = useRef<Monaco.editor.IStandaloneCodeEditor>(null);
-    const domainDraw = DomainDraw.init(draw);
+    const domainDraw = DomainDraw.init({
+        tables, 
+        activeDatabaseId
+    });
 
     function handleEditorDidMount(editor: Monaco.editor.IStandaloneCodeEditor, monaco: any) {
         // @ts-ignore

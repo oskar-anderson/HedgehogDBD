@@ -8,11 +8,11 @@ export default class LocalStorageData {
     }
 
     setStorage() {
-        localStorage.setItem("HedgehogDBD", JSON.stringify(this));
+        localStorage.setItem("HedgehogDBD-scripts", JSON.stringify(this));
     }
 
     static getStorage() {
-        let result = localStorage.getItem("HedgehogDBD");
+        let result = localStorage.getItem("HedgehogDBD-scripts");
         if (! result) {
             return new LocalStorageData([]);
         }

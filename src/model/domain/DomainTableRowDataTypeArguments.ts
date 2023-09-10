@@ -18,9 +18,9 @@ export default class DomainTableRowDataTypeArguments {
     }
 
     mapToVm(): VmTableRowDataTypeArguments {
-        return new VmTableRowDataTypeArguments(
-            this.value, 
-            DataType.getArgumentById(this.id)
-        );
+        return {
+            value: this.value,
+            argument: DataType.getArgumentById(this.id)
+        };
     }
 }

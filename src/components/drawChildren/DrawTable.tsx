@@ -2,7 +2,8 @@ import React, { useRef } from 'react';
 import ReactFlow, { NodeProps, Handle, Position } from 'reactflow';
 import VmTableRow from '../../model/viewModel/VmTableRow';
 import VmTable from '../../model/viewModel/VmTable';
-import ManagerSingleton, { useApplicationState } from '../../ManagerSingleton';
+import { useApplicationState } from '../../Store';
+import DataType from '../../model/DataTypes/DataType';
 
 
 type DrawTableRowProps = {
@@ -13,13 +14,14 @@ type DrawTableRowProps = {
 }
 
 function DrawTableRow( { row, rowStartY, height, tableName }: DrawTableRowProps) {
-    useApplicationState.setState()
     const relations = useApplicationState(state => state.schemaRelations);
     const handleStyle: React.CSSProperties = { opacity: 0, background: "#555", border: "none", cursor: "inherit" }
     const relation = relations
                         .filter(relation => relation.source.head === tableName)
                         .find(relation => relation.sourceRow.name === row.name);
-                         
+    const nullabilitySymbol = row.datatype.isNullable ? "?" : "";
+    const selectListName = DataType.getTypeById(row.datatype.dataTypeId).getSelectListName();
+    const displayName = `${selectListName}${nullabilitySymbol}`;
     return (
         <div>
             <Handle type="target" id={`${tableName}-${row.name}-left`} position={Position.Left} style={{ top: `${rowStartY}px`, left: '2px', ...handleStyle }} />
@@ -46,7 +48,7 @@ function DrawTableRow( { row, rowStartY, height, tableName }: DrawTableRowProps)
                 </div>
                 <div className="d-flex" style={{ gap: "16px", justifyContent: "space-between", width: "100%" }}>
                     <div style={{ paddingRight: "6px" }}>{row.name}</div>
-                    <div style={{ color: "#b0b8c4" }}>{row.datatype.getDisplayableText()}</div>
+                    <div style={{ color: "#b0b8c4" }}>{displayName}</div>
                 </div>
             </div>
 

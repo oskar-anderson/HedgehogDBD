@@ -1,12 +1,18 @@
 import DomainDraw from "../../model/domain/DomainDraw"
 import VmDraw from "../../model/viewModel/VmDraw"
 import { ICommand } from "../ICommand";
+import VmTable from "../../model/viewModel/VmTable";
+
 
 export class CommandSetSchema implements ICommand<CommandSetSchemaArgs> {
-    context: VmDraw;
+    context: {
+        tables: VmTable[]
+    };
     args: CommandSetSchemaArgs;
 
-    constructor(context: VmDraw, args: CommandSetSchemaArgs) {
+    constructor(context: {
+        tables: VmTable[]
+    }, args: CommandSetSchemaArgs) {
         this.context = context;
         this.args = args;
     }
@@ -15,18 +21,12 @@ export class CommandSetSchema implements ICommand<CommandSetSchemaArgs> {
         return this.args;
     }
 
-    redo() {
-        let newDraw = this.args.newDraw;
-        this.context.schemaTables = newDraw.tables.map(x => x.mapToVm());
-        this.context.schemaRelations = this.context.schemaTables.flatMap(table => table.getRelations(this.context.schemaTables));
-        this.context.areTablesDirty = true;
+    redo(setTables: (tables: VmTable[]) => void) {
+        setTables(this.args.newDraw.tables.map(x => x.mapToVm()));
     }
 
-    undo() {
-        let oldDraw = this.args.oldDraw;
-        this.context.schemaTables = oldDraw.tables.map(x => x.mapToVm());
-        this.context.schemaRelations = this.context.schemaTables.flatMap(table => table.getRelations(this.context.schemaTables));
-        this.context.areTablesDirty = true;
+    undo(setTables: (tables: VmTable[]) => void) {
+        setTables(this.args.oldDraw.tables.map(x => x.mapToVm()));
     }
 }
 

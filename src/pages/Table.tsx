@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import ManagerSingleton, { useApplicationState } from "../ManagerSingleton";
+import { useApplicationState } from "../Store";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { CommandDeleteTable, CommandDeleteTableArgs } from "../commands/appCommands/CommandDeleteTable";
 import DataType from "../model/DataTypes/DataType";
@@ -10,15 +10,19 @@ import DomainTableRowDataTypeArguments from "../model/domain/DomainTableRowDataT
 import DomainTable from "../model/domain/DomainTable";
 import TableRow from "../components/tableChildren/TableRow"
 import { CommandModifyTable, CommandModifyTableArgs } from "../commands/appCommands/CommandModifyTableArgs";
+import CommandHistory from "../commands/CommandHistory";
 
 
 export default function Table() {
     const { id } = useParams();
-    const draw = useApplicationState.getState();
+    const tables = useApplicationState(state => state.schemaTables);
+    const setTables = useApplicationState(state => state.setTables);
+    const activeDatabaseId = useApplicationState(state => state.activeDatabaseId);
+    const history = useApplicationState(state => state.history);
     const navigate = useNavigate();
 
     // Figure out why a simple argument not found is so difficult to implement in React
-    const tableBeingEditedNullable = draw.schemaTables.find(x => x.id === id);
+    const tableBeingEditedNullable = tables.find(x => x.id === id);
     useEffect(() => {
         if (!tableBeingEditedNullable){
             console.error("No table could be selected!");
@@ -79,7 +83,7 @@ export default function Table() {
     const [tableName, setTableName] = useState(tableBeingEdited.head);
 
     const saveChanges = () => {
-        let oldTable = draw.schemaTables.find(x => x.id === tableBeingEdited.id)!;
+        let oldTable = tables.find(x => x.id === tableBeingEdited.id)!;
         let newTableRows = rows.map(tableRow => new DomainTableRow(
             tableRow.rowName,
             new DomainTableRowDataType(
@@ -93,8 +97,8 @@ export default function Table() {
             ),
             tableRow.rowAttributes.split(",").map(x => x.trim())
         ));
-        draw.history.execute(new CommandModifyTable(
-            draw, 
+        CommandHistory.execute(history, new CommandModifyTable(
+            { tables }, 
             new CommandModifyTableArgs(
                 DomainTable.init(oldTable), 
                 new DomainTable(
@@ -104,14 +108,14 @@ export default function Table() {
                     newTableRows
                 )
             )
-        ));
+        ), setTables);
         
         navigate(`/draw`)
     }
 
     const insertNewRow = (event: FormEvent<HTMLButtonElement>, index: number) => {
         if (index === -1) { index = rows.length }
-        const activeDatabase = Databases.get(draw.activeDatabaseId);
+        const activeDatabase = Databases.get(activeDatabaseId);
         const newDataType = DataType.string();
         const newRow = {
             key: crypto.randomUUID(),
@@ -150,13 +154,14 @@ export default function Table() {
     }
 
     const deleteTable = () => {
-        draw.history.execute(
+        CommandHistory.execute(
+            history,
             new CommandDeleteTable(
-                draw, new CommandDeleteTableArgs(
+                { tables }, new CommandDeleteTableArgs(
                     tableBeingEdited!, 
-                    draw.schemaTables.findIndex(x => x.id === tableBeingEdited.id)
+                    tables.findIndex(x => x.id === tableBeingEdited.id)
                 )
-            )
+            ), setTables
         )
         navigate(`/draw`)
     }

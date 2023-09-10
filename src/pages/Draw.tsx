@@ -7,7 +7,7 @@ import 'reactflow/dist/style.css';
 import { TOP_TOOLBAR_HEIGHT_PX } from "../components/TopToolbarAction"
 import SecondaryTopToolbar, { SECONDARY_TOOLBAR_HEIGHT_PX } from "../components/drawChildren/SecondaryTopToolbar";
 import CommandMoveTableRelative, { CommandMoveTableRelativeArgs } from "../commands/appCommands/CommandMoveTableRelative"
-import ManagerSingleton, {useApplicationState} from "../ManagerSingleton";
+import {useApplicationState} from "../Store";
 import DrawSide from "../components/drawChildren/DrawSide";
 import VmTable from "../model/viewModel/VmTable";
 import Databases from "../model/DataTypes/Databases";
@@ -19,6 +19,7 @@ import DomainTable from "../model/domain/DomainTable";
 import DomainTableRow from "../model/domain/DomainTableRow";
 import DomainTableRowDataType from "../model/domain/DomainTableRowDataType";
 import DomainTableRowDataTypeArguments from "../model/domain/DomainTableRowDataTypeArguments";
+import CommandHistory from "../commands/CommandHistory";
 
 // nodeTypes need to be defined outside the render function or using memo
 const nodeTypes = { 
@@ -61,8 +62,11 @@ const convertRelationToEdge = (relation: VmRelation) => {
 }
 
 export const WrappedDraw = () => {
-    const draw = useApplicationState.getState();
-    
+    const history = useApplicationState(state => state.history);
+    const tables = useApplicationState(state => state.schemaTables);
+    const setTables = useApplicationState(state => state.setTables);
+    const relations = useApplicationState(state => state.schemaRelations);
+    const activeDatabaseId = useApplicationState(state => state.activeDatabaseId);
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const { x, y, zoom } = useViewport();
@@ -70,24 +74,19 @@ export const WrappedDraw = () => {
     
     useEffect(() => {
         setEdges([]);
-        setNodes(draw.schemaTables.map(table => {
+        setNodes(tables.map(table => {
             const node = nodes.find(node => table.id === node.id);
-            // console.log(node?.data.table.head, "node: ", node, "witdh: ", node?.width, "converted node: ", convertTableToNode(table, node));
-            return table.isDirty || !node ? 
-                convertTableToNode(table.setIsDirty(false), node) : 
-                node;
+            return convertTableToNode(table, node);
         }));
-        setEdges(draw.schemaRelations.map(relation => {
-            return convertRelationToEdge(relation)
-        }));
-    }, [draw.schemaTables])
+        setEdges(relations.map(relation => convertRelationToEdge(relation)));
+    }, [tables])
 
     const onNodeClick = (event: React.MouseEvent, node: Node) => {
         navigate(`/table/${node.data.table.id}`);
     }
 
     const createNewTable = () =>  {
-        const dataBase = Databases.getAll().find(x => x.id === draw.activeDatabaseId)!;
+        const dataBase = Databases.getAll().find(x => x.id === activeDatabaseId)!;
         const defaultPkDataType = DataType.guid();
         const tableRowDataTypeArguments = defaultPkDataType.getAllArguments()
             .filter(arg => arg.databases.includes(dataBase))
@@ -112,10 +111,12 @@ export const WrappedDraw = () => {
                 )
             ]
         );
-        draw.history.execute(
+        CommandHistory.execute(
+            history,
             new CommandCreateTable(
-                draw, new CommandCreateTableArgs(newTable)
-            )
+                { tables }, new CommandCreateTableArgs(newTable)
+            ),
+            setTables
         );
     }
 
@@ -134,14 +135,14 @@ export const WrappedDraw = () => {
             }
 
             if (! nodeChange.dragging && nodeDraggedChangesStart.current && nodeDraggedChangesEnd.current) {
-                const command = new CommandMoveTableRelative(draw, new CommandMoveTableRelativeArgs(
+                const command = new CommandMoveTableRelative({ tables }, new CommandMoveTableRelativeArgs(
                     nodeChange.id, 
                     nodeDraggedChangesEnd.current!.position!.x - nodeDraggedChangesStart.current!.position!.x, 
                     nodeDraggedChangesEnd.current!.position!.y - nodeDraggedChangesStart.current!.position!.y
                 ));
                 nodeDraggedChangesStart.current = null;
                 nodeDraggedChangesEnd.current = null;
-                draw.history.execute(command);
+                CommandHistory.execute(history, command, setTables);
             } else {
               onNodesChange(nodeChanges);
             }
@@ -187,7 +188,7 @@ export const WrappedDraw = () => {
         <Layout currentlyLoadedLink={"Draw"}>
             <SecondaryTopToolbar exportPngImage={ downloadImagePng }  />
             <div style={{ display: 'flex', width: '100vw', height: `calc(100vh - ${TOP_TOOLBAR_HEIGHT_PX}px  - ${SECONDARY_TOOLBAR_HEIGHT_PX}px)` }}>
-                <DrawSide tables={draw.schemaTables} createNewTable={createNewTable}>
+                <DrawSide tables={tables} createNewTable={createNewTable}>
                     <MiniMap style={{ position: "relative", margin: 0 }} pannable maskColor="rgba(213, 213, 213, 0.7)" nodeColor="#ffc8c8" />
                 </DrawSide>
                 <ReactFlow

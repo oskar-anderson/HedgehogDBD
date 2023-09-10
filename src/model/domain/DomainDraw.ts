@@ -1,7 +1,8 @@
 import DomainTable from "./DomainTable";
 import VmDraw from "../viewModel/VmDraw"
-import History from "../../commands/History";
+import History from "../../commands/CommandHistory";
 import Databases from "../DataTypes/Databases";
+import VmTable from "../viewModel/VmTable";
 
 export default class DomainDraw {
 
@@ -13,9 +14,12 @@ export default class DomainDraw {
         this.activeDatabaseId = activeDatabaseId
     }
 
-    static init(draw: VmDraw) {
+    static init(draw: {
+        tables: VmTable[],
+        activeDatabaseId: string
+    }) {
         return new DomainDraw(
-            draw.schemaTables.map(x => DomainTable.init(x)),
+            draw.tables.map(x => DomainTable.init(x)),
             draw.activeDatabaseId
         );
     }
@@ -41,8 +45,7 @@ export default class DomainDraw {
             history,
             selectedDatabaseId,
             tables,
-            tables.flatMap(x => x.getRelations(tables)),
-            true
+            tables.flatMap(x => VmTable.GetRelations(x, tables))
         );
     }
 }

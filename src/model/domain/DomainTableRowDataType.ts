@@ -26,10 +26,10 @@ export default class DomainTableRowDataType {
     }
 
     mapToVm(): VmTableRowDataType {
-        return new VmTableRowDataType(
-            DataType.getTypeById(this.id).getId(), 
-            this.arguments.map(x => x.mapToVm()), 
-            this.isNullable
-        );
+        return {
+            dataTypeId: DataType.getTypeById(this.id).getId(),
+            arguments: this.arguments.map(x => x.mapToVm()),
+            isNullable: this.isNullable
+        };
     }
 }

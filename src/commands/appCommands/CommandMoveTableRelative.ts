@@ -2,34 +2,37 @@ import DomainDraw from "../../model/domain/DomainDraw";
 import VmDraw from "../../model/viewModel/VmDraw"
 import { ICommand, IHydratable } from "../ICommand";
 import Point from "../../model/Point"
+import VmTable from "../../model/viewModel/VmTable";
 
 export default class CommandMoveTableRelative implements ICommand<CommandMoveTableRelativeArgs> {
-    context: VmDraw;
+    context: {
+        tables: VmTable[]
+    };
     args: CommandMoveTableRelativeArgs;
 
-    constructor(context: VmDraw, args: CommandMoveTableRelativeArgs) {
+    constructor(context: {
+        tables: VmTable[]
+    }, args: CommandMoveTableRelativeArgs) {
         this.context = context;
         this.args = args;
     }
 
-    redo() {
-        let table = this.context.schemaTables.find(x => x.id === this.args.id)!;
+    redo(setTables: (tables: VmTable[]) => void) {
+        let table = this.context.tables.find(x => x.id === this.args.id)!;
         table.position = { 
             x: table.position.x + this.args.x, 
             y: table.position.y + this.args.y
         };
-        table.isDirty = true;
-        this.context.areTablesDirty = true;  // for recalculating relationship edges
+        setTables([...this.context.tables]);
     }
 
-    undo() {
-        let table = this.context.schemaTables.find(x => x.id === this.args.id)!;
+    undo(setTables: (tables: VmTable[]) => void) {
+        let table = this.context.tables.find(x => x.id === this.args.id)!;
         table.position = {
             x: table.position.x - this.args.x, 
             y: table.position.y - this.args.y
         };
-        table.isDirty = true;
-        this.context.areTablesDirty = true;
+        setTables([...this.context.tables]);
     }
 }
 

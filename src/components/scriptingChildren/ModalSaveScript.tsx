@@ -13,7 +13,11 @@ export default function ModalSaveScript({ setModalSaveScriptState, editorValue, 
     const [inputValue, setInputValue] = useState("");
 
     const onClickSaveScript = () => {
-        addLocalStorageData(new Script(inputValue, editorValue, []));
+        addLocalStorageData({ 
+            name: inputValue, 
+            content: editorValue, 
+            tags: []
+        });
         setModalSaveScriptState(false)
     }
 

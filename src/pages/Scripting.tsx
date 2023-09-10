@@ -1,6 +1,5 @@
 import * as Monaco from 'monaco-editor';
 import Layout from "../components/Layout";
-import LocalStorageData from '../model/LocalStorageData';
 import Script from '../model/Script';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import ModalScriptListItem, { ModalScriptListItemProps } from "../components/scriptingChildren/ModalScriptListItem" 
@@ -46,6 +45,8 @@ export async function executeAndReturn(value: string, draw: DomainDraw) {
 export default function Scripting() {
     const tables = useApplicationState(state => state.schemaTables);
     const activeDatabaseId = useApplicationState(state => state.activeDatabaseId);
+    const localStorageScripts = useApplicationState(state => state.scripts);
+    const setLocalScripts = useApplicationState(state => state.setScripts);
     let [builtinScripts, setBuiltinScripts] = useState<Script[]>([]);
     let [areScriptsLoaded, setAreScriptsLoaded] = useState(false);
     const editorRef = useRef<Monaco.editor.IStandaloneCodeEditor>(null);
@@ -62,21 +63,21 @@ export default function Scripting() {
     useEffect(() => {
         const getScripts = async () => {
             const fetchedScripts = [
-                new Script(
-                    "List tables",
-                    await fetch('/wwwroot/scripts/listAllTables.js', { cache: "no-cache" }).then(x => x.text()),
-                    ["builtin"]
-                ),
-                new Script(
-                    "List tables and rows",
-                    await fetch('/wwwroot/scripts/listAllTableRows.js', { cache: "no-cache" }).then(x => x.text()),
-                    ['builtin', 'CSV']
-                ),
-                new Script(
-                    "SQL CREATE",
-                    await fetch('/wwwroot/scripts/createTablesSQL.js', { cache: "no-cache" }).then(x => x.text()),
-                    ["builtin", "SQL"]
-                )
+                {
+                    name: "List tables",
+                    content: await fetch('/wwwroot/scripts/listAllTables.js', { cache: "no-cache" }).then(x => x.text()),
+                    tags: ["builtin"]
+                },
+                {
+                    name: "List tables and rows",
+                    content: await fetch('/wwwroot/scripts/listAllTableRows.js', { cache: "no-cache" }).then(x => x.text()),
+                    tags: ['builtin', 'CSV']
+                },
+                {
+                    name: "SQL CREATE",
+                    content: await fetch('/wwwroot/scripts/createTablesSQL.js', { cache: "no-cache" }).then(x => x.text()),
+                    tags: ["builtin", "SQL"]
+                }
             ];
             setBuiltinScripts(fetchedScripts);
             setAreScriptsLoaded(true);
@@ -84,7 +85,6 @@ export default function Scripting() {
         getScripts();
     }, []);
 
-    const [localStorageScripts, setLocalStorageScripts] = useState(LocalStorageData.getStorage().scripts);
     const scripts = localStorageScripts.concat(builtinScripts)
 
     const [isScriptListItemModalVisible, setIsScriptListItemModalVisible] = useState(false);
@@ -101,13 +101,11 @@ export default function Scripting() {
 
 
     const addScriptFromLocalStorage = (script: Script) => {
-        LocalStorageData.getStorage().addScript(script)
-        setLocalStorageScripts([...LocalStorageData.getStorage().scripts])
+        setLocalScripts([...scripts, script])
     }
 
     const removeScriptFromLocalStorage = useCallback((script: Script) => {
-        LocalStorageData.getStorage().removeScript(script)
-        setLocalStorageScripts([...LocalStorageData.getStorage().scripts])
+        setLocalScripts([...scripts.filter(x => JSON.stringify(x) !== JSON.stringify(script))])
     }, [])
 
 

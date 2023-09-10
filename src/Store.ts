@@ -7,6 +7,7 @@ import VmRelation from "./model/viewModel/VmRelation";
 import VmTable from "./model/viewModel/VmTable";
 import { create } from "zustand"
 import { persist, createJSONStorage } from 'zustand/middleware'
+import Script from "./model/Script";
 
 
 
@@ -19,6 +20,7 @@ interface ApplicationState {
     activeDatabaseId: string;
     schemaTables: VmTable[];
     schemaRelations: VmRelation[];
+    scripts: Script[];
 
     setTables: (tables: VmTable[]) => void;
     setActiveDatabaseId: (newValue: string) => void;
@@ -26,6 +28,7 @@ interface ApplicationState {
         undoHistory: string[],
         redoHistory: string[],
     }) => void;
+    setScripts: (scripts: Script[]) => void;
 }
 
 export const useApplicationState = create(
@@ -38,6 +41,7 @@ export const useApplicationState = create(
             activeDatabaseId: Databases.Postgres.id,
             schemaTables: [],
             schemaRelations: [],
+            scripts: [],
 
             setTables: (tables: VmTable[]) => set((state) => (
                 { 
@@ -56,6 +60,11 @@ export const useApplicationState = create(
             }) => set((state) => (
                 {
                     history: newValue
+                }
+            )),
+            setScripts: (newValue: Script[]) => set((state) => (
+                {
+                    scripts: newValue,
                 }
             )),
         }),

@@ -1,22 +1,34 @@
+import DataType from "../DataTypes/DataType";
 import VmTableRow from "../viewModel/VmTableRow";
-import DomainTableRowDataType from "./DomainTableRowDataType";
+import DomainTableRowDataTypeArguments from "./DomainTableRowDataTypeArguments";
 
 
 export default class DomainTableRow {
     readonly name: string;
-    readonly datatype: DomainTableRowDataType;
+    datatypeId: string;
+    datatypeArguments: DomainTableRowDataTypeArguments[];
+    datatypeIsNullable: boolean;
     attributes: string[]
 
-    constructor(name: string, datatype: DomainTableRowDataType, attributes: string[]) {
+    constructor(
+        name: string, 
+        datatypeId: string, 
+        datatypeArguments: DomainTableRowDataTypeArguments[], 
+        datatypeIsNullable: boolean,
+        attributes: string[]) {
         this.name = name;
-        this.datatype = datatype;
+        this.datatypeId = datatypeId;
+        this.datatypeArguments = datatypeArguments;
+        this.datatypeIsNullable = datatypeIsNullable;
         this.attributes = attributes;
     }
 
     static hydrate(jsonObject: DomainTableRow): DomainTableRow {
         return new DomainTableRow(
             jsonObject.name,
-            DomainTableRowDataType.hydrate(jsonObject.datatype),
+            jsonObject.datatypeId,
+            jsonObject.datatypeArguments.map(x => DomainTableRowDataTypeArguments.hydrate(x)),
+            jsonObject.datatypeIsNullable,
             [...jsonObject.attributes]
         );
     }
@@ -24,7 +36,11 @@ export default class DomainTableRow {
     mapToVM(): VmTableRow {
         return {
             name: this.name, 
-            datatype: this.datatype.mapToVm(), 
+            datatype: {
+                dataTypeId: this.datatypeId,
+                arguments: this.datatypeArguments.map(x => x.mapToVm()),
+                isNullable: this.datatypeIsNullable
+            },
             attributes: [...this.attributes]
         }
     }

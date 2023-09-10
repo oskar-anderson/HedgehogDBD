@@ -5,7 +5,6 @@ import { CommandDeleteTable, CommandDeleteTableArgs } from "../commands/appComma
 import DataType from "../model/DataTypes/DataType";
 import Databases from "../model/DataTypes/Databases";
 import DomainTableRow from "../model/domain/DomainTableRow";
-import DomainTableRowDataType from "../model/domain/DomainTableRowDataType";
 import DomainTableRowDataTypeArguments from "../model/domain/DomainTableRowDataTypeArguments";
 import DomainTable from "../model/domain/DomainTable";
 import TableRow from "../components/tableChildren/TableRow"
@@ -63,8 +62,8 @@ export default function Table() {
             key: crypto.randomUUID() as string,
             rowName: x.name,
             rowDatatype: {
-                id: x.datatype.id,
-                arguments: x.datatype.arguments.map(y => {
+                id: x.datatypeId,
+                arguments: x.datatypeArguments.map(y => {
                     const argument = DataType.getArgumentById(y.id)
                     return {
                         value: {
@@ -74,7 +73,7 @@ export default function Table() {
                         argumentId: argument.id
                     }
                 }),
-                isNullable: x.datatype.isNullable,
+                isNullable: x.datatypeIsNullable,
             },
             rowAttributes: x.attributes.join(", ")
         }
@@ -86,15 +85,13 @@ export default function Table() {
         let oldTable = tables.find(x => x.id === tableBeingEdited.id)!;
         let newTableRows = rows.map(tableRow => new DomainTableRow(
             tableRow.rowName,
-            new DomainTableRowDataType(
-                tableRow.rowDatatype.id,
-                tableRow.rowDatatype.arguments.map(arg => {
-                    const value = arg.value.realValue === "" ? 0 : parseInt(arg.value.realValue);
-                    const argument = DataType.getArgumentById(arg.argumentId);
-                    return new DomainTableRowDataTypeArguments(value, argument.id)
-                }),
-                tableRow.rowDatatype.isNullable
-            ),
+            tableRow.rowDatatype.id,
+            tableRow.rowDatatype.arguments.map(arg => {
+                const value = arg.value.realValue === "" ? 0 : parseInt(arg.value.realValue);
+                const argument = DataType.getArgumentById(arg.argumentId);
+                return new DomainTableRowDataTypeArguments(value, argument.id)
+            }),
+            tableRow.rowDatatype.isNullable,
             tableRow.rowAttributes.split(",").map(x => x.trim())
         ));
         CommandHistory.execute(history, new CommandModifyTable(

@@ -17,7 +17,6 @@ import VmRelation from "../model/viewModel/VmRelation";
 import { CommandCreateTable, CommandCreateTableArgs } from "../commands/appCommands/CommandCreateTable";
 import DomainTable from "../model/domain/DomainTable";
 import DomainTableRow from "../model/domain/DomainTableRow";
-import DomainTableRowDataType from "../model/domain/DomainTableRowDataType";
 import DomainTableRowDataTypeArguments from "../model/domain/DomainTableRowDataTypeArguments";
 import CommandHistory from "../commands/CommandHistory";
 
@@ -102,11 +101,9 @@ export const WrappedDraw = () => {
             [
                 new DomainTableRow(
                     "id", 
-                    new DomainTableRowDataType(
-                        defaultPkDataType.getId(),
-                        tableRowDataTypeArguments,
-                        false
-                    ), 
+                    defaultPkDataType.getId(),
+                    tableRowDataTypeArguments,
+                    false, 
                     ["PK"]
                 )
             ]

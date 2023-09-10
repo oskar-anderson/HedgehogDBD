@@ -1,7 +1,6 @@
 import Point from "../Point"
 import VmTable from "../viewModel/VmTable"
 import DomainTableRow from "./DomainTableRow";
-import DomainTableRowDataType from "./DomainTableRowDataType";
 import DomainTableRowDataTypeArguments from "./DomainTableRowDataTypeArguments";
 
 
@@ -26,16 +25,14 @@ export default class DomainTable {
             table.tableRows.map(x => 
                 new DomainTableRow(
                     x.name, 
-                    new DomainTableRowDataType(
-                        x.datatype.dataTypeId, 
-                        x.datatype.arguments.map(y => {
-                            return new DomainTableRowDataTypeArguments(
-                                y.value,
-                                y.argument.id
-                            )
-                        }),
-                        x.datatype.isNullable
-                    ), 
+                    x.datatype.dataTypeId, 
+                    x.datatype.arguments.map(y => {
+                        return new DomainTableRowDataTypeArguments(
+                            y.value,
+                            y.argument.id
+                        )
+                    }),
+                    x.datatype.isNullable, 
                     [...x.attributes]
                 )
             )

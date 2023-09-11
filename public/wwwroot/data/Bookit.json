@@ -10,27 +10,23 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "IDX"
                     ]
@@ -47,33 +43,27 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "authgroup_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"authgroup\")"
                     ]
                 },
                 {
                     "name": "permission",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"permission\")"
                     ]
@@ -90,27 +80,23 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -127,33 +113,27 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "authgroup_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"authgroup\")"
                     ]
                 },
                 {
                     "name": "user_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"user\")"
                     ]
@@ -170,81 +150,69 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "password_salted_hash",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "last_login",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "username",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "email",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "date_created",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -261,97 +229,83 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "user_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"user\")"
                     ]
                 },
                 {
                     "name": "manager_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": true
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": true,
                     "attributes": [
                         "FK(\"business_user\")"
                     ]
                 },
                 {
                     "name": "first_name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "last_name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "phone",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "email",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -368,82 +322,68 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "hotel_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"hotel\")"
                     ]
                 },
                 {
                     "name": "base64",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 25555,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 25555,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "is_room",
-                    "datatype": {
-                        "id": "602200d9-2075-4824-b80c-6e739e503a70",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "is_general",
-                    "datatype": {
-                        "id": "602200d9-2075-4824-b80c-6e739e503a70",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "is_street",
-                    "datatype": {
-                        "id": "602200d9-2075-4824-b80c-6e739e503a70",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "order",
-                    "datatype": {
-                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -460,76 +400,64 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "svg",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 25555,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": true
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 25555,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": true,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "is_room_comfort",
-                    "datatype": {
-                        "id": "602200d9-2075-4824-b80c-6e739e503a70",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "is_hotel_comfort",
-                    "datatype": {
-                        "id": "602200d9-2075-4824-b80c-6e739e503a70",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "order",
-                    "datatype": {
-                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -546,77 +474,63 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "room_type_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"room_type\")"
                     ]
                 },
                 {
                     "name": "comfort_list_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"dd_comfort\")"
                     ]
                 },
                 {
                     "name": "is_highlighted",
-                    "datatype": {
-                        "id": "602200d9-2075-4824-b80c-6e739e503a70",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "is_general",
-                    "datatype": {
-                        "id": "602200d9-2075-4824-b80c-6e739e503a70",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "is_bathroom",
-                    "datatype": {
-                        "id": "602200d9-2075-4824-b80c-6e739e503a70",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "is_great_view",
-                    "datatype": {
-                        "id": "602200d9-2075-4824-b80c-6e739e503a70",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -633,33 +547,27 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "hotel_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"hotel\")"
                     ]
                 },
                 {
                     "name": "comfort_list_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"dd_comfort\")"
                     ]
@@ -676,44 +584,36 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "bed_type_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"dd_bed_type\")"
                     ]
                 },
                 {
                     "name": "room_type_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"room_type\")"
                     ]
                 },
                 {
                     "name": "quantity",
-                    "datatype": {
-                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -730,38 +630,32 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "order",
-                    "datatype": {
-                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -778,38 +672,32 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "sellable_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"sellable\")"
                     ]
                 },
                 {
                     "name": "base64",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 25555,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 25555,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -826,100 +714,86 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "sellable_variation_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"sellable_variation\")"
                     ]
                 },
                 {
                     "name": "normal_price",
-                    "datatype": {
-                        "id": "4bde4381-61f9-4877-9d14-084978b20b28",
-                        "arguments": [
-                            {
-                                "value": 10,
-                                "id": "f44703fe-0e0e-451f-872c-1278cc77df3e"
-                            },
-                            {
-                                "value": 2,
-                                "id": "278da857-3740-43bf-a8c5-894319355e5a"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "4bde4381-61f9-4877-9d14-084978b20b28",
+                    "datatypeArguments": [
+                        {
+                            "value": 10,
+                            "id": "f44703fe-0e0e-451f-872c-1278cc77df3e"
+                        },
+                        {
+                            "value": 2,
+                            "id": "278da857-3740-43bf-a8c5-894319355e5a"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "discount_price",
-                    "datatype": {
-                        "id": "4bde4381-61f9-4877-9d14-084978b20b28",
-                        "arguments": [
-                            {
-                                "value": 10,
-                                "id": "f44703fe-0e0e-451f-872c-1278cc77df3e"
-                            },
-                            {
-                                "value": 2,
-                                "id": "278da857-3740-43bf-a8c5-894319355e5a"
-                            }
-                        ],
-                        "isNullable": true
-                    },
+                    "datatypeId": "4bde4381-61f9-4877-9d14-084978b20b28",
+                    "datatypeArguments": [
+                        {
+                            "value": 10,
+                            "id": "f44703fe-0e0e-451f-872c-1278cc77df3e"
+                        },
+                        {
+                            "value": 2,
+                            "id": "278da857-3740-43bf-a8c5-894319355e5a"
+                        }
+                    ],
+                    "datatypeIsNullable": true,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "code_for_discount",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": true
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": true,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "valid_from",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "valid_to",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -936,93 +810,77 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "hotel_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"hotel\")"
                     ]
                 },
                 {
                     "name": "sellable_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"sellable\")"
                     ]
                 },
                 {
                     "name": "size_m2",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "is_smoking_allowed",
-                    "datatype": {
-                        "id": "602200d9-2075-4824-b80c-6e739e503a70",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "is_pets_allowed",
-                    "datatype": {
-                        "id": "602200d9-2075-4824-b80c-6e739e503a70",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "number_of_guests",
-                    "datatype": {
-                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "number_of_extra_beds",
-                    "datatype": {
-                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -1039,145 +897,125 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "manager_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"business_user\")"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "description",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 25555,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 25555,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "number_of_stars",
-                    "datatype": {
-                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "location_street_address",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "location_address_line2",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "location_region_country",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "location_city",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "location_zip_code",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -1194,108 +1032,92 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "hotel_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"hotel\")"
                     ]
                 },
                 {
                     "name": "person_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"person\")"
                     ]
                 },
                 {
                     "name": "special_needs",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 25555,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 25555,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "predicted_arrival_date",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "email",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "fullname",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "phone",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -1312,108 +1134,92 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "hotel_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"hotel\")"
                     ]
                 },
                 {
                     "name": "person_id",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": true
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": true,
                     "attributes": [
                         "FK(\"person\")"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "buyer_name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "payment_method",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "status",
-                    "datatype": {
-                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "date",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -1430,49 +1236,41 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "room_type_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"room_type\")"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "is_disabled",
-                    "datatype": {
-                        "id": "602200d9-2075-4824-b80c-6e739e503a70",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -1489,76 +1287,64 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "purchase_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"purchase\")"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "sku_code",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "quantity",
-                    "datatype": {
-                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "price",
-                    "datatype": {
-                        "id": "30767a2a-9bb4-4d2b-8af2-8b0fc84b2fc9",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "30767a2a-9bb4-4d2b-8af2-8b0fc84b2fc9",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -1575,104 +1361,86 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "reservation_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"reservation\")"
                     ]
                 },
                 {
                     "name": "room_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"room\")"
                     ]
                 },
                 {
                     "name": "fullname",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "date_from",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "date_to",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "adult_quantity",
-                    "datatype": {
-                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "children_quantity",
-                    "datatype": {
-                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "is_cancelled",
-                    "datatype": {
-                        "id": "602200d9-2075-4824-b80c-6e739e503a70",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -1689,54 +1457,46 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "user_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"user\")"
                     ]
                 },
                 {
                     "name": "business_name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "registration_code",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -1753,65 +1513,55 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "category_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"sellable_category\")"
                     ]
                 },
                 {
                     "name": "hotel_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"hotel\")"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "description",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 25555,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 25555,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -1828,38 +1578,32 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "master_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": true
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": true,
                     "attributes": [
                         "FK(\"sellable_category\")"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -1876,113 +1620,97 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "sellable_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"sellable\")"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "color",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": true
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": true,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "size",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": true
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": true,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "quantity_number",
-                    "datatype": {
-                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
-                        "arguments": [],
-                        "isNullable": true
-                    },
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": true,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "quantity_api_calc_name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": true
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": true,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "quantity_contact_for_quantity",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": true
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": true,
                     "attributes": [
                         ""
                     ]

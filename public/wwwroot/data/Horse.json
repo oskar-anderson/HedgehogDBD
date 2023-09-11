@@ -10,38 +10,32 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "company_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"company\")"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -58,38 +52,32 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "hippodrome_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"hippodrome\")"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -106,38 +94,32 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "breed_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"dd_breed\")"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -154,22 +136,18 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -186,38 +164,32 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "stable_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"stable\")"
                     ]
                 },
                 {
                     "name": "number",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -234,53 +206,45 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "person_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"person\")"
                     ]
                 },
                 {
                     "name": "horse_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"horse\")"
                     ]
                 },
                 {
                     "name": "ownership_percent",
-                    "datatype": {
-                        "id": "4bde4381-61f9-4877-9d14-084978b20b28",
-                        "arguments": [
-                            {
-                                "value": 3,
-                                "id": "f44703fe-0e0e-451f-872c-1278cc77df3e"
-                            },
-                            {
-                                "value": 3,
-                                "id": "278da857-3740-43bf-a8c5-894319355e5a"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "4bde4381-61f9-4877-9d14-084978b20b28",
+                    "datatypeArguments": [
+                        {
+                            "value": 3,
+                            "id": "f44703fe-0e0e-451f-872c-1278cc77df3e"
+                        },
+                        {
+                            "value": 3,
+                            "id": "278da857-3740-43bf-a8c5-894319355e5a"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -297,43 +261,37 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "firstname",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "lastname",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -350,65 +308,55 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "horse_id",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"horse\")"
                     ]
                 },
                 {
                     "name": "stall_id",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"stall\")"
                     ]
                 },
                 {
                     "name": "from",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "to",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -425,66 +373,54 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "horse_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"horse\")"
                     ]
                 },
                 {
                     "name": "person_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"person\")"
                     ]
                 },
                 {
                     "name": "worker_type_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"dd_worker_type\")"
                     ]
                 },
                 {
                     "name": "valid_from",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "valid_to",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -501,38 +437,32 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "order",
-                    "datatype": {
-                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -549,75 +479,65 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "horse_id",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"horse\")"
                     ]
                 },
                 {
                     "name": "training_type_id",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"dd_training_type\")"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "description",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 25555,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 25555,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -634,27 +554,23 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -671,60 +587,50 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "training_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"training\")"
                     ]
                 },
                 {
                     "name": "person_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": true
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": true,
                     "attributes": [
                         "FK(\"person\")"
                     ]
                 },
                 {
                     "name": "horse_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": true
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": true,
                     "attributes": [
                         "FK(\"horse\")"
                     ]
                 },
                 {
                     "name": "participant_role",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -741,55 +647,45 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "horse_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"horse\")"
                     ]
                 },
                 {
                     "name": "person_registrant_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"person\")"
                     ]
                 },
                 {
                     "name": "person_rider_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"person\")"
                     ]
                 },
                 {
                     "name": "competition_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"competition\")"
                     ]
@@ -806,54 +702,46 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "hippodrome_id",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"hippodrome\")"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "happens_at",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -870,49 +758,41 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "competition_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"competition\")"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "distance",
-                    "datatype": {
-                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -929,82 +809,68 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "race_id",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"race\")"
                     ]
                 },
                 {
                     "name": "horse_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"horse\")"
                     ]
                 },
                 {
                     "name": "rider_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"person\")"
                     ]
                 },
                 {
                     "name": "horse_place",
-                    "datatype": {
-                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
-                        "arguments": [],
-                        "isNullable": true
-                    },
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": true,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "end_time_milliseconds",
-                    "datatype": {
-                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
-                        "arguments": [],
-                        "isNullable": true
-                    },
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": true,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "is_disqualified",
-                    "datatype": {
-                        "id": "602200d9-2075-4824-b80c-6e739e503a70",
-                        "arguments": [],
-                        "isNullable": true
-                    },
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": true,
                     "attributes": [
                         ""
                     ]
@@ -1021,27 +887,23 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -1058,71 +920,59 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "giver_company_id",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"company\")"
                     ]
                 },
                 {
                     "name": "receiver_company_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"company\")"
                     ]
                 },
                 {
                     "name": "hippodrome_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"hippodrome\")"
                     ]
                 },
                 {
                     "name": "period_start",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "period_end",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]

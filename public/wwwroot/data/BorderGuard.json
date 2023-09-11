@@ -10,54 +10,46 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "cordon_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"cordon\")"
                     ]
                 },
                 {
                     "name": "code",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -74,65 +66,55 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "house_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"house\")"
                     ]
                 },
                 {
                     "name": "cordon_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"cordon\")"
                     ]
                 },
                 {
                     "name": "code",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -149,43 +131,37 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "code",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -202,65 +178,55 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "room_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"room\")"
                     ]
                 },
                 {
                     "name": "cordon_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"cordon\")"
                     ]
                 },
                 {
                     "name": "code",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -277,54 +243,46 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "cordon_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"cordon\")"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "code",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -341,55 +299,45 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "watchguard_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"watchguard\")"
                     ]
                 },
                 {
                     "name": "border_section_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"border_section\")"
                     ]
                 },
                 {
                     "name": "since",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "until",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -406,59 +354,51 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "first_name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "last_name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "phone",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": true
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": true,
                     "attributes": [
                         ""
                     ]
@@ -475,43 +415,37 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "code",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -528,55 +462,45 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "military_unit_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"military_unit\")"
                     ]
                 },
                 {
                     "name": "cordon_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"cordon\")"
                     ]
                 },
                 {
                     "name": "since",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "until",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -593,93 +517,77 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "person_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"person\")"
                     ]
                 },
                 {
                     "name": "military_unit_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": true
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": true,
                     "attributes": [
                         "FK(\"military_unit\")"
                     ]
                 },
                 {
                     "name": "cordon_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": true
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": true,
                     "attributes": [
                         "FK(\"cordon\")"
                     ]
                 },
                 {
                     "name": "watchguard_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": true
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": true,
                     "attributes": [
                         "FK(\"watchguard\")"
                     ]
                 },
                 {
                     "name": "title_or_role",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "since",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "until",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -696,55 +604,45 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "person_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"person\")"
                     ]
                 },
                 {
                     "name": "place_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"place\")"
                     ]
                 },
                 {
                     "name": "since",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "until",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -761,49 +659,41 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "border_section_master_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"border_section\")"
                     ]
                 },
                 {
                     "name": "cordon_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"cordon\")"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -820,73 +710,63 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "border_section_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"border_section\")"
                     ]
                 },
                 {
                     "name": "x",
-                    "datatype": {
-                        "id": "4bde4381-61f9-4877-9d14-084978b20b28",
-                        "arguments": [
-                            {
-                                "value": 5,
-                                "id": "f44703fe-0e0e-451f-872c-1278cc77df3e"
-                            },
-                            {
-                                "value": 5,
-                                "id": "278da857-3740-43bf-a8c5-894319355e5a"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "4bde4381-61f9-4877-9d14-084978b20b28",
+                    "datatypeArguments": [
+                        {
+                            "value": 5,
+                            "id": "f44703fe-0e0e-451f-872c-1278cc77df3e"
+                        },
+                        {
+                            "value": 5,
+                            "id": "278da857-3740-43bf-a8c5-894319355e5a"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "y",
-                    "datatype": {
-                        "id": "4bde4381-61f9-4877-9d14-084978b20b28",
-                        "arguments": [
-                            {
-                                "value": 5,
-                                "id": "f44703fe-0e0e-451f-872c-1278cc77df3e"
-                            },
-                            {
-                                "value": 5,
-                                "id": "278da857-3740-43bf-a8c5-894319355e5a"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "4bde4381-61f9-4877-9d14-084978b20b28",
+                    "datatypeArguments": [
+                        {
+                            "value": 5,
+                            "id": "f44703fe-0e0e-451f-872c-1278cc77df3e"
+                        },
+                        {
+                            "value": 5,
+                            "id": "278da857-3740-43bf-a8c5-894319355e5a"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "order",
-                    "datatype": {
-                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -903,55 +783,45 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "person_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"person\")"
                     ]
                 },
                 {
                     "name": "rank_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"rank\")"
                     ]
                 },
                 {
                     "name": "since",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "until",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -968,70 +838,60 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "fullname",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "shortname",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "code",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "order",
-                    "datatype": {
-                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -1048,87 +908,73 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "person_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"person\")"
                     ]
                 },
                 {
                     "name": "absentness_type_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"generic_type\")"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "description",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 25555,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 25555,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "since",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "until",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -1145,76 +991,64 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "person_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"person\")"
                     ]
                 },
                 {
                     "name": "reward_type_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"generic_type\")"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "description",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 25555,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 25555,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "date",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -1231,76 +1065,64 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "person_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"person\")"
                     ]
                 },
                 {
                     "name": "punishment_type_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"generic_type\")"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "description",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 25555,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 25555,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "date",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -1317,87 +1139,73 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "person_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"person\")"
                     ]
                 },
                 {
                     "name": "person_absentness_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"person_absentness\")"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "description",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 25555,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 25555,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "since",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "until",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -1414,54 +1222,46 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "group_unique_name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "order",
-                    "datatype": {
-                        "id": "d8b8dfce-adbf-4988-919e-63b475c187bc",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -1478,81 +1278,69 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "border_section_id",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"border_section\")"
                     ]
                 },
                 {
                     "name": "incident_type_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"generic_type\")"
                     ]
                 },
                 {
                     "name": "name",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "description",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 25555,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 25555,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "date",
-                    "datatype": {
-                        "id": "1b294675-44fb-4dae-9481-abaecd97a836",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
@@ -1569,86 +1357,74 @@
             "tableRows": [
                 {
                     "name": "id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "PK"
                     ]
                 },
                 {
                     "name": "incident_id",
-                    "datatype": {
-                        "id": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
-                        "arguments": [],
-                        "isNullable": false
-                    },
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         "FK(\"incident\")"
                     ]
                 },
                 {
                     "name": "national_id",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": true
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": true,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "firstname",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "lastname",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 255,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": true
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": true,
                     "attributes": [
                         ""
                     ]
                 },
                 {
                     "name": "description",
-                    "datatype": {
-                        "id": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
-                        "arguments": [
-                            {
-                                "value": 25555,
-                                "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
-                            }
-                        ],
-                        "isNullable": false
-                    },
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 25555,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
                     "attributes": [
                         ""
                     ]

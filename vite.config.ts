@@ -13,7 +13,7 @@ export default defineConfig(({ command, mode }) => {
       // Enables better console errors messages (name of React component error occured in) on built app
       minify: false
     },
-     // transpiled assets folder is now relative to index.html not the project root
+     // Optional - Transpiled assets folder is now relative to index.html not the project root
     base: "./",
     server: {
       port: 8080

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "./../components/Layout"
-import ReactFlow, { ReactFlowProvider, useNodesState, useEdgesState, MiniMap, Background, Controls, BackgroundVariant, NodeChange, NodePositionChange, Node, getRectOfNodes, getTransformForBounds, useReactFlow, useViewport } from 'reactflow';
+import ReactFlow, { ReactFlowProvider, useNodesState, useEdgesState, MiniMap, Background, Controls, BackgroundVariant, NodeChange, NodePositionChange, Node, getRectOfNodes, getTransformForBounds, useReactFlow, useViewport, EdgeTypes } from 'reactflow';
 import DrawTable from "../components/drawChildren/DrawTable";
 import 'reactflow/dist/style.css';
 import { TOP_TOOLBAR_HEIGHT_PX } from "../components/TopToolbarAction"
@@ -19,11 +19,17 @@ import DomainTable from "../model/domain/DomainTable";
 import DomainTableRow from "../model/domain/DomainTableRow";
 import DomainTableRowDataTypeArguments from "../model/domain/DomainTableRowDataTypeArguments";
 import CommandHistory from "../commands/CommandHistory";
+import LabeledEdge from "../components/drawChildren/LabeledEdge";
+import ScriptingTableRowDataType from "../model/dto/scripting/ScriptingTableRowDataType";
 
 // nodeTypes need to be defined outside the render function or using memo
 const nodeTypes = { 
     tableNode: DrawTable
 }
+
+const edgeTypes: EdgeTypes = {
+    'labeled-edge': LabeledEdge,
+};
 
 
 const convertTableToNode = (table: VmTable, node: undefined|Node) => {
@@ -42,21 +48,32 @@ const convertRelationToEdgeId = (relation: VmRelation) => {
     return `${relation.source.head}(${relation.sourceRow.name}) references ${relation.target.head}(${relation.targetRow.name})`;
 }
 
-const convertRelationToEdge = (relation: VmRelation) => {
+const convertRelationToEdge = (relation: VmRelation, nodes: Record<string, Node | undefined>) => {
     let sourceSide: 'left' | 'right' = relation.source.position.x > relation.target.position.x ? "left" : "right";
     let targetSide: 'left' | 'right' = relation.source.position.x > relation.target.position.x ? "right" : "left";
+    
+    console.log(`${relation.source.head}(${relation.sourceRow.name}) ref ${relation.target.head}(${relation.targetRow.name}) - source ${sourceSide}, target ${targetSide} `)
+
     let type: 'default' | 'straight' | 'step' | 'smoothstep' | 'simplebezier' = 'default';
     if (relation.source.id === relation.target.id) { 
         targetSide = sourceSide;
         type = "smoothstep";
     }
+
+    const style = relation.sourceRow.datatype.isNullable ? { strokeDasharray: "5 5" } : {};
     return {
         id:convertRelationToEdgeId(relation),
-        type: type,
+        type: 'labeled-edge',
         source: relation.source.id,
-        sourceHandle: `${relation.source.head}-${relation.sourceRow.name}-${sourceSide}`,
+        sourceHandle: `${relation.source.head}(${relation.sourceRow.name}) ref ${relation.target.head}(${relation.targetRow.name}) - ${sourceSide}`,
         target: relation.target.id,
-        targetHandle: `${relation.target.head}-${relation.targetRow.name}-${targetSide}`,
+        targetHandle: `${relation.source.head}(${relation.sourceRow.name}) ref ${relation.target.head}(${relation.targetRow.name}) - ${targetSide}`,
+        style: style,
+        data: {
+            startLabel: '1',
+            endLabel: 'm',
+            pathType: 'labeled-edge',
+        }
     }
 }
 
@@ -72,12 +89,22 @@ export const WrappedDraw = () => {
     const navigate = useNavigate();
     
     useEffect(() => {
+        console.log("useEffect")
+        console.log(relations)
         setEdges([]);
+        let tableNodes: Record<string, Node | undefined> = tables.reduce(
+            (acc, table) => (
+                { 
+                    ...acc, 
+                    [table.id]: nodes.find(node => table.id === node.id) 
+                }
+            ), 
+            {}
+        );
         setNodes(tables.map(table => {
-            const node = nodes.find(node => table.id === node.id);
-            return convertTableToNode(table, node);
+            return convertTableToNode(table, tableNodes[table.id]);
         }));
-        setEdges(relations.map(relation => convertRelationToEdge(relation)));
+        setEdges(relations.map(relation => convertRelationToEdge(relation, tableNodes)));
     }, [tables])
 
     const onNodeClick = (event: React.MouseEvent, node: Node) => {
@@ -192,6 +219,7 @@ export const WrappedDraw = () => {
                     nodes={nodes}
                     edges={edges}
                     nodeTypes={nodeTypes}
+                    edgeTypes={edgeTypes}
                     onNodesChange={onNodesChangeCommandListener}
                     onEdgesChange={onEdgesChange}
                     onNodeClick={onNodeClick}

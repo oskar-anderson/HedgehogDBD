@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "./../components/Layout"
-import ReactFlow, { ReactFlowProvider, useNodesState, useEdgesState, MiniMap, Background, Controls, BackgroundVariant, NodeChange, NodePositionChange, Node, getRectOfNodes, getTransformForBounds, useReactFlow, useViewport } from 'reactflow';
+import ReactFlow, { ReactFlowProvider, useNodesState, useEdgesState, MiniMap, Background, Controls, BackgroundVariant, NodeChange, NodePositionChange, Node, getRectOfNodes, getTransformForBounds, useReactFlow, useViewport, EdgeTypes } from 'reactflow';
 import DrawTable from "../components/drawChildren/DrawTable";
 import 'reactflow/dist/style.css';
 import { TOP_TOOLBAR_HEIGHT_PX } from "../components/TopToolbarAction"
@@ -19,12 +19,17 @@ import DomainTable from "../model/domain/DomainTable";
 import DomainTableRow from "../model/domain/DomainTableRow";
 import DomainTableRowDataTypeArguments from "../model/domain/DomainTableRowDataTypeArguments";
 import CommandHistory from "../commands/CommandHistory";
+import ErdEdge from "../components/drawChildren/ErdEdge";
 
 // nodeTypes need to be defined outside the render function or using memo
 const nodeTypes = { 
     tableNode: DrawTable
 }
 
+
+const edgeTypes: EdgeTypes = {
+    'erd-edge': ErdEdge
+};
 
 const convertTableToNode = (table: VmTable, node: undefined|Node) => {
     return {
@@ -45,20 +50,23 @@ const convertRelationToEdgeId = (relation: VmRelation) => {
 const convertRelationToEdge = (relation: VmRelation) => {
     let sourceSide: 'left' | 'right' = relation.source.position.x > relation.target.position.x ? "left" : "right";
     let targetSide: 'left' | 'right' = relation.source.position.x > relation.target.position.x ? "right" : "left";
-    let type: 'default' | 'straight' | 'step' | 'smoothstep' | 'simplebezier' = 'default';
+    let pathType: 'default' | 'straight' | 'step' | 'smoothstep' | 'simplebezier' = 'default';
     if (relation.source.id === relation.target.id) { 
         targetSide = sourceSide;
-        type = "smoothstep";
+        pathType = "smoothstep";
     }
     const style = relation.sourceRow.datatype.isNullable ? { strokeDasharray: "5 5" } : {};
     return {
         id: convertRelationToEdgeId(relation),
-        type: type,
+        type: 'erd-edge',
         source: relation.source.id,
         sourceHandle: `${relation.source.head}-${relation.sourceRow.name}-${sourceSide}`,
         target: relation.target.id,
         targetHandle: `${relation.target.head}-${relation.targetRow.name}-${targetSide}`,
-        style: style
+        style: style,
+        data: {
+            pathType: pathType,
+        }
     }
 }
 
@@ -194,6 +202,7 @@ export const WrappedDraw = () => {
                     nodes={nodes}
                     edges={edges}
                     nodeTypes={nodeTypes}
+                    edgeTypes={edgeTypes}
                     onNodesChange={onNodesChangeCommandListener}
                     onEdgesChange={onEdgesChange}
                     onNodeClick={onNodeClick}

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "./../components/Layout"
-import ReactFlow, { ReactFlowProvider, useNodesState, useEdgesState, MiniMap, Background, Controls, BackgroundVariant, NodeChange, NodePositionChange, Node, getRectOfNodes, getTransformForBounds, useReactFlow, useViewport, EdgeTypes } from 'reactflow';
+import ReactFlow, { ReactFlowProvider, useNodesState, useEdgesState, MiniMap, Background, Controls, BackgroundVariant, NodeChange, NodePositionChange, Node, getRectOfNodes, getTransformForBounds, useReactFlow, useViewport, EdgeTypes, Viewport } from 'reactflow';
 import DrawTable from "../components/drawChildren/DrawTable";
 import 'reactflow/dist/style.css';
 import { TOP_TOOLBAR_HEIGHT_PX } from "../components/TopToolbarAction"
@@ -78,6 +78,7 @@ export const WrappedDraw = () => {
     const setTables = useApplicationState(state => state.setTables);
     const relations = useApplicationState(state => state.schemaRelations);
     const activeDatabaseId = useApplicationState(state => state.activeDatabaseId);
+    const currentViewport = useApplicationState(state => state.currentViewport);
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const { x, y, zoom } = useViewport();
@@ -161,6 +162,12 @@ export const WrappedDraw = () => {
         }
     }
 
+    const onMove = (event: MouseEvent | TouchEvent, viewport: Viewport) => {
+        currentViewport.x = viewport.x;
+        currentViewport.y = viewport.y;
+        currentViewport.zoom = viewport.zoom;
+    }
+
     const downloadImagePng = () => {
         const nodesBounds = getRectOfNodes(nodes);
         const viewportElement = document.querySelector('.react-flow__viewport') as HTMLElement;
@@ -209,6 +216,8 @@ export const WrappedDraw = () => {
                     onEdgesChange={onEdgesChange}
                     onNodeClick={onNodeClick}
                     disableKeyboardA11y={true}  // keyboard arrow key movement is not supported
+                    defaultViewport={currentViewport}
+                    onMove={onMove}
                 >
                     <Controls />
                     <Background variant={BackgroundVariant.Dots} gap={36} size={1} style={{ backgroundColor: "#f8fafc"}} />

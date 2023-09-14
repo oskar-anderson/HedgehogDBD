@@ -21,6 +21,7 @@ interface ApplicationState {
     schemaTables: VmTable[];
     schemaRelations: VmRelation[];
     scripts: Script[];
+    currentViewport: { x: number, y: number, zoom: number };
 
     setTables: (tables: VmTable[]) => void;
     setActiveDatabaseId: (newValue: string) => void;
@@ -42,6 +43,7 @@ export const useApplicationState = create(
             schemaTables: [],
             schemaRelations: [],
             scripts: [],
+            currentViewport: { x: 0, y: 0, zoom: 1},
 
             setTables: (tables: VmTable[]) => set((state) => (
                 { 

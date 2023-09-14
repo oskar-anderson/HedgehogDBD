@@ -15,7 +15,7 @@ export default class CommandHistory {
         redoHistory: string[]
     }, commandInstance: ICommand<any>, setTables: (tables: VmTable[]) => void) {
         let command = { commandName: commandInstance.constructor.name, args: commandInstance.args};
-        history.undoHistory.push(JSON.stringify(command));
+        history.undoHistory = [...history.undoHistory.slice(-99), JSON.stringify(command)];
         history.redoHistory = [];
         commandInstance.redo(setTables);
     }

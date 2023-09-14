@@ -4,6 +4,7 @@ import VmTableRow from '../../model/viewModel/VmTableRow';
 import VmTable from '../../model/viewModel/VmTable';
 import { useApplicationState } from '../../Store';
 import DataType from '../../model/DataTypes/DataType';
+import { EdgeNotationPadding } from './ErdEdge';
 
 
 type DrawTableRowProps = {
@@ -24,8 +25,8 @@ function DrawTableRow( { row, rowStartY, height, tableName }: DrawTableRowProps)
     const displayName = `${selectListName}${nullabilitySymbol}`;
     return (
         <div>
-            <Handle type="target" id={`${tableName}-${row.name}-left`} position={Position.Left} style={{ top: `${rowStartY}px`, left: '2px', ...handleStyle }} />
-            <Handle type="source" id={`${tableName}-${row.name}-left`} position={Position.Left} style={{ top: `${rowStartY}px`, left: '2px', ...handleStyle }} />
+            <Handle type="target" id={`${tableName}-${row.name}-left`} position={Position.Left} style={{ top: `${rowStartY}px`, left: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle }} />
+            <Handle type="source" id={`${tableName}-${row.name}-left`} position={Position.Left} style={{ top: `${rowStartY}px`, left: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle }} />
             
             <div className='d-flex' style={{ height: `${height}px`, whiteSpace: "nowrap" }}>
                 <div className='d-flex align-items-center' style={{ width: "16px", paddingRight: "4px" }}>
@@ -52,8 +53,8 @@ function DrawTableRow( { row, rowStartY, height, tableName }: DrawTableRowProps)
                 </div>
             </div>
 
-            <Handle type="target" id={`${tableName}-${row.name}-right`} position={Position.Right} style={{ top: `${rowStartY}px`, right: '2px', ...handleStyle}} />
-            <Handle type="source" id={`${tableName}-${row.name}-right`} position={Position.Right} style={{ top: `${rowStartY}px`, right: '2px', ...handleStyle}} />
+            <Handle type="target" id={`${tableName}-${row.name}-right`} position={Position.Right} style={{ top: `${rowStartY}px`, right: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle}} />
+            <Handle type="source" id={`${tableName}-${row.name}-right`} position={Position.Right} style={{ top: `${rowStartY}px`, right: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle}} />
         </div>
     );
 }

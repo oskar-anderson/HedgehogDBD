@@ -65,7 +65,9 @@ const convertRelationToEdge = (relation: VmRelation) => {
         targetHandle: `${relation.target.head}-${relation.targetRow.name}-${targetSide}`,
         style: style,
         data: {
-            pathType: pathType,
+            pathType,
+            sourceSide,
+            targetSide
         }
     }
 }

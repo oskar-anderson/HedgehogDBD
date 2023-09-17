@@ -216,12 +216,12 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
                     onMouseDown={(e) => { dragItem.current = index; }}
                 >
                     <svg style={{ userSelect: "none" }} stroke="#000000" data-bs-toggle="tooltip" data-bs-placement="bottom" width={28} height={28} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M14 18C14 18.5523 14.4477 19 15 19C15.5523 19 16 18.5523 16 18C16 17.4477 15.5523 17 15 17C14.4477 17 14 17.4477 14 18Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M8 18C8 18.5523 8.44772 19 9 19C9.55228 19 10 18.5523 10 18C10 17.4477 9.55228 17 9 17C8.44772 17 8 17.4477 8 18Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M14 12C14 12.5523 14.4477 13 15 13C15.5523 13 16 12.5523 16 12C16 11.4477 15.5523 11 15 11C14.4477 11 14 11.4477 14 12Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M8 12C8 12.5523 8.44772 13 9 13C9.55228 13 10 12.5523 10 12C10 11.4477 9.55228 11 9 11C8.44772 11 8 11.4477 8 12Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M14 6C14 6.55228 14.4477 7 15 7C15.5523 7 16 6.55228 16 6C16 5.44772 15.5523 5 15 5C14.4477 5 14 5.44772 14 6Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M8 6C8 6.55228 8.44772 7 9 7C9.55228 7 10 6.55228 10 6C10 5.44772 9.55228 5 9 5C8.44772 5 8 5.44772 8 6Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M14 18C14 18.5523 14.4477 19 15 19C15.5523 19 16 18.5523 16 18C16 17.4477 15.5523 17 15 17C14.4477 17 14 17.4477 14 18Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M8 18C8 18.5523 8.44772 19 9 19C9.55228 19 10 18.5523 10 18C10 17.4477 9.55228 17 9 17C8.44772 17 8 17.4477 8 18Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M14 12C14 12.5523 14.4477 13 15 13C15.5523 13 16 12.5523 16 12C16 11.4477 15.5523 11 15 11C14.4477 11 14 11.4477 14 12Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M8 12C8 12.5523 8.44772 13 9 13C9.55228 13 10 12.5523 10 12C10 11.4477 9.55228 11 9 11C8.44772 11 8 11.4477 8 12Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M14 6C14 6.55228 14.4477 7 15 7C15.5523 7 16 6.55228 16 6C16 5.44772 15.5523 5 15 5C14.4477 5 14 5.44772 14 6Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M8 6C8 6.55228 8.44772 7 9 7C9.55228 7 10 6.55228 10 6C10 5.44772 9.55228 5 9 5C8.44772 5 8 5.44772 8 6Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                 </button>
             </td>
@@ -271,10 +271,10 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
                     </button>
                     <OverlayTrigger trigger="click" placement="right" overlay={popover} rootClose={true}>
                         <button className={`btn btn-light btn-icon ${datatypeArguments.length === 0 ? "disabled" : ""}`} disabled={datatypeArguments.length === 0}>
-                            <svg width="24px" height="24px" viewBox="0 0 24 24" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M17 12C17 12.5523 17.4477 13 18 13C18.5523 13 19 12.5523 19 12C19 11.4477 18.5523 11 18 11C17.4477 11 17 11.4477 17 12Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M11 12C11 12.5523 11.4477 13 12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M5 12C5 12.5523 5.44772 13 6 13C6.55228 13 7 12.5523 7 12C7 11.4477 6.55228 11 6 11C5.44772 11 5 11.4477 5 12Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <svg width="28px" height="28px" viewBox="0 0 24 24" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17 12C17 12.5523 17.4477 13 18 13C18.5523 13 19 12.5523 19 12C19 11.4477 18.5523 11 18 11C17.4477 11 17 11.4477 17 12Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M11 12C11 12.5523 11.4477 13 12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M5 12C5 12.5523 5.44772 13 6 13C6.55228 13 7 12.5523 7 12C7 11.4477 6.55228 11 6 11C5.44772 11 5 11.4477 5 12Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
                         </button>
                     </OverlayTrigger>

@@ -21,6 +21,7 @@ import DomainTableRowDataTypeArguments from "../model/domain/DomainTableRowDataT
 import CommandHistory from "../commands/CommandHistory";
 import ErdEdge from "../components/drawChildren/ErdEdge";
 import { CommandModifyTable, CommandModifyTableArgs } from "../commands/appCommands/CommandModifyTableArgs";
+import VmTableRow from "../model/viewModel/VmTableRow";
 
 // nodeTypes need to be defined outside the render function or using memo
 const nodeTypes = { 
@@ -30,25 +31,18 @@ const nodeTypes = {
 type EdgeActionPayload = {
     show: boolean,
     props: {
-        centerX: number,
-        centerY: number,
-        sourceTable: VmTable | null,
-        sourceTableRowName: string,
+        x: number,
+        y: number,
+        sourceTable: VmTable,
+        sourceTableRow: VmTableRow,
         targetTableName: string,
         targetTableRowName: string
-    }
+    } | null
 }
 
 const edgeActionPayloadDefault: EdgeActionPayload = {
     show: false,
-    props: {
-        centerX: 0,
-        centerY: 0,
-        sourceTable: null,
-        sourceTableRowName: "",
-        targetTableName: "",
-        targetTableRowName: ""
-    }
+    props: null
 }
 
 
@@ -76,7 +70,7 @@ const convertRelationToEdgeId = (relation: VmRelation) => {
     return `${relation.source.head}(${relation.sourceRow.name}) references ${relation.target.head}(${relation.targetRow.name})`;
 }
 
-type EdgePayload = {
+export type EdgePayload = {
     pathType: string,
     sourceSide: 'left' | 'right'
     targetSide: 'left' | 'right'
@@ -130,6 +124,41 @@ export const WrappedDraw = () => {
     const navigate = useNavigate();
     const [edgeActions, setEdgeActions] = useState(edgeActionPayloadDefault);
     const mainContentRef = useRef<HTMLDivElement>(null);
+
+    const toggleRelationSourceRequiredness = (tableId: string, rowName: string) => {
+        const table = tables.find(x => x.id === tableId);
+        if (! table) { 
+            console.error("Table not found!")
+            return;
+        }
+        CommandHistory.execute(history, new CommandModifyTable(
+            { tables }, 
+            new CommandModifyTableArgs(
+                DomainTable.init(table), 
+                new DomainTable(
+                    table.id, 
+                    table.position, 
+                    table.head, 
+                    table.tableRows.map(tr => 
+                        {
+                            return new DomainTableRow(
+                                tr.name,
+                                tr.datatype.dataTypeId,
+                                tr.datatype.arguments.map(arg => {
+                                    return new DomainTableRowDataTypeArguments(arg.value, arg.argument.id)
+                                }),
+                                tr.name === rowName ? !tr.datatype.isNullable : tr.datatype.isNullable,
+                                tr.attributes
+                            );
+                        }
+                    )
+                )
+            )
+        ), setTables);
+        const edgeActionsCopy = {...edgeActions};
+        edgeActionsCopy.props!.sourceTableRow.datatype.isNullable = !edgeActionsCopy.props!.sourceTableRow.datatype.isNullable;
+        setEdgeActions(edgeActionsCopy);
+    }
 
     const deleteRelation = (tableId: string, rowName: string, targetTableName: string) => {
         const table = tables.find(x => x.id === tableId);
@@ -202,20 +231,21 @@ export const WrappedDraw = () => {
 
 
     const onEdgeClick = (e: React.MouseEvent, edgeId: string) => {
-        let selectedEdge = edgesRef.current.find(x => x.id === edgeId);
+        let selectedEdge = edgesRef.current.find(x => x.id === edgeId)!;
         if (!selectedEdge) { 
             console.error(`Edge with id (${edgeId}) not found.`); 
             return; 
         }
-        const sourceTable = nodesRef.current.find(x => x.id === selectedEdge!.source)!.data.table;
-        const targetTable = nodesRef.current.find(x => x.id === selectedEdge!.target)!.data.table;
+        const sourceTable = nodesRef.current.find(x => x.id === selectedEdge.source)!.data.table;
+        const sourceTableRow = sourceTable.tableRows.find(tr => tr.name === selectedEdge.data!.sourceRowName)!;
+        const targetTable = nodesRef.current.find(x => x.id === selectedEdge.target)!.data.table;
         setEdgeActions({
             show: true,
             props: {
-                centerX: e.clientX - mainContentRef.current!.getBoundingClientRect().x,
-                centerY: e.clientY - mainContentRef.current!.getBoundingClientRect().y,
+                x: e.clientX - mainContentRef.current!.getBoundingClientRect().x,
+                y: e.clientY - mainContentRef.current!.getBoundingClientRect().y,
                 sourceTable: sourceTable,
-                sourceTableRowName: selectedEdge.data!.sourceRowName,
+                sourceTableRow: sourceTableRow,
                 targetTableName: targetTable.head,
                 targetTableRowName: selectedEdge.data!.targetRowName
             }
@@ -364,9 +394,8 @@ export const WrappedDraw = () => {
                     {edgeActions.show ? 
                         <div style={{ 
                             position: "absolute", 
-                            top: edgeActions.props.centerY, 
-                            left: edgeActions.props.centerX, 
-                            transform: "translate(-50%, -3em)",
+                            top: edgeActions.props!.y, 
+                            left: edgeActions.props!.x,
                             background: "white",
                             border: "1px solid #ccc",
                             borderRadius: "4px",
@@ -381,16 +410,20 @@ export const WrappedDraw = () => {
                             <div className="p-2" style={{ borderBottom: "solid 1px #eee"}}>
                                 <div className="row">
                                     <span className="col-sm-3">Source: </span>
-                                    <span style={{ whiteSpace: "nowrap" }} className="col-sm-auto">{edgeActions.props.sourceTable?.head}.{edgeActions.props.sourceTableRowName}</span>
+                                    <span style={{ whiteSpace: "nowrap" }} className="col-sm-auto">{edgeActions.props!.sourceTable.head}.{edgeActions.props!.sourceTableRow!.name}</span>
                                 </div> 
                                 <div className="row">
                                     <span className="col-sm-3">Target: </span>
-                                    <span style={{ whiteSpace: "nowrap" }} className="col-sm-auto">{edgeActions.props.targetTableName}.{edgeActions.props.targetTableRowName}</span>
+                                    <span style={{ whiteSpace: "nowrap" }} className="col-sm-auto">{edgeActions.props!.targetTableName}.{edgeActions.props!.targetTableRowName}</span>
                                 </div>
                             </div>
                             <div className="p-2">
-                                <button className="btn btn-danger w-100 mb-1" onClick={() => deleteRelation(edgeActions.props.sourceTable!.id, edgeActions.props.sourceTableRowName, edgeActions.props.targetTableName)}>Delete relation</button>
-                                <button className="btn btn-danger w-100" onClick={() => deleteTableRow(edgeActions.props.sourceTable!.id, edgeActions.props.sourceTableRowName)}>Delete source</button>
+                                <div className="d-flex mb-1 gap-1">
+                                    <button className="btn btn-light w-50" onClick={() => toggleRelationSourceRequiredness(edgeActions.props!.sourceTable.id, edgeActions.props!.sourceTableRow.name)}>Source: {edgeActions.props!.sourceTableRow.datatype.isNullable ? "?" : "!"}</button>
+                                    <button className="btn btn-light w-50 disabled" onClick={() => deleteRelation(edgeActions.props!.sourceTable.id, edgeActions.props!.sourceTableRow.name, edgeActions.props!.targetTableName)}>Target: m</button> 
+                                </div>
+                                <button className="btn btn-danger w-100 mb-1" onClick={() => deleteRelation(edgeActions.props!.sourceTable.id, edgeActions.props!.sourceTableRow.name, edgeActions.props!.targetTableName)}>Delete relation</button>
+                                <button className="btn btn-danger w-100" onClick={() => deleteTableRow(edgeActions.props!.sourceTable.id, edgeActions.props!.sourceTableRow.name)}>Delete source</button>
                             </div>
                         </div>
                         : null

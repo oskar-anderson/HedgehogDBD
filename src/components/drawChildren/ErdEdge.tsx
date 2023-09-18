@@ -1,13 +1,5 @@
-import React from 'react';
 import { EdgeProps, getBezierPath, getSmoothStepPath, BaseEdge } from 'reactflow';
-
-
-type Payload = {
-    pathType: "smoothstep" | "default" | "straight" | "step" | "simplebezier"
-    sourceSide: "left" | "right"
-    targetSide: "left" | "right"
-    onClick: (e: React.MouseEvent, edgeId: string) => void
-}
+import { EdgePayload } from '../../pages/Draw';
 
 export const EdgeNotationPadding = 12;
 
@@ -21,7 +13,7 @@ export default function ErdEdge({
     targetPosition,
     style,
     data
-  }: EdgeProps<Payload>) {
+  }: EdgeProps<EdgePayload>) {
     if (! data) { 
         console.error("Edge data payload was undefined!");
         return null;

@@ -24,7 +24,7 @@ export default function ErdEdge({
   }: EdgeProps<Payload>) {
     if (! data) { 
         console.error("Edge data payload was undefined!");
-        return;
+        return null;
     }
     const edgeArgs = { sourceX,
         sourceY,

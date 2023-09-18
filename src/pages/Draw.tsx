@@ -30,8 +30,8 @@ const nodeTypes = {
 type EdgeActionPayload = {
     show: boolean,
     props: {
-        x: number,
-        y: number,
+        centerX: number,
+        centerY: number,
         sourceTable: VmTable | null,
         sourceTableRowName: string,
         targetTableName: string,
@@ -42,8 +42,8 @@ type EdgeActionPayload = {
 const edgeActionPayloadDefault: EdgeActionPayload = {
     show: false,
     props: {
-        x: 0,
-        y: 0,
+        centerX: 0,
+        centerY: 0,
         sourceTable: null,
         sourceTableRowName: "",
         targetTableName: "",
@@ -212,8 +212,8 @@ export const WrappedDraw = () => {
         setEdgeActions({
             show: true,
             props: {
-                x: e.clientX - mainContentRef.current!.getBoundingClientRect().x,
-                y: e.clientY - mainContentRef.current!.getBoundingClientRect().y,
+                centerX: e.clientX - mainContentRef.current!.getBoundingClientRect().x,
+                centerY: e.clientY - mainContentRef.current!.getBoundingClientRect().y,
                 sourceTable: sourceTable,
                 sourceTableRowName: selectedEdge.data!.sourceRowName,
                 targetTableName: targetTable.head,
@@ -364,8 +364,8 @@ export const WrappedDraw = () => {
                     {edgeActions.show ? 
                         <div style={{ 
                             position: "absolute", 
-                            top: edgeActions.props.y, 
-                            left: edgeActions.props.x, 
+                            top: edgeActions.props.centerY, 
+                            left: edgeActions.props.centerX, 
                             transform: "translate(-50%, -3em)",
                             background: "white",
                             border: "1px solid #ccc",

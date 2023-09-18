@@ -1,3 +1,4 @@
+import React from 'react';
 import { EdgeProps, getBezierPath, getSmoothStepPath, BaseEdge } from 'reactflow';
 
 
@@ -5,6 +6,7 @@ type Payload = {
     pathType: "smoothstep" | "default" | "straight" | "step" | "simplebezier"
     sourceSide: "left" | "right"
     targetSide: "left" | "right"
+    onClick: (e: React.MouseEvent, edgeId: string) => void
 }
 
 export const EdgeNotationPadding = 12;
@@ -20,31 +22,22 @@ export default function ErdEdge({
     style,
     data
   }: EdgeProps<Payload>) {
-    const [edgePath] = ["simplebezier", "default"].includes(data!.pathType) ? 
-    getBezierPath({
-        sourceX,
+    if (! data) { 
+        console.error("Edge data payload was undefined!");
+        return;
+    }
+    const edgeArgs = { sourceX,
         sourceY,
         sourcePosition,
         targetX,
         targetY,
-        targetPosition,
-    }) : "smoothstep" ?
-    getSmoothStepPath({
-        sourceX,
-        sourceY,
-        sourcePosition,
-        targetX,
-        targetY,
-        targetPosition,
-    }) : 
-    getBezierPath({
-        sourceX,
-        sourceY,
-        sourcePosition,
-        targetX,
-        targetY,
-        targetPosition,
-    })
+        targetPosition
+    };
+    const [edgePath] = 
+    "simplebezier" === data!.pathType ? getBezierPath(edgeArgs) :
+    "default" === data!.pathType ?      getBezierPath(edgeArgs) : 
+    "smoothstep" === data!.pathType ?   getSmoothStepPath(edgeArgs) : 
+                                        getBezierPath(edgeArgs)
 
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('d', edgePath);
@@ -55,32 +48,34 @@ export default function ErdEdge({
 
     return (
         <>
-            <line className='react-flow__edge-path'
-                x1={edgeTargetTableCollisionPoint.x} y1={edgeTargetTableCollisionPoint.y} 
-                x2={edgeTargetTableCollisionPoint.x - (data!.targetSide === "left" ? (EdgeNotationPadding) : -(EdgeNotationPadding))} y2={edgeTargetTableCollisionPoint.y} 
-                stroke='#b1b1b7' strokeWidth={1} style={{ fill: '#b1b1b7' }}
-            />
+            <g onClick={(e) => data.onClick(e, id)}>
+                <line className='react-flow__edge-path'
+                    x1={edgeTargetTableCollisionPoint.x} y1={edgeTargetTableCollisionPoint.y} 
+                    x2={edgeTargetTableCollisionPoint.x - (data!.targetSide === "left" ? (EdgeNotationPadding) : -(EdgeNotationPadding))} y2={edgeTargetTableCollisionPoint.y} 
+                    stroke='#b1b1b7' strokeWidth={1} style={{ fill: '#b1b1b7' }}
+                />
 
-            <circle className='react-flow__edge-path' cx={edgeTargetTableCollisionPoint.x + (data!.targetSide === "left" ? -3 : 3)} cy={edgeTargetTableCollisionPoint.y} r={2} stroke='#b1b1b7' strokeWidth={1} style={{ fill: '#b1b1b7' }}  />
-            
-            <BaseEdge id={id} path={edgePath} style={style} />
-            <polygon
-                className="react-flow__edge-path"
-                //          3
-                //  2,6             1,4
-                //          5
-                points={`
-                    ${edgeSourceTableCollisionPoint.x + EdgeNotationPadding},${edgeSourceTableCollisionPoint.y} 
-                    ${edgeSourceTableCollisionPoint.x - EdgeNotationPadding},${edgeSourceTableCollisionPoint.y} 
-                    ${edgeSourceTableCollisionPoint.x},${edgeSourceTableCollisionPoint.y - Math.tan((30 * Math.PI) / 180) * EdgeNotationPadding} 
-                    ${edgeSourceTableCollisionPoint.x + EdgeNotationPadding},${edgeSourceTableCollisionPoint.y} 
-                    ${edgeSourceTableCollisionPoint.x},${edgeSourceTableCollisionPoint.y + Math.tan((30 * Math.PI) / 180) * EdgeNotationPadding}
-                    ${edgeSourceTableCollisionPoint.x - EdgeNotationPadding},${edgeSourceTableCollisionPoint.y} 
-                `}
-                stroke="#b1b1b7"
-                strokeWidth={1}
-                style={{fill: "none", }}
-            />
+                <circle className='react-flow__edge-path' cx={edgeTargetTableCollisionPoint.x + (data!.targetSide === "left" ? -3 : 3)} cy={edgeTargetTableCollisionPoint.y} r={2} stroke='#b1b1b7' strokeWidth={1} style={{ fill: '#b1b1b7' }}  />
+                
+                <BaseEdge id={id} path={edgePath} style={style} />
+                <polygon
+                    className="react-flow__edge-path"
+                    //          3
+                    //  2,6             1,4
+                    //          5
+                    points={`
+                        ${edgeSourceTableCollisionPoint.x + EdgeNotationPadding},${edgeSourceTableCollisionPoint.y} 
+                        ${edgeSourceTableCollisionPoint.x - EdgeNotationPadding},${edgeSourceTableCollisionPoint.y} 
+                        ${edgeSourceTableCollisionPoint.x},${edgeSourceTableCollisionPoint.y - Math.tan((30 * Math.PI) / 180) * EdgeNotationPadding} 
+                        ${edgeSourceTableCollisionPoint.x + EdgeNotationPadding},${edgeSourceTableCollisionPoint.y} 
+                        ${edgeSourceTableCollisionPoint.x},${edgeSourceTableCollisionPoint.y + Math.tan((30 * Math.PI) / 180) * EdgeNotationPadding}
+                        ${edgeSourceTableCollisionPoint.x - EdgeNotationPadding},${edgeSourceTableCollisionPoint.y} 
+                    `}
+                    stroke="#b1b1b7"
+                    strokeWidth={1}
+                    style={{fill: "none", }}
+                />
+            </g>
         </>
     );
 };

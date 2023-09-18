@@ -1,7 +1,7 @@
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "./../components/Layout"
-import ReactFlow, { ReactFlowProvider, useNodesState, useEdgesState, MiniMap, Background, Controls, BackgroundVariant, NodeChange, NodePositionChange, Node, getRectOfNodes, getTransformForBounds, useReactFlow, useViewport, EdgeTypes, Viewport } from 'reactflow';
+import ReactFlow, { ReactFlowProvider, useNodesState, useEdgesState, MiniMap, Background, Controls, BackgroundVariant, NodeChange, NodePositionChange, Node, getRectOfNodes, getTransformForBounds, useReactFlow, useViewport, EdgeTypes, Viewport, Edge } from 'reactflow';
 import DrawTable from "../components/drawChildren/DrawTable";
 import 'reactflow/dist/style.css';
 import { TOP_TOOLBAR_HEIGHT_PX } from "../components/TopToolbarAction"
@@ -20,10 +20,35 @@ import DomainTableRow from "../model/domain/DomainTableRow";
 import DomainTableRowDataTypeArguments from "../model/domain/DomainTableRowDataTypeArguments";
 import CommandHistory from "../commands/CommandHistory";
 import ErdEdge from "../components/drawChildren/ErdEdge";
+import { CommandModifyTable, CommandModifyTableArgs } from "../commands/appCommands/CommandModifyTableArgs";
 
 // nodeTypes need to be defined outside the render function or using memo
 const nodeTypes = { 
     tableNode: DrawTable
+}
+
+type EdgeActionPayload = {
+    show: boolean,
+    props: {
+        x: number,
+        y: number,
+        sourceTable: VmTable | null,
+        sourceTableRowName: string,
+        targetTableName: string,
+        targetTableRowName: string
+    }
+}
+
+const edgeActionPayloadDefault: EdgeActionPayload = {
+    show: false,
+    props: {
+        x: 0,
+        y: 0,
+        sourceTable: null,
+        sourceTableRowName: "",
+        targetTableName: "",
+        targetTableRowName: ""
+    }
 }
 
 
@@ -31,7 +56,11 @@ const edgeTypes: EdgeTypes = {
     'erd-edge': ErdEdge
 };
 
-const convertTableToNode = (table: VmTable, node: undefined|Node) => {
+type NodePayload = {
+    table: VmTable
+}
+
+const convertTableToNode = (table: VmTable, node: undefined|Node<NodePayload>): Node<NodePayload> => {
     return {
         id: table.id,
         type: "tableNode",
@@ -47,7 +76,16 @@ const convertRelationToEdgeId = (relation: VmRelation) => {
     return `${relation.source.head}(${relation.sourceRow.name}) references ${relation.target.head}(${relation.targetRow.name})`;
 }
 
-const convertRelationToEdge = (relation: VmRelation) => {
+type EdgePayload = {
+    pathType: string,
+    sourceSide: 'left' | 'right'
+    targetSide: 'left' | 'right'
+    onClick: (e: React.MouseEvent, edgeId: string) => void,
+    sourceRowName: string,
+    targetRowName: string,
+};
+
+const convertRelationToEdge = (relation: VmRelation, onClick: (e: React.MouseEvent, edgeId: string) => void): Edge<EdgePayload> => {
     let sourceSide: 'left' | 'right' = relation.source.position.x > relation.target.position.x ? "left" : "right";
     let targetSide: 'left' | 'right' = relation.source.position.x > relation.target.position.x ? "right" : "left";
     let pathType: 'default' | 'straight' | 'step' | 'smoothstep' | 'simplebezier' = 'default';
@@ -67,7 +105,10 @@ const convertRelationToEdge = (relation: VmRelation) => {
         data: {
             pathType,
             sourceSide,
-            targetSide
+            targetSide,
+            onClick,
+            sourceRowName: relation.sourceRow.name,
+            targetRowName: relation.targetRow.name,
         }
     }
 }
@@ -79,18 +120,115 @@ export const WrappedDraw = () => {
     const relations = useApplicationState(state => state.schemaRelations);
     const activeDatabaseId = useApplicationState(state => state.activeDatabaseId);
     const currentViewport = useApplicationState(state => state.currentViewport);
-    const [nodes, setNodes, onNodesChange] = useNodesState([]);
-    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+    const [nodes, setNodes, onNodesChange] = useNodesState<NodePayload>([]);
+    const nodesRef = useRef<Node<NodePayload>[]>([]);
+    nodesRef.current = nodes;
+    const [edges, setEdges, onEdgesChange] = useEdgesState<EdgePayload>([]);
+    const edgesRef = useRef<Edge<EdgePayload>[]>([]);
+    edgesRef.current = edges;
     const { x, y, zoom } = useViewport();
     const navigate = useNavigate();
-    
+    const [edgeActions, setEdgeActions] = useState(edgeActionPayloadDefault);
+    const mainContentRef = useRef<HTMLDivElement>(null);
+
+    const deleteRelation = (tableId: string, rowName: string, targetTableName: string) => {
+        const table = tables.find(x => x.id === tableId);
+        if (! table) { 
+            console.error("Table not found!")
+            return;
+        }
+        CommandHistory.execute(history, new CommandModifyTable(
+            { tables }, 
+            new CommandModifyTableArgs(
+                DomainTable.init(table), 
+                new DomainTable(
+                    table.id, 
+                    table.position, 
+                    table.head, 
+                    table.tableRows.map(tr => 
+                        {
+                            return new DomainTableRow(
+                                tr.name,
+                                tr.datatype.dataTypeId,
+                                tr.datatype.arguments.map(arg => {
+                                    return new DomainTableRowDataTypeArguments(arg.value, arg.argument.id)
+                                }),
+                                tr.datatype.isNullable,
+                                tr.name !== rowName ? tr.attributes :
+                                tr.attributes.filter(attribute => attribute !== `FK("${targetTableName}")`)
+                            );
+                        }
+                    )
+                )
+            )
+        ), setTables);
+        setEdgeActions(edgeActionPayloadDefault);
+    }
+
+    const deleteTableRow = (tableId: string, rowName: string) => {
+        const table = tables.find(x => x.id === tableId);
+        if (! table) { 
+            console.error("Table not found!")
+            return;
+        }
+        CommandHistory.execute(history, new CommandModifyTable(
+            { tables }, 
+            new CommandModifyTableArgs(
+                DomainTable.init(table), 
+                new DomainTable(
+                    table.id, 
+                    table.position, 
+                    table.head, 
+                    table.tableRows
+                        .filter(tr => tr.name !== rowName)
+                        .map(tr => 
+                        {
+                            return new DomainTableRow(
+                                tr.name,
+                                tr.datatype.dataTypeId,
+                                tr.datatype.arguments.map(arg => {
+                                    return new DomainTableRowDataTypeArguments(arg.value, arg.argument.id)
+                                }),
+                                tr.datatype.isNullable,
+                                tr.attributes
+                            );
+                        }
+                    )
+                )
+            )
+        ), setTables);
+        setEdgeActions(edgeActionPayloadDefault);
+    }
+
+
+    const onEdgeClick = (e: React.MouseEvent, edgeId: string) => {
+        let selectedEdge = edgesRef.current.find(x => x.id === edgeId);
+        if (!selectedEdge) { 
+            console.error(`Edge with id (${edgeId}) not found.`); 
+            return; 
+        }
+        const sourceTable = nodesRef.current.find(x => x.id === selectedEdge!.source)!.data.table;
+        const targetTable = nodesRef.current.find(x => x.id === selectedEdge!.target)!.data.table;
+        setEdgeActions({
+            show: true,
+            props: {
+                x: e.clientX - mainContentRef.current!.getBoundingClientRect().x,
+                y: e.clientY - mainContentRef.current!.getBoundingClientRect().y,
+                sourceTable: sourceTable,
+                sourceTableRowName: selectedEdge.data!.sourceRowName,
+                targetTableName: targetTable.head,
+                targetTableRowName: selectedEdge.data!.targetRowName
+            }
+        });
+    };
+
     useEffect(() => {
         setEdges([]);
         setNodes(tables.map(table => {
             const node = nodes.find(node => table.id === node.id);
             return convertTableToNode(table, node);
         }));
-        setEdges(relations.map(relation => convertRelationToEdge(relation)));
+        setEdges(relations.map(relation => convertRelationToEdge(relation, onEdgeClick)));
     }, [tables])
 
     const onNodeClick = (event: React.MouseEvent, node: Node) => {
@@ -207,21 +345,57 @@ export const WrappedDraw = () => {
                 <DrawSide tables={tables} createNewTable={createNewTable}>
                     <MiniMap style={{ position: "relative", margin: 0 }} pannable maskColor="rgba(213, 213, 213, 0.7)" nodeColor="#ffc8c8" />
                 </DrawSide>
-                <ReactFlow
-                    nodes={nodes}
-                    edges={edges}
-                    nodeTypes={nodeTypes}
-                    edgeTypes={edgeTypes}
-                    onNodesChange={onNodesChangeCommandListener}
-                    onEdgesChange={onEdgesChange}
-                    onNodeClick={onNodeClick}
-                    disableKeyboardA11y={true}  // keyboard arrow key movement is not supported
-                    defaultViewport={currentViewport}
-                    onMove={onMove}
-                >
-                    <Controls />
-                    <Background variant={BackgroundVariant.Dots} gap={36} size={1} style={{ backgroundColor: "#f8fafc"}} />
-                </ReactFlow>
+                <div ref={mainContentRef} className="w-100 h-100 position-relative overflow-hidden">
+                    <ReactFlow
+                        nodes={nodes}
+                        edges={edges}
+                        nodeTypes={nodeTypes}
+                        edgeTypes={edgeTypes}
+                        onNodesChange={onNodesChangeCommandListener}
+                        onEdgesChange={onEdgesChange}
+                        onNodeClick={onNodeClick}
+                        disableKeyboardA11y={true}  // keyboard arrow key movement is not supported
+                        defaultViewport={currentViewport}
+                        onMove={onMove}
+                    >
+                        <Controls />
+                        <Background variant={BackgroundVariant.Dots} gap={36} size={1} style={{ backgroundColor: "#f8fafc"}} />
+                    </ReactFlow>
+                    {edgeActions.show ? 
+                        <div style={{ 
+                            position: "absolute", 
+                            top: edgeActions.props.y, 
+                            left: edgeActions.props.x, 
+                            transform: "translate(-50%, -3em)",
+                            background: "white",
+                            border: "1px solid #ccc",
+                            borderRadius: "4px",
+                        }}
+                            onMouseLeave={() => setEdgeActions(edgeActionPayloadDefault)}
+                        >
+                            <div className="modal-header p-2" style={{ borderBottom: "solid 1px #eee", height: "3em" }}>
+                                <h5 className="modal-title">Relation</h5>
+                                <button type="button" className="btn-close" aria-label="Close" onClick={() => setEdgeActions(edgeActionPayloadDefault)}></button>
+                            </div>
+
+                            <div className="p-2" style={{ borderBottom: "solid 1px #eee"}}>
+                                <div className="row">
+                                    <span className="col-sm-3">Source: </span>
+                                    <span style={{ whiteSpace: "nowrap" }} className="col-sm-auto">{edgeActions.props.sourceTable?.head}.{edgeActions.props.sourceTableRowName}</span>
+                                </div> 
+                                <div className="row">
+                                    <span className="col-sm-3">Target: </span>
+                                    <span style={{ whiteSpace: "nowrap" }} className="col-sm-auto">{edgeActions.props.targetTableName}.{edgeActions.props.targetTableRowName}</span>
+                                </div>
+                            </div>
+                            <div className="p-2">
+                                <button className="btn btn-danger w-100 mb-1" onClick={() => deleteRelation(edgeActions.props.sourceTable!.id, edgeActions.props.sourceTableRowName, edgeActions.props.targetTableName)}>Delete relation</button>
+                                <button className="btn btn-danger w-100" onClick={() => deleteTableRow(edgeActions.props.sourceTable!.id, edgeActions.props.sourceTableRowName)}>Delete source</button>
+                            </div>
+                        </div>
+                        : null
+                    }
+                </div>
             </div>
         </Layout>
     </>

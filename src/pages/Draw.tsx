@@ -420,7 +420,7 @@ export const WrappedDraw = () => {
                             <div className="p-2">
                                 <div className="d-flex mb-1 gap-1">
                                     <button className="btn btn-light w-50" onClick={() => toggleRelationSourceRequiredness(edgeActions.props!.sourceTable.id, edgeActions.props!.sourceTableRow.name)}>Source: {edgeActions.props!.sourceTableRow.datatype.isNullable ? "?" : "!"}</button>
-                                    <button className="btn btn-light w-50 disabled" onClick={() => deleteRelation(edgeActions.props!.sourceTable.id, edgeActions.props!.sourceTableRow.name, edgeActions.props!.targetTableName)}>Target: m</button> 
+                                    <button className="btn btn-light w-50 disabled">Target: m</button> 
                                 </div>
                                 <button className="btn btn-danger w-100 mb-1" onClick={() => deleteRelation(edgeActions.props!.sourceTable.id, edgeActions.props!.sourceTableRow.name, edgeActions.props!.targetTableName)}>Delete relation</button>
                                 <button className="btn btn-danger w-100" onClick={() => deleteTableRow(edgeActions.props!.sourceTable.id, edgeActions.props!.sourceTableRow.name)}>Delete source</button>

@@ -231,6 +231,7 @@ export const WrappedDraw = () => {
 
 
     const onEdgeClick = (e: React.MouseEvent, edgeId: string) => {
+        e.stopPropagation();
         let selectedEdge = edgesRef.current.find(x => x.id === edgeId)!;
         if (!selectedEdge) { 
             console.error(`Edge with id (${edgeId}) not found.`); 
@@ -383,6 +384,7 @@ export const WrappedDraw = () => {
                         edgeTypes={edgeTypes}
                         onNodesChange={onNodesChangeCommandListener}
                         onEdgesChange={onEdgesChange}
+                        onClick={() => setEdgeActions(edgeActionPayloadDefault)}
                         onNodeClick={onNodeClick}
                         disableKeyboardA11y={true}  // keyboard arrow key movement is not supported
                         defaultViewport={currentViewport}
@@ -400,7 +402,6 @@ export const WrappedDraw = () => {
                             border: "1px solid #ccc",
                             borderRadius: "4px",
                         }}
-                            onMouseLeave={() => setEdgeActions(edgeActionPayloadDefault)}
                         >
                             <div className="modal-header p-2" style={{ borderBottom: "solid 1px #eee", height: "3em" }}>
                                 <h5 className="modal-title">Relation</h5>

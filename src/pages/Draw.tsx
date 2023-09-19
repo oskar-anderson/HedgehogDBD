@@ -22,6 +22,7 @@ import CommandHistory from "../commands/CommandHistory";
 import ErdEdge from "../components/drawChildren/ErdEdge";
 import { CommandModifyTable, CommandModifyTableArgs } from "../commands/appCommands/CommandModifyTableArgs";
 import VmTableRow from "../model/viewModel/VmTableRow";
+import UseIsDebugVisible from "../components/drawChildren/UseIsDebugVisible";
 
 // nodeTypes need to be defined outside the render function or using memo
 const nodeTypes = { 
@@ -125,6 +126,8 @@ export const WrappedDraw = () => {
     const navigate = useNavigate();
     const [edgeActions, setEdgeActions] = useState(edgeActionPayloadDefault);
     const mainContentRef = useRef<HTMLDivElement>(null);
+    const isDebugVisible = UseIsDebugVisible();
+    const [mouseScreenPosition, setMouseScreenPosition] = useState({x: 0, y: 0});
 
     const toggleRelationSourceRequiredness = (tableId: string, rowName: string) => {
         const table = tables.find(x => x.id === tableId);
@@ -366,7 +369,13 @@ export const WrappedDraw = () => {
         const attribution = document.querySelector(".react-flow__attribution");
         const attribuitionTextElement = attribution?.children[0] as HTMLLinkElement;
         attribuitionTextElement!.innerHTML = "HedgehogDBD uses React Flow";
-    }, [])
+    }, []);
+
+    const onDrawMouseMove = (e: React.MouseEvent) => {
+        if (isDebugVisible) {
+            setMouseScreenPosition({ x: e.clientX, y: e.clientY });
+        }
+    }
 
     return <>
         <Layout currentlyLoadedLink={"Draw"}>
@@ -384,6 +393,7 @@ export const WrappedDraw = () => {
                         onNodesChange={onNodesChangeCommandListener}
                         onEdgesChange={onEdgesChange}
                         onClick={() => setEdgeActions(edgeActionPayloadDefault)}
+                        onMouseMove={onDrawMouseMove}
                         onNodeClick={onNodeClick}
                         disableKeyboardA11y={true}  // keyboard arrow key movement is not supported
                         defaultViewport={currentViewport}
@@ -428,6 +438,42 @@ export const WrappedDraw = () => {
                         </div>
                         : null
                     }
+                    {
+                        isDebugVisible ?
+                        <div style={{ 
+                            position: "absolute", 
+                            top: 0, 
+                            right: 0,
+                            width: "200px",
+                            backgroundColor: "rgba(30, 30, 30, 0.8)", 
+                            zIndex: 1,
+                            color: "#eee",
+                            pointerEvents: 'none',
+                        }} className="p-1">
+                            <div>
+                                <div>
+                                    Screen x: {currentViewport.x.toFixed(2)}
+                                </div>
+                                
+                                <div>
+                                    Screen y: {currentViewport.y.toFixed(2)}
+                                </div>
+                                
+                                <div>
+                                    Zoom: {currentViewport.zoom.toFixed(2)}
+                                </div>
+
+                                <div>
+                                    Mouse x: {mouseScreenPosition.x}
+                                </div>
+                                <div>
+                                    Mouse y: {mouseScreenPosition.y}
+                                </div>
+                            </div>
+                        </div> :
+                        null
+                    }
+                    
                 </div>
             </div>
         </Layout>

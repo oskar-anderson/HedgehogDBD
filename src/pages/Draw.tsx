@@ -63,7 +63,8 @@ const convertTableToNode = (table: VmTable, node: undefined|Node<NodePayload>): 
         data: {
             table: table
         },
-        width: node?.width
+        width: node?.width,
+        height: node?.height,
     }
 }
 
@@ -342,18 +343,13 @@ export const WrappedDraw = () => {
     const downloadImagePng = () => {
         const nodesBounds = getRectOfNodes(nodes);
         const viewportElement = document.querySelector('.react-flow__viewport') as HTMLElement;
-        const imageWidth = viewportElement.offsetWidth;
-        const imageHeight = viewportElement.offsetHeight;
-        console.log(imageWidth, imageHeight)
-        const transform = getTransformForBounds(nodesBounds, imageWidth, imageHeight, 0.5, 2);
-    
+        const transform = getTransformForBounds(nodesBounds, nodesBounds.width, nodesBounds.height, 0.5, 2);
+
         toPng(viewportElement, {
-            width: imageWidth / transform[2],
-            height: imageHeight / transform[2],
-            pixelRatio: 4,
+            width: nodesBounds.width,
+            height: nodesBounds.height,
+            pixelRatio: 2,
             style: {
-                width: `${imageWidth}px`,
-                height: `${imageHeight}px`,
                 transform: `translate(${transform[0]}px, ${transform[1]}px) scale(${transform[2]})`
             },
         },

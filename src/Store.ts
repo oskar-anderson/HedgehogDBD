@@ -30,6 +30,7 @@ interface ApplicationState {
         redoHistory: string[],
     }) => void;
     setScripts: (scripts: Script[]) => void;
+    setViewport: (newValue: { x: number, y: number, zoom: number }) => void;
 }
 
 export const useApplicationState = create(
@@ -67,6 +68,11 @@ export const useApplicationState = create(
             setScripts: (newValue: Script[]) => set((state) => (
                 {
                     scripts: newValue,
+                }
+            )),
+            setViewport: (newValue: {x: number, y: number, zoom: number }) => set((state) => (
+                {
+                    currentViewport: newValue
                 }
             )),
         }),

@@ -114,6 +114,7 @@ export const WrappedDraw = () => {
     const relations = useApplicationState(state => state.schemaRelations);
     const activeDatabaseId = useApplicationState(state => state.activeDatabaseId);
     const currentViewport = useApplicationState(state => state.currentViewport);
+    const setViewport = useApplicationState(state => state.setViewport);
     const [nodes, setNodes, onNodesChange] = useNodesState<NodePayload>([]);
     const nodesRef = useRef<Node<NodePayload>[]>([]);
     nodesRef.current = nodes;
@@ -332,9 +333,7 @@ export const WrappedDraw = () => {
     }
 
     const onMove = (event: MouseEvent | TouchEvent, viewport: Viewport) => {
-        currentViewport.x = viewport.x;
-        currentViewport.y = viewport.y;
-        currentViewport.zoom = viewport.zoom;
+        setViewport(viewport);
     }
 
     const downloadImagePng = () => {

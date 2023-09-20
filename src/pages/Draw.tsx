@@ -23,6 +23,7 @@ import ErdEdge from "../components/drawChildren/ErdEdge";
 import { CommandModifyTable, CommandModifyTableArgs } from "../commands/appCommands/CommandModifyTableArgs";
 import VmTableRow from "../model/viewModel/VmTableRow";
 import UseIsDebugVisible from "../components/drawChildren/UseIsDebugVisible";
+import ErdEdgeConnection from "../components/drawChildren/ErdEdgeConnection";
 
 // nodeTypes need to be defined outside the render function or using memo
 const nodeTypes = { 
@@ -51,8 +52,9 @@ const edgeTypes: EdgeTypes = {
     'erd-edge': ErdEdge
 };
 
-type NodePayload = {
-    table: VmTable
+export type NodePayload = {
+    table: VmTable,
+    showHandles: boolean
 }
 
 const convertTableToNode = (table: VmTable, node: undefined|Node<NodePayload>): Node<NodePayload> => {
@@ -61,7 +63,8 @@ const convertTableToNode = (table: VmTable, node: undefined|Node<NodePayload>): 
         type: "tableNode",
         position: table.position,
         data: {
-            table: table
+            table: table,
+            showHandles: node?.data.showHandles ?? false
         },
         width: node?.width,
         height: node?.height,
@@ -94,9 +97,9 @@ const convertRelationToEdge = (relation: VmRelation, onClick: (e: React.MouseEve
         id: convertRelationToEdgeId(relation),
         type: 'erd-edge',
         source: relation.source.id,
-        sourceHandle: `${relation.source.head}-${relation.sourceRow.name}-${sourceSide}`,
+        sourceHandle: `${relation.source.head}-row-${relation.sourceRow.name}-${sourceSide}`,
         target: relation.target.id,
-        targetHandle: `${relation.target.head}-${relation.targetRow.name}-${targetSide}`,
+        targetHandle: `${relation.target.head}-row-${relation.targetRow.name}-${targetSide}`,
         style: style,
         data: {
             pathType,
@@ -267,7 +270,26 @@ export const WrappedDraw = () => {
         setEdges(relations.map(relation => convertRelationToEdge(relation, onEdgeClick)));
     }, [tables])
 
-    const onNodeClick = (event: React.MouseEvent, node: Node) => {
+    const onClick = () => { 
+        setEdgeActions(edgeActionPayloadDefault); 
+        nodes.forEach(x => x.data.showHandles = false );
+        setNodes([...nodes.map(x => { 
+            x.data.showHandles = false; 
+            return x; 
+        })])
+    }
+
+    const onNodeClick = (event: React.MouseEvent, node: Node<NodePayload>) => {
+        console.log("onNodeClick"); 
+        event.stopPropagation();
+        setNodes([...nodes.map(x => { 
+            x.data.showHandles = x.id === node.id; 
+            return x;
+        })])
+        node.data.showHandles = true;
+    }
+
+    const onNodeDoubleClick = (event: React.MouseEvent, node: Node) => {
         navigate(`/table/${node.data.table.id}`);
     }
 
@@ -337,6 +359,7 @@ export const WrappedDraw = () => {
     }
 
     const onMove = (event: MouseEvent | TouchEvent, viewport: Viewport) => {
+        setEdgeActions(edgeActionPayloadDefault);
         setViewport(viewport);
     }
 
@@ -386,11 +409,14 @@ export const WrappedDraw = () => {
                         edges={edges}
                         nodeTypes={nodeTypes}
                         edgeTypes={edgeTypes}
+                        connectionLineComponent={ErdEdgeConnection}
+                        onContextMenu={(e) => e.preventDefault()}
                         onNodesChange={onNodesChangeCommandListener}
                         onEdgesChange={onEdgesChange}
-                        onClick={() => setEdgeActions(edgeActionPayloadDefault)}
+                        onClick={onClick}
                         onMouseMove={onDrawMouseMove}
                         onNodeClick={onNodeClick}
+                        onNodeDoubleClick={onNodeDoubleClick}
                         disableKeyboardA11y={true}  // keyboard arrow key movement is not supported
                         defaultViewport={currentViewport}
                         onMove={onMove}
@@ -414,13 +440,13 @@ export const WrappedDraw = () => {
                             </div>
 
                             <div className="p-2" style={{ borderBottom: "solid 1px #eee"}}>
-                                <div className="row">
-                                    <span className="col-sm-3">Source: </span>
-                                    <span style={{ whiteSpace: "nowrap" }} className="col-sm-auto">{edgeActions.props!.sourceTable.head}.{edgeActions.props!.sourceTableRow!.name}</span>
+                                <div className="d-flex">
+                                    <span style={{ width: "80px" }}>Source: </span>
+                                    <span>{edgeActions.props!.sourceTable.head}.{edgeActions.props!.sourceTableRow!.name}</span>
                                 </div> 
-                                <div className="row">
-                                    <span className="col-sm-3">Target: </span>
-                                    <span style={{ whiteSpace: "nowrap" }} className="col-sm-auto">{edgeActions.props!.targetTableName}.{edgeActions.props!.targetTableRowName}</span>
+                                <div className="d-flex">
+                                    <span style={{ width: "80px" }}>Target: </span>
+                                    <span>{edgeActions.props!.targetTableName}.{edgeActions.props!.targetTableRowName}</span>
                                 </div>
                             </div>
                             <div className="p-2">

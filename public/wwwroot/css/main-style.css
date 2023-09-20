@@ -131,6 +131,14 @@ https://stackoverflow.com/questions/5214127/css-technique-for-a-horizontal-line-
     height: auto;
 }
 
+.react-flow__pane {
+    cursor: default !important;
+}
+
+.react-flow__node {
+    cursor: pointer !important;
+}
+
 .btn-create {
     --bs-btn-color: #fff;
     --bs-btn-bg: #58B785;

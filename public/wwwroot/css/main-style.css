@@ -139,6 +139,10 @@ https://stackoverflow.com/questions/5214127/css-technique-for-a-horizontal-line-
     cursor: pointer !important;
 }
 
+.hover-gray:hover {
+    background-color: #eee;
+}
+
 .btn-create {
     --bs-btn-color: #fff;
     --bs-btn-bg: #58B785;

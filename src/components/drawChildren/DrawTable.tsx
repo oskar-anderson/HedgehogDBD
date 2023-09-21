@@ -6,6 +6,7 @@ import { useApplicationState } from '../../Store';
 import DataType from '../../model/DataTypes/DataType';
 import { EdgeNotationPadding } from './ErdEdge';
 import { NodePayload } from '../../pages/Draw';
+import { publish } from '../../Event';
 
 
 type DrawTableRowProps = {
@@ -13,11 +14,10 @@ type DrawTableRowProps = {
     rowStartY: number,
     height: number,
     tableName: string,
-    handleStyle: React.CSSProperties,
-    onMouseUp: (e: React.MouseEvent, row: VmTableRow) => void
+    handleStyle: React.CSSProperties
 }
 
-function DrawTableRow( { row, rowStartY, height, tableName, handleStyle, onMouseUp }: DrawTableRowProps) {
+function DrawTableRow( { row, rowStartY, height, tableName, handleStyle }: DrawTableRowProps) {
     const relations = useApplicationState(state => state.schemaRelations);
     const relation = relations
                         .filter(relation => relation.source.head === tableName)
@@ -25,8 +25,19 @@ function DrawTableRow( { row, rowStartY, height, tableName, handleStyle, onMouse
     const nullabilitySymbol = row.datatype.isNullable ? "?" : "";
     const selectListName = DataType.getTypeById(row.datatype.dataTypeId).getSelectListName();
     const displayName = `${selectListName}${nullabilitySymbol}`;
+    
     return (
-        <div onMouseUp={ (e) => onMouseUp(e, row) }>
+        <div 
+            onContextMenu={ (e) => { 
+                e.preventDefault();
+                e.stopPropagation();
+                publish("DrawTableRow__onRightClick", { event: e, row: row }); 
+            }} 
+            onMouseUp={ (e) => { 
+                e.stopPropagation();
+                publish("DrawTableRow__onMouseUp", { event: e }); 
+            }}
+        >
             <Handle type="target" id={`${tableName}-row-${row.name}-left`} position={Position.Left} style={{ top: `${rowStartY}px`, left: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle }} />
             <Handle type="source" id={`${tableName}-row-${row.name}-left`} position={Position.Left} style={{ top: `${rowStartY}px`, left: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle }} />
             
@@ -73,13 +84,6 @@ export const handleStyle: React.CSSProperties = {
     
 
 export default function DrawTable(node: NodeProps<NodePayload>) {
-    const connectionSourceHandleId = useStore((state) => state.connectionHandleId);
-    const connectionTargetHandle = useStore((state) => state.connectionEndHandle);
-    const tables = useApplicationState(state => state.schemaTables);
-    const isConnecting = !!connectionSourceHandleId;
-    if (isConnecting) {
-        console.log("isConnecting", true, connectionSourceHandleId)
-    }
     const tableRef = useRef(null)
     const table = node.data.table;
     const outerBorderWidth = 2;
@@ -102,15 +106,7 @@ export default function DrawTable(node: NodeProps<NodePayload>) {
     const handleStyleDynamic: React.CSSProperties = {...handleStyle, opacity: node.data.showHandles ? 1 : 1, pointerEvents: node.data.showHandles ? "none" : "all"}
     const alignCenterTweak = 2;
     const tableY = outerBorderWidth + 2 * innerBorderWidth + headingPaddingY + rowHeight/2 + alignCenterTweak;
-    const onTableRowMouseUp = (e: React.MouseEvent, row: VmTableRow) => {
-        if (isConnecting) {
-            
-        }
-        console.log("mouse up on row", "is connecting", isConnecting, connectionSourceHandleId, row.name);
-    }
-    const onTableHeaderMouseUp = (e: React.MouseEvent) => {
-        console.log("mouse up on head", "is connecting", isConnecting, connectionSourceHandleId);
-    }
+
     return (
         <>
             <div ref={tableRef} style={{  
@@ -118,9 +114,18 @@ export default function DrawTable(node: NodeProps<NodePayload>) {
                 border: `solid ${outerBorderWidth}px ${node.selected ? '#5a67d8' : 'transparent'}`,
                 width: "min-content"
             }}>
-                <div className="tableHeader" style={{ borderRadius: "4px",  backgroundColor: "#eee" }}>
+                <div style={{ borderRadius: "4px",  backgroundColor: "#eee" }}>
 
-                    <div className="d-flex" style={headingStyle} onMouseUp={(e) => onTableHeaderMouseUp(e) }>
+                    <div className="d-flex" style={headingStyle} 
+                        onMouseUp={(e) => {
+                            e.stopPropagation();
+                            publish("DrawTable__onHeaderMouseUp", { event: e, table: table}) 
+                        }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            publish("DrawTable__onHeaderMouseClick", { event: e, table: table}) 
+                        }}    
+                    >
                         <Handle type="target" id={`${table.head}-head-left`} position={Position.Left} style={{ top: `${tableY}px`, left: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle }} />
                         <Handle type="source" id={`${table.head}-head-left`} position={Position.Left} style={{ top: `${tableY}px`, left: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle }} />
             
@@ -138,7 +143,7 @@ export default function DrawTable(node: NodeProps<NodePayload>) {
                             table.tableRows.map((row, i) => {
                                 const rowStartY = (outerBorderWidth + 2 * innerBorderWidth + rowHeight + 2*headingPaddingY) + (rowHeight / 2) + (i * rowHeight) + alignCenterTweak;  
                                 return (
-                                    <DrawTableRow key={row.name} handleStyle={handleStyleDynamic} tableName={table.head} row={row} rowStartY={rowStartY} height={rowHeight} onMouseUp={onTableRowMouseUp} />
+                                    <DrawTableRow key={row.name} handleStyle={handleStyleDynamic} tableName={table.head} row={row} rowStartY={rowStartY} height={rowHeight} />
                                 );
                             })
                         }

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "./../components/Layout"
-import ReactFlow, { ReactFlowProvider, useNodesState, useEdgesState, MiniMap, Background, Controls, BackgroundVariant, NodeChange, NodePositionChange, Node, getRectOfNodes, getTransformForBounds, useReactFlow, useViewport, EdgeTypes, Viewport, Edge } from 'reactflow';
+import ReactFlow, { ReactFlowProvider, useNodesState, useEdgesState, MiniMap, Background, Controls, BackgroundVariant, NodeChange, NodePositionChange, Node, getRectOfNodes, getTransformForBounds, useReactFlow, useViewport, EdgeTypes, Viewport, Edge, ConnectionLineType, Position } from 'reactflow';
 import DrawTable from "../components/drawChildren/DrawTable";
 import 'reactflow/dist/style.css';
 import { TOP_TOOLBAR_HEIGHT_PX } from "../components/TopToolbarAction"
@@ -24,6 +24,7 @@ import { CommandModifyTable, CommandModifyTableArgs } from "../commands/appComma
 import VmTableRow from "../model/viewModel/VmTableRow";
 import UseIsDebugVisible from "../components/drawChildren/UseIsDebugVisible";
 import ErdEdgeConnection from "../components/drawChildren/ErdEdgeConnection";
+import { subscribe, unsubscribe } from "../Event";
 
 // nodeTypes need to be defined outside the render function or using memo
 const nodeTypes = { 
@@ -43,6 +44,41 @@ type EdgeActionPayload = {
 }
 
 const edgeActionPayloadDefault: EdgeActionPayload = {
+    show: false,
+    props: null
+}
+
+type NodeActionPayload = {
+    show: boolean,
+    props: {
+        x: number,
+        y: number,
+        type: "table" | "row"
+        table: {
+            name: string
+        } | null,
+        row: {
+            name: string
+        } | null
+    } | null
+}
+
+const nodeActionPayloadDefault: NodeActionPayload = {
+    show: false,
+    props: null
+}
+
+type ErdEdgeConnection = {
+    show: boolean,
+    props: {
+        width: number,
+        height: number,
+        x: number,
+        y: number,
+    } | null
+}
+
+const erdEdgeConnectionDefault: ErdEdgeConnection = {
     show: false,
     props: null
 }
@@ -132,6 +168,92 @@ export const WrappedDraw = () => {
     const mainContentRef = useRef<HTMLDivElement>(null);
     const isDebugVisible = UseIsDebugVisible();
     const [mouseScreenPosition, setMouseScreenPosition] = useState({x: 0, y: 0});
+    const [tableContextMenu, setTableContextMenu] = useState<NodeActionPayload>(nodeActionPayloadDefault);
+    const [erdEdgeConnection, setErdEdgeConnection] = useState<ErdEdgeConnection>(erdEdgeConnectionDefault);
+
+
+    useEffect(() => {
+        const onTableHeaderMouseClick = (e: any) => {
+            console.log("onTableHeaderMouseClick");
+
+            
+        }
+        const onTableHeaderMouseUp = (e: any) => {
+            console.log("onHeaderMouseUp")
+            const event = e.detail.event as React.MouseEvent;
+            if (event.button === 2) {
+                const table = e.detail.table as VmTable;
+                setTableContextMenu({
+                    show: true,
+                    props: {
+                        x: event.clientX - mainContentRef.current!.getBoundingClientRect().x,
+                        y: event.clientY - mainContentRef.current!.getBoundingClientRect().y,
+                        type: "table",
+                        table: {
+                            name: table.head
+                        },
+                        row: null
+                    }
+                });
+            }
+        }
+        const onTableRowMouseUp = (e: React.MouseEvent) => {
+            
+        }
+        const onTableRowRightClick = (e: any) => {
+            console.log("onTableRowRightClick")
+            const event = e.detail.event as React.MouseEvent;
+            const row = e.detail.row as VmTableRow;
+            setTableContextMenu({
+                show: true,
+                props: {
+                    x: event.clientX - mainContentRef.current!.getBoundingClientRect().x,
+                    y: event.clientY - mainContentRef.current!.getBoundingClientRect().y,
+                    type: "row",
+                    row: {
+                        name: row.name
+                    },
+                    table: null
+                }
+            });
+        }
+        subscribe("DrawTable__onHeaderMouseUp", onTableHeaderMouseUp);
+        subscribe("DrawTable__onHeaderMouseClick", onTableHeaderMouseClick);
+        subscribe("DrawTableRow__onMouseUp", onTableRowMouseUp);
+        subscribe("DrawTableRow__onRightClick", onTableRowRightClick);
+        return () => { 
+            unsubscribe("DrawTable__onHeaderMouseUp", onTableHeaderMouseUp); 
+            unsubscribe("DrawTable__onHeaderMouseClick", onTableHeaderMouseClick); 
+            unsubscribe("DrawTableRow__onMouseUp", onTableRowMouseUp); 
+            unsubscribe("DrawTableRow__onRightClick", onTableRowRightClick); 
+            
+        }
+    }, []);
+
+    const addRelation = (tableContextMenuProps: { 
+        x: number;
+        y: number;
+        type: "table" | "row";
+        table: {
+            name: string;
+        } | null;
+        row: {
+            name: string;
+        } | null;
+    }) => {
+        setTableContextMenu(nodeActionPayloadDefault);
+        setErdEdgeConnection({
+            show: true,
+            props: {
+                width: 100,
+                height: 100,
+                x: 500,
+                y: 500
+            }
+        })
+        console.log("addRelation");
+        
+    }
 
     const toggleRelationSourceRequiredness = (tableId: string, rowName: string) => {
         const table = tables.find(x => x.id === tableId);
@@ -271,12 +393,15 @@ export const WrappedDraw = () => {
     }, [tables])
 
     const onClick = () => { 
+        console.log("onClick")
+        setTableContextMenu(nodeActionPayloadDefault);
         setEdgeActions(edgeActionPayloadDefault); 
         nodes.forEach(x => x.data.showHandles = false );
         setNodes([...nodes.map(x => { 
             x.data.showHandles = false; 
             return x; 
         })])
+        
     }
 
     const onNodeClick = (event: React.MouseEvent, node: Node<NodePayload>) => {
@@ -391,9 +516,7 @@ export const WrappedDraw = () => {
     }, []);
 
     const onDrawMouseMove = (e: React.MouseEvent) => {
-        if (isDebugVisible) {
-            setMouseScreenPosition({ x: e.clientX, y: e.clientY });
-        }
+        setMouseScreenPosition({ x: e.clientX, y: e.clientY });
     }
 
     return <>
@@ -410,17 +533,28 @@ export const WrappedDraw = () => {
                         nodeTypes={nodeTypes}
                         edgeTypes={edgeTypes}
                         connectionLineComponent={ErdEdgeConnection}
-                        onContextMenu={(e) => e.preventDefault()}
+                        onContextMenu={(e) => { 
+                            // prevent right click context menu from appearing unless shift is down
+                            if (! e.shiftKey) {
+                                e.preventDefault();
+                            }
+                        }}
                         onNodesChange={onNodesChangeCommandListener}
                         onEdgesChange={onEdgesChange}
                         onClick={onClick}
                         onMouseMove={onDrawMouseMove}
-                        onNodeClick={onNodeClick}
+                        
                         onNodeDoubleClick={onNodeDoubleClick}
                         disableKeyboardA11y={true}  // keyboard arrow key movement is not supported
                         defaultViewport={currentViewport}
                         onMove={onMove}
                     >
+                        { erdEdgeConnection.show ? 
+                        <svg viewBox="0 0 100 100" style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 1, pointerEvents: "none"}}>
+                            <ErdEdgeConnection connectionLineType={ConnectionLineType.Straight} fromX={erdEdgeConnection.props!.x} fromY={erdEdgeConnection.props!.y} toX={mouseScreenPosition.x} toY={mouseScreenPosition.y} fromPosition={Position.Left} toPosition={Position.Left} connectionStatus={null} />
+                        </svg> :
+                        null
+                    }
                         <Controls />
                         <Background variant={BackgroundVariant.Dots} gap={36} size={1} style={{ backgroundColor: "#f8fafc"}} />
                     </ReactFlow>
@@ -471,7 +605,13 @@ export const WrappedDraw = () => {
                             zIndex: 1,
                             color: "#eee",
                             pointerEvents: 'none',
-                        }} className="p-1">
+                        }} className="p-1" 
+                            onContextMenu={(e) => { 
+                            // prevent right click context menu from appearing unless shift is down
+                            if (! e.shiftKey) {
+                                e.preventDefault();
+                            }
+                        }}>
                             <div>
                                 <div>
                                     Screen x: {currentViewport.x.toFixed(2)}
@@ -495,6 +635,34 @@ export const WrappedDraw = () => {
                         </div> :
                         null
                     }
+                    {
+                        tableContextMenu.show ?
+                        <div style={{ 
+                            position: "absolute", 
+                            top: tableContextMenu.props!.y, 
+                            left: tableContextMenu.props!.x,
+                            width: "200px",
+                            backgroundColor: "white",
+                            borderRadius: "6px",
+                            border: "1px solid #eee",
+                        }} className="py-1"
+                            onContextMenu={(e) => { 
+                            // prevent right click context menu from appearing unless shift is down
+                            if (! e.shiftKey) {
+                                e.preventDefault();
+                            }
+                        }}>
+                            { 
+                                tableContextMenu.props!.type === "row" ?
+                                    <div className="px-3 py-1 text-muted">{tableContextMenu.props?.row?.name} field</div>
+                                    :
+                                    <div className="px-3 py-1 text-muted">{tableContextMenu.props?.table?.name} table</div>
+                            }
+                            <div className="px-3 py-1 hover-gray" onClick={() => addRelation(tableContextMenu.props!) }>Add relation</div>
+                        </div> :
+                        null
+                    }
+                    
                     
                 </div>
             </div>

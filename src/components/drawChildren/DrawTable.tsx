@@ -13,14 +13,14 @@ type DrawTableRowProps = {
     row: VmTableRow,
     rowStartY: number,
     height: number,
-    tableName: string,
+    table: VmTable,
     handleStyle: React.CSSProperties
 }
 
-function DrawTableRow( { row, rowStartY, height, tableName, handleStyle }: DrawTableRowProps) {
+function DrawTableRow( { row, rowStartY, height, table, handleStyle }: DrawTableRowProps) {
     const relations = useApplicationState(state => state.schemaRelations);
     const relation = relations
-                        .filter(relation => relation.source.head === tableName)
+                        .filter(relation => relation.source.head === table.head)
                         .find(relation => relation.sourceRow.name === row.name);
     const nullabilitySymbol = row.datatype.isNullable ? "?" : "";
     const selectListName = DataType.getTypeById(row.datatype.dataTypeId).getSelectListName();
@@ -31,15 +31,15 @@ function DrawTableRow( { row, rowStartY, height, tableName, handleStyle }: DrawT
             onContextMenu={ (e) => { 
                 e.preventDefault();
                 e.stopPropagation();
-                publish("DrawTableRow__onRightClick", { event: e, row: row }); 
+                publish("DrawTableRow__onRightClick", { event: e, row, table }); 
             }} 
             onMouseUp={ (e) => { 
                 e.stopPropagation();
                 publish("DrawTableRow__onMouseUp", { event: e }); 
             }}
         >
-            <Handle type="target" id={`${tableName}-row-${row.name}-left`} position={Position.Left} style={{ top: `${rowStartY}px`, left: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle }} />
-            <Handle type="source" id={`${tableName}-row-${row.name}-left`} position={Position.Left} style={{ top: `${rowStartY}px`, left: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle }} />
+            <Handle type="target" id={`${table.head}-row-${row.name}-left`} position={Position.Left} style={{ top: `${rowStartY}px`, left: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle }} />
+            <Handle type="source" id={`${table.head}-row-${row.name}-left`} position={Position.Left} style={{ top: `${rowStartY}px`, left: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle }} />
             
             <div className='d-flex' style={{ height: `${height}px`, whiteSpace: "nowrap" }}>
                 <div className='d-flex align-items-center' style={{ width: "16px", paddingRight: "4px" }}>
@@ -66,8 +66,8 @@ function DrawTableRow( { row, rowStartY, height, tableName, handleStyle }: DrawT
                 </div>
             </div>
 
-            <Handle type="target" id={`${tableName}-row-${row.name}-right`} position={Position.Right} style={{ top: `${rowStartY}px`, right: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle}} />
-            <Handle type="source" id={`${tableName}-row-${row.name}-right`} position={Position.Right} style={{ top: `${rowStartY}px`, right: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle}} />
+            <Handle type="target" id={`${table.head}-row-${row.name}-right`} position={Position.Right} style={{ top: `${rowStartY}px`, right: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle}} />
+            <Handle type="source" id={`${table.head}-row-${row.name}-right`} position={Position.Right} style={{ top: `${rowStartY}px`, right: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle}} />
         </div>
     );
 }
@@ -103,7 +103,7 @@ export default function DrawTable(node: NodeProps<NodePayload>) {
         borderBottom: `solid ${innerBorderWidth}px #dee5ee`
     }
 
-    const handleStyleDynamic: React.CSSProperties = {...handleStyle, opacity: node.data.showHandles ? 1 : 1, pointerEvents: node.data.showHandles ? "none" : "all"}
+    const handleStyleDynamic: React.CSSProperties = {...handleStyle, opacity: 1, pointerEvents: "all"}
     const alignCenterTweak = 2;
     const tableY = outerBorderWidth + 2 * innerBorderWidth + headingPaddingY + rowHeight/2 + alignCenterTweak;
 
@@ -126,14 +126,11 @@ export default function DrawTable(node: NodeProps<NodePayload>) {
                             publish("DrawTable__onHeaderMouseClick", { event: e, table: table}) 
                         }}    
                     >
-                        <Handle type="target" id={`${table.head}-head-left`} position={Position.Left} style={{ top: `${tableY}px`, left: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle }} />
                         <Handle type="source" id={`${table.head}-head-left`} position={Position.Left} style={{ top: `${tableY}px`, left: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle }} />
             
                         <div className="w-100 d-flex justify-content-center" style={{ fontWeight: "500" }}>{table.head}</div>
                     
-                        <Handle type="target" id={`${table.head}-head-right`} position={Position.Right} style={{ top: `${tableY}px`, right: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle}} />
                         <Handle type="source" id={`${table.head}-head-right`} position={Position.Right} style={{ top: `${tableY}px`, right: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle}} />
-
                     </div>
 
 
@@ -143,7 +140,7 @@ export default function DrawTable(node: NodeProps<NodePayload>) {
                             table.tableRows.map((row, i) => {
                                 const rowStartY = (outerBorderWidth + 2 * innerBorderWidth + rowHeight + 2*headingPaddingY) + (rowHeight / 2) + (i * rowHeight) + alignCenterTweak;  
                                 return (
-                                    <DrawTableRow key={row.name} handleStyle={handleStyleDynamic} tableName={table.head} row={row} rowStartY={rowStartY} height={rowHeight} />
+                                    <DrawTableRow key={row.name} handleStyle={handleStyleDynamic} table={table} row={row} rowStartY={rowStartY} height={rowHeight} />
                                 );
                             })
                         }

@@ -23,12 +23,14 @@ import ErdEdge from "../components/drawChildren/ErdEdge";
 import { CommandModifyTable, CommandModifyTableArgs } from "../commands/appCommands/CommandModifyTableArgs";
 import VmTableRow from "../model/viewModel/VmTableRow";
 import UseIsDebugVisible from "../components/drawChildren/UseIsDebugVisible";
-import ErdEdgeConnection from "../components/drawChildren/ErdEdgeConnection";
 import { subscribe, unsubscribe } from "../Event";
+import CursorNode from "../components/drawChildren/CursorNode";
+import CursorEdge from "../components/drawChildren/CursorEdge";
 
 // nodeTypes need to be defined outside the render function or using memo
 const nodeTypes = { 
-    tableNode: DrawTable
+    tableNode: DrawTable,
+    cursorNode: CursorNode
 }
 
 type EdgeActionPayload = {
@@ -54,9 +56,8 @@ type NodeActionPayload = {
         x: number,
         y: number,
         type: "table" | "row"
-        table: {
-            name: string
-        } | null,
+        tableId: string,
+        tableName: string,
         row: {
             name: string
         } | null
@@ -68,29 +69,21 @@ const nodeActionPayloadDefault: NodeActionPayload = {
     props: null
 }
 
-type ErdEdgeConnection = {
-    show: boolean,
-    props: {
-        width: number,
-        height: number,
-        x: number,
-        y: number,
-    } | null
-}
-
-const erdEdgeConnectionDefault: ErdEdgeConnection = {
-    show: false,
-    props: null
-}
-
-
 const edgeTypes: EdgeTypes = {
-    'erd-edge': ErdEdge
+    'erd-edge': ErdEdge,
+    'cursor-edge': CursorEdge
 };
+
+function getCursorNode(mouseWorldPosition: { x: number, y: number }): Node {
+    return {
+        id: "cursor-node",
+        type: "cursorNode",
+        position: { x: mouseWorldPosition.x, y: mouseWorldPosition.y },
+    } as Node
+}
 
 export type NodePayload = {
     table: VmTable,
-    showHandles: boolean
 }
 
 const convertTableToNode = (table: VmTable, node: undefined|Node<NodePayload>): Node<NodePayload> => {
@@ -100,7 +93,6 @@ const convertTableToNode = (table: VmTable, node: undefined|Node<NodePayload>): 
         position: table.position,
         data: {
             table: table,
-            showHandles: node?.data.showHandles ?? false
         },
         width: node?.width,
         height: node?.height,
@@ -168,9 +160,15 @@ export const WrappedDraw = () => {
     const mainContentRef = useRef<HTMLDivElement>(null);
     const isDebugVisible = UseIsDebugVisible();
     const [mouseScreenPosition, setMouseScreenPosition] = useState({x: 0, y: 0});
+    const [mouseWorldPosition, setMouseWorldPosition] = useState({x: 0, y: 0});
     const [tableContextMenu, setTableContextMenu] = useState<NodeActionPayload>(nodeActionPayloadDefault);
-    const [erdEdgeConnection, setErdEdgeConnection] = useState<ErdEdgeConnection>(erdEdgeConnectionDefault);
+    const [cursorEdge, setCursorEdge] = useState<{
+        sourceNodeId: string,
+        sourceHandleId: string,
+        targetNodeId: string
+    } | null>(null);
 
+    
 
     useEffect(() => {
         const onTableHeaderMouseClick = (e: any) => {
@@ -189,9 +187,8 @@ export const WrappedDraw = () => {
                         x: event.clientX - mainContentRef.current!.getBoundingClientRect().x,
                         y: event.clientY - mainContentRef.current!.getBoundingClientRect().y,
                         type: "table",
-                        table: {
-                            name: table.head
-                        },
+                        tableId: table.id,
+                        tableName: table.head,
                         row: null
                     }
                 });
@@ -204,16 +201,18 @@ export const WrappedDraw = () => {
             console.log("onTableRowRightClick")
             const event = e.detail.event as React.MouseEvent;
             const row = e.detail.row as VmTableRow;
+            const table = e.detail.table as VmTable;
             setTableContextMenu({
                 show: true,
                 props: {
                     x: event.clientX - mainContentRef.current!.getBoundingClientRect().x,
                     y: event.clientY - mainContentRef.current!.getBoundingClientRect().y,
                     type: "row",
+                    tableId: table.id,
+                    tableName: table.head,
                     row: {
                         name: row.name
                     },
-                    table: null
                 }
             });
         }
@@ -231,28 +230,23 @@ export const WrappedDraw = () => {
     }, []);
 
     const addRelation = (tableContextMenuProps: { 
-        x: number;
-        y: number;
         type: "table" | "row";
-        table: {
-            name: string;
-        } | null;
+        tableId: string,
+        tableName: string;
         row: {
             name: string;
         } | null;
     }) => {
         setTableContextMenu(nodeActionPayloadDefault);
-        setErdEdgeConnection({
-            show: true,
-            props: {
-                width: 100,
-                height: 100,
-                x: 500,
-                y: 500
-            }
+        const sourceNodeId = tableContextMenuProps.tableId;
+        const sourceHandleId = tableContextMenuProps.type === "table" ? 
+            `${tableContextMenuProps.tableName}-head-left` : 
+            `${tableContextMenuProps.tableName}-row-${tableContextMenuProps.row!.name}-left`;
+        setCursorEdge({
+            sourceNodeId: sourceNodeId,
+            sourceHandleId: sourceHandleId,
+            targetNodeId: "cursor-node",
         })
-        console.log("addRelation");
-        
     }
 
     const toggleRelationSourceRequiredness = (tableId: string, rowName: string) => {
@@ -385,33 +379,31 @@ export const WrappedDraw = () => {
 
     useEffect(() => {
         setEdges([]);
-        setNodes(tables.map(table => {
+        setNodes([...tables.map(table => {
             const node = nodes.find(node => table.id === node.id);
             return convertTableToNode(table, node);
-        }));
-        setEdges(relations.map(relation => convertRelationToEdge(relation, onEdgeClick)));
-    }, [tables])
+        }), getCursorNode(mouseWorldPosition)]);
+        
+        const cursorEdgeDrawable = cursorEdge ? {
+            id: "cursor-edge",
+            type: 'cursor-edge',
+            source: cursorEdge!.sourceNodeId,
+            sourceHandle: cursorEdge!.sourceHandleId,
+            target: cursorEdge!.targetNodeId,
+            zIndex: 1
+        } : null;
+        const edges = relations.map(relation => convertRelationToEdge(relation, onEdgeClick))
+        if (cursorEdgeDrawable) {
+            edges.push(cursorEdgeDrawable);
+        }
+        
+        setEdges(edges);
+    }, [tables, cursorEdge])
 
     const onClick = () => { 
         console.log("onClick")
         setTableContextMenu(nodeActionPayloadDefault);
         setEdgeActions(edgeActionPayloadDefault); 
-        nodes.forEach(x => x.data.showHandles = false );
-        setNodes([...nodes.map(x => { 
-            x.data.showHandles = false; 
-            return x; 
-        })])
-        
-    }
-
-    const onNodeClick = (event: React.MouseEvent, node: Node<NodePayload>) => {
-        console.log("onNodeClick"); 
-        event.stopPropagation();
-        setNodes([...nodes.map(x => { 
-            x.data.showHandles = x.id === node.id; 
-            return x;
-        })])
-        node.data.showHandles = true;
     }
 
     const onNodeDoubleClick = (event: React.MouseEvent, node: Node) => {
@@ -516,7 +508,20 @@ export const WrappedDraw = () => {
     }, []);
 
     const onDrawMouseMove = (e: React.MouseEvent) => {
-        setMouseScreenPosition({ x: e.clientX, y: e.clientY });
+        const screenPosition = { 
+            x: e.clientX - mainContentRef.current!.getBoundingClientRect().x, 
+            y: e.clientY - mainContentRef.current!.getBoundingClientRect().y 
+        }
+        const worldPosition = { 
+            x: (screenPosition.x - currentViewport.x) / currentViewport.zoom, 
+            y: (screenPosition.y - currentViewport.y) / currentViewport.zoom 
+        };
+        setMouseScreenPosition(screenPosition);
+        setMouseWorldPosition(worldPosition);
+        setNodes([...tables.map(table => {
+            const node = nodes.find(node => table.id === node.id);
+            return convertTableToNode(table, node);
+        }), getCursorNode(worldPosition)]);
     }
 
     return <>
@@ -532,7 +537,6 @@ export const WrappedDraw = () => {
                         edges={edges}
                         nodeTypes={nodeTypes}
                         edgeTypes={edgeTypes}
-                        connectionLineComponent={ErdEdgeConnection}
                         onContextMenu={(e) => { 
                             // prevent right click context menu from appearing unless shift is down
                             if (! e.shiftKey) {
@@ -549,12 +553,6 @@ export const WrappedDraw = () => {
                         defaultViewport={currentViewport}
                         onMove={onMove}
                     >
-                        { erdEdgeConnection.show ? 
-                        <svg viewBox="0 0 100 100" style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 1, pointerEvents: "none"}}>
-                            <ErdEdgeConnection connectionLineType={ConnectionLineType.Straight} fromX={erdEdgeConnection.props!.x} fromY={erdEdgeConnection.props!.y} toX={mouseScreenPosition.x} toY={mouseScreenPosition.y} fromPosition={Position.Left} toPosition={Position.Left} connectionStatus={null} />
-                        </svg> :
-                        null
-                    }
                         <Controls />
                         <Background variant={BackgroundVariant.Dots} gap={36} size={1} style={{ backgroundColor: "#f8fafc"}} />
                     </ReactFlow>
@@ -626,10 +624,17 @@ export const WrappedDraw = () => {
                                 </div>
 
                                 <div>
-                                    Mouse x: {mouseScreenPosition.x}
+                                    Mouse sx: {mouseScreenPosition.x.toFixed(2)}
                                 </div>
                                 <div>
-                                    Mouse y: {mouseScreenPosition.y}
+                                    Mouse sy: {mouseScreenPosition.y.toFixed(2)}
+                                </div>
+
+                                <div>
+                                    Mouse wx: {mouseWorldPosition.x.toFixed(2)}
+                                </div>
+                                <div>
+                                    Mouse wy: {mouseWorldPosition.y.toFixed(2)}
                                 </div>
                             </div>
                         </div> :
@@ -656,7 +661,7 @@ export const WrappedDraw = () => {
                                 tableContextMenu.props!.type === "row" ?
                                     <div className="px-3 py-1 text-muted">{tableContextMenu.props?.row?.name} field</div>
                                     :
-                                    <div className="px-3 py-1 text-muted">{tableContextMenu.props?.table?.name} table</div>
+                                    <div className="px-3 py-1 text-muted">{tableContextMenu.props?.tableName} table</div>
                             }
                             <div className="px-3 py-1 hover-gray" onClick={() => addRelation(tableContextMenu.props!) }>Add relation</div>
                         </div> :

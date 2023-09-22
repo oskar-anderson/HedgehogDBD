@@ -120,7 +120,7 @@ export default function ErdEdge({
 
                 <circle className='react-flow__edge-path' cx={edgeTargetTableCollisionPoint.x + (targetPosition === "left" ? -3 : 3)} cy={edgeTargetTableCollisionPoint.y} r={2} stroke='#b1b1b7' strokeWidth={1} style={{ fill: '#b1b1b7' }}  />
                 
-                <BaseEdge id={id} path={edgePath} style={style} />
+                <BaseEdge interactionWidth={0} id={id} path={edgePath} style={style} />
                 { sourcePosition === Position.Left ?
                 <ManyLeft tableCollisionPoint={ edgeSourceTableCollisionPoint } />
                 : sourcePosition === Position.Right ? 

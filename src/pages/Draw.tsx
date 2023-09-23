@@ -22,10 +22,11 @@ import CommandHistory from "../commands/CommandHistory";
 import ErdEdge from "../components/drawChildren/ErdEdge";
 import { CommandModifyTable, CommandModifyTableArgs } from "../commands/appCommands/CommandModifyTableArgs";
 import VmTableRow from "../model/viewModel/VmTableRow";
-import UseIsDebugVisible from "../components/drawChildren/UseIsDebugVisible";
+import useIsDebugVisible from "../components/drawChildren/UseIsDebugVisible";
 import { subscribe, unsubscribe } from "../Event";
 import CursorNode from "../components/drawChildren/CursorNode";
 import CursorEdge from "../components/drawChildren/CursorEdge";
+import useTableHeaderLeftClick from "../components/drawChildren/UseTableHeaderLeftClick";
 
 // nodeTypes need to be defined outside the render function or using memo
 const nodeTypes = { 
@@ -158,45 +159,52 @@ export const WrappedDraw = () => {
     const navigate = useNavigate();
     const [edgeActions, setEdgeActions] = useState(edgeActionPayloadDefault);
     const mainContentRef = useRef<HTMLDivElement>(null);
-    const isDebugVisible = UseIsDebugVisible();
+    const isDebugVisible = useIsDebugVisible();
     const [mouseScreenPosition, setMouseScreenPosition] = useState({x: 0, y: 0});
     const [mouseWorldPosition, setMouseWorldPosition] = useState({x: 0, y: 0});
     const [tableContextMenu, setTableContextMenu] = useState<NodeActionPayload>(nodeActionPayloadDefault);
     const [cursorEdge, setCursorEdge] = useState<{
         sourceNodeId: string,
         sourceHandleId: string,
+        sourceHandleIdWithoutSide: string,
         targetNodeId: string
     } | null>(null);
+    useTableHeaderLeftClick({ cursorEdge, setCursorEdge })
 
     
 
     useEffect(() => {
-        const onTableHeaderMouseClick = (e: any) => {
-            console.log("onTableHeaderMouseClick");
-
-            
-        }
-        const onTableHeaderMouseUp = (e: any) => {
-            console.log("onHeaderMouseUp")
+        const onTableHeaderRightClick = (e: any) => {
+            console.log("onTableHeaderRightClick")
             const event = e.detail.event as React.MouseEvent;
-            if (event.button === 2) {
-                const table = e.detail.table as VmTable;
-                setTableContextMenu({
-                    show: true,
-                    props: {
-                        x: event.clientX - mainContentRef.current!.getBoundingClientRect().x,
-                        y: event.clientY - mainContentRef.current!.getBoundingClientRect().y,
-                        type: "table",
-                        tableId: table.id,
-                        tableName: table.head,
-                        row: null
-                    }
-                });
-            }
+            const table = e.detail.table as VmTable;
+            setTableContextMenu({
+                show: true,
+                props: {
+                    x: event.clientX - mainContentRef.current!.getBoundingClientRect().x,
+                    y: event.clientY - mainContentRef.current!.getBoundingClientRect().y,
+                    type: "table",
+                    tableId: table.id,
+                    tableName: table.head,
+                    row: null
+                }
+            });
         }
-        const onTableRowMouseUp = (e: React.MouseEvent) => {
+        subscribe("DrawTable__onHeaderRightClick", onTableHeaderRightClick);
+        return () => { 
+            unsubscribe("DrawTable__onHeaderRightClick", onTableHeaderRightClick); 
+        }
+    }, []);
+    useEffect(() => {
+        const onTableRowMouseUp = (e: any) => {
             
         }
+        subscribe("DrawTableRow__onMouseUp", (e) => onTableRowMouseUp(e));
+        return () => { 
+            unsubscribe("DrawTableRow__onMouseUp", onTableRowMouseUp); 
+        }
+    }, [])
+    useEffect(() => {
         const onTableRowRightClick = (e: any) => {
             console.log("onTableRowRightClick")
             const event = e.detail.event as React.MouseEvent;
@@ -216,18 +224,11 @@ export const WrappedDraw = () => {
                 }
             });
         }
-        subscribe("DrawTable__onHeaderMouseUp", onTableHeaderMouseUp);
-        subscribe("DrawTable__onHeaderMouseClick", onTableHeaderMouseClick);
-        subscribe("DrawTableRow__onMouseUp", onTableRowMouseUp);
-        subscribe("DrawTableRow__onRightClick", onTableRowRightClick);
+        subscribe("DrawTableRow__onRightClick", (e) => onTableRowRightClick(e));
         return () => { 
-            unsubscribe("DrawTable__onHeaderMouseUp", onTableHeaderMouseUp); 
-            unsubscribe("DrawTable__onHeaderMouseClick", onTableHeaderMouseClick); 
-            unsubscribe("DrawTableRow__onMouseUp", onTableRowMouseUp); 
-            unsubscribe("DrawTableRow__onRightClick", onTableRowRightClick); 
-            
+            unsubscribe("DrawTableRow__onRightClick", onTableRowRightClick);  
         }
-    }, []);
+    }, [])
 
     const addRelation = (tableContextMenuProps: { 
         type: "table" | "row";
@@ -240,11 +241,12 @@ export const WrappedDraw = () => {
         setTableContextMenu(nodeActionPayloadDefault);
         const sourceNodeId = tableContextMenuProps.tableId;
         const sourceHandleId = tableContextMenuProps.type === "table" ? 
-            `${tableContextMenuProps.tableName}-head-left` : 
-            `${tableContextMenuProps.tableName}-row-${tableContextMenuProps.row!.name}-left`;
+            `${tableContextMenuProps.tableName}-head` : 
+            `${tableContextMenuProps.tableName}-row-${tableContextMenuProps.row!.name}`;
         setCursorEdge({
             sourceNodeId: sourceNodeId,
-            sourceHandleId: sourceHandleId,
+            sourceHandleId: sourceHandleId + "-left",
+            sourceHandleIdWithoutSide: sourceHandleId,
             targetNodeId: "cursor-node",
         })
     }
@@ -383,7 +385,6 @@ export const WrappedDraw = () => {
             const node = nodes.find(node => table.id === node.id);
             return convertTableToNode(table, node);
         }), getCursorNode(mouseWorldPosition)]);
-        
         const cursorEdgeDrawable = cursorEdge ? {
             id: "cursor-edge",
             type: 'cursor-edge',
@@ -475,7 +476,7 @@ export const WrappedDraw = () => {
         }
     }
 
-    const onMove = (event: MouseEvent | TouchEvent, viewport: Viewport) => {
+    const onMoveWorldToViewport = (event: MouseEvent | TouchEvent, viewport: Viewport) => {
         setEdgeActions(edgeActionPayloadDefault);
         setViewport(viewport);
     }
@@ -522,6 +523,14 @@ export const WrappedDraw = () => {
             const node = nodes.find(node => table.id === node.id);
             return convertTableToNode(table, node);
         }), getCursorNode(worldPosition)]);
+        if (cursorEdge) {
+            const sourceNode = nodes.find(x => x.id === cursorEdge.sourceNodeId);
+            const sourceNodeXMiddle = sourceNode!.position.x + sourceNode!.width! / 2;
+            const side = worldPosition.x < sourceNodeXMiddle ? "-left" : "-right"
+            const newSourceHandleId = cursorEdge.sourceHandleIdWithoutSide + side;
+            cursorEdge.sourceHandleId = newSourceHandleId;
+            setCursorEdge({...cursorEdge})
+        }
     }
 
     return <>
@@ -551,7 +560,7 @@ export const WrappedDraw = () => {
                         onNodeDoubleClick={onNodeDoubleClick}
                         disableKeyboardA11y={true}  // keyboard arrow key movement is not supported
                         defaultViewport={currentViewport}
-                        onMove={onMove}
+                        onMove={onMoveWorldToViewport}
                     >
                         <Controls />
                         <Background variant={BackgroundVariant.Dots} gap={36} size={1} style={{ backgroundColor: "#f8fafc"}} />

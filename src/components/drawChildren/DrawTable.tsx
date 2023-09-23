@@ -117,13 +117,13 @@ export default function DrawTable(node: NodeProps<NodePayload>) {
                 <div style={{ borderRadius: "4px",  backgroundColor: "#eee" }}>
 
                     <div className="d-flex" style={headingStyle} 
-                        onMouseUp={(e) => {
+                        onContextMenu={(e) => {
                             e.stopPropagation();
-                            publish("DrawTable__onHeaderMouseUp", { event: e, table: table}) 
+                            publish("DrawTable__onHeaderRightClick", { event: e, table: table}) 
                         }}
                         onClick={(e) => {
                             e.stopPropagation();
-                            publish("DrawTable__onHeaderMouseClick", { event: e, table: table}) 
+                            publish("DrawTable__onHeaderLeftClick", { event: e, table: table}) 
                         }}    
                     >
                         <Handle type="source" id={`${table.head}-head-left`} position={Position.Left} style={{ top: `${tableY}px`, left: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle }} />

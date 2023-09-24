@@ -130,7 +130,7 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
         setRows([...tableRows]);
     }
 
-    const handleAttributeChange = (newValue: string) => {
+    const handleAttributeChange = (newValue: string): void => {
         tableRows[index].rowAttributes = newValue;
         setRows([...tableRows]);
     }

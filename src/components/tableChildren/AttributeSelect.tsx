@@ -64,17 +64,33 @@ export default function AttributeSelect({
   }
 
   return (
-    <div className="input-group mb-3" style={{ flexWrap: 'nowrap' }}>
-      <input
-        className="form-control w-25"
-        style={{ display: "inline", width: "10%" }}
-        value={selectedAttributeType}
-        list="type-suggestions"
-        type="search"
-        onChange={(event) => {
-          changeAttributeType((event.target as HTMLInputElement).value as string)
-        }}
-      />
+    <>
+      <div className="input-group mb-3" style={{ flexWrap: 'nowrap' }}>
+        <input
+          className="form-control"
+          style={{ maxWidth: "70px" }}
+          value={selectedAttributeType}
+          list="type-suggestions"
+          type="search"
+          onChange={(event) => {
+            changeAttributeType((event.target as HTMLInputElement).value as string)
+          }}
+        />
+
+        <input
+          disabled={checkIfDisabled()}
+          className="form-control"
+          list="table-suggestions"
+          type="search"
+          value={selectedAttributeType === "FK"
+            ? FKTableName
+            : ''}
+          placeholder={selectedAttributeType === "FK" ? 'Select table' : ''}
+          onChange={(event) => {
+            changeFKTableName((event.target as HTMLInputElement).value)
+          }}
+        />
+      </div>
 
       <datalist id="type-suggestions">
         { attributeTypes.map(type => (
@@ -92,21 +108,7 @@ export default function AttributeSelect({
           <option value={table.head} key={table.id} />
         ))}
       </datalist>
+    </>
 
-      <input
-        disabled={checkIfDisabled()}
-        className="form-control"
-        style={{ display: "inline", width: "80%" }}
-        list="table-suggestions"
-        type="search"
-        value={selectedAttributeType === "FK"
-          ? FKTableName
-          : ''}
-        placeholder={selectedAttributeType === "FK" ? 'Select table' : ''}
-        onChange={(event) => {
-          changeFKTableName((event.target as HTMLInputElement).value)
-        }}
-      />
-    </div>
   );
 }

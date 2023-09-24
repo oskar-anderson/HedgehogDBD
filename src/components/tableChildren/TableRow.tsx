@@ -3,6 +3,7 @@ import { useApplicationState } from "../../Store"
 import DataType from "../../model/DataTypes/DataType"
 import Databases from "../../model/DataTypes/Databases"
 import { OverlayTrigger, Popover } from "react-bootstrap"
+import AttributeSelect from './AttributeSelect';
 
 
 interface UiTableRowDatatype {
@@ -281,6 +282,7 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
                 </div>
             </td>
             <td>
+                <AttributeSelect />
                 <input className="form-control" style={{ display: "inline" }} list="attribute-suggestions" type="text" value={row.rowAttributes}
                     onChange={(e) => handleAttributeChange((e.target as HTMLInputElement).value) }
                 />

@@ -1,4 +1,4 @@
-import useIsDebugVisible from "../../drawChildren/UseIsDebugVisible";
+import useIsDebugVisible from "../../drawChildren/use/UseIsDebugVisible";
 
 
 type DebugModalProps = {

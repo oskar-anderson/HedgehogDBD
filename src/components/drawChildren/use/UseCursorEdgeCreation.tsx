@@ -1,12 +1,22 @@
 import { useEffect } from "react";
-import { subscribe, unsubscribe } from "../../Event";
-import CommandHistory from "../../commands/CommandHistory";
-import { CommandModifyTable, CommandModifyTableArgs } from "../../commands/appCommands/CommandModifyTableArgs";
-import DomainTable from "../../model/domain/DomainTable";
-import DataType from "../../model/DataTypes/DataType";
-import Databases from "../../model/DataTypes/Databases";
-import VmTable from "../../model/viewModel/VmTable";
-import { useApplicationState } from "../../Store";
+import { subscribe, unsubscribe } from "../../../Event";
+import CommandHistory from "../../../commands/CommandHistory";
+import { CommandModifyTable, CommandModifyTableArgs } from "../../../commands/appCommands/CommandModifyTableArgs";
+import DomainTable from "../../../model/domain/DomainTable";
+import DataType from "../../../model/DataTypes/DataType";
+import Databases from "../../../model/DataTypes/Databases";
+import VmTable from "../../../model/viewModel/VmTable";
+import { useApplicationState } from "../../../Store";
+
+
+export type CursorEdgePayload = {
+    sourceNodeId: string,
+    sourceHandleId: string,
+    sourceHandleIdWithoutSide: string,
+    sourceTableRow: string | null,
+    targetNodeId: string
+} | null
+
 
 const getNewSourceRowName = (sourceTable: VmTable, targetTable: VmTable) => {
     const rowNameBase = targetTable.head + "_id";
@@ -21,31 +31,21 @@ const getNewSourceRowName = (sourceTable: VmTable, targetTable: VmTable) => {
     return newRowName;
 }
 
-type useTableHeaderLeftClickProps = {
-    cursorEdge: {
-        sourceNodeId: string;
-        sourceHandleId: string;
-        sourceHandleIdWithoutSide: string;
-        targetNodeId: string;
-    } | null, 
-    setCursorEdge: (value: React.SetStateAction<{
-        sourceNodeId: string;
-        sourceHandleId: string;
-        sourceHandleIdWithoutSide: string;
-        targetNodeId: string;
-    } | null>) => void
+type useCursorEdgeTableHeaderLeftClickProps = {
+    cursorEdge: CursorEdgePayload, 
+    setCursorEdge: (value: React.SetStateAction<CursorEdgePayload>) => void
 }
 
-export default function useTableHeaderLeftClick({ cursorEdge, setCursorEdge } : useTableHeaderLeftClickProps) {
+export default function useCursorEdgeCreation({ cursorEdge, setCursorEdge } : useCursorEdgeTableHeaderLeftClickProps) {
     const history = useApplicationState(state => state.history);
     const tables = useApplicationState(state => state.schemaTables);
     const setTables = useApplicationState(state => state.setTables);
     const activeDatabaseId = useApplicationState(state => state.activeDatabaseId);
 
-    const onTableHeaderLeftClick = (e: any) => {
-        const event = e.detail.event as React.MouseEvent;
+    const onCompleteAddingRelation = (e: any) => {
         const targetTable = e.detail.table as VmTable;
-        if (cursorEdge) {
+        if (!cursorEdge) { return };
+        if (!cursorEdge.sourceTableRow) {
             const sourceTable = tables.find(table => table.id === cursorEdge!.sourceNodeId)!;
             const newRowName = getNewSourceRowName(sourceTable, targetTable);
             let newTable = JSON.parse(JSON.stringify(sourceTable));
@@ -79,11 +79,30 @@ export default function useTableHeaderLeftClick({ cursorEdge, setCursorEdge } : 
             );
             setCursorEdge(null);
         }
+        if (cursorEdge.sourceTableRow) {
+            const sourceTable = tables.find(table => table.id === cursorEdge!.sourceNodeId)!;
+            let newTable = JSON.parse(JSON.stringify(sourceTable)) as VmTable;
+            let tableRowToChange = newTable.tableRows.find(x => x.name === cursorEdge.sourceTableRow)!
+            tableRowToChange.attributes.push(`FK("${targetTable.head}")`)
+            const command = new CommandModifyTable(
+                { tables },
+                new CommandModifyTableArgs(
+                    DomainTable.init(sourceTable),
+                    DomainTable.init(newTable)
+                )
+            );
+            CommandHistory.execute(
+                history, 
+                command,
+                setTables
+            );
+            setCursorEdge(null);
+        }
     }
     useEffect(() => {
-        subscribe("DrawTable__onHeaderLeftClick", onTableHeaderLeftClick);
+        subscribe("e_completeAddingRelation", onCompleteAddingRelation);
         return () => { 
-            unsubscribe("DrawTable__onHeaderLeftClick", onTableHeaderLeftClick); 
+            unsubscribe("e_completeAddingRelation", onCompleteAddingRelation); 
         }
     }, [cursorEdge, setCursorEdge, history, tables, setTables, activeDatabaseId])
 }

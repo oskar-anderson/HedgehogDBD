@@ -33,10 +33,6 @@ function DrawTableRow( { row, rowStartY, height, table, handleStyle }: DrawTable
                 e.stopPropagation();
                 publish("DrawTableRow__onRightClick", { event: e, row, table }); 
             }} 
-            onMouseUp={ (e) => { 
-                e.stopPropagation();
-                publish("DrawTableRow__onMouseUp", { event: e }); 
-            }}
         >
             <Handle type="target" id={`${table.head}-row-${row.name}-left`} position={Position.Left} style={{ top: `${rowStartY}px`, left: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle }} />
             <Handle type="source" id={`${table.head}-row-${row.name}-left`} position={Position.Left} style={{ top: `${rowStartY}px`, left: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle }} />
@@ -79,7 +75,9 @@ export const handleStyle: React.CSSProperties = {
     width: `${handleSize}px`,
     background: "#555", 
     border: "none", 
-    cursor: "inherit" 
+    cursor: "inherit",
+    opacity: 0,
+    pointerEvents: "all"
 }
     
 
@@ -103,7 +101,6 @@ export default function DrawTable(node: NodeProps<NodePayload>) {
         borderBottom: `solid ${innerBorderWidth}px #dee5ee`
     }
 
-    const handleStyleDynamic: React.CSSProperties = {...handleStyle, opacity: 1, pointerEvents: "all"}
     const alignCenterTweak = 2;
     const tableY = outerBorderWidth + 2 * innerBorderWidth + headingPaddingY + rowHeight/2 + alignCenterTweak;
 
@@ -113,6 +110,9 @@ export default function DrawTable(node: NodeProps<NodePayload>) {
                 borderRadius: "6px", 
                 border: `solid ${outerBorderWidth}px ${node.selected ? '#5a67d8' : 'transparent'}`,
                 width: "min-content"
+            }} onClick={(e) => {
+                e.stopPropagation();
+                publish("e_completeAddingRelation", { event: e, table: table}) 
             }}>
                 <div style={{ borderRadius: "4px",  backgroundColor: "#eee" }}>
 
@@ -122,10 +122,6 @@ export default function DrawTable(node: NodeProps<NodePayload>) {
                             e.preventDefault();
                             publish("DrawTable__onHeaderRightClick", { event: e, table: table}) 
                         }}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            publish("DrawTable__onHeaderLeftClick", { event: e, table: table}) 
-                        }}    
                     >
                         <Handle type="source" id={`${table.head}-head-left`} position={Position.Left} style={{ top: `${tableY}px`, left: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle }} />
             
@@ -141,7 +137,7 @@ export default function DrawTable(node: NodeProps<NodePayload>) {
                             table.tableRows.map((row, i) => {
                                 const rowStartY = (outerBorderWidth + 2 * innerBorderWidth + rowHeight + 2*headingPaddingY) + (rowHeight / 2) + (i * rowHeight) + alignCenterTweak;  
                                 return (
-                                    <DrawTableRow key={row.name} handleStyle={handleStyleDynamic} table={table} row={row} rowStartY={rowStartY} height={rowHeight} />
+                                    <DrawTableRow key={row.name} handleStyle={handleStyle} table={table} row={row} rowStartY={rowStartY} height={rowHeight} />
                                 );
                             })
                         }

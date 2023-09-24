@@ -8,7 +8,6 @@ export function unsubscribe(eventName: string, listener: (e: any) => void) {
 }
 
 export function publish(eventName: string, data: any) {
-    console.log("publish", eventName)
     const event = new CustomEvent(eventName, { detail: data, cancelable: true });
     document.dispatchEvent(event);
 }

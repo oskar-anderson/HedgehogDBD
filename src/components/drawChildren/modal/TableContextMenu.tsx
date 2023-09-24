@@ -1,5 +1,5 @@
 import { publish } from "../../../Event";
-import { CursorEdgePayload } from "../../../pages/Draw"
+import { CursorEdgePayload } from "../use/UseCursorEdgeCreation"
 
 const addRelation = (tableContextMenuProps: { 
     type: "table" | "row";
@@ -19,6 +19,7 @@ const addRelation = (tableContextMenuProps: {
             sourceNodeId: sourceNodeId,
             sourceHandleId: sourceHandleId + "-left",
             sourceHandleIdWithoutSide: sourceHandleId,
+            sourceTableRow: tableContextMenuProps.row?.name ?? null,
             targetNodeId: "cursor-node",
         } as CursorEdgePayload
     ) 
@@ -65,9 +66,9 @@ export default function TableContextMenu(tableContextMenu: TableContextMenuProps
         }}>
             { 
                 tableContextMenu.props!.type === "row" ?
-                    <div className="px-3 py-1 text-muted">{tableContextMenu.props?.row?.name} field</div>
+                    <div className="px-3 py-1 text-muted" style={{ whiteSpace: "nowrap", overflow: "clip", textOverflow: "ellipsis" }}>{tableContextMenu.props?.row?.name} field</div>
                     :
-                    <div className="px-3 py-1 text-muted">{tableContextMenu.props?.tableName} table</div>
+                    <div className="px-3 py-1 text-muted" style={{ whiteSpace: "nowrap", overflow: "clip", textOverflow: "ellipsis"}}>{tableContextMenu.props?.tableName} table</div>
             }
             <div className="px-3 py-1 hover-gray" onClick={() => addRelation(tableContextMenu.props!) }>Add relation</div>
         </div> :

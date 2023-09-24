@@ -24,11 +24,13 @@ import { CommandModifyTable, CommandModifyTableArgs } from "../commands/appComma
 import VmTableRow from "../model/viewModel/VmTableRow";
 import { subscribe, unsubscribe } from "../Event";
 import CursorNode from "../components/drawChildren/CursorNode";
-import CursorEdgePayload from "../components/drawChildren/CursorEdge";
-import useTableHeaderLeftClick from "../components/drawChildren/UseTableHeaderLeftClick";
+import CursorEdge from "../components/drawChildren/CursorEdge";
+import useCursorEdgeCreation from "../components/drawChildren/use/UseCursorEdgeCreation";
 import EdgeActionsModal, { edgeActionPayloadDefault } from "../components/drawChildren/modal/EdgeActionsModal";
 import DebugModal from "../components/drawChildren/modal/DebugModal";
 import TableContextMenu, { TableContextMenuProps, tableContextMenuDefault } from "../components/drawChildren/modal/TableContextMenu"
+import CursorEdgeIndicator from "../components/drawChildren/CursorEdgeIndicator";
+import { CursorEdgePayload } from "../components/drawChildren/use/UseCursorEdgeCreation";
 
 // nodeTypes need to be defined outside the render function or using memo
 const nodeTypes = { 
@@ -38,7 +40,7 @@ const nodeTypes = {
 
 const edgeTypes: EdgeTypes = {
     'erd-edge': ErdEdge,
-    'cursor-edge': CursorEdgePayload
+    'cursor-edge': CursorEdge
 };
 
 function getCursorNode(mouseWorldPosition: { x: number, y: number }): Node {
@@ -48,13 +50,6 @@ function getCursorNode(mouseWorldPosition: { x: number, y: number }): Node {
         position: { x: mouseWorldPosition.x, y: mouseWorldPosition.y },
     } as Node
 }
-
-export type CursorEdgePayload = {
-    sourceNodeId: string,
-    sourceHandleId: string,
-    sourceHandleIdWithoutSide: string,
-    targetNodeId: string
-} | null
 
 export type NodePayload = {
     table: VmTable,
@@ -136,7 +131,7 @@ export const WrappedDraw = () => {
     const [mouseWorldPosition, setMouseWorldPosition] = useState({x: 0, y: 0});
     const [tableContextMenu, setTableContextMenu] = useState<TableContextMenuProps>(tableContextMenuDefault);
     const [cursorEdge, setCursorEdge] = useState<CursorEdgePayload>(null);
-    useTableHeaderLeftClick({ cursorEdge, setCursorEdge })
+    useCursorEdgeCreation({ cursorEdge, setCursorEdge })
 
     useEffect(() => {
         const setCursorEdgeCallback = (e: any) => {
@@ -160,7 +155,6 @@ export const WrappedDraw = () => {
 
     useEffect(() => {
         const onTableHeaderRightClick = (e: any) => {
-            console.log("onTableHeaderRightClick")
             const event = e.detail.event as React.MouseEvent;
             const table = e.detail.table as VmTable;
             setTableContextMenu({
@@ -180,18 +174,9 @@ export const WrappedDraw = () => {
             unsubscribe("DrawTable__onHeaderRightClick", onTableHeaderRightClick); 
         }
     }, []);
-    useEffect(() => {
-        const onTableRowMouseUp = (e: any) => {
-            
-        }
-        subscribe("DrawTableRow__onMouseUp", (e) => onTableRowMouseUp(e));
-        return () => { 
-            unsubscribe("DrawTableRow__onMouseUp", onTableRowMouseUp); 
-        }
-    }, [])
+
     useEffect(() => {
         const onTableRowRightClick = (e: any) => {
-            console.log("onTableRowRightClick")
             const event = e.detail.event as React.MouseEvent;
             const row = e.detail.row as VmTableRow;
             const table = e.detail.table as VmTable;
@@ -240,10 +225,11 @@ export const WrappedDraw = () => {
 
     useEffect(() => {
         setEdges([]);
-        setNodes([...tables.map(table => {
+        const newNodes = tables.map(table => {
             const node = nodes.find(node => table.id === node.id);
             return convertTableToNode(table, node);
-        }), getCursorNode(mouseWorldPosition)]);
+        });
+        setNodes([...newNodes, getCursorNode(mouseWorldPosition)]);
         const cursorEdgeDrawable = cursorEdge ? {
             id: "cursor-edge",
             type: 'cursor-edge',
@@ -261,7 +247,6 @@ export const WrappedDraw = () => {
     }, [tables, cursorEdge])
 
     const onClick = () => { 
-        console.log("onClick")
         setTableContextMenu(tableContextMenuDefault);
         setEdgeActions(edgeActionPayloadDefault); 
     }
@@ -421,6 +406,7 @@ export const WrappedDraw = () => {
                         defaultViewport={currentViewport}
                         onMove={onMoveWorldToViewport}
                     >
+                        <CursorEdgeIndicator cursorEdge={cursorEdge} setCursorEdge={setCursorEdge}/>
                         <Controls />
                         <Background variant={BackgroundVariant.Dots} gap={36} size={1} style={{ backgroundColor: "#f8fafc"}} />
                     </ReactFlow>

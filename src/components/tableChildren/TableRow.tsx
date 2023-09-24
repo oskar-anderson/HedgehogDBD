@@ -282,9 +282,9 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
                 </div>
             </td>
             <td>
-                <AttributeSelect />
-                <input className="form-control" style={{ display: "inline" }} list="attribute-suggestions" type="text" value={row.rowAttributes}
-                    onChange={(e) => handleAttributeChange((e.target as HTMLInputElement).value) }
+                <AttributeSelect
+                  row={row}
+                  handleChange={handleAttributeChange}
                 />
             </td>
             <td>

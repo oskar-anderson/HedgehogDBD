@@ -144,6 +144,9 @@ export default function SecondaryTopToolbar( { exportPngImage } : SecondaryTopTo
                         <TopToolbarListElementIcon onClickAction={() => loadSchema("Elron.json")}>
                             Elron
                         </TopToolbarListElementIcon>
+                        <TopToolbarListElementIcon onClickAction={() => loadSchema("Challonge.json")}>
+                            Tournament Management
+                        </TopToolbarListElementIcon>
                         <TopToolbarListElementIcon onClickAction={() => loadSchema("Prescription.json")}>
                             Prescription
                         </TopToolbarListElementIcon>

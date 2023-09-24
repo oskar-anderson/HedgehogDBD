@@ -1,0 +1,1011 @@
+{
+    "tables": [
+        {
+            "id": "c61c30e1-dd45-47d2-b6f1-c3ee9f7e57d4",
+            "position": {
+                "x": 150.8162468578356,
+                "y": 601.8845484608107
+            },
+            "head": "tournament",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "game_id",
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": true,
+                    "attributes": [
+                        "FK(\"game\")"
+                    ]
+                },
+                {
+                    "name": "event_id",
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": true,
+                    "attributes": [
+                        "FK(\"event\")"
+                    ]
+                },
+                {
+                    "name": "game_name",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": true,
+                    "attributes": []
+                },
+                {
+                    "name": "name",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "url",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "subdomain",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": true,
+                    "attributes": []
+                },
+                {
+                    "name": "description",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "open_signup",
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "tournament_type",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "se_only__hold_third_place_match",
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": true,
+                    "attributes": []
+                },
+                {
+                    "name": "swiss_only__pts_for_match_win",
+                    "datatypeId": "4bde4381-61f9-4877-9d14-084978b20b28",
+                    "datatypeArguments": [
+                        {
+                            "value": 10,
+                            "id": "f44703fe-0e0e-451f-872c-1278cc77df3e"
+                        },
+                        {
+                            "value": 2,
+                            "id": "278da857-3740-43bf-a8c5-894319355e5a"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "swiss_only__pts_for_match_tie",
+                    "datatypeId": "4bde4381-61f9-4877-9d14-084978b20b28",
+                    "datatypeArguments": [
+                        {
+                            "value": 10,
+                            "id": "f44703fe-0e0e-451f-872c-1278cc77df3e"
+                        },
+                        {
+                            "value": 2,
+                            "id": "278da857-3740-43bf-a8c5-894319355e5a"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "swiss_only__pts_for_game_win",
+                    "datatypeId": "4bde4381-61f9-4877-9d14-084978b20b28",
+                    "datatypeArguments": [
+                        {
+                            "value": 10,
+                            "id": "f44703fe-0e0e-451f-872c-1278cc77df3e"
+                        },
+                        {
+                            "value": 2,
+                            "id": "278da857-3740-43bf-a8c5-894319355e5a"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "swiss_only__pts_for_game_tie",
+                    "datatypeId": "4bde4381-61f9-4877-9d14-084978b20b28",
+                    "datatypeArguments": [
+                        {
+                            "value": 10,
+                            "id": "f44703fe-0e0e-451f-872c-1278cc77df3e"
+                        },
+                        {
+                            "value": 2,
+                            "id": "278da857-3740-43bf-a8c5-894319355e5a"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "swiss_only__pts_for_bye",
+                    "datatypeId": "4bde4381-61f9-4877-9d14-084978b20b28",
+                    "datatypeArguments": [
+                        {
+                            "value": 10,
+                            "id": "f44703fe-0e0e-451f-872c-1278cc77df3e"
+                        },
+                        {
+                            "value": 2,
+                            "id": "278da857-3740-43bf-a8c5-894319355e5a"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "swiss_only__swiss_rounds",
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "round_robin_only__pts_for_match_win",
+                    "datatypeId": "4bde4381-61f9-4877-9d14-084978b20b28",
+                    "datatypeArguments": [
+                        {
+                            "value": 10,
+                            "id": "f44703fe-0e0e-451f-872c-1278cc77df3e"
+                        },
+                        {
+                            "value": 2,
+                            "id": "278da857-3740-43bf-a8c5-894319355e5a"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "round_robin_only__pts_for_match_tie",
+                    "datatypeId": "4bde4381-61f9-4877-9d14-084978b20b28",
+                    "datatypeArguments": [
+                        {
+                            "value": 10,
+                            "id": "f44703fe-0e0e-451f-872c-1278cc77df3e"
+                        },
+                        {
+                            "value": 2,
+                            "id": "278da857-3740-43bf-a8c5-894319355e5a"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "round_robin_only__pts_for_game_win",
+                    "datatypeId": "4bde4381-61f9-4877-9d14-084978b20b28",
+                    "datatypeArguments": [
+                        {
+                            "value": 10,
+                            "id": "f44703fe-0e0e-451f-872c-1278cc77df3e"
+                        },
+                        {
+                            "value": 2,
+                            "id": "278da857-3740-43bf-a8c5-894319355e5a"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "round_robin_only__pts_for_game_tie",
+                    "datatypeId": "4bde4381-61f9-4877-9d14-084978b20b28",
+                    "datatypeArguments": [
+                        {
+                            "value": 10,
+                            "id": "f44703fe-0e0e-451f-872c-1278cc77df3e"
+                        },
+                        {
+                            "value": 2,
+                            "id": "278da857-3740-43bf-a8c5-894319355e5a"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "de_only__grand_finals_modifier",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "ranked_by",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "accept_attachments",
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "hide_forum",
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "se_and_de_only__show_rounds",
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "private",
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "notify_users_when_matches_open",
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "notify_users_when_the_tournament_ends",
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "signup_cap",
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": true,
+                    "attributes": []
+                },
+                {
+                    "name": "start_at",
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "check_in_duration",
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "completed_at",
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": true,
+                    "attributes": []
+                },
+                {
+                    "name": "created_at",
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "updated_at",
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                }
+            ]
+        },
+        {
+            "id": "1a43d07f-2883-4e88-8a81-2c889ffcc0ee",
+            "position": {
+                "x": 298.4419711362123,
+                "y": 262.48264785256526
+            },
+            "head": "game",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "art_url",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "description",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "created_at",
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                }
+            ]
+        },
+        {
+            "id": "ae59e967-710e-41df-a890-e316f30ecdbb",
+            "position": {
+                "x": 807.4862446831482,
+                "y": 738.8042280903045
+            },
+            "head": "participant",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "tournament_id",
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": [
+                        "FK(\"tournament\")"
+                    ]
+                },
+                {
+                    "name": "user_id",
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": true,
+                    "attributes": [
+                        "FK(\"user\")"
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "icon",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": true,
+                    "attributes": []
+                },
+                {
+                    "name": "active",
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "on_waiting_list",
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "invite_email_identifier",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": true,
+                    "attributes": []
+                },
+                {
+                    "name": "email_hash",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": true,
+                    "attributes": []
+                },
+                {
+                    "name": "invitation_pending",
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "invite_email_address_verified",
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "seed",
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "final_rank",
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": true,
+                    "attributes": []
+                },
+                {
+                    "name": "checked_in_at",
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": true,
+                    "attributes": []
+                },
+                {
+                    "name": "can_check_in",
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "checked_in",
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "reactivatable",
+                    "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "created_at",
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "updated_at",
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                }
+            ]
+        },
+        {
+            "id": "5786a1b8-6a16-4105-9b4e-2a5065133f0f",
+            "position": {
+                "x": 895.2597805660383,
+                "y": 274.4278922561943
+            },
+            "head": "user",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "name",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "email_hash",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "password_hash",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "created_at",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                }
+            ]
+        },
+        {
+            "id": "f8d8e8dd-05ea-4c50-9740-456a7af2de01",
+            "position": {
+                "x": 1356.962900045239,
+                "y": 619.5507796294792
+            },
+            "head": "match",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "tournament_id",
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": [
+                        "FK(\"tournament\")"
+                    ]
+                },
+                {
+                    "name": "identifier",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "location",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": true,
+                    "attributes": []
+                },
+                {
+                    "name": "winner_id",
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": true,
+                    "attributes": [
+                        "FK(\"participant\")"
+                    ]
+                },
+                {
+                    "name": "participant1_id",
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": [
+                        "FK(\"participant\")"
+                    ]
+                },
+                {
+                    "name": "participant2_id",
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": [
+                        "FK(\"participant\")"
+                    ]
+                },
+                {
+                    "name": "scheduled_time",
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": true,
+                    "attributes": []
+                },
+                {
+                    "name": "state",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "current_round",
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": true,
+                    "attributes": []
+                },
+                {
+                    "name": "scores_csv",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "started_at",
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": true,
+                    "attributes": []
+                },
+                {
+                    "name": "created_at",
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "updated_at",
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                }
+            ]
+        },
+        {
+            "id": "a1ab0dbb-8f20-4f88-9a7b-d6fa2feb983f",
+            "position": {
+                "x": 1854.3678214127915,
+                "y": 623.2715732569741
+            },
+            "head": "round",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "match_id",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": [
+                        "FK(\"match\")"
+                    ]
+                },
+                {
+                    "name": "details",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "round_number",
+                    "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "score",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": true,
+                    "attributes": []
+                },
+                {
+                    "name": "created_at",
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "updated_at",
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                }
+            ]
+        },
+        {
+            "id": "a296c0f7-4bf0-495b-ab64-a336692bfa81",
+            "position": {
+                "x": -237.02207585600055,
+                "y": 604.4676473869694
+            },
+            "head": "event",
+            "tableRows": [
+                {
+                    "name": "id",
+                    "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": [
+                        "PK"
+                    ]
+                },
+                {
+                    "name": "event_name",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "season_name",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": true,
+                    "attributes": []
+                },
+                {
+                    "name": "description",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "format_short",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "format_description",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "location",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "sponsor",
+                    "datatypeId": "5b333c43-06e5-4874-8348-c3ed3a7af2d3",
+                    "datatypeArguments": [
+                        {
+                            "value": 255,
+                            "id": "884701d9-79bf-41a8-a4d9-af8d6bd0c1ea"
+                        }
+                    ],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                },
+                {
+                    "name": "created_at",
+                    "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
+                    "datatypeArguments": [],
+                    "datatypeIsNullable": false,
+                    "attributes": []
+                }
+            ]
+        }
+    ],
+    "activeDatabaseId": "e4886f99-e1bf-4a9e-a2a0-672195b0c823"
+}

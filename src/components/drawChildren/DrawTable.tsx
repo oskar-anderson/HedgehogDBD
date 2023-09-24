@@ -31,7 +31,7 @@ function DrawTableRow( { row, rowStartY, height, table, handleStyle }: DrawTable
             onContextMenu={ (e) => { 
                 e.preventDefault();
                 e.stopPropagation();
-                publish("DrawTableRow__onRightClick", { event: e, row, table }); 
+                publish("e_openTableContextMenu", { event: e, row, table }); 
             }} 
         >
             <Handle type="target" id={`${table.head}-row-${row.name}-left`} position={Position.Left} style={{ top: `${rowStartY}px`, left: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle }} />
@@ -112,7 +112,7 @@ export default function DrawTable(node: NodeProps<NodePayload>) {
                 width: "min-content"
             }} onClick={(e) => {
                 e.stopPropagation();
-                publish("e_completeAddingRelation", { event: e, table: table}) 
+                publish("e_clickedOnTable", { event: e, table: table}) 
             }}>
                 <div style={{ borderRadius: "4px",  backgroundColor: "#eee" }}>
 
@@ -120,7 +120,7 @@ export default function DrawTable(node: NodeProps<NodePayload>) {
                         onContextMenu={(e) => {
                             e.stopPropagation();
                             e.preventDefault();
-                            publish("DrawTable__onHeaderRightClick", { event: e, table: table}) 
+                            publish("e_openTableContextMenu", { event: e, table: table}) 
                         }}
                     >
                         <Handle type="source" id={`${table.head}-head-left`} position={Position.Left} style={{ top: `${tableY}px`, left: `calc(3px - ${EdgeNotationPadding}px)`, ...handleStyle }} />

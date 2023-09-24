@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { subscribe, unsubscribe } from "../../../Event";
+import { publish, subscribe, unsubscribe } from "../../../Event";
 import CommandHistory from "../../../commands/CommandHistory";
 import { CommandModifyTable, CommandModifyTableArgs } from "../../../commands/appCommands/CommandModifyTableArgs";
 import DomainTable from "../../../model/domain/DomainTable";
@@ -44,7 +44,10 @@ export default function useCursorEdgeCreation({ cursorEdge, setCursorEdge } : us
 
     const onCompleteAddingRelation = (e: any) => {
         const targetTable = e.detail.table as VmTable;
-        if (!cursorEdge) { return };
+        if (!cursorEdge) { 
+            publish("e_nodeClick", { tableId: targetTable.id })
+            return; 
+        };
         if (!cursorEdge.sourceTableRow) {
             const sourceTable = tables.find(table => table.id === cursorEdge!.sourceNodeId)!;
             const newRowName = getNewSourceRowName(sourceTable, targetTable);
@@ -100,9 +103,9 @@ export default function useCursorEdgeCreation({ cursorEdge, setCursorEdge } : us
         }
     }
     useEffect(() => {
-        subscribe("e_completeAddingRelation", onCompleteAddingRelation);
+        subscribe("e_clickedOnTable", onCompleteAddingRelation);
         return () => { 
-            unsubscribe("e_completeAddingRelation", onCompleteAddingRelation); 
+            unsubscribe("e_clickedOnTable", onCompleteAddingRelation); 
         }
     }, [cursorEdge, setCursorEdge, history, tables, setTables, activeDatabaseId])
 }

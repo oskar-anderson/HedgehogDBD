@@ -154,51 +154,27 @@ export const WrappedDraw = () => {
     }, [])
 
     useEffect(() => {
-        const onTableHeaderRightClick = (e: any) => {
-            const event = e.detail.event as React.MouseEvent;
-            const table = e.detail.table as VmTable;
+        const openTableContextMenu = (e: any) => {
+            const { event, table, row }: { event: React.MouseEvent, table: VmTable, row: VmTableRow | undefined } = e.detail;
             setTableContextMenu({
                 show: true,
                 props: {
                     x: event.clientX - mainContentRef.current!.getBoundingClientRect().x,
                     y: event.clientY - mainContentRef.current!.getBoundingClientRect().y,
-                    type: "table",
+                    type: row ? "row" : "table",
                     tableId: table.id,
                     tableName: table.head,
-                    row: null
+                    row: row ? {
+                        name: row.name
+                    } : null
                 }
             });
         }
-        subscribe("DrawTable__onHeaderRightClick", onTableHeaderRightClick);
+        subscribe("e_openTableContextMenu", openTableContextMenu);
         return () => { 
-            unsubscribe("DrawTable__onHeaderRightClick", onTableHeaderRightClick); 
+            unsubscribe("e_openTableContextMenu", openTableContextMenu); 
         }
     }, []);
-
-    useEffect(() => {
-        const onTableRowRightClick = (e: any) => {
-            const event = e.detail.event as React.MouseEvent;
-            const row = e.detail.row as VmTableRow;
-            const table = e.detail.table as VmTable;
-            setTableContextMenu({
-                show: true,
-                props: {
-                    x: event.clientX - mainContentRef.current!.getBoundingClientRect().x,
-                    y: event.clientY - mainContentRef.current!.getBoundingClientRect().y,
-                    type: "row",
-                    tableId: table.id,
-                    tableName: table.head,
-                    row: {
-                        name: row.name
-                    },
-                }
-            });
-        }
-        subscribe("DrawTableRow__onRightClick", (e) => onTableRowRightClick(e));
-        return () => { 
-            unsubscribe("DrawTableRow__onRightClick", onTableRowRightClick);  
-        }
-    }, [])
 
     const onEdgeClick = (e: React.MouseEvent, edgeId: string) => {
         e.stopPropagation();
@@ -251,9 +227,15 @@ export const WrappedDraw = () => {
         setEdgeActions(edgeActionPayloadDefault); 
     }
 
-    const onNodeDoubleClick = (event: React.MouseEvent, node: Node) => {
-        navigate(`/table/${node.data.table.id}`);
-    }
+    useEffect(() => {
+        const handleNavigation = (e: any) => {
+            navigate(`/table/${e.detail.tableId}`);
+        }
+        subscribe("e_nodeClick", handleNavigation)
+        return () => { 
+            unsubscribe("e_nodeClick", handleNavigation); 
+        }
+    }, [])
 
     const createNewTable = () =>  {
         const dataBase = Databases.getAll().find(x => x.id === activeDatabaseId)!;
@@ -400,8 +382,6 @@ export const WrappedDraw = () => {
                         onEdgesChange={onEdgesChange}
                         onClick={onClick}
                         onMouseMove={onDrawMouseMove}
-                        
-                        onNodeDoubleClick={onNodeDoubleClick}
                         disableKeyboardA11y={true}  // keyboard arrow key movement is not supported
                         defaultViewport={currentViewport}
                         onMove={onMoveWorldToViewport}

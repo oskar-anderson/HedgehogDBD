@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useApplicationState } from '../../Store';
 import { UiTableRowDatatype } from './TableRow';
+import { useParams } from 'react-router-dom';
 
 type Row = {
   rowName: string;
@@ -17,7 +18,10 @@ export default function AttributeSelect({
   row,
   handleChange
 }: AttributeSelectProps) {
-  const tables = useApplicationState(state => state.schemaTables);
+  const { id } = useParams();
+  const tables = useApplicationState(state => (
+    state.schemaTables.filter(table => table.id !== id)
+  ));
 
   const attributeTypes: string[] = ['PK', 'FK'];
 

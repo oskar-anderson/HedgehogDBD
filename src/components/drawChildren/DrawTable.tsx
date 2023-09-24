@@ -119,6 +119,7 @@ export default function DrawTable(node: NodeProps<NodePayload>) {
                     <div className="d-flex" style={headingStyle} 
                         onContextMenu={(e) => {
                             e.stopPropagation();
+                            e.preventDefault();
                             publish("DrawTable__onHeaderRightClick", { event: e, table: table}) 
                         }}
                         onClick={(e) => {

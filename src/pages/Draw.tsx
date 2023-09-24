@@ -22,11 +22,13 @@ import CommandHistory from "../commands/CommandHistory";
 import ErdEdge from "../components/drawChildren/ErdEdge";
 import { CommandModifyTable, CommandModifyTableArgs } from "../commands/appCommands/CommandModifyTableArgs";
 import VmTableRow from "../model/viewModel/VmTableRow";
-import useIsDebugVisible from "../components/drawChildren/UseIsDebugVisible";
 import { subscribe, unsubscribe } from "../Event";
 import CursorNode from "../components/drawChildren/CursorNode";
-import CursorEdge from "../components/drawChildren/CursorEdge";
+import CursorEdgePayload from "../components/drawChildren/CursorEdge";
 import useTableHeaderLeftClick from "../components/drawChildren/UseTableHeaderLeftClick";
+import EdgeActionsModal, { edgeActionPayloadDefault } from "../components/drawChildren/modal/EdgeActionsModal";
+import DebugModal from "../components/drawChildren/modal/DebugModal";
+import TableContextMenu, { TableContextMenuProps, tableContextMenuDefault } from "../components/drawChildren/modal/TableContextMenu"
 
 // nodeTypes need to be defined outside the render function or using memo
 const nodeTypes = { 
@@ -34,45 +36,9 @@ const nodeTypes = {
     cursorNode: CursorNode
 }
 
-type EdgeActionPayload = {
-    show: boolean,
-    props: {
-        x: number,
-        y: number,
-        sourceTable: VmTable,
-        sourceTableRow: VmTableRow,
-        targetTableName: string,
-        targetTableRowName: string
-    } | null
-}
-
-const edgeActionPayloadDefault: EdgeActionPayload = {
-    show: false,
-    props: null
-}
-
-type NodeActionPayload = {
-    show: boolean,
-    props: {
-        x: number,
-        y: number,
-        type: "table" | "row"
-        tableId: string,
-        tableName: string,
-        row: {
-            name: string
-        } | null
-    } | null
-}
-
-const nodeActionPayloadDefault: NodeActionPayload = {
-    show: false,
-    props: null
-}
-
 const edgeTypes: EdgeTypes = {
     'erd-edge': ErdEdge,
-    'cursor-edge': CursorEdge
+    'cursor-edge': CursorEdgePayload
 };
 
 function getCursorNode(mouseWorldPosition: { x: number, y: number }): Node {
@@ -82,6 +48,13 @@ function getCursorNode(mouseWorldPosition: { x: number, y: number }): Node {
         position: { x: mouseWorldPosition.x, y: mouseWorldPosition.y },
     } as Node
 }
+
+export type CursorEdgePayload = {
+    sourceNodeId: string,
+    sourceHandleId: string,
+    sourceHandleIdWithoutSide: string,
+    targetNodeId: string
+} | null
 
 export type NodePayload = {
     table: VmTable,
@@ -159,19 +132,31 @@ export const WrappedDraw = () => {
     const navigate = useNavigate();
     const [edgeActions, setEdgeActions] = useState(edgeActionPayloadDefault);
     const mainContentRef = useRef<HTMLDivElement>(null);
-    const isDebugVisible = useIsDebugVisible();
     const [mouseScreenPosition, setMouseScreenPosition] = useState({x: 0, y: 0});
     const [mouseWorldPosition, setMouseWorldPosition] = useState({x: 0, y: 0});
-    const [tableContextMenu, setTableContextMenu] = useState<NodeActionPayload>(nodeActionPayloadDefault);
-    const [cursorEdge, setCursorEdge] = useState<{
-        sourceNodeId: string,
-        sourceHandleId: string,
-        sourceHandleIdWithoutSide: string,
-        targetNodeId: string
-    } | null>(null);
+    const [tableContextMenu, setTableContextMenu] = useState<TableContextMenuProps>(tableContextMenuDefault);
+    const [cursorEdge, setCursorEdge] = useState<CursorEdgePayload>(null);
     useTableHeaderLeftClick({ cursorEdge, setCursorEdge })
 
-    
+    useEffect(() => {
+        const setCursorEdgeCallback = (e: any) => {
+            setCursorEdge(e.detail);
+        }
+        subscribe("e_setCursorEdge", setCursorEdgeCallback)
+        return () => { 
+            unsubscribe("e_setCursorEdge", setCursorEdgeCallback); 
+        }
+    }, []);
+
+    useEffect(() => {
+        const setTableContextMenuCallback = (e: any) => {
+            setTableContextMenu(e.detail);
+        }
+        subscribe("e_setTableContextMenu", setTableContextMenuCallback)
+        return () => { 
+            unsubscribe("e_setTableContextMenu", setTableContextMenuCallback); 
+        }
+    }, [])
 
     useEffect(() => {
         const onTableHeaderRightClick = (e: any) => {
@@ -230,132 +215,6 @@ export const WrappedDraw = () => {
         }
     }, [])
 
-    const addRelation = (tableContextMenuProps: { 
-        type: "table" | "row";
-        tableId: string,
-        tableName: string;
-        row: {
-            name: string;
-        } | null;
-    }) => {
-        setTableContextMenu(nodeActionPayloadDefault);
-        const sourceNodeId = tableContextMenuProps.tableId;
-        const sourceHandleId = tableContextMenuProps.type === "table" ? 
-            `${tableContextMenuProps.tableName}-head` : 
-            `${tableContextMenuProps.tableName}-row-${tableContextMenuProps.row!.name}`;
-        setCursorEdge({
-            sourceNodeId: sourceNodeId,
-            sourceHandleId: sourceHandleId + "-left",
-            sourceHandleIdWithoutSide: sourceHandleId,
-            targetNodeId: "cursor-node",
-        })
-    }
-
-    const toggleRelationSourceRequiredness = (tableId: string, rowName: string) => {
-        const table = tables.find(x => x.id === tableId);
-        if (! table) { 
-            console.error("Table not found!")
-            return;
-        }
-        CommandHistory.execute(history, new CommandModifyTable(
-            { tables }, 
-            new CommandModifyTableArgs(
-                DomainTable.init(table), 
-                new DomainTable(
-                    table.id, 
-                    table.position, 
-                    table.head, 
-                    table.tableRows.map(tr => 
-                        {
-                            return new DomainTableRow(
-                                tr.name,
-                                tr.datatype.dataTypeId,
-                                tr.datatype.arguments.map(arg => {
-                                    return new DomainTableRowDataTypeArguments(arg.value, arg.argument.id)
-                                }),
-                                tr.name === rowName ? !tr.datatype.isNullable : tr.datatype.isNullable,
-                                tr.attributes
-                            );
-                        }
-                    )
-                )
-            )
-        ), setTables);
-        const edgeActionsCopy = {...edgeActions};
-        edgeActionsCopy.props!.sourceTableRow.datatype.isNullable = !edgeActionsCopy.props!.sourceTableRow.datatype.isNullable;
-        setEdgeActions(edgeActionsCopy);
-    }
-
-    const deleteRelation = (tableId: string, rowName: string, targetTableName: string) => {
-        const table = tables.find(x => x.id === tableId);
-        if (! table) { 
-            console.error("Table not found!")
-            return;
-        }
-        CommandHistory.execute(history, new CommandModifyTable(
-            { tables }, 
-            new CommandModifyTableArgs(
-                DomainTable.init(table), 
-                new DomainTable(
-                    table.id, 
-                    table.position, 
-                    table.head, 
-                    table.tableRows.map(tr => 
-                        {
-                            return new DomainTableRow(
-                                tr.name,
-                                tr.datatype.dataTypeId,
-                                tr.datatype.arguments.map(arg => {
-                                    return new DomainTableRowDataTypeArguments(arg.value, arg.argument.id)
-                                }),
-                                tr.datatype.isNullable,
-                                tr.name !== rowName ? tr.attributes :
-                                tr.attributes.filter(attribute => attribute !== `FK("${targetTableName}")`)
-                            );
-                        }
-                    )
-                )
-            )
-        ), setTables);
-        setEdgeActions(edgeActionPayloadDefault);
-    }
-
-    const deleteTableRow = (tableId: string, rowName: string) => {
-        const table = tables.find(x => x.id === tableId);
-        if (! table) { 
-            console.error("Table not found!")
-            return;
-        }
-        CommandHistory.execute(history, new CommandModifyTable(
-            { tables }, 
-            new CommandModifyTableArgs(
-                DomainTable.init(table), 
-                new DomainTable(
-                    table.id, 
-                    table.position, 
-                    table.head, 
-                    table.tableRows
-                        .filter(tr => tr.name !== rowName)
-                        .map(tr => 
-                        {
-                            return new DomainTableRow(
-                                tr.name,
-                                tr.datatype.dataTypeId,
-                                tr.datatype.arguments.map(arg => {
-                                    return new DomainTableRowDataTypeArguments(arg.value, arg.argument.id)
-                                }),
-                                tr.datatype.isNullable,
-                                tr.attributes
-                            );
-                        }
-                    )
-                )
-            )
-        ), setTables);
-        setEdgeActions(edgeActionPayloadDefault);
-    }
-
-
     const onEdgeClick = (e: React.MouseEvent, edgeId: string) => {
         e.stopPropagation();
         let selectedEdge = edgesRef.current.find(x => x.id === edgeId)!;
@@ -403,7 +262,7 @@ export const WrappedDraw = () => {
 
     const onClick = () => { 
         console.log("onClick")
-        setTableContextMenu(nodeActionPayloadDefault);
+        setTableContextMenu(tableContextMenuDefault);
         setEdgeActions(edgeActionPayloadDefault); 
     }
 
@@ -565,119 +424,15 @@ export const WrappedDraw = () => {
                         <Controls />
                         <Background variant={BackgroundVariant.Dots} gap={36} size={1} style={{ backgroundColor: "#f8fafc"}} />
                     </ReactFlow>
-                    {edgeActions.show ? 
-                        <div style={{ 
-                            position: "absolute", 
-                            top: edgeActions.props!.y, 
-                            left: edgeActions.props!.x,
-                            background: "white",
-                            border: "1px solid #ccc",
-                            borderRadius: "4px",
-                        }}
-                        >
-                            <div className="modal-header p-2" style={{ borderBottom: "solid 1px #eee", height: "3em" }}>
-                                <h5 className="modal-title">Relation</h5>
-                                <button type="button" className="btn-close" aria-label="Close" onClick={() => setEdgeActions(edgeActionPayloadDefault)}></button>
-                            </div>
-
-                            <div className="p-2" style={{ borderBottom: "solid 1px #eee"}}>
-                                <div className="d-flex">
-                                    <span style={{ width: "80px" }}>Source: </span>
-                                    <span>{edgeActions.props!.sourceTable.head}.{edgeActions.props!.sourceTableRow!.name}</span>
-                                </div> 
-                                <div className="d-flex">
-                                    <span style={{ width: "80px" }}>Target: </span>
-                                    <span>{edgeActions.props!.targetTableName}.{edgeActions.props!.targetTableRowName}</span>
-                                </div>
-                            </div>
-                            <div className="p-2">
-                                <div className="d-flex mb-1 gap-1">
-                                    <button className="btn btn-light w-50" onClick={() => toggleRelationSourceRequiredness(edgeActions.props!.sourceTable.id, edgeActions.props!.sourceTableRow.name)}>Source: {edgeActions.props!.sourceTableRow.datatype.isNullable ? "?" : "!"}</button>
-                                    <button className="btn btn-light w-50 disabled">Target: m</button> 
-                                </div>
-                                <button className="btn btn-danger w-100 mb-1" onClick={() => deleteRelation(edgeActions.props!.sourceTable.id, edgeActions.props!.sourceTableRow.name, edgeActions.props!.targetTableName)}>Delete relation</button>
-                                <button className="btn btn-danger w-100" onClick={() => deleteTableRow(edgeActions.props!.sourceTable.id, edgeActions.props!.sourceTableRow.name)}>Delete source</button>
-                            </div>
-                        </div>
-                        : null
-                    }
-                    {
-                        isDebugVisible ?
-                        <div style={{ 
-                            position: "absolute", 
-                            top: 0, 
-                            right: 0,
-                            width: "200px",
-                            backgroundColor: "rgba(30, 30, 30, 0.8)", 
-                            zIndex: 1,
-                            color: "#eee",
-                            pointerEvents: 'none',
-                        }} className="p-1" 
-                            onContextMenu={(e) => { 
-                            // prevent right click context menu from appearing unless shift is down
-                            if (! e.shiftKey) {
-                                e.preventDefault();
-                            }
-                        }}>
-                            <div>
-                                <div>
-                                    Screen x: {currentViewport.x.toFixed(2)}
-                                </div>
-                                
-                                <div>
-                                    Screen y: {currentViewport.y.toFixed(2)}
-                                </div>
-                                
-                                <div>
-                                    Zoom: {currentViewport.zoom.toFixed(2)}
-                                </div>
-
-                                <div>
-                                    Mouse sx: {mouseScreenPosition.x.toFixed(2)}
-                                </div>
-                                <div>
-                                    Mouse sy: {mouseScreenPosition.y.toFixed(2)}
-                                </div>
-
-                                <div>
-                                    Mouse wx: {mouseWorldPosition.x.toFixed(2)}
-                                </div>
-                                <div>
-                                    Mouse wy: {mouseWorldPosition.y.toFixed(2)}
-                                </div>
-                            </div>
-                        </div> :
-                        null
-                    }
-                    {
-                        tableContextMenu.show ?
-                        <div style={{ 
-                            position: "absolute", 
-                            top: tableContextMenu.props!.y, 
-                            left: tableContextMenu.props!.x,
-                            width: "200px",
-                            backgroundColor: "white",
-                            borderRadius: "6px",
-                            border: "1px solid #eee",
-                        }} className="py-1"
-                            onContextMenu={(e) => { 
-                            // prevent right click context menu from appearing unless shift is down
-                            if (! e.shiftKey) {
-                                e.preventDefault();
-                            }
-                        }}>
-                            { 
-                                tableContextMenu.props!.type === "row" ?
-                                    <div className="px-3 py-1 text-muted">{tableContextMenu.props?.row?.name} field</div>
-                                    :
-                                    <div className="px-3 py-1 text-muted">{tableContextMenu.props?.tableName} table</div>
-                            }
-                            <div className="px-3 py-1 hover-gray" onClick={() => addRelation(tableContextMenu.props!) }>Add relation</div>
-                        </div> :
-                        null
-                    }
-                    
-                    
+                    <EdgeActionsModal 
+                        edgeActions={edgeActions} 
+                        setEdgeActions={setEdgeActions} />
+                    <DebugModal 
+                        currentViewport={currentViewport} 
+                        mouseScreenPosition={mouseScreenPosition} 
+                        mouseWorldPosition={mouseWorldPosition}
+                    />
+                    <TableContextMenu show={tableContextMenu.show} props={tableContextMenu.props} />
                 </div>
             </div>
         </Layout>

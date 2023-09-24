@@ -8,6 +8,18 @@ import Databases from "../../model/DataTypes/Databases";
 import VmTable from "../../model/viewModel/VmTable";
 import { useApplicationState } from "../../Store";
 
+const getNewSourceRowName = (sourceTable: VmTable, targetTable: VmTable) => {
+    const rowNameBase = targetTable.head + "_id";
+    let rowNameAppendix = 2;
+    const rowNameIsUnique = !sourceTable.tableRows.map(x => x.name).includes(targetTable.head + "_id")
+    if (! rowNameIsUnique) {
+        while (sourceTable.tableRows.map(x => x.name).includes(targetTable.head + rowNameAppendix + "_id")) {
+            rowNameAppendix++;
+        }
+    }
+    const newRowName = rowNameIsUnique ? rowNameBase : (targetTable.head + rowNameAppendix + "_id");
+    return newRowName;
+}
 
 type useTableHeaderLeftClickProps = {
     cursorEdge: {
@@ -32,13 +44,14 @@ export default function useTableHeaderLeftClick({ cursorEdge, setCursorEdge } : 
 
     const onTableHeaderLeftClick = (e: any) => {
         const event = e.detail.event as React.MouseEvent;
-        const table = e.detail.table as VmTable;
+        const targetTable = e.detail.table as VmTable;
         if (cursorEdge) {
-            let newTable = JSON.parse(JSON.stringify(table));
             const sourceTable = tables.find(table => table.id === cursorEdge!.sourceNodeId)!;
+            const newRowName = getNewSourceRowName(sourceTable, targetTable);
+            let newTable = JSON.parse(JSON.stringify(sourceTable));
             const dataBase = Databases.getAll().find(x => x.id === activeDatabaseId)!;
             newTable.tableRows.push({
-                name: sourceTable.head + "_id",
+                name: newRowName,
                 datatype: {
                     dataTypeId: DataType.guid().getId(),
                     arguments: DataType.guid().getAllArguments()
@@ -50,12 +63,12 @@ export default function useTableHeaderLeftClick({ cursorEdge, setCursorEdge } : 
                     ),
                     isNullable: false,
                 },
-                attributes: [`FK("${sourceTable.head}")`]
+                attributes: [`FK("${targetTable.head}")`]
             })
             const command = new CommandModifyTable(
                 { tables },
                 new CommandModifyTableArgs(
-                    DomainTable.init(table),
+                    DomainTable.init(sourceTable),
                     DomainTable.init(newTable)
                 )
             );

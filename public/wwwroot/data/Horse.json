@@ -36,9 +36,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -78,9 +76,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -120,9 +116,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -148,9 +142,7 @@
                     "datatypeId": "37cc5f13-d7f7-4fa4-808f-8fbf2c4f5d68",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -190,9 +182,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -245,9 +235,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -278,9 +266,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "lastname",
@@ -292,9 +278,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -348,18 +332,14 @@
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "to",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -412,18 +392,14 @@
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "valid_to",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -454,18 +430,14 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "order",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -524,9 +496,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "description",
@@ -538,9 +508,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -571,9 +539,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -631,9 +597,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -733,18 +697,14 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "happens_at",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -784,18 +744,14 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "distance",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -853,27 +809,21 @@
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": true,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "end_time_milliseconds",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": true,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "is_disqualified",
                     "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
                     "datatypeArguments": [],
                     "datatypeIsNullable": true,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -904,9 +854,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -964,18 +912,14 @@
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "period_end",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         }

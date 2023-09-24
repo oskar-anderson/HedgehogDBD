@@ -27,9 +27,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "composer_facility-registration_code",
@@ -41,9 +39,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "composer_person-name",
@@ -55,9 +51,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "composer_person-code",
@@ -69,9 +63,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "composer_person-telephone",
@@ -83,9 +75,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "composer_person-e_post",
@@ -97,9 +87,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "composer_person-job_title",
@@ -111,9 +99,7 @@
                         }
                     ],
                     "datatypeIsNullable": true,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "issuer_facility-name",
@@ -125,9 +111,7 @@
                         }
                     ],
                     "datatypeIsNullable": true,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "issuer_facility-registration_code",
@@ -139,9 +123,7 @@
                         }
                     ],
                     "datatypeIsNullable": true,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "issuer_person-name",
@@ -153,9 +135,7 @@
                         }
                     ],
                     "datatypeIsNullable": true,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "issuer_person-code",
@@ -167,9 +147,7 @@
                         }
                     ],
                     "datatypeIsNullable": true,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "patient-personal_id_code",
@@ -181,9 +159,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "patient-firstname",
@@ -195,9 +171,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "patient-lastname",
@@ -209,9 +183,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "patient-birthdate",
@@ -223,9 +195,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "patient-registered_place_of_residence",
@@ -237,18 +207,14 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "patient-is_insured",
                     "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "patient-insurance_name",
@@ -260,9 +226,7 @@
                         }
                     ],
                     "datatypeIsNullable": true,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "prescription-code",
@@ -274,54 +238,42 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "prescription-requires_a_special_sales_license_from_ravimiamet",
                     "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "prescription-valid_from",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "prescription-valid_to",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "prescription-status",
                     "datatypeId": "71ccfd31-47c8-472c-bc80-4ca5df29e939",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "prescription-is_no_buyer_limit",
                     "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "prescription-diagnosis",
@@ -333,9 +285,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "prescription-medicine_form",
@@ -347,9 +297,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "prescription-atc_code",
@@ -361,9 +309,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "prescription-name",
@@ -375,9 +321,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "prescription-single_administration_amount_value",
@@ -393,9 +337,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "prescription-single_administration_amount_value_suffix",
@@ -407,45 +349,35 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "prescription-administration_amount_piece",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "prescription_dosage_treatment_type",
                     "datatypeId": "71ccfd31-47c8-472c-bc80-4ca5df29e939",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "prescription_dosage_treatment_duration_days",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "prescription_dosage_amount_value",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "prescription_dosage_amount_value_suffix",
@@ -457,9 +389,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "prescription_dosage_amount_repetition",
@@ -471,9 +401,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "prescription_dosage_description",
@@ -485,9 +413,7 @@
                         }
                     ],
                     "datatypeIsNullable": true,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -527,9 +453,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "firstname",
@@ -541,9 +465,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "lastname",
@@ -555,9 +477,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         }

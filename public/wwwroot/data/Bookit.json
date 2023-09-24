@@ -97,9 +97,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -167,18 +165,14 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "last_login",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "username",
@@ -190,9 +184,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "email",
@@ -204,18 +196,14 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "date_created",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -264,9 +252,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "last_name",
@@ -278,9 +264,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "phone",
@@ -292,9 +276,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "email",
@@ -306,9 +288,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -348,45 +328,35 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "is_room",
                     "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "is_general",
                     "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "is_street",
                     "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "order",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -417,9 +387,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "svg",
@@ -431,36 +399,28 @@
                         }
                     ],
                     "datatypeIsNullable": true,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "is_room_comfort",
                     "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "is_hotel_comfort",
                     "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "order",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -504,36 +464,28 @@
                     "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "is_general",
                     "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "is_bathroom",
                     "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "is_great_view",
                     "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -614,9 +566,7 @@
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -647,18 +597,14 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "order",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -698,9 +644,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -744,9 +688,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "discount_price",
@@ -762,9 +704,7 @@
                         }
                     ],
                     "datatypeIsNullable": true,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "code_for_discount",
@@ -776,27 +716,21 @@
                         }
                     ],
                     "datatypeIsNullable": true,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "valid_from",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "valid_to",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -845,45 +779,35 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "is_smoking_allowed",
                     "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "is_pets_allowed",
                     "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "number_of_guests",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "number_of_extra_beds",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -923,9 +847,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "description",
@@ -937,18 +859,14 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "number_of_stars",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "location_street_address",
@@ -960,9 +878,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "location_address_line2",
@@ -974,9 +890,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "location_region_country",
@@ -988,9 +902,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "location_city",
@@ -1002,9 +914,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "location_zip_code",
@@ -1016,9 +926,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -1067,18 +975,14 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "predicted_arrival_date",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "email",
@@ -1090,9 +994,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "fullname",
@@ -1104,9 +1006,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "phone",
@@ -1118,9 +1018,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -1174,9 +1072,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "buyer_name",
@@ -1188,9 +1084,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "payment_method",
@@ -1202,27 +1096,21 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "status",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "date",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -1262,18 +1150,14 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "is_disabled",
                     "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -1313,9 +1197,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "sku_code",
@@ -1327,27 +1209,21 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "quantity",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "price",
                     "datatypeId": "30767a2a-9bb4-4d2b-8af2-8b0fc84b2fc9",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -1396,54 +1272,42 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "date_from",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "date_to",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "adult_quantity",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "children_quantity",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "is_cancelled",
                     "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -1483,9 +1347,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "registration_code",
@@ -1497,9 +1359,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -1548,9 +1408,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "description",
@@ -1562,9 +1420,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -1604,9 +1460,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -1646,9 +1500,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "color",
@@ -1660,9 +1512,7 @@
                         }
                     ],
                     "datatypeIsNullable": true,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "size",
@@ -1674,18 +1524,14 @@
                         }
                     ],
                     "datatypeIsNullable": true,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "quantity_number",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": true,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "quantity_api_calc_name",
@@ -1697,9 +1543,7 @@
                         }
                     ],
                     "datatypeIsNullable": true,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "quantity_contact_for_quantity",
@@ -1711,9 +1555,7 @@
                         }
                     ],
                     "datatypeIsNullable": true,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         }

@@ -36,9 +36,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "national_id_number",
@@ -50,9 +48,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "nationality",
@@ -64,9 +60,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "license_number",
@@ -78,9 +72,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "image_national_id_card",
@@ -92,9 +84,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "image_driver_license_front",
@@ -106,9 +96,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "image_insurance",
@@ -120,9 +108,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -180,9 +166,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "model",
@@ -194,18 +178,14 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "year",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "license_plate",
@@ -217,9 +197,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "color",
@@ -231,27 +209,21 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "number_of_seats",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "insurance_expiration_date",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -304,9 +276,7 @@
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": true,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "x",
@@ -322,9 +292,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "y",
@@ -340,27 +308,21 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "from_date",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "to_date",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": true,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -404,9 +366,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "km_price_day",
@@ -422,9 +382,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "km_price_night",
@@ -440,9 +398,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "hour_wait_price",
@@ -458,9 +414,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "name",
@@ -472,27 +426,21 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "valid_from_date",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "valid_until_date",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -523,9 +471,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "description",
@@ -537,18 +483,14 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "order",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -579,9 +521,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -625,9 +565,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "point_y",
@@ -643,18 +581,14 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "order",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -698,18 +632,14 @@
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "numbe_of_seats",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "description",
@@ -721,9 +651,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "estimated_distance",
@@ -739,9 +667,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -790,9 +716,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "location_x",
@@ -808,9 +732,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "location_y",
@@ -826,18 +748,14 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "order",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -881,27 +799,21 @@
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "start_time",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "end_time",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -936,9 +848,7 @@
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "order_number",
@@ -950,9 +860,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "sum_tax_free",
@@ -968,9 +876,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "tax",
@@ -986,9 +892,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "sum_with_tax",
@@ -1004,9 +908,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -1046,9 +948,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "product_name",
@@ -1060,18 +960,14 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "amount",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "unit_price_with_tax",
@@ -1087,9 +983,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "sum_tax_free",
@@ -1105,9 +999,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "tax",
@@ -1123,9 +1015,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "sum_with_tax",
@@ -1141,9 +1031,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -1201,9 +1089,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "first_name",
@@ -1215,9 +1101,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "last_name",
@@ -1229,9 +1113,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "email",
@@ -1243,9 +1125,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "phone",
@@ -1257,9 +1137,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "avatar_image",
@@ -1271,9 +1149,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -1336,18 +1212,14 @@
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "until",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -1378,9 +1250,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         }

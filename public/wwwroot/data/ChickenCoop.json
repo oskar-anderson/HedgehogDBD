@@ -36,18 +36,14 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "order",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -87,18 +83,14 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "date",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "note",
@@ -110,9 +102,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -152,18 +142,14 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "is_cost",
                     "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "monetary_change",
@@ -179,9 +165,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -239,9 +223,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -272,9 +254,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "code",
@@ -286,18 +266,14 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "area_requirement",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -341,9 +317,7 @@
                     "datatypeId": "602200d9-2075-4824-b80c-6e739e503a70",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -374,9 +348,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "name",
@@ -388,9 +360,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "description",
@@ -402,9 +372,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -448,18 +416,14 @@
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "amount",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -499,9 +463,7 @@
                         }
                     ],
                     "datatypeIsNullable": true,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "egg_weight_code",
@@ -513,36 +475,28 @@
                         }
                     ],
                     "datatypeIsNullable": true,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "date_recorded",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "date_added",
                     "datatypeId": "1b294675-44fb-4dae-9481-abaecd97a836",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "weight",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -591,9 +545,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "weighter_identifier_code",
@@ -605,9 +557,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -638,9 +588,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -671,9 +619,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "name",
@@ -685,27 +631,21 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "min_weight",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "max_weight",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -736,9 +676,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "cage_identifier_code",
@@ -750,9 +688,7 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         },
@@ -783,27 +719,21 @@
                         }
                     ],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "area",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 },
                 {
                     "name": "order",
                     "datatypeId": "d8b8dfce-adbf-4988-919e-63b475c187bc",
                     "datatypeArguments": [],
                     "datatypeIsNullable": false,
-                    "attributes": [
-                        ""
-                    ]
+                    "attributes": []
                 }
             ]
         }

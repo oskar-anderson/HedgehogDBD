@@ -92,7 +92,7 @@ export default function Table() {
                 return new DomainTableRowDataTypeArguments(value, argument.id)
             }),
             tableRow.rowDatatype.isNullable,
-            tableRow.rowAttributes.split(",").map(x => x.trim())
+            tableRow.rowAttributes.split(",").map(x => x.trim()).filter(x => x)
         ));
         CommandHistory.execute(history, new CommandModifyTable(
             { tables }, 

@@ -5,8 +5,7 @@ import Databases from "../../model/DataTypes/Databases"
 import { OverlayTrigger, Popover } from "react-bootstrap"
 import AttributeSelect from './AttributeSelect';
 
-
-interface UiTableRowDatatype {
+export interface UiTableRowDatatype {
     id: string,
     arguments: {
         value: {

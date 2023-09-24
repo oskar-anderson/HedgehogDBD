@@ -66,7 +66,7 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
     );
 
     const activeDatabaseId = useApplicationState(state => state.activeDatabaseId);
-    
+
     const handleArgumentInputChange = (e: ChangeEvent, argumentId: string) => {
         const newValue = (e.target! as HTMLInputElement).value;
         const newArguments = [...datatypeArguments];
@@ -86,14 +86,14 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
         setRows([...tableRows]);
     }
 
-    
+
     const handleSelectInputOnChange = (e: ChangeEvent) => {
         const selectedDatatypeId = (e.target as HTMLSelectElement).value;
         const args = DataType.getArgumentsByDatabaseAndByType(
-            Databases.get(activeDatabaseId).select, 
+            Databases.get(activeDatabaseId).select,
             selectedDatatypeId
         )
-        
+
         const dataTypeArguements = args.map(x => ({
             displayName: x.displayName,
             isReadonly: x.isReadonly,
@@ -120,7 +120,7 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
         setRows([...tableRows]);
     }
 
-    
+
     const handleArgumentWillNotBeProvidedCheckbox = (isChecked: boolean) => {
         const newArgs = [...datatypeArguments];
         // every field has to be included or excluded as to not mess up the argument order
@@ -135,11 +135,11 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
         setRows([...tableRows]);
     }
 
-    
+
     const popover = (
         <Popover style={{ padding: "12px" }}>
             <input id="inputIncludeCustomArguments" style={{ marginRight: "6px" }} type="checkbox"
-                onChange={(e) => { handleArgumentWillNotBeProvidedCheckbox((e.target as HTMLInputElement).checked) }} 
+                onChange={(e) => { handleArgumentWillNotBeProvidedCheckbox((e.target as HTMLInputElement).checked) }}
                 defaultChecked={datatypeArguments.length === 0 ? true : datatypeArguments.every(x => x.isIncluded)}
             />
             <label htmlFor="inputIncludeCustomArguments">Include optional arguments</label>
@@ -160,25 +160,25 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
     )
 
     const tableRowRef = useRef<HTMLTableRowElement>(null);
-    
+
 
     return (
         <tr ref={tableRowRef}
-            onMouseMove={(e) => { 
+            onMouseMove={(e) => {
                 if (dragItem.current === null) { return; }
                 const tableRowRect = tableRowRef.current!.getBoundingClientRect();
                 const rectContains = (x: number, y: number, width: number, height: number, pointX: number, pointY: number) => {
                     return (x <= pointX)
-                        && (pointX < x + width) 
-                        && (y <= pointY) 
+                        && (pointX < x + width)
+                        && (y <= pointY)
                         && (pointY < y + height)
                 }
                 let extraHeightForBottomIndicator = 0;
                 if (dragItem.current > index) { // dragging up
                     if (rectContains(
-                        tableRowRect.x, 
-                        tableRowRect.y, 
-                        tableRowRect.width, 
+                        tableRowRect.x,
+                        tableRowRect.y,
+                        tableRowRect.width,
                         tableRowRect.height / 2,
                         e.clientX, e.clientY
                     )) {
@@ -192,10 +192,10 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
                     return;
                 } else { // dragging down
                     if (rectContains(
-                        tableRowRect.x, 
-                        tableRowRect.y + tableRowRect.height / 2, 
-                        tableRowRect.width, 
-                        tableRowRect.height / 2, 
+                        tableRowRect.x,
+                        tableRowRect.y + tableRowRect.height / 2,
+                        tableRowRect.width,
+                        tableRowRect.height / 2,
                         e.clientX, e.clientY)
                     ) {
                         dragOverItem.current = index;
@@ -245,14 +245,14 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
                             let selectedOptionDisplayParameters = "";
                             if (x.getId() === row.rowDatatype.id) {
                                 const selectedDataTypeArguments = datatypeArguments.filter(x => x.isIncluded);
-                                selectedOptionDisplayParameters = (selectedDataTypeArguments.length !== 0) ? 
-                                    `(${selectedDataTypeArguments.map(x => x.value === "" ? "0" : x.value).join(", ")})` : 
+                                selectedOptionDisplayParameters = (selectedDataTypeArguments.length !== 0) ?
+                                    `(${selectedDataTypeArguments.map(x => x.value === "" ? "0" : x.value).join(", ")})` :
                                     "";
                             } else {
                                 const notSelectedDataTypeArguments = DataType.getArgumentsByDatabaseAndByType(
                                     Databases.get(activeDatabaseId).select,
                                     x.getId());
-                                selectedOptionDisplayParameters = (notSelectedDataTypeArguments.length !== 0) ? 
+                                selectedOptionDisplayParameters = (notSelectedDataTypeArguments.length !== 0) ?
                                     `(${notSelectedDataTypeArguments.map(x => x.defaultValue).join(", ")})` :
                                     "";
                             }

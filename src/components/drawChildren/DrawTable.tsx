@@ -77,7 +77,7 @@ export const handleStyle: React.CSSProperties = {
     border: "none", 
     cursor: "inherit",
     opacity: 0,
-    pointerEvents: "all"
+    pointerEvents: "none"
 }
     
 

@@ -1,5 +1,6 @@
 import { EdgeProps, getBezierPath, getSmoothStepPath, BaseEdge, Position, getStraightPath } from 'reactflow';
 import { EdgePayload } from '../../pages/Draw';
+import { publish } from '../../Event';
 
 export const EdgeNotationPadding = 12;
 
@@ -110,7 +111,8 @@ export default function ErdEdge({
         <>
             <g onContextMenu={(e) => {
                 e.preventDefault();
-                data!.onClick(e, id) 
+                e.stopPropagation();
+                publish("e_onEdgeClick", { event: e, edgeId: id}) 
             }}>
                 <line className='react-flow__edge-path'
                     x1={edgeTargetTableCollisionPoint.x} y1={edgeTargetTableCollisionPoint.y} 

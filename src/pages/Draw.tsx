@@ -76,12 +76,11 @@ export type EdgePayload = {
     pathType: string,
     sourceSide: 'left' | 'right'
     targetSide: 'left' | 'right'
-    onClick: (e: React.MouseEvent, edgeId: string) => void,
     sourceRowName: string,
     targetRowName: string,
 };
 
-const convertRelationToEdge = (relation: VmRelation, onClick: (e: React.MouseEvent, edgeId: string) => void): Edge<EdgePayload> => {
+const convertRelationToEdge = (relation: VmRelation): Edge<EdgePayload> => {
     let sourceSide: 'left' | 'right' = relation.source.position.x > relation.target.position.x ? "left" : "right";
     let targetSide: 'left' | 'right' = relation.source.position.x > relation.target.position.x ? "right" : "left";
     let pathType: 'default' | 'straight' | 'step' | 'smoothstep' | 'simplebezier' = 'default';
@@ -102,7 +101,6 @@ const convertRelationToEdge = (relation: VmRelation, onClick: (e: React.MouseEve
             pathType,
             sourceSide,
             targetSide,
-            onClick,
             sourceRowName: relation.sourceRow.name,
             targetRowName: relation.targetRow.name,
         }
@@ -176,28 +174,35 @@ export const WrappedDraw = () => {
         }
     }, []);
 
-    const onEdgeClick = (e: React.MouseEvent, edgeId: string) => {
-        e.stopPropagation();
-        let selectedEdge = edgesRef.current.find(x => x.id === edgeId)!;
-        if (!selectedEdge) { 
-            console.error(`Edge with id (${edgeId}) not found.`); 
-            return; 
-        }
-        const sourceTable = nodesRef.current.find(x => x.id === selectedEdge.source)!.data.table;
-        const sourceTableRow = sourceTable.tableRows.find(tr => tr.name === selectedEdge.data!.sourceRowName)!;
-        const targetTable = nodesRef.current.find(x => x.id === selectedEdge.target)!.data.table;
-        setEdgeActions({
-            show: true,
-            props: {
-                x: e.clientX - mainContentRef.current!.getBoundingClientRect().x,
-                y: e.clientY - mainContentRef.current!.getBoundingClientRect().y,
-                sourceTable: sourceTable,
-                sourceTableRow: sourceTableRow,
-                targetTableName: targetTable.head,
-                targetTableRowName: selectedEdge.data!.targetRowName
+    useEffect(() => {
+        const onEdgeClick = (e: any) => {
+            const { event, edgeId } = e.detail as { event: React.MouseEvent, edgeId: string };
+            let selectedEdge = edgesRef.current.find(x => x.id === edgeId)!;
+            if (!selectedEdge) { 
+                console.error(`Edge with id (${edgeId}) not found.`); 
+                return; 
             }
-        });
-    };
+            const sourceTable = nodesRef.current.find(x => x.id === selectedEdge.source)!.data.table;
+            const sourceTableRow = sourceTable.tableRows.find(tr => tr.name === selectedEdge.data!.sourceRowName)!;
+            const targetTable = nodesRef.current.find(x => x.id === selectedEdge.target)!.data.table;
+            setEdgeActions({
+                show: true,
+                props: {
+                    x: event.clientX - mainContentRef.current!.getBoundingClientRect().x,
+                    y: event.clientY - mainContentRef.current!.getBoundingClientRect().y,
+                    sourceTable: sourceTable,
+                    sourceTableRow: sourceTableRow,
+                    targetTableName: targetTable.head,
+                    targetTableRowName: selectedEdge.data!.targetRowName
+                }
+            });
+        };
+        subscribe("e_onEdgeClick", onEdgeClick);
+        return () => { 
+            unsubscribe("e_onEdgeClick", onEdgeClick); 
+        }
+    }, [])
+
 
     useEffect(() => {
         setEdges([]);
@@ -214,7 +219,7 @@ export const WrappedDraw = () => {
             target: cursorEdge!.targetNodeId,
             zIndex: 1
         } : null;
-        const edges = relations.map(relation => convertRelationToEdge(relation, onEdgeClick))
+        const edges = relations.map(relation => convertRelationToEdge(relation))
         if (cursorEdgeDrawable) {
             edges.push(cursorEdgeDrawable);
         }

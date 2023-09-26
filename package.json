@@ -18,6 +18,7 @@
     "react-bootstrap": "^2.7.4",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.15.0",
+    "react-select": "^5.7.5",
     "reactflow": "^11.8.3",
     "zustand": "^4.4.1"
   },

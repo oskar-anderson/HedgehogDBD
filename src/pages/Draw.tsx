@@ -345,10 +345,15 @@ export const WrappedDraw = () => {
         };
         setMouseScreenPosition(screenPosition);
         setMouseWorldPosition(worldPosition);
-        setNodes([...tables.map(table => {
-            const node = nodes.find(node => table.id === node.id);
-            return convertTableToNode(table, node);
-        }), getCursorNode(worldPosition)]);
+        // Careful! Do not touch! - setNodes(newNodes) causes a problem with tables flashing on screen for 1 frame and dissapearing when this event fires. 
+        // Mostly happens when switching from table page to draw page quickly in about 1/30 chance - pull #24
+        setNodes(state => { 
+            return [...state.map(node => 
+                node.type === "cursorNode" ? 
+                getCursorNode(worldPosition) 
+                : node
+            )] 
+        });
         if (cursorEdge) {
             const sourceNode = nodes.find(x => x.id === cursorEdge.sourceNodeId);
             const sourceNodeXMiddle = sourceNode!.position.x + sourceNode!.width! / 2;

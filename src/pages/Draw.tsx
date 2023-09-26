@@ -303,6 +303,7 @@ export const WrappedDraw = () => {
     }
 
     const onMoveWorldToViewport = (event: MouseEvent | TouchEvent, viewport: Viewport) => {
+        setTableContextMenu(tableContextMenuDefault);
         setEdgeActions(edgeActionPayloadDefault);
         setViewport(viewport);
     }

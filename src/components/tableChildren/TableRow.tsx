@@ -3,7 +3,7 @@ import { useApplicationState } from "../../Store"
 import DataType from "../../model/DataTypes/DataType"
 import Databases from "../../model/DataTypes/Databases"
 import { OverlayTrigger, Popover } from "react-bootstrap"
-
+import { useParams } from "react-router-dom"
 
 interface UiTableRowDatatype {
     id: string,
@@ -63,6 +63,9 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
             }
         })
     );
+    const { id } = useParams();
+    const tables = useApplicationState(state => state.schemaTables);
+    const attributesTextInputField = useRef<HTMLInputElement>(null);
 
     const activeDatabaseId = useApplicationState(state => state.activeDatabaseId);
     
@@ -280,10 +283,50 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
                     </OverlayTrigger>
                 </div>
             </td>
-            <td>
-                <input className="form-control" style={{ display: "inline" }} list="attribute-suggestions" type="text" value={row.rowAttributes}
+            <td className="d-flex">
+                <input ref={attributesTextInputField} 
+                    className="form-control" 
+                    style={{ display: "inline", borderTopRightRadius: 0, borderBottomRightRadius: 0 }} 
+                    type="text" 
+                    value={row.rowAttributes}
                     onChange={(e) => handleAttributeChange((e.target as HTMLInputElement).value) }
                 />
+                <select 
+                    className="form-select" 
+                    style={{
+                        borderTopLeftRadius: 0,
+                        borderBottomLeftRadius: 0,
+                        width: 80,
+                    }}
+                    name="hints" 
+                    onChange={(e) => {
+                        e.preventDefault();
+                        let lenght = attributesTextInputField.current!.value.length
+                        let startPos = attributesTextInputField.current!.selectionStart ?? lenght;
+                        let endPos = attributesTextInputField.current!.selectionEnd ?? lenght;
+                        const newAttributeValue = 
+                            attributesTextInputField.current!.value.substring(0, startPos)
+                            + e.target.value
+                            + attributesTextInputField.current!.value.substring(endPos, lenght);
+                        handleAttributeChange(newAttributeValue);
+                    }}
+                    value={'DEFAULT'}
+                >
+                    <option value="DEFAULT" disabled className="d-none">Hints</option>
+                    <optgroup label="Commands">
+                        <option value={ `FK("tableName"), ` }>FK(tableName)</option>
+                        <option value="PK, ">PK</option>
+                    </optgroup>
+                    <optgroup label="Tables">
+                        {
+                            tables
+                                .filter(table => table.id !== id)
+                                .map(table => (
+                                <option key={table.id} value={table.head}>{table.head}</option>
+                            ))
+                        }
+                    </optgroup>
+                </select>
             </td>
             <td>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>

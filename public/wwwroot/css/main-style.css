@@ -131,6 +131,10 @@ https://stackoverflow.com/questions/5214127/css-technique-for-a-horizontal-line-
     height: auto;
 }
 
+select optgroup{
+    font-style: normal; /* prevent browser inconsistencies - italic in FF by default */
+}
+
 .react-flow__pane {
     cursor: default !important;
 }

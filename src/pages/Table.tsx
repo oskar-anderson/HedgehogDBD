@@ -219,10 +219,6 @@ export default function Table() {
                             <div ref={hoverInsertIndicator} className="horizontal-strike" style={{ position: "fixed", display: "none", justifyContent: "center", pointerEvents: "none" }}>
                                 Drop
                             </div>
-                            <datalist id="attribute-suggestions">
-                                <option value="PK" />
-                                <option value='FK("TableName")' />
-                            </datalist>
                             <hr />
                         </div>
                         <div className="modal-footer" style={{ display: "grid", gridTemplateColumns: "1fr 3fr" }}>

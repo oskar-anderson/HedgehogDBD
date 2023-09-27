@@ -1,4 +1,5 @@
 {
+  "name": "HedgehogDBD",
   "scripts": {
     "start": "npm-run-all -p check --parallel serve",
     "serve": "vite",

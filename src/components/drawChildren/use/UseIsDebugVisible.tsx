@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 
-export default function UseIsDebugVisible() {
+export default function useIsDebugVisible() {
     const pressedKeySequence = useRef("");
     const [isDebugVisible, setIsDebugVisible] = useState(false);
     

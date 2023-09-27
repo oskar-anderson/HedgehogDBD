@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import DomainDraw from "../../model/domain/DomainDraw";
 import { useApplicationState } from "../../Store";
 import { CommandSetSchema, CommandSetSchemaArgs } from "../../commands/appCommands/CommandSetSchema";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import CommandHistory from "../../commands/CommandHistory";
 
 interface TopToolbarListElementIconProps {
@@ -31,6 +31,8 @@ export default function SecondaryTopToolbar( { exportPngImage } : SecondaryTopTo
     const setTables = useApplicationState(state => state.setTables)
     const history = useApplicationState(state => state.history)
     const activeDatabaseId = useApplicationState(state => state.activeDatabaseId)
+    const tablesRef = useRef(tables);
+    tablesRef.current = tables;
 
     const newSchema = () => {
         setSchema(new DomainDraw([], activeDatabaseId));
@@ -68,10 +70,10 @@ export default function SecondaryTopToolbar( { exportPngImage } : SecondaryTopTo
     }
 
     const undo = () => {
-        CommandHistory.undo(history, {tables}, setTables);
+        CommandHistory.undo(history, {tables: tablesRef.current}, setTables);
     }
     const redo = () => {
-        CommandHistory.redo(history, {tables}, setTables);
+        CommandHistory.redo(history, {tables: tablesRef.current}, setTables);
     }
 
     useEffect(() => {

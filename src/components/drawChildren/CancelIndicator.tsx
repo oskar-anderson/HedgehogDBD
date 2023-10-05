@@ -37,7 +37,7 @@ export default function CancelIndicator({ type, show, children }: CancelIndicato
             document.removeEventListener("keydown", onEscClick)
             document.removeEventListener("contextmenu", onRightClick)
         });
-    }, [show])
+    }, [show, type])
 
     return (
         show ?

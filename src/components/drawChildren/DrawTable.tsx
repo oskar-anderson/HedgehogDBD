@@ -118,12 +118,11 @@ const tableStyle = {
     }
 }
 
-export function HoverTable({name, tableRows, scale}: { name: string, tableRows: VmTableRow[], scale: number}) {
+export function HoverTable({name, tableRows}: { name: string, tableRows: VmTableRow[]}) {
     return (
         <>
             <div style={{  
-                width: "min-content",
-                transform: `scale(${scale})`
+                width: "min-content"
             }}>
                 <div style={{ borderRadius: "4px",  backgroundColor: "#eee" }}>
 

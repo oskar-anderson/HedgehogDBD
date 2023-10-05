@@ -313,8 +313,8 @@ export const WrappedDraw = () => {
         const newTable = new DomainTable(
             crypto.randomUUID(),
             { 
-                x: cursorWorldPosition.x - tableNode!.clientWidth / 2, 
-                y: cursorWorldPosition.y - tableNode!.clientHeight / 2
+                x: cursorWorldPosition.x - tableNode.clientWidth / 2, 
+                y: cursorWorldPosition.y - tableNode.clientHeight / 2
             }, 
             "new_table", 
             [
@@ -481,10 +481,10 @@ export const WrappedDraw = () => {
                             position: "absolute", 
                             top: mouseScreenPosition.y, 
                             left: mouseScreenPosition.x,
-                            transform: "translate(-50%, -50%)",
-                            pointerEvents: "none" 
+                            transform: `translate(-50%, -50%) scale(${currentViewport.zoom})`,
+                            pointerEvents: "none",
                         }}>
-                            <HoverTable name={creatingTableHoverPhase.name} tableRows={creatingTableHoverPhase.tableRows} scale={currentViewport.zoom} />
+                            <HoverTable name={creatingTableHoverPhase.name} tableRows={creatingTableHoverPhase.tableRows} />
                         </div>
                         :
                         null

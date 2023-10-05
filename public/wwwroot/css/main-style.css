@@ -151,6 +151,10 @@ select optgroup{
     visibility: hidden !important;
 }
 
+.react-flow__renderer {
+    z-index: auto !important; /* Allow displaying overlaying text  */
+}
+
 .hover-gray:hover {
     background-color: #eee;
 }

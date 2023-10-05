@@ -43,7 +43,8 @@ export default function useCursorEdgeCreation({ cursorEdge, setCursorEdge } : us
     const activeDatabaseId = useApplicationState(state => state.activeDatabaseId);
 
     const onCompleteAddingRelation = (e: any) => {
-        const targetTable = e.detail.table as VmTable;
+        const targetTableId = e.detail.targetTableId as String;
+        const targetTable = tables.find(table => table.id === targetTableId)!;
         if (!cursorEdge) { 
             publish("e_nodeClick", { tableId: targetTable.id })
             return; 

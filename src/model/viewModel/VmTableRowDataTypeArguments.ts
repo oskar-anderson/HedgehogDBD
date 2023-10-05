@@ -1,7 +1,7 @@
 import { IDataTypeArgument } from "../DataTypes/DataType";
 
 
-export default interface TableRowDataTypeArguments {
+export default interface VmTableRowDataTypeArguments {
     value: number;
     argument: IDataTypeArgument;
 }

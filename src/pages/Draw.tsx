@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "./../components/Layout"
 import ReactFlow, { ReactFlowProvider, useNodesState, useEdgesState, MiniMap, Background, Controls, BackgroundVariant, NodeChange, NodePositionChange, Node, getRectOfNodes, getTransformForBounds, useReactFlow, useViewport, EdgeTypes, Viewport, Edge, ConnectionLineType, Position } from 'reactflow';
-import DrawTable from "../components/drawChildren/DrawTable";
+import DrawTable, { HoverTable } from "../components/drawChildren/DrawTable";
 import 'reactflow/dist/style.css';
 import { TOP_TOOLBAR_HEIGHT_PX } from "../components/TopToolbarAction"
 import SecondaryTopToolbar, { SECONDARY_TOOLBAR_HEIGHT_PX } from "../components/drawChildren/SecondaryTopToolbar";
@@ -22,14 +22,14 @@ import CommandHistory from "../commands/CommandHistory";
 import ErdEdge from "../components/drawChildren/ErdEdge";
 import { CommandModifyTable, CommandModifyTableArgs } from "../commands/appCommands/CommandModifyTableArgs";
 import VmTableRow from "../model/viewModel/VmTableRow";
-import { subscribe, unsubscribe } from "../Event";
+import { publish, subscribe, unsubscribe } from "../Event";
 import CursorNode from "../components/drawChildren/CursorNode";
 import CursorEdge from "../components/drawChildren/CursorEdge";
 import useCursorEdgeCreation from "../components/drawChildren/use/UseCursorEdgeCreation";
 import EdgeActionsModal, { edgeActionPayloadDefault } from "../components/drawChildren/modal/EdgeActionsModal";
 import DebugModal from "../components/drawChildren/modal/DebugModal";
 import TableContextMenu, { TableContextMenuProps, tableContextMenuDefault } from "../components/drawChildren/modal/TableContextMenu"
-import CursorEdgeIndicator from "../components/drawChildren/CursorEdgeIndicator";
+import CancelIndicator, { CANCEL_INDICATOR_EMITTED, CANCEL_INDICATOR_ARGUMENT_TYPE } from "../components/drawChildren/CancelIndicator";
 import { CursorEdgePayload } from "../components/drawChildren/use/UseCursorEdgeCreation";
 
 // nodeTypes need to be defined outside the render function or using memo
@@ -130,6 +130,7 @@ export const WrappedDraw = () => {
     const [tableContextMenu, setTableContextMenu] = useState<TableContextMenuProps>(tableContextMenuDefault);
     const [cursorEdge, setCursorEdge] = useState<CursorEdgePayload>(null);
     useCursorEdgeCreation({ cursorEdge, setCursorEdge })
+    const [creatingTableHoverPhase, setCreatingTableHoverPhase] = useState<{ name: string, tableRows: VmTableRow[] } | null>(null);
 
     useEffect(() => {
         const setCursorEdgeCallback = (e: any) => {
@@ -153,7 +154,11 @@ export const WrappedDraw = () => {
 
     useEffect(() => {
         const openTableContextMenu = (e: any) => {
-            const { event, table, row }: { event: React.MouseEvent, table: VmTable, row: VmTableRow | undefined } = e.detail;
+            publish(CANCEL_INDICATOR_EMITTED.CANCEL_INDICATOR_TRIGGER, { type: CANCEL_INDICATOR_ARGUMENT_TYPE.ALL })
+            
+            const { event, tableId, row }: { event: React.MouseEvent, tableId: String, row: VmTableRow | undefined } = e.detail;
+            const table = tables.find(table => table.id === tableId)!;
+        
             setTableContextMenu({
                 show: true,
                 props: {
@@ -172,10 +177,11 @@ export const WrappedDraw = () => {
         return () => { 
             unsubscribe("e_openTableContextMenu", openTableContextMenu); 
         }
-    }, []);
+    }, [tables]);
 
     useEffect(() => {
         const onEdgeClick = (e: any) => {
+            publish(CANCEL_INDICATOR_EMITTED.CANCEL_INDICATOR_TRIGGER, { type: CANCEL_INDICATOR_ARGUMENT_TYPE.ALL })
             const { event, edgeId } = e.detail as { event: React.MouseEvent, edgeId: string };
             let selectedEdge = edgesRef.current.find(x => x.id === edgeId)!;
             if (!selectedEdge) { 
@@ -227,9 +233,62 @@ export const WrappedDraw = () => {
         setEdges(edges);
     }, [tables, cursorEdge])
 
-    const onClick = () => { 
+    useEffect(() => {
+        const handleCancelEvents = (e: any) => {
+            const type = e.detail.type as CANCEL_INDICATOR_ARGUMENT_TYPE;
+            if (type === CANCEL_INDICATOR_ARGUMENT_TYPE.ALL || 
+                type === CANCEL_INDICATOR_ARGUMENT_TYPE.EDGE) {
+                setCursorEdge(null);
+            }
+            if (type === CANCEL_INDICATOR_ARGUMENT_TYPE.ALL || 
+                type === CANCEL_INDICATOR_ARGUMENT_TYPE.TABLE) {
+                setCreatingTableHoverPhase(null);
+            }
+
+        }
+        subscribe(CANCEL_INDICATOR_EMITTED.CANCEL_INDICATOR_TRIGGER, handleCancelEvents);
+        return () => { 
+            unsubscribe(CANCEL_INDICATOR_EMITTED.CANCEL_INDICATOR_TRIGGER, handleCancelEvents)
+        }
+    }, []);
+
+    const onClick = () => {
         setTableContextMenu(tableContextMenuDefault);
-        setEdgeActions(edgeActionPayloadDefault); 
+        setEdgeActions(edgeActionPayloadDefault);
+        if (creatingTableHoverPhase) {
+            createNewTable(mouseWorldPosition);
+            setCreatingTableHoverPhase(null);
+        }
+    }
+
+    const startCreatingTableHoverPhase = () => {
+        const dataBase = Databases.getAll().find(x => x.id === activeDatabaseId)!;
+        const defaultPkDataType = DataType.guid();
+        const tableRowDataTypeArguments = defaultPkDataType.getAllArguments()
+            .filter(arg => arg.databases.includes(dataBase))
+            .map(x => new DomainTableRowDataTypeArguments(x.defaultValue, x.id)
+        );
+        
+        setCreatingTableHoverPhase(
+        { 
+            name: "new_table", 
+            tableRows: [
+                {
+                    name: "id",
+                    datatype: {
+                        isNullable: false,
+                        dataTypeId: defaultPkDataType.getId(),
+                        arguments: tableRowDataTypeArguments.map(arg => 
+                            ({ 
+                                value: arg.value,
+                                argument: DataType.getArgumentById(arg.id),
+                            })   
+                        )
+                    },
+                    attributes: ["PK"]
+                }
+            ]
+        });
     }
 
     useEffect(() => {
@@ -242,7 +301,9 @@ export const WrappedDraw = () => {
         }
     }, [])
 
-    const createNewTable = () =>  {
+    const createNewTable = (cursorWorldPosition: { x: number, y: number }) => {
+        const tableNode = document.querySelector("#table-creation-hover");
+        if (!tableNode) { return; }
         const dataBase = Databases.getAll().find(x => x.id === activeDatabaseId)!;
         const defaultPkDataType = DataType.guid();
         const tableRowDataTypeArguments = defaultPkDataType.getAllArguments()
@@ -252,8 +313,8 @@ export const WrappedDraw = () => {
         const newTable = new DomainTable(
             crypto.randomUUID(),
             { 
-                x: -x / zoom + 20, 
-                y: -y / zoom + 20
+                x: cursorWorldPosition.x - tableNode!.clientWidth / 2, 
+                y: cursorWorldPosition.y - tableNode!.clientHeight / 2
             }, 
             "new_table", 
             [
@@ -374,7 +435,7 @@ export const WrappedDraw = () => {
         <Layout currentlyLoadedLink={"Draw"}>
             <SecondaryTopToolbar exportPngImage={ downloadImagePng }  />
             <div style={{ display: 'flex', width: '100vw', height: `calc(100vh - ${TOP_TOOLBAR_HEIGHT_PX}px  - ${SECONDARY_TOOLBAR_HEIGHT_PX}px)` }}>
-                <DrawSide tables={tables} createNewTable={createNewTable}>
+                <DrawSide tables={tables} createNewTable={startCreatingTableHoverPhase}>
                     <MiniMap style={{ position: "relative", margin: 0 }} pannable maskColor="rgba(213, 213, 213, 0.7)" nodeColor="#ffc8c8" />
                 </DrawSide>
                 <div ref={mainContentRef} className="w-100 h-100 position-relative overflow-hidden">
@@ -397,7 +458,12 @@ export const WrappedDraw = () => {
                         defaultViewport={currentViewport}
                         onMove={onMoveWorldToViewport}
                     >
-                        <CursorEdgeIndicator cursorEdge={cursorEdge} setCursorEdge={setCursorEdge}/>
+                        <CancelIndicator show={cursorEdge !== null} type={CANCEL_INDICATOR_ARGUMENT_TYPE.EDGE}>
+                            <div className="h5 badge text-bg-secondary">Right click to cancel adding relation!</div>
+                        </CancelIndicator>
+                        <CancelIndicator show={creatingTableHoverPhase !== null} type={CANCEL_INDICATOR_ARGUMENT_TYPE.TABLE}>
+                            <div className="h5 badge text-bg-secondary">Right click to cancel entity creation!</div>
+                        </CancelIndicator>
                         <Controls />
                         <Background variant={BackgroundVariant.Dots} gap={36} size={1} style={{ backgroundColor: "#f8fafc"}} />
                     </ReactFlow>
@@ -410,6 +476,19 @@ export const WrappedDraw = () => {
                         mouseWorldPosition={mouseWorldPosition}
                     />
                     <TableContextMenu show={tableContextMenu.show} props={tableContextMenu.props} />
+                    { creatingTableHoverPhase ? 
+                        <div id="table-creation-hover" style={{ 
+                            position: "absolute", 
+                            top: mouseScreenPosition.y, 
+                            left: mouseScreenPosition.x,
+                            transform: "translate(-50%, -50%)",
+                            pointerEvents: "none" 
+                        }}>
+                            <HoverTable name={creatingTableHoverPhase.name} tableRows={creatingTableHoverPhase.tableRows} scale={currentViewport.zoom} />
+                        </div>
+                        :
+                        null
+                    }
                 </div>
             </div>
         </Layout>

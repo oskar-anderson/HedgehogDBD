@@ -4,6 +4,7 @@ import DataType from "../../model/DataTypes/DataType"
 import Databases from "../../model/DataTypes/Databases"
 import { OverlayTrigger, Popover } from "react-bootstrap"
 import { useParams } from "react-router-dom"
+import { CreateAttributeModel } from "../models/createAttribute"
 
 interface UiTableRowDatatype {
     id: string,
@@ -25,24 +26,26 @@ export interface TableRowProps extends HTMLProps<HTMLTableRowElement> {
     row: {
         rowName: string
         rowDatatype: UiTableRowDatatype
-        rowAttributes: string
+        rowAttributes: string[]
     },
     tableRows: {  // I think this cannot be named rows because of a collision with some attribute of type number named rows or _rows
         key: string; // this is only needed in the parent component to manage state on new row insertion
         rowName: string;
         rowDatatype: UiTableRowDatatype;
-        rowAttributes: string;
+        rowAttributes: string[];
     }[],
     setRows: React.Dispatch<React.SetStateAction<{
         key: string;
         rowName: string;
         rowDatatype: UiTableRowDatatype;
-        rowAttributes: string;
+        rowAttributes: string[];
     }[]>>,
     deleteRow: (index: number) => void
 }
 
 export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOverItem, row, setRows, tableRows, deleteRow}: TableRowProps) {
+    const [editingAttribute , setEditingAttribute ] = useState<null | string>(null)
+    const [createAttributeModal , setCreateAttributeModal ] = useState(false)
     const [datatypeArguments, setDatatypeArguments] = useState<{
         value: string;
         displayName: string;
@@ -132,10 +135,10 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
         setRows([...tableRows]);
     }
 
-    const handleAttributeChange = (newValue: string) => {
-        tableRows[index].rowAttributes = newValue;
-        setRows([...tableRows]);
-    }
+    // const handleAttributeChange = (newValue: string) => {
+    //     tableRows[index].rowAttributes = newValue;
+    //     setRows([...tableRows]);
+    // }
 
     
     const popover = (
@@ -284,7 +287,20 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
                 </div>
             </td>
             <td className="d-flex">
-                <input ref={attributesTextInputField} 
+              
+            <CreateAttributeModel >      
+                model
+            {/* {
+            row.rowAttributes.map(attribute=><button type="button"  className="btn btn-light" >Discard changes  </button> )
+            }         */}
+            </CreateAttributeModel>              
+              
+              
+              
+              
+              
+              
+                {/* <input ref={attributesTextInputField} 
                     className="form-control" 
                     style={{ display: "inline", borderTopRightRadius: 0, borderBottomRightRadius: 0 }} 
                     type="text" 
@@ -326,7 +342,7 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
                             ))
                         }
                     </optgroup>
-                </select>
+                </select> */}
             </td>
             <td>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>

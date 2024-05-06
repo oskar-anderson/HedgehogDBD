@@ -75,7 +75,7 @@ export default function Table() {
                 }),
                 isNullable: x.datatypeIsNullable,
             },
-            rowAttributes: x.attributes.join(", ")
+            rowAttributes: x.attributes
         }
     }));
 
@@ -92,7 +92,7 @@ export default function Table() {
                 return new DomainTableRowDataTypeArguments(value, argument.id)
             }),
             tableRow.rowDatatype.isNullable,
-            tableRow.rowAttributes.split(",").map(x => x.trim()).filter(x => x)
+            tableRow.rowAttributes
         ));
         CommandHistory.execute(history, new CommandModifyTable(
             { tables }, 
@@ -131,7 +131,7 @@ export default function Table() {
                     }),
                 isNullable: false,
             },
-            rowAttributes: "",
+            rowAttributes: [],
         };
         const newRows = [
             ...[...rows].slice(0, index),

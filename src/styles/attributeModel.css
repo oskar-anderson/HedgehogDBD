@@ -11,7 +11,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 16px;
-    padding: 40px;
+    padding: 24px;
     gap: 24px ;
 }
 
@@ -19,7 +19,10 @@
 .modelSaveBtn {
     width:  100%;
 }
-
+.selectedItemEffect {
+    /* background-color: rgb(222, 218, 218);
+    border: 2px solid gray; */
+}
 
 .createAttributeModalContainer {
     display: flex;

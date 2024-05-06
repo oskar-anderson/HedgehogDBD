@@ -5,6 +5,7 @@ import '../../styles/attributeModel.css'
 import { useApplicationState } from '../../Store';
 import VmTable from '../../model/viewModel/VmTable';
 import DomainTable from '../../model/domain/DomainTable';
+import { cn } from '../../utils/conditionalClassNames';
 
 
 const modelStyle = {
@@ -57,7 +58,7 @@ const toggleList = (list: Lists)=>{
 
 
 <div className='modelHeader' >
-<h3>Add Attributes</h3>
+<h3>Add Attribute</h3>
 <h5>Select attributes to add</h5>
 </div>
 
@@ -72,8 +73,8 @@ const toggleList = (list: Lists)=>{
   </button>
   {
     openedLists.includes(Lists.primaryList) &&<div className='attPrimaryList' >  
-    <button onClick={()=>setSelectedPrimaryAttribute(PrimaryAttributes.Primary_Key)} className='btn btn-light primaryListItem' >Primary Key</button>
-    <button onClick={()=>setSelectedPrimaryAttribute(PrimaryAttributes.Foreign_Key)} className='btn btn-light primaryListItem' >Foreign Key</button>
+    <button onClick={()=>setSelectedPrimaryAttribute(PrimaryAttributes.Primary_Key)} className={cn( 'btn  primaryListItem'  , {"btn-light" : selectedPrimaryAttribute !== PrimaryAttributes.Primary_Key},  {"btn-light selectedItemEffect" : selectedPrimaryAttribute === PrimaryAttributes.Primary_Key }) } >Primary Key</button>
+    <button onClick={()=>setSelectedPrimaryAttribute(PrimaryAttributes.Foreign_Key)} className={cn( 'btn  primaryListItem'  , {"btn-light" : selectedPrimaryAttribute !== PrimaryAttributes.Foreign_Key},  {"btn-light selectedItemEffect" : selectedPrimaryAttribute === PrimaryAttributes.Foreign_Key }) } >Foreign Key</button>
     </div>}
   </div>
 <div className='listCategory' >    {

@@ -11,9 +11,14 @@
     align-items: center;
     justify-content: center;
     border-radius: 16px;
-    padding: 80px 40px;
+    padding: 40px;
+    gap: 24px ;
 }
 
+
+.modelSaveBtn {
+    width:  100%;
+}
 
 
 .createAttributeModalContainer {
@@ -68,9 +73,11 @@
     display: flex;
 
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 }
-
+.primaryAttDropdownButton >span {
+    display: inline-block;
+}
 
 .listCategory {
     width: 100%;
@@ -79,4 +86,19 @@
     justify-content: center;
     gap: 4px;
     flex-direction: column;
+}
+
+
+.modelHeader {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+.modelHeader > * {
+    display: inline-block;
+}
+
+.modelHeader > h5 {
+    font-size: 16px;
 }

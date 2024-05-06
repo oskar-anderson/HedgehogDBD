@@ -53,36 +53,38 @@ const toggleList = (list: Lists)=>{
 }
 
 
-    return        <Modal  classNames={{modal : "createAttributeModal" , modalContainer : "createAttributeModalContainer" }}   open={open} onClose={onCloseModal} center>
-<div className='createAttModalContent' >
-<div className='createAttSelectList' >
+    return        <Modal  classNames={{modal : "createAttributeModal card" , modalContainer : "createAttributeModalContainer" }}   open={open} onClose={onCloseModal} center>
 
 
+<div className='modelHeader' >
+<h3>Add Attributes</h3>
+<h5>Select attributes to add</h5>
+</div>
 
 
 
 <div className="dropdown primaryDropdown">
 
 <div className='listCategory' >  
-  <button  onClick={()=>toggleList(Lists.primaryList)} className="btn btn-secondary primaryAttDropdownButton " type="button"  >
-    PK / FK
-    <i style={{transform :  openedLists.includes(Lists.primaryList) ? 'rotate(180deg)' : undefined  }} className="bi m-2 bi-caret-down-fill"></i>
+  <button  onClick={()=>toggleList(Lists.primaryList)} className="btn btn btn-dark primaryAttDropdownButton " type="button"  >
+    <span  > PK / FK</span>
+    <i style={{transform :  openedLists.includes(Lists.primaryList) ? 'rotate(180deg)' : undefined  }} className="bi mx-2 bi-caret-down-fill"></i>
   </button>
   {
     openedLists.includes(Lists.primaryList) &&<div className='attPrimaryList' >  
-    <button onClick={()=>setSelectedPrimaryAttribute(PrimaryAttributes.Primary_Key)} className='btn btn-light primaryListItem' >PK</button>
-    <button onClick={()=>setSelectedPrimaryAttribute(PrimaryAttributes.Foreign_Key)} className='btn btn-light primaryListItem' >FK</button>
+    <button onClick={()=>setSelectedPrimaryAttribute(PrimaryAttributes.Primary_Key)} className='btn btn-light primaryListItem' >Primary Key</button>
+    <button onClick={()=>setSelectedPrimaryAttribute(PrimaryAttributes.Foreign_Key)} className='btn btn-light primaryListItem' >Foreign Key</button>
     </div>}
   </div>
 <div className='listCategory' >    {
       selectedPrimaryAttribute === PrimaryAttributes.Foreign_Key && <>
-  <button onClick={()=>toggleList(Lists.tableNames) } className="btn btn-secondary primaryAttDropdownButton " type="button"  >
-    Dropdown button
-    <i style={{transform : openedLists.includes(Lists.tableNames) ?   'rotate(180deg)'  : undefined }} className="bi m-1 bi-caret-down-fill"></i>
+  <button onClick={()=>toggleList(Lists.tableNames) } className="btn btn-dark primaryAttDropdownButton " type="button"  >
+<span>  Table Names</span>
+    <i style={{transform : openedLists.includes(Lists.tableNames) ?   'rotate(180deg)'  : undefined }} className="bi mx-2 bi-caret-down-fill"></i>
   </button>
 
 { openedLists.includes(Lists.tableNames)  && tables.filter(item => item.id !== table.id).map(table => (
-     <button key={table.id} className='btn btn-light dropdownListItem' >table names</button>
+     <button key={table.id} className='btn btn-light dropdownListItem' >{table.head}</button>
 ))
 
 }
@@ -90,16 +92,12 @@ const toggleList = (list: Lists)=>{
 
       </>
     }</div>
-
+<input placeholder='Type Attribute...' className="form-control" style={{ display: "inline" }} ></input>
+<button className='btn btn-success modelSaveBtn' >Add Attribute</button>
 </div>
 
 
 
-
-</div>
-<input className="form-control" style={{ display: "inline" }} ></input>
-
-</div>
     </Modal>
 
   

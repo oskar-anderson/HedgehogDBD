@@ -4,7 +4,9 @@ import DataType from "../../model/DataTypes/DataType"
 import Databases from "../../model/DataTypes/Databases"
 import { OverlayTrigger, Popover } from "react-bootstrap"
 import { useParams } from "react-router-dom"
-import { CreateAttributeModel } from "../models/createAttribute"
+import { CreateAttributeModel } from "../modals/createAttribute"
+
+
 
 interface UiTableRowDatatype {
     id: string,
@@ -20,6 +22,7 @@ interface UiTableRowDatatype {
 
 export interface TableRowProps extends HTMLProps<HTMLTableRowElement> {
     index: number,
+    setAttributeModal : React.Dispatch<React.SetStateAction<boolean>> 
     hoverInsertIndicator: React.RefObject<HTMLDivElement>,
     dragItem: React.MutableRefObject<number | null>,
     dragOverItem: React.MutableRefObject<number | null>,
@@ -43,7 +46,7 @@ export interface TableRowProps extends HTMLProps<HTMLTableRowElement> {
     deleteRow: (index: number) => void
 }
 
-export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOverItem, row, setRows, tableRows, deleteRow}: TableRowProps) {
+export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOverItem, row, setRows, setAttributeModal  , tableRows, deleteRow}: TableRowProps) {
     const [editingAttribute , setEditingAttribute ] = useState<null | string>(null)
     const [createAttributeModal , setCreateAttributeModal ] = useState(false)
     const [datatypeArguments, setDatatypeArguments] = useState<{
@@ -288,15 +291,8 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
             </td>
             <td className="d-flex">
               
-            <CreateAttributeModel >      
-                model
-            {/* {
-            row.rowAttributes.map(attribute=><button type="button"  className="btn btn-light" >Discard changes  </button> )
-            }         */}
-            </CreateAttributeModel>              
               
-              
-              
+              <button onClick={()=>setAttributeModal(true)} >att</button>
               
               
               

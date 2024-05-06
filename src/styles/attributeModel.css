@@ -1,0 +1,82 @@
+
+
+
+
+.modelTriger {
+    cursor: pointer;
+}
+
+.createAttributeModal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    padding: 80px 40px;
+}
+
+
+
+.createAttributeModalContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.createAttModalContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-direction: column;
+}
+.createAttSelectList {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    flex-direction: column;
+    width: 222px;
+}
+
+
+.listBtn{
+    width: 100%;
+}
+
+.attPrimaryList{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    gap: 4px;
+}
+
+.primaryDropdown , .dropdownListItem {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+}
+
+.primaryListItem{
+    width: 100%;
+}
+
+.primaryAttDropdownButton {
+    width: 100%;
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+
+.listCategory {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    flex-direction: column;
+}

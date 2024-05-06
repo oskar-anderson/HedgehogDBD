@@ -5,10 +5,12 @@ import Info from "./pages/system/Info";
 import Settings from './pages/Settings';
 import Scripting from './pages/Scripting';
 import Table from './pages/Table';
+import "bootstrap-icons/font/bootstrap-icons.css"
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
+export const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 root.render(
+    <>
     <BrowserRouter>
         <Routes>
             <Route path={`/`} element={<Draw />}></Route>
@@ -19,4 +21,6 @@ root.render(
             <Route path={`/system/info`} element={<Info />}></Route>
         </Routes>
     </BrowserRouter>
+
+    </>
 )

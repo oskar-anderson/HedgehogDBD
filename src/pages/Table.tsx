@@ -10,12 +10,15 @@ import DomainTable from "../model/domain/DomainTable";
 import TableRow from "../components/tableChildren/TableRow"
 import { CommandModifyTable, CommandModifyTableArgs } from "../commands/appCommands/CommandModifyTableArgs";
 import CommandHistory from "../commands/CommandHistory";
+import { CreateAttributeModel } from "../components/modals/createAttribute";
+
 
 
 export default function Table() {
     const { id } = useParams();
     const tables = useApplicationState(state => state.schemaTables);
     const setTables = useApplicationState(state => state.setTables);
+    const [attModalOpen, setAttModalOpen] = useState(false)
     const activeDatabaseId = useApplicationState(state => state.activeDatabaseId);
     const history = useApplicationState(state => state.history);
     const navigate = useNavigate();
@@ -166,15 +169,18 @@ export default function Table() {
     const hoverInsertIndicator = useRef<HTMLDivElement>(null);
 
     return (
+        <>
+        <CreateAttributeModel table={tableBeingEdited} open={attModalOpen} setOpen={setAttModalOpen}   ></CreateAttributeModel>
+        <div>
         <div className="table-edit-container">
-            <div className="modal bg-grey" tabIndex={-1} style={{ display: "block" }}>
-                <div className="modal-dialog modal-dialog-scrollable" style={{ maxWidth: "80%" }}>
-                    <div className="modal-content">
-                        <div className="modal-header">
+            <div className="vh-100 p-4 bg-grey" tabIndex={-1} style={{ display: "block" }}>
+                <div className=" modal-dialog modal-dialog-scrollable" style={{ maxWidth: "80%" }}>
+                    <div className="p-3 border rounded border-grey modal-content bg-white">
+                        <div className="modal-header pb-2  border-bottom  border-grey">
                             <h5>Editing table</h5>
                             <button type="button" className="btn-close" onClick={() => navigate(`/draw`)} aria-label="Close"></button>
                         </div>
-                        <div className="modal-body">
+                        <div className="modal-body py-3">
                             <div className="modal-title" style={{ display: "flex", gridGap: "1em" }}>
                                 <div style={{ flex: "50%", display: "flex", alignItems: "center" }}>
                                     <label htmlFor="table-name" className="me-3">Table name</label>
@@ -201,6 +207,7 @@ export default function Table() {
                                     {
                                         rows.map((row, index) => (
                                             <TableRow
+                                               setAttributeModal={setAttModalOpen}
                                                 key={row.key}
                                                 dragItem={dragItem}
                                                 dragOverItem={dragOverItem}
@@ -228,7 +235,10 @@ export default function Table() {
                     </div>
                 </div>
             </div>
+            </div>
         </div>
+        </>
+
     );
 }
 

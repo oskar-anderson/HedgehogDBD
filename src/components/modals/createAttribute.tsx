@@ -46,6 +46,7 @@ export const CreateAttributeModel  : React.FC<CreateTableProps> = ({open , setOp
   const onCloseModal = () => setOpen(false);
   const [openedLists , setOpenedLists ] = useState<Lists[]>([])
   const [selectedPrimaryAttribute , setSelectedPrimaryAttribute ] = useState<PrimaryAttributes | null>(null)
+  const [selectedTableName , setSelectedTableName ] = useState<null | string >(null)
   const tables = useApplicationState(state => state.schemaTables);
 
 
@@ -70,24 +71,29 @@ const toggleList = (list: Lists)=>{
 
 
 <select onChange={e=>setSelectedPrimaryAttribute(e.target.value as PrimaryAttributes)} className="form-select" aria-label="Select list">
- { selectedPrimaryAttribute === null && <option selected>PK / FK</option> }
+ { selectedPrimaryAttribute === null && <option className='hiddenOption' selected>PK / FK</option> }
   <option value={PrimaryAttributes.Primary_Key}>Primary Attribute</option>
   <option value={PrimaryAttributes.Foreign_Key}>Foreign Key</option>
 </select>
 
 
 
-  {/* <button  onClick={()=>toggleList(Lists.primaryList)} className="btn btn btn-dark primaryAttDropdownButton " type="button"  >
-    <span  > PK / FK</span>
-    <i style={{transform :  openedLists.includes(Lists.primaryList) ? 'rotate(180deg)' : undefined  }} className="bi mx-2 bi-caret-down-fill"></i>
-  </button>
-  {
-    openedLists.includes(Lists.primaryList) &&<div className='attPrimaryList' >  
-    <button onClick={()=>setSelectedPrimaryAttribute(PrimaryAttributes.Primary_Key)} className={cn( 'btn  primaryListItem'  , {"btn-light" : selectedPrimaryAttribute !== PrimaryAttributes.Primary_Key},  {"btn-light selectedItemEffect" : selectedPrimaryAttribute === PrimaryAttributes.Primary_Key }) } >Primary Key</button>
-    <button onClick={()=>setSelectedPrimaryAttribute(PrimaryAttributes.Foreign_Key)} className={cn( 'btn  primaryListItem'  , {"btn-light" : selectedPrimaryAttribute !== PrimaryAttributes.Foreign_Key},  {"btn-light selectedItemEffect" : selectedPrimaryAttribute === PrimaryAttributes.Foreign_Key }) } >Foreign Key</button>
-    </div>} */}
   </div>
-<div className='listCategory' >    {
+<div className='listCategory' >  
+
+{ selectedPrimaryAttribute === PrimaryAttributes.Foreign_Key &&  <select   onChange={e=>setSelectedTableName(e.target.value)} className="form-select" aria-label="Select list">
+ { selectedTableName === null && <option className='hiddenOption' selected>Table Name</option> }
+{ tables.filter(item => item.id !== table.id).map(table => (
+     <option key={table.id} selected={selectedTableName === table.head} value={table.head} className='btn btn-light dropdownListItem' >{table.head}</option>
+))}
+
+
+
+</select>
+}
+
+
+  {/* {
       selectedPrimaryAttribute === PrimaryAttributes.Foreign_Key && <>
   <button onClick={()=>toggleList(Lists.tableNames) } className="btn btn-dark primaryAttDropdownButton " type="button"  >
 <span>  Table Names</span>
@@ -102,7 +108,10 @@ const toggleList = (list: Lists)=>{
 
 
       </>
-    }</div>
+    }
+     */}
+    
+    </div>
 <input placeholder='Type Attribute...' className="form-control" style={{ display: "inline" }} ></input>
 <button className='btn btn-success modelSaveBtn' >Add Attribute</button>
 </div>

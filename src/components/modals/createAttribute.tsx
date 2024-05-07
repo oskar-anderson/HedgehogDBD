@@ -61,6 +61,7 @@ const toggleList = (list: Lists)=>{
 const handlePrimaryAttributeChange = (e :React.ChangeEvent<HTMLSelectElement>)=>{
 setSelectedPrimaryAttribute(e.target.value as PrimaryAttributes )
 if(e.target.value === PrimaryAttributes.Primary_Key) {   setAttributeText("PK") }
+if(e.target.value === PrimaryAttributes.Foreign_Key) setAttributeText(`FK("${selectedTableName}")`)
 }
 
 

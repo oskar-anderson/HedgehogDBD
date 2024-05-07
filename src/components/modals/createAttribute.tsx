@@ -6,6 +6,7 @@ import { useApplicationState } from '../../Store';
 import VmTable from '../../model/viewModel/VmTable';
 import DomainTable from '../../model/domain/DomainTable';
 import { cn } from '../../utils/conditionalClassNames';
+import { rowData } from '../../pages/Table';
 
 
 const modelStyle = {
@@ -24,8 +25,10 @@ const modelStyle = {
 
 
 interface CreateTableProps   {
-       open : boolean 
-       setOpen : React.Dispatch<React.SetStateAction<boolean>>
+  addRowAttributeModal : {   row: rowData | null;}
+       setAddRowAttributeModal : React.Dispatch<React.SetStateAction<{
+        row: rowData | null;
+    }>>
        table : DomainTable
 }
 
@@ -41,47 +44,58 @@ enum Lists {
   tableNames = "Table_Names"
 }
 
-export const CreateAttributeModel  : React.FC<CreateTableProps> = ({open , setOpen , table  })=>{
-  const onOpenModal = () => setOpen(true) ;
-  const onCloseModal = () => setOpen(false);
+export const CreateAttributeModel  : React.FC<CreateTableProps> = ({addRowAttributeModal , setAddRowAttributeModal , table  })=>{
+  const onCloseModal = () => setAddRowAttributeModal({row : null});
   const [openedLists , setOpenedLists ] = useState<Lists[]>([])
   const [selectedPrimaryAttribute , setSelectedPrimaryAttribute ] = useState<PrimaryAttributes | null>(null)
   const [selectedTableName , setSelectedTableName ] = useState<null | string >(null)
   const tables = useApplicationState(state => state.schemaTables);
-
+const [attributeText , setAttributeText ] = useState("")
 
 const toggleList = (list: Lists)=>{
   openedLists.includes(list) ? setOpenedLists(val=>val.filter(item=>item !== list)) : setOpenedLists(val=>[...val , list])
 }
 
 
-    return        <Modal  classNames={{modal : "createAttributeModal card" , modalContainer : "createAttributeModalContainer" }}   open={open} onClose={onCloseModal} center>
+
+const handlePrimaryAttributeChange = (e :React.ChangeEvent<HTMLSelectElement>)=>{
+setSelectedPrimaryAttribute(e.target.value as PrimaryAttributes )
+if(e.target.value === PrimaryAttributes.Primary_Key) {   setAttributeText("PK") }
+}
+
+
+const handleTableNameChange = (e :React.ChangeEvent<HTMLSelectElement>)=>{
+  setSelectedTableName(e.target.value as PrimaryAttributes )
+  setAttributeText(`FK("${e.target.value}")`) 
+  }
+  
+    return        <Modal   classNames={{ closeButton : "modalCloseBtn" ,   modal : "createAttributeModal card" , modalContainer : "createAttributeModalContainer" }}   open={addRowAttributeModal.row !== null && Boolean(addRowAttributeModal.row)} onClose={onCloseModal} center>
 
 
 <div className='modelHeader' >
-<h3>Add Attribute</h3>
-<h5>Select attributes to add</h5>
+{<h3  >{`${addRowAttributeModal.row?.rowName} Attribute`}</h3>}
+{/* <h5>Select an attribute to add</h5> */}
 </div>
 
 
 
 <div className="dropdown primaryDropdown">
 
-<div className='listCategory' >  
+<div className='listCategory ' >  
 
 
-<select onChange={e=>setSelectedPrimaryAttribute(e.target.value as PrimaryAttributes)} className="form-select" aria-label="Select list">
+<select onChange={handlePrimaryAttributeChange} className="form-select" aria-label="Select list">
  { selectedPrimaryAttribute === null && <option className='hiddenOption' selected>PK / FK</option> }
-  <option value={PrimaryAttributes.Primary_Key}>Primary Attribute</option>
+  <option  value={PrimaryAttributes.Primary_Key}>Primary Key</option>
   <option value={PrimaryAttributes.Foreign_Key}>Foreign Key</option>
 </select>
 
 
 
   </div>
-<div className='listCategory' >  
 
-{ selectedPrimaryAttribute === PrimaryAttributes.Foreign_Key &&  <select   onChange={e=>setSelectedTableName(e.target.value)} className="form-select" aria-label="Select list">
+{ selectedPrimaryAttribute === PrimaryAttributes.Foreign_Key && <div className='listCategory' >  
+ <select   onChange={handleTableNameChange} className="form-select" aria-label="Select list">
  { selectedTableName === null && <option className='hiddenOption' selected>Table Name</option> }
 { tables.filter(item => item.id !== table.id).map(table => (
      <option key={table.id} selected={selectedTableName === table.head} value={table.head} className='btn btn-light dropdownListItem' >{table.head}</option>
@@ -89,30 +103,12 @@ const toggleList = (list: Lists)=>{
 
 
 
-</select>
-}
-
-
-  {/* {
-      selectedPrimaryAttribute === PrimaryAttributes.Foreign_Key && <>
-  <button onClick={()=>toggleList(Lists.tableNames) } className="btn btn-dark primaryAttDropdownButton " type="button"  >
-<span>  Table Names</span>
-    <i style={{transform : openedLists.includes(Lists.tableNames) ?   'rotate(180deg)'  : undefined }} className="bi mx-2 bi-caret-down-fill"></i>
-  </button>
-
-{ openedLists.includes(Lists.tableNames)  && tables.filter(item => item.id !== table.id).map(table => (
-     <button key={table.id} className='btn btn-light dropdownListItem' >{table.head}</button>
-))
+</select>    </div>
 
 }
 
 
-      </>
-    }
-     */}
-    
-    </div>
-<input placeholder='Type Attribute...' className="form-control" style={{ display: "inline" }} ></input>
+<input value={attributeText} onChange={(e)=>setAttributeText(e.target.value)} placeholder='Type Attribute...' className="form-control" style={{ display: "inline" }} ></input>
 <button className='btn btn-success modelSaveBtn' >Add Attribute</button>
 </div>
 

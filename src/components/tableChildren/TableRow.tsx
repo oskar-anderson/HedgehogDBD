@@ -5,10 +5,11 @@ import Databases from "../../model/DataTypes/Databases"
 import { OverlayTrigger, Popover } from "react-bootstrap"
 import { useParams } from "react-router-dom"
 import { CreateAttributeModel } from "../modals/createAttribute"
+import { rowData } from "../../pages/Table"
 
 
 
-interface UiTableRowDatatype {
+export interface UiTableRowDatatype {
     id: string,
     arguments: {
         value: {
@@ -22,7 +23,9 @@ interface UiTableRowDatatype {
 
 export interface TableRowProps extends HTMLProps<HTMLTableRowElement> {
     index: number,
-    setAttributeModal : React.Dispatch<React.SetStateAction<boolean>> 
+    setAddRowAttributeModal: React.Dispatch<React.SetStateAction<{
+        row: rowData | null;
+    }>> ,
     hoverInsertIndicator: React.RefObject<HTMLDivElement>,
     dragItem: React.MutableRefObject<number | null>,
     dragOverItem: React.MutableRefObject<number | null>,
@@ -46,7 +49,7 @@ export interface TableRowProps extends HTMLProps<HTMLTableRowElement> {
     deleteRow: (index: number) => void
 }
 
-export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOverItem, row, setRows, setAttributeModal  , tableRows, deleteRow}: TableRowProps) {
+export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOverItem, row, setRows, setAddRowAttributeModal  , tableRows, deleteRow}: TableRowProps) {
     const [editingAttribute , setEditingAttribute ] = useState<null | string>(null)
     const [createAttributeModal , setCreateAttributeModal ] = useState(false)
     const [datatypeArguments, setDatatypeArguments] = useState<{
@@ -292,7 +295,7 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
             <td className="d-flex">
               
               
-              <button onClick={()=>setAttributeModal(true)} >att</button>
+              <button onClick={()=>setAddRowAttributeModal({row })} >att</button>
               
               
               

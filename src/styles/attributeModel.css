@@ -93,11 +93,14 @@
     gap: 4px;
     flex-direction: column;
 }
-
+.modalCloseBtn {
+    color: gray;
+}
 
 .modelHeader {
     display: flex;
     width: 100%;
+    padding-right: 30px;
     flex-direction: column;
 }
 

@@ -7,18 +7,21 @@ import Databases from "../model/DataTypes/Databases";
 import DomainTableRow from "../model/domain/DomainTableRow";
 import DomainTableRowDataTypeArguments from "../model/domain/DomainTableRowDataTypeArguments";
 import DomainTable from "../model/domain/DomainTable";
-import TableRow from "../components/tableChildren/TableRow"
+import TableRow, { UiTableRowDatatype } from "../components/tableChildren/TableRow"
 import { CommandModifyTable, CommandModifyTableArgs } from "../commands/appCommands/CommandModifyTableArgs";
 import CommandHistory from "../commands/CommandHistory";
 import { CreateAttributeModel } from "../components/modals/createAttribute";
 
-
+export interface rowData {
+    rowName: string
+    rowDatatype: UiTableRowDatatype
+    rowAttributes: string[]
+}
 
 export default function Table() {
     const { id } = useParams();
     const tables = useApplicationState(state => state.schemaTables);
     const setTables = useApplicationState(state => state.setTables);
-    const [attModalOpen, setAttModalOpen] = useState(false)
     const activeDatabaseId = useApplicationState(state => state.activeDatabaseId);
     const history = useApplicationState(state => state.history);
     const navigate = useNavigate();
@@ -83,7 +86,7 @@ export default function Table() {
     }));
 
     const [tableName, setTableName] = useState(tableBeingEdited.head);
-
+    const [addRowAttributeModal , setAddRowAttributeModal ] = useState<{row : rowData | null}>({row : null})
     const saveChanges = () => {
         let oldTable = tables.find(x => x.id === tableBeingEdited.id)!;
         let newTableRows = rows.map(tableRow => new DomainTableRow(
@@ -170,7 +173,7 @@ export default function Table() {
 
     return (
         <>
-        <CreateAttributeModel table={tableBeingEdited} open={attModalOpen} setOpen={setAttModalOpen}   ></CreateAttributeModel>
+        <CreateAttributeModel table={tableBeingEdited}  addRowAttributeModal={addRowAttributeModal} setAddRowAttributeModal={setAddRowAttributeModal}   ></CreateAttributeModel>
         <div>
         <div className="table-edit-container">
             <div className="vh-100 p-4 bg-grey" tabIndex={-1} style={{ display: "block" }}>
@@ -207,7 +210,7 @@ export default function Table() {
                                     {
                                         rows.map((row, index) => (
                                             <TableRow
-                                               setAttributeModal={setAttModalOpen}
+                                                setAddRowAttributeModal={setAddRowAttributeModal}
                                                 key={row.key}
                                                 dragItem={dragItem}
                                                 dragOverItem={dragOverItem}

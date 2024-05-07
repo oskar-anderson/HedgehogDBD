@@ -67,7 +67,17 @@ const toggleList = (list: Lists)=>{
 <div className="dropdown primaryDropdown">
 
 <div className='listCategory' >  
-  <button  onClick={()=>toggleList(Lists.primaryList)} className="btn btn btn-dark primaryAttDropdownButton " type="button"  >
+
+
+<select onChange={e=>setSelectedPrimaryAttribute(e.target.value as PrimaryAttributes)} className="form-select" aria-label="Select list">
+ { selectedPrimaryAttribute === null && <option selected>PK / FK</option> }
+  <option value={PrimaryAttributes.Primary_Key}>Primary Attribute</option>
+  <option value={PrimaryAttributes.Foreign_Key}>Foreign Key</option>
+</select>
+
+
+
+  {/* <button  onClick={()=>toggleList(Lists.primaryList)} className="btn btn btn-dark primaryAttDropdownButton " type="button"  >
     <span  > PK / FK</span>
     <i style={{transform :  openedLists.includes(Lists.primaryList) ? 'rotate(180deg)' : undefined  }} className="bi mx-2 bi-caret-down-fill"></i>
   </button>
@@ -75,7 +85,7 @@ const toggleList = (list: Lists)=>{
     openedLists.includes(Lists.primaryList) &&<div className='attPrimaryList' >  
     <button onClick={()=>setSelectedPrimaryAttribute(PrimaryAttributes.Primary_Key)} className={cn( 'btn  primaryListItem'  , {"btn-light" : selectedPrimaryAttribute !== PrimaryAttributes.Primary_Key},  {"btn-light selectedItemEffect" : selectedPrimaryAttribute === PrimaryAttributes.Primary_Key }) } >Primary Key</button>
     <button onClick={()=>setSelectedPrimaryAttribute(PrimaryAttributes.Foreign_Key)} className={cn( 'btn  primaryListItem'  , {"btn-light" : selectedPrimaryAttribute !== PrimaryAttributes.Foreign_Key},  {"btn-light selectedItemEffect" : selectedPrimaryAttribute === PrimaryAttributes.Foreign_Key }) } >Foreign Key</button>
-    </div>}
+    </div>} */}
   </div>
 <div className='listCategory' >    {
       selectedPrimaryAttribute === PrimaryAttributes.Foreign_Key && <>

@@ -25,11 +25,29 @@ const modelStyle = {
 
 
 interface CreateTableProps   {
-  addRowAttributeModal : {   row: rowData | null;}
+  handleSaveAttribute :   (att: string, index: number) => void
+  addRowAttributeModal : {   row: rowData | null; rowIndex : number | null}
        setAddRowAttributeModal : React.Dispatch<React.SetStateAction<{
-        row: rowData | null;
+        row: rowData | null
+        rowIndex : number | null
     }>>
        table : DomainTable
+       setRows : React.Dispatch<React.SetStateAction<{
+        key: string;
+        rowName: string;
+        rowDatatype: {
+            id: string;
+            arguments: {
+                value: {
+                    isIncluded: boolean;
+                    realValue: string;
+                };
+                argumentId: string;
+            }[];
+            isNullable: boolean;
+        };
+        rowAttributes: string[];
+    }[]>>
 }
 
 
@@ -44,8 +62,8 @@ enum Lists {
   tableNames = "Table_Names"
 }
 
-export const CreateAttributeModel  : React.FC<CreateTableProps> = ({addRowAttributeModal , setAddRowAttributeModal , table  })=>{
-  const onCloseModal = () => setAddRowAttributeModal({row : null});
+export const CreateAttributeModel  : React.FC<CreateTableProps> = ({addRowAttributeModal , handleSaveAttribute , setAddRowAttributeModal , table , setRows })=>{
+  const onCloseModal = () => setAddRowAttributeModal({row : null , rowIndex : null });
   const [openedLists , setOpenedLists ] = useState<Lists[]>([])
   const [selectedPrimaryAttribute , setSelectedPrimaryAttribute ] = useState<PrimaryAttributes | null>(null)
   const [selectedTableName , setSelectedTableName ] = useState<null | string >(null)
@@ -60,6 +78,7 @@ const toggleList = (list: Lists)=>{
 
 const handlePrimaryAttributeChange = (e :React.ChangeEvent<HTMLSelectElement>)=>{
 setSelectedPrimaryAttribute(e.target.value as PrimaryAttributes )
+
 if(e.target.value === PrimaryAttributes.Primary_Key) {   setAttributeText("PK") }
 if(e.target.value === PrimaryAttributes.Foreign_Key) setAttributeText(`FK("${selectedTableName}")`)
 }
@@ -70,7 +89,20 @@ const handleTableNameChange = (e :React.ChangeEvent<HTMLSelectElement>)=>{
   setAttributeText(`FK("${e.target.value}")`) 
   }
   
-    return        <Modal   classNames={{ closeButton : "modalCloseBtn" ,   modal : "createAttributeModal card" , modalContainer : "createAttributeModalContainer" }}   open={addRowAttributeModal.row !== null && Boolean(addRowAttributeModal.row)} onClose={onCloseModal} center>
+
+const resetModal = ()=>{
+  setAttributeText("")
+  setSelectedPrimaryAttribute(null)
+  setSelectedTableName(null)
+  setAddRowAttributeModal({row : null , rowIndex : null})
+}  
+const handleSubmit = (e: React.FormEvent<HTMLFormElement>)=>{
+  e.preventDefault()
+  handleSaveAttribute(attributeText , addRowAttributeModal.rowIndex as number)
+  resetModal()
+}
+
+    return        <Modal   classNames={{ closeButton : "modalCloseBtn" ,   modal : "createAttributeModal card" , modalContainer : "createAttributeModalContainer" }}   open={addRowAttributeModal.row !== null && Boolean(addRowAttributeModal.row )} onClose={onCloseModal} center>
 
 
 <div className='modelHeader' >
@@ -80,7 +112,7 @@ const handleTableNameChange = (e :React.ChangeEvent<HTMLSelectElement>)=>{
 
 
 
-<div className="dropdown primaryDropdown">
+<form onSubmit={handleSubmit} className="dropdown primaryDropdown">
 
 <div className='listCategory ' >  
 
@@ -110,8 +142,8 @@ const handleTableNameChange = (e :React.ChangeEvent<HTMLSelectElement>)=>{
 
 
 <input value={attributeText} onChange={(e)=>setAttributeText(e.target.value)} placeholder='Type Attribute...' className="form-control" style={{ display: "inline" }} ></input>
-<button className='btn btn-success modelSaveBtn' >Add Attribute</button>
-</div>
+<button className='btn btn-success modelSaveBtn '  type='submit' >Add Attribute</button>
+</form>
 
 
 

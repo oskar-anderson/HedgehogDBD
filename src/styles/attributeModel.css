@@ -18,6 +18,7 @@
 
 .modelSaveBtn {
     width:  100%;
+    font-weight: bold;
 }
 .selectedItemEffect {
     /* background-color: rgb(222, 218, 218);
@@ -111,3 +112,14 @@
 .modelHeader > h5 {
     font-size: 16px;
 }
+
+
+.attributesLabel {
+    display: flex;
+    align-items: center;
+    padding:  2px ;
+    width: 100%;
+    border-radius: 4px;
+    gap: 4px;
+}
+

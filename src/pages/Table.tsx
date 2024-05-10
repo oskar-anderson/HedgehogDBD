@@ -11,6 +11,7 @@ import TableRow, { UiTableRowDatatype } from "../components/tableChildren/TableR
 import { CommandModifyTable, CommandModifyTableArgs } from "../commands/appCommands/CommandModifyTableArgs";
 import CommandHistory from "../commands/CommandHistory";
 import { CreateAttributeModel } from "../components/modals/createAttribute";
+import  { AttributeBeingEdited , EditAttributeModel  }   from "../components/modals/editAttibute";
 
 export interface rowData {
     rowName: string
@@ -25,6 +26,7 @@ export default function Table() {
     const activeDatabaseId = useApplicationState(state => state.activeDatabaseId);
     const history = useApplicationState(state => state.history);
     const navigate = useNavigate();
+    
 
     // Figure out why a simple argument not found is so difficult to implement in React
     const tableBeingEditedNullable = tables.find(x => x.id === id);
@@ -86,7 +88,8 @@ export default function Table() {
     }));
 
     const [tableName, setTableName] = useState(tableBeingEdited.head);
-    const [addRowAttributeModal , setAddRowAttributeModal ] = useState<{row : rowData | null}>({row : null})
+    const [addRowAttributeModal , setAddRowAttributeModal ] = useState<{row : rowData | null , rowIndex : number|null}>({row : null , rowIndex : null })
+    const [attributeBeignEdited , setAttributeBeignEdited ] = useState<AttributeBeingEdited | null>(null)
     const saveChanges = () => {
         let oldTable = tables.find(x => x.id === tableBeingEdited.id)!;
         let newTableRows = rows.map(tableRow => new DomainTableRow(
@@ -171,9 +174,78 @@ export default function Table() {
 
     const hoverInsertIndicator = useRef<HTMLDivElement>(null);
 
+
+
+
+    const handleSaveAttribute = (att : string , rowIndex : number )=>{
+        if(rows[rowIndex].rowAttributes.includes(att))return alert("Attribute already exists!")
+        const newRows = rows.map((row , index )=>{
+            if(index=== rowIndex ) return ({...row , rowAttributes : [...row.rowAttributes , att]})
+            else return row
+        })
+        setRows(newRows)
+    }
+
+
+   const handleDeleteAttribute= (att : string , rowIndex : number)=>{
+    const newRows = rows.map((row , index )=>{
+        if(index=== rowIndex ) return ({...row , rowAttributes : row.rowAttributes.filter(item=>{ console.log("item" , item , att) ; return  item !== att})})
+        else return row
+    })
+    setRows(newRows)    
+   }
+   const handleEditAttribute =(oldAttribute : string , newAttribute : string, rowIndex: number )=>{
+    const newRows = rows.map((row , index )=>{
+        if(index=== rowIndex ) return ({...row , rowAttributes : row.rowAttributes.map(item=>item === oldAttribute ? newAttribute : item)})
+        else return row
+    })
+    setRows(newRows)    
+   }
+
+    const handleRankUp = (attribute  : string, rowIndex : number)=>{
+        const  newRows = [...rows]
+        const allAttributes = newRows[rowIndex].rowAttributes 
+        if(allAttributes.length< 2) return 
+        for(let i = 0 ; i < allAttributes.length ; i++){
+            if(attribute === allAttributes[i]){
+                if(i > allAttributes.length - 2 || i <0  ) break ;
+                let temp = allAttributes[i]
+                allAttributes[i] = allAttributes[i + 1]
+                allAttributes[i + 1] = temp
+                break ;
+            }
+        }
+        setRows(newRows)
+    }
+
+
+
+    
+
+    const handleRankDown = (attribute  : string, rowIndex : number)=>{
+        let newRows = [...rows]
+        const allAttributes = newRows[rowIndex].rowAttributes         
+        if(allAttributes.length < 2) return 
+
+        for(let i = 0 ; i < allAttributes.length ; i++){
+            if(attribute === allAttributes[i]){
+                if(i < 1 || i > allAttributes.length - 1  ) break ;
+                let temp = allAttributes[i]
+                allAttributes[i] = allAttributes[i - 1]
+                allAttributes[i - 1] = temp
+                break ;
+            }
+        }
+        setRows(newRows)
+    }
+
+
+
+
     return (
         <>
-        <CreateAttributeModel table={tableBeingEdited}  addRowAttributeModal={addRowAttributeModal} setAddRowAttributeModal={setAddRowAttributeModal}   ></CreateAttributeModel>
+        <CreateAttributeModel handleSaveAttribute={handleSaveAttribute} setRows={setRows} table={tableBeingEdited}  addRowAttributeModal={addRowAttributeModal} setAddRowAttributeModal={setAddRowAttributeModal}   ></CreateAttributeModel>
+        <EditAttributeModel hanldeRankDown={handleRankDown} handleRankUp={handleRankUp} handleDeleteAttribute={handleDeleteAttribute} attributeBeignEdited={attributeBeignEdited} handleSave={handleEditAttribute} setAttributeBeignEdited={setAttributeBeignEdited} />
         <div>
         <div className="table-edit-container">
             <div className="vh-100 p-4 bg-grey" tabIndex={-1} style={{ display: "block" }}>
@@ -196,7 +268,7 @@ export default function Table() {
                             </div>
 
                             <hr />
-                            <table>
+                            <table >
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -206,10 +278,12 @@ export default function Table() {
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody  >
                                     {
                                         rows.map((row, index) => (
                                             <TableRow
+                                            setAttributeBeignEdited={setAttributeBeignEdited}
+                                                 handleDeleteAttribute={handleDeleteAttribute}
                                                 setAddRowAttributeModal={setAddRowAttributeModal}
                                                 key={row.key}
                                                 dragItem={dragItem}

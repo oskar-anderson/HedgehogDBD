@@ -6,7 +6,9 @@ import { OverlayTrigger, Popover } from "react-bootstrap"
 import { useParams } from "react-router-dom"
 import { CreateAttributeModel } from "../modals/createAttribute"
 import { rowData } from "../../pages/Table"
-
+import Select from 'react-select';
+import '../../styles/tableRow.css'
+import { AttributeBeingEdited } from "../modals/editAttibute"
 
 
 export interface UiTableRowDatatype {
@@ -22,9 +24,12 @@ export interface UiTableRowDatatype {
 }
 
 export interface TableRowProps extends HTMLProps<HTMLTableRowElement> {
+    handleDeleteAttribute : (att: string, rowIndex: number) => void, 
+    setAttributeBeignEdited : React.Dispatch<React.SetStateAction<AttributeBeingEdited>> , 
     index: number,
     setAddRowAttributeModal: React.Dispatch<React.SetStateAction<{
         row: rowData | null;
+        rowIndex : number |null
     }>> ,
     hoverInsertIndicator: React.RefObject<HTMLDivElement>,
     dragItem: React.MutableRefObject<number | null>,
@@ -49,7 +54,7 @@ export interface TableRowProps extends HTMLProps<HTMLTableRowElement> {
     deleteRow: (index: number) => void
 }
 
-export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOverItem, row, setRows, setAddRowAttributeModal  , tableRows, deleteRow}: TableRowProps) {
+export default function TableRow({ index, handleDeleteAttribute , hoverInsertIndicator , setAttributeBeignEdited, dragItem, dragOverItem, row, setRows, setAddRowAttributeModal  , tableRows, deleteRow}: TableRowProps) {
     const [editingAttribute , setEditingAttribute ] = useState<null | string>(null)
     const [createAttributeModal , setCreateAttributeModal ] = useState(false)
     const [datatypeArguments, setDatatypeArguments] = useState<{
@@ -131,7 +136,6 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
         setRows([...tableRows]);
     }
 
-    
     const handleArgumentWillNotBeProvidedCheckbox = (isChecked: boolean) => {
         const newArgs = [...datatypeArguments];
         // every field has to be included or excluded as to not mess up the argument order
@@ -292,13 +296,11 @@ export default function TableRow({ index, hoverInsertIndicator, dragItem, dragOv
                     </OverlayTrigger>
                 </div>
             </td>
-            <td className="d-flex">
-              
-              
-              <button onClick={()=>setAddRowAttributeModal({row })} >att</button>
-              
-              
-              
+            <td    style={{ position : "relative" , width: "300px", height : "100%" }} >
+<div onClick={()=>setAddRowAttributeModal({row , rowIndex : index  })}   style={{ cursor : "pointer" , height: "37px" , right : "5px"  , position : "absolute" , top : "9px" , left : "5px"   }} className="attributesLabel px-2" >            
+              <div className="attributesScroll" style={{maxWidth : "90%" , overflowX : "scroll", display : "flex" , alignItems : "center" , gap : 8}} >{tableRows[index].rowAttributes.map(att=><div onClick={(e)=>{e.stopPropagation() ; setAttributeBeignEdited({attribute : att ,  row : row , rowIndex : index}) }}  key={att}  className="attributeLabel"    >{att}  </div>)}</div>
+              <i className="bi bi-plus-lg"  style={{  position : "absolute" , color : "gray" , top : "2px" , bottom : "2px" , right : "6px"  , fontSize : "20px" }} ></i>          
+</div>             
                 {/* <input ref={attributesTextInputField} 
                     className="form-control" 
                     style={{ display: "inline", borderTopRightRadius: 0, borderBottomRightRadius: 0 }} 

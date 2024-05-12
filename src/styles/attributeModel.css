@@ -1,28 +1,17 @@
 
-
-
-
-.modelTriger {
-    cursor: pointer;
-}
-
 .createAttributeModal {
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 16px;
     padding: 24px;
-    gap: 24px ;
+    gap: 24px;
 }
 
 
 .modelSaveBtn {
-    width:  100%;
+    width: 100%;
     font-weight: bold;
-}
-.selectedItemEffect {
-    /* background-color: rgb(222, 218, 218);
-    border: 2px solid gray; */
 }
 
 .createAttributeModalContainer {
@@ -34,56 +23,13 @@
 .hiddenOption {
     display: none;
 }
-.createAttModalContent {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    flex-direction: column;
-}
-.createAttSelectList {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    flex-direction: column;
-    width: 222px;
-}
 
-
-.listBtn{
-    width: 100%;
-}
-
-.attPrimaryList{
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    width: 100%;
-    gap: 4px;
-}
-
-.primaryDropdown , .dropdownListItem {
+.primaryDropdown {
     display: flex;
     align-items: center;
     flex-direction: column;
     width: 100%;
     gap: 12px;
-}
-
-.primaryListItem{
-    width: 100%;
-}
-
-.primaryAttDropdownButton {
-    width: 100%;
-    display: flex;
-
-    align-items: center;
-    justify-content: space-between;
-}
-.primaryAttDropdownButton >span {
-    display: inline-block;
 }
 
 .listCategory {
@@ -112,14 +58,3 @@
 .modelHeader > h5 {
     font-size: 16px;
 }
-
-
-.attributesLabel {
-    display: flex;
-    align-items: center;
-    padding:  2px ;
-    width: 100%;
-    border-radius: 4px;
-    gap: 4px;
-}
-

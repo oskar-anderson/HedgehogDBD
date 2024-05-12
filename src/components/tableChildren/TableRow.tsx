@@ -3,7 +3,6 @@ import { useApplicationState } from "../../Store"
 import DataType from "../../model/DataTypes/DataType"
 import Databases from "../../model/DataTypes/Databases"
 import { OverlayTrigger, Popover } from "react-bootstrap"
-import { useParams } from "react-router-dom"
 import { AddAttribute } from "../../pages/Table"
 import '../../styles/tableRow.css'
 import { AttributeBeingEdited } from "../modals/attributeModal"
@@ -74,30 +73,26 @@ export default function TableRow({ index, handleDeleteAttribute , hoverInsertInd
             }
         })
     );
-    const { id } = useParams();
-    const tables = useApplicationState(state => state.schemaTables);
-    const attributesTextInputField = useRef<HTMLInputElement>(null);
 
     const activeDatabaseId = useApplicationState(state => state.activeDatabaseId);
     
 
-    const scrollAttributes = (e : WheelEvent )=>{
+    const scrollAttributes = (e: WheelEvent) => {
         e.preventDefault()
 
         if(!attributesScrollRef.current) return 
-        if (e.deltaY > 0) attributesScrollRef.current.scrollTo({left : attributesScrollRef.current.scrollLeft +20  })         
-        else   attributesScrollRef.current.scrollTo({left : attributesScrollRef.current.scrollLeft - 20  }) 
+        attributesScrollRef.current.scrollTo({left : attributesScrollRef.current.scrollLeft + (e.deltaY > 0 ? 20 : -20) })
     }
 
-     useEffect(()=>{
+    useEffect(() => {
+        if (attributesScrollRef.current) {
+            attributesScrollRef.current?.addEventListener("wheel" , scrollAttributes)
+        }
 
-     if(attributesScrollRef.current){
-        attributesScrollRef.current?.addEventListener("wheel" , scrollAttributes)
-     }
-     return ()=>{
-     attributesScrollRef.current &&   attributesScrollRef.current?.removeEventListener("wheel"   , scrollAttributes)
-     }
-     } , [attributesScrollRef] )
+        return () => {
+            attributesScrollRef.current && attributesScrollRef.current?.removeEventListener("wheel", scrollAttributes)
+        }
+    }, [attributesScrollRef])
 
 
 
@@ -162,12 +157,6 @@ export default function TableRow({ index, handleDeleteAttribute , hoverInsertInd
         tableRows[index].rowDatatype.arguments.map(x => x.value.isIncluded = isChecked);
         setRows([...tableRows]);
     }
-
-    // const handleAttributeChange = (newValue: string) => {
-    //     tableRows[index].rowAttributes = newValue;
-    //     setRows([...tableRows]);
-    // }
-
     
     const popover = (
         <Popover style={{ padding: "12px" }}>
@@ -314,11 +303,18 @@ export default function TableRow({ index, handleDeleteAttribute , hoverInsertInd
                     </OverlayTrigger>
                 </div>
             </td>
-            <td    style={{ position : "relative" , width: "300px", height : "100%" }} >
-<div  onClick={()=>setModalInfo({ addAttribute : {rowData : row , rowIndex : index  }})}   style={{ cursor : "pointer" , height: "37px" , right : "5px"  , position : "absolute" , top : "9px" , left : "5px"   }} className="attributesLabel px-2" >            
-              <div ref={attributesScrollRef} className="attributesScroll" style={{maxWidth : "90%" , overflowX : "scroll", display : "flex" , alignItems : "center" , gap : 8}} >{tableRows[index].rowAttributes.map(att=><div onClick={(e)=>{e.stopPropagation() ; setModalInfo({ attributeBeignEdited :  {attribute : att ,  row : row , rowIndex : index}}) }}  key={att}  className="attributeLabel"    >{att}  </div>)}</div>
-              <i className="bi bi-plus-lg"  style={{  position : "absolute" , color : "gray" , top : "2px" , bottom : "2px" , right : "6px"  , fontSize : "20px" }} ></i>          
-</div>             
+            <td style={{ position: "relative", width: "300px", height: "100%" }} >
+                <div onClick={() => setModalInfo({ addAttribute: {rowData: row, rowIndex: index }})} 
+                    style={{ cursor: "pointer", height: "37px", right: "5px", position: "absolute", top: "9px", left: "5px" }} className="attributesLabel px-2" >            
+                    <div ref={attributesScrollRef} className="attributesScroll" style={{maxWidth: "90%", overflowX: "scroll", display : "flex", alignItems: "center", gap: 8}} >
+                        {tableRows[index].rowAttributes.map(att => 
+                            <div onClick={(e) => {e.stopPropagation(); setModalInfo({ attributeBeignEdited: {attribute: att, row: row, rowIndex: index }}) }} key={att} className="attributeLabel">
+                                {att}
+                            </div>
+                        )}
+                    </div>
+                    <i className="bi bi-plus-lg" style={{ position: "absolute", color: "gray", top: "2px", bottom: "2px", right: "6px", fontSize: "20px" }} ></i>
+                </div>
             </td>
             <td>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
@@ -328,17 +324,3 @@ export default function TableRow({ index, handleDeleteAttribute , hoverInsertInd
         </tr>
     );
 }
-
-
-
-interface user {
-    username : string ,
-    name : string ,
-    age : number
-}
-
-interface visitor extends Omit<user , "username" >{}
-
-const visitor : visitor  = {age : 20 , name  :"name"}
-
-

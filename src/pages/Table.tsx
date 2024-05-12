@@ -19,7 +19,7 @@ export interface rowData {
 }
 
 
-export interface AddAttribute {rowData : rowData | null , rowIndex : number|null}
+export interface AddAttribute {rowData: rowData | null, rowIndex : number|null}
 
 
 export default function Table() {
@@ -91,8 +91,7 @@ export default function Table() {
     }));
 
     const [tableName, setTableName] = useState(tableBeingEdited.head);
-     const [modalInfo , setModalInfo ] = useState<{attributeBeignEdited? : AttributeBeingEdited , addAttribute? :  AddAttribute } | null>(null)
-
+    const [modalInfo, setModalInfo] = useState<{attributeBeignEdited?: AttributeBeingEdited, addAttribute?: AddAttribute } | null>(null)
 
     const saveChanges = () => {
         let oldTable = tables.find(x => x.id === tableBeingEdited.id)!;
@@ -182,65 +181,55 @@ export default function Table() {
 
 
     const handleSaveAttribute = (att : string , rowIndex : number )=>{
-        if(rows[rowIndex].rowAttributes.includes(att))return alert("Attribute already exists!")
-        const newRows = rows.map((row , index )=>{
-            if(index=== rowIndex ) return ({...row , rowAttributes : [...row.rowAttributes , att]})
-            else return row
+        if (rows[rowIndex].rowAttributes.includes(att)) return alert("Attribute already exists!")
+        const newRows = rows.map((row , index ) => {
+            return index === rowIndex ? ({...row, rowAttributes : [...row.rowAttributes, att]}) : row;
         })
-        setRows(newRows)
+        setRows(newRows);
+    }
+    const handleDeleteAttribute= (att : string , rowIndex : number)=>{
+        const newRows = rows.map((row, index ) => {
+            return index === rowIndex ? ({
+                ...row, 
+                rowAttributes: row.rowAttributes.filter(item => item !== att )
+            }) : row;
+        })
+        setRows(newRows);
     }
 
-
-   const handleDeleteAttribute= (att : string , rowIndex : number)=>{
-    const newRows = rows.map((row , index )=>{
-        if(index=== rowIndex ) return ({...row , rowAttributes : row.rowAttributes.filter(item=>{ console.log("item" , item , att) ; return  item !== att})})
-        else return row
-    })
-    setRows(newRows)    
-   }
-   const handleEditAttribute =(oldAttribute : string , newAttribute : string, rowIndex: number )=>{
-    const newRows = rows.map((row , index )=>{
-        if(index=== rowIndex ) return ({...row , rowAttributes : row.rowAttributes.map(item=>item === oldAttribute ? newAttribute : item)})
-        else return row
-    })
-    setRows(newRows)    
-   }
-
-    const handleRankUp = (attribute  : string, rowIndex : number)=>{
-        const  newRows = [...rows]
-        const allAttributes = newRows[rowIndex].rowAttributes 
-        if(allAttributes.length< 2) return 
-        for(let i = 0 ; i < allAttributes.length ; i++){
-            if(attribute === allAttributes[i]){
-                if(i > allAttributes.length - 2 || i <0  ) break ;
-                let temp = allAttributes[i]
-                allAttributes[i] = allAttributes[i + 1]
-                allAttributes[i + 1] = temp
-                break ;
-            }
-        }
-        setRows(newRows)
+    const handleEditAttribute = (oldAttribute: string, newAttribute: string, rowIndex: number) => {
+        const newRows = rows.map((row, index ) => {
+            return index === rowIndex ? ({
+                ...row, 
+                rowAttributes: row.rowAttributes.map(item => item === oldAttribute ? newAttribute : item)
+            }) : row;
+        })
+        setRows(newRows);
     }
 
+    const handleRankDown = (attribute: string, rowIndex: number)=> {
+        if (rows[rowIndex].rowAttributes.length < 2) return;
 
+        const newRows = [...rows]
+        let attributeBeingMovedIdx = newRows[rowIndex].rowAttributes.findIndex(x => x === attribute);
+        if (attributeBeingMovedIdx === -1 || newRows[rowIndex].rowAttributes.length - 2 < attributeBeingMovedIdx) return;
+        [newRows[rowIndex].rowAttributes[attributeBeingMovedIdx + 1], newRows[rowIndex].rowAttributes[attributeBeingMovedIdx]] = [
+            newRows[rowIndex].rowAttributes[attributeBeingMovedIdx],
+            newRows[rowIndex].rowAttributes[attributeBeingMovedIdx + 1]];
+        setRows(newRows);
+    }
 
-    
-
-    const handleRankDown = (attribute  : string, rowIndex : number)=>{
-        let newRows = [...rows]
-        const allAttributes = newRows[rowIndex].rowAttributes         
-        if(allAttributes.length < 2) return 
-
-        for(let i = 0 ; i < allAttributes.length ; i++){
-            if(attribute === allAttributes[i]){
-                if(i < 1 || i > allAttributes.length - 1  ) break ;
-                let temp = allAttributes[i]
-                allAttributes[i] = allAttributes[i - 1]
-                allAttributes[i - 1] = temp
-                break ;
-            }
-        }
-        setRows(newRows)
+    const handleRankUp = (attribute: string, rowIndex: number) => {
+        if (rows[rowIndex].rowAttributes.length < 2) return;
+        
+        const newRows = [...rows]
+        let attributeBeingMovedIdx = newRows[rowIndex].rowAttributes.findIndex(x => x === attribute);
+        if (attributeBeingMovedIdx < 1) return;
+        [newRows[rowIndex].rowAttributes[attributeBeingMovedIdx], newRows[rowIndex].rowAttributes[attributeBeingMovedIdx - 1]] = [
+            newRows[rowIndex].rowAttributes[attributeBeingMovedIdx - 1], 
+            newRows[rowIndex].rowAttributes[attributeBeingMovedIdx]
+        ];
+        setRows(newRows);
     }
 
 
@@ -248,14 +237,12 @@ export default function Table() {
 
     return (
         <>
-        {/* <CreateAttributeModel handleSaveAttribute={handleSaveAttribute} setRows={setRows} table={tableBeingEdited}  addRowAttributeModal={addRowAttributeModal} setAddRowAttributeModal={setAddRowAttributeModal}   ></CreateAttributeModel> */}
-        <AttributeModal  handleSaveAttribute={handleSaveAttribute} setRows={setRows} table={tableBeingEdited}   hanldeRankDown={handleRankDown} handleRankUp={handleRankUp} handleDeleteAttribute={handleDeleteAttribute}  handleSave={handleEditAttribute}  modalInfo={modalInfo} setModalInfo={setModalInfo} />
-        <div>
+        <AttributeModal handleSaveAttribute={handleSaveAttribute} setRows={setRows} table={tableBeingEdited} handleRankDown={handleRankDown} handleRankUp={handleRankUp} handleDeleteAttribute={handleDeleteAttribute} handleSave={handleEditAttribute} modalInfo={modalInfo} setModalInfo={setModalInfo} />
         <div className="table-edit-container">
             <div className="vh-100 p-4 bg-grey" tabIndex={-1} style={{ display: "block" }}>
                 <div className=" modal-dialog modal-dialog-scrollable" style={{ maxWidth: "80%" }}>
                     <div className="p-3 border rounded border-grey modal-content bg-white">
-                        <div className="modal-header pb-2  border-bottom  border-grey">
+                        <div className="modal-header pb-2 border-bottom border-grey">
                             <h5>Editing table</h5>
                             <button type="button" className="btn-close" onClick={() => navigate(`/draw`)} aria-label="Close"></button>
                         </div>
@@ -282,7 +269,7 @@ export default function Table() {
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody  >
+                                <tbody>
                                     {
                                         rows.map((row, index) => (
                                             <TableRow
@@ -315,10 +302,8 @@ export default function Table() {
                     </div>
                 </div>
             </div>
-            </div>
         </div>
-        </>
-
+    </>
     );
 }
 

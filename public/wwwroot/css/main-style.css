@@ -117,6 +117,17 @@ https://stackoverflow.com/questions/5214127/css-technique-for-a-horizontal-line-
     height: 38px;
 }
 
+hr {
+    margin: 4px 0;
+    color: inherit;
+    border: 0;
+    border-top-color: currentcolor;
+    border-top-style: none;
+    border-top-width: 0px;
+    border-top: 1px solid;
+    opacity: .25;
+}
+
 .modal-body {
     max-height: 76vh;
     overflow: auto;
@@ -131,8 +142,9 @@ https://stackoverflow.com/questions/5214127/css-technique-for-a-horizontal-line-
     height: auto;
 }
 
-select optgroup{
-    font-style: normal; /* prevent browser inconsistencies - italic in FF by default */
+/* browser reset - italic in FF */
+select optgroup {
+    font-style: normal; 
 }
 
 .react-flow__pane {

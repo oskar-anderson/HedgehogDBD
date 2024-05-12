@@ -179,8 +179,8 @@ if(modalInfo?.addAttribute){
 if(modalInfo?.attributeBeignEdited){
 const rank =  attributeBeignEdited?.row.rowAttributes.indexOf(attributeBeignEdited.attribute)
 const allAttributes = attributeBeignEdited?.row.rowAttributes
-const rankUpDisabled = rank && allAttributes && (rank > allAttributes.length - 2 || rank <0 || allAttributes.length< 2)
-const rankDownDisabled = rank && allAttributes &&( (rank < 1) || rank > allAttributes.length -1 || allAttributes.length < 2 )
+const rankUpDisabled = typeof rank === "number" && allAttributes && (rank > allAttributes.length - 2 || rank <0 || allAttributes.length< 2)
+const rankDownDisabled =  typeof rank === "number" && allAttributes &&( (rank < 1) || rank > allAttributes.length -1 || allAttributes.length < 2 )
 
 
 

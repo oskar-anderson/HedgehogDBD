@@ -7,9 +7,19 @@ import Databases from "../model/DataTypes/Databases";
 import DomainTableRow from "../model/domain/DomainTableRow";
 import DomainTableRowDataTypeArguments from "../model/domain/DomainTableRowDataTypeArguments";
 import DomainTable from "../model/domain/DomainTable";
-import TableRow from "../components/tableChildren/TableRow"
+import TableRow, { UiTableRowDatatype } from "../components/tableChildren/TableRow"
 import { CommandModifyTable, CommandModifyTableArgs } from "../commands/appCommands/CommandModifyTableArgs";
 import CommandHistory from "../commands/CommandHistory";
+import { ModalInfoData, AttributeModal } from "../components/modals/attributeModal";
+
+export interface rowData {
+    rowName: string
+    rowDatatype: UiTableRowDatatype
+    rowAttributes: string[]
+}
+
+
+export interface AddAttribute { rowData: rowData | null, rowIndex: number | null }
 
 
 export default function Table() {
@@ -20,15 +30,16 @@ export default function Table() {
     const history = useApplicationState(state => state.history);
     const navigate = useNavigate();
 
+
     // Figure out why a simple argument not found is so difficult to implement in React
     const tableBeingEditedNullable = tables.find(x => x.id === id);
     useEffect(() => {
-        if (!tableBeingEditedNullable){
+        if (!tableBeingEditedNullable) {
             console.error("No table could be selected!");
             navigate(`/`);
         }
     }, []);
-    if (!tableBeingEditedNullable){
+    if (!tableBeingEditedNullable) {
         return null;
     }
     const tableBeingEdited = DomainTable.init(tableBeingEditedNullable!);
@@ -75,11 +86,12 @@ export default function Table() {
                 }),
                 isNullable: x.datatypeIsNullable,
             },
-            rowAttributes: x.attributes.join(", ")
+            rowAttributes: x.attributes
         }
     }));
 
     const [tableName, setTableName] = useState(tableBeingEdited.head);
+    const [modalInfo, setModalInfo] = useState<ModalInfoData>(null)
 
     const saveChanges = () => {
         let oldTable = tables.find(x => x.id === tableBeingEdited.id)!;
@@ -92,21 +104,21 @@ export default function Table() {
                 return new DomainTableRowDataTypeArguments(value, argument.id)
             }),
             tableRow.rowDatatype.isNullable,
-            tableRow.rowAttributes.split(",").map(x => x.trim()).filter(x => x)
+            tableRow.rowAttributes
         ));
         CommandHistory.execute(history, new CommandModifyTable(
-            { tables }, 
+            { tables },
             new CommandModifyTableArgs(
-                DomainTable.init(oldTable), 
+                DomainTable.init(oldTable),
                 new DomainTable(
-                    tableBeingEdited.id, 
-                    tableBeingEdited.position, 
-                    tableName, 
+                    tableBeingEdited.id,
+                    tableBeingEdited.position,
+                    tableName,
                     newTableRows
                 )
             )
         ), setTables);
-        
+
         navigate(`/draw`)
     }
 
@@ -131,7 +143,7 @@ export default function Table() {
                     }),
                 isNullable: false,
             },
-            rowAttributes: "",
+            rowAttributes: [],
         };
         const newRows = [
             ...[...rows].slice(0, index),
@@ -155,7 +167,7 @@ export default function Table() {
             history,
             new CommandDeleteTable(
                 { tables }, new CommandDeleteTableArgs(
-                    tableBeingEdited!, 
+                    tableBeingEdited!,
                     tables.findIndex(x => x.id === tableBeingEdited.id)
                 )
             ), setTables
@@ -165,70 +177,133 @@ export default function Table() {
 
     const hoverInsertIndicator = useRef<HTMLDivElement>(null);
 
-    return (
-        <div className="table-edit-container">
-            <div className="modal bg-grey" tabIndex={-1} style={{ display: "block" }}>
-                <div className="modal-dialog modal-dialog-scrollable" style={{ maxWidth: "80%" }}>
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5>Editing table</h5>
-                            <button type="button" className="btn-close" onClick={() => navigate(`/draw`)} aria-label="Close"></button>
-                        </div>
-                        <div className="modal-body">
-                            <div className="modal-title" style={{ display: "flex", gridGap: "1em" }}>
-                                <div style={{ flex: "50%", display: "flex", alignItems: "center" }}>
-                                    <label htmlFor="table-name" className="me-3">Table name</label>
-                                    <input id="table-name" className="form-control" style={{ width: "auto" }} onChange={(e) => setTableName(e.target.value)} type="text" value={tableName} />
-                                </div>
-                                <div style={{ flex: "50%", display: "flex", alignItems: "center" }}>
-                                    <label className="me-3">Table action</label>
-                                    <button className="table-delete-btn btn btn-danger" onClick={() => deleteTable()}>Delete table</button>
-                                </div>
-                            </div>
 
-                            <hr />
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Name</th>
-                                        <th style={{ width: "120px" }}>Datatype</th>
-                                        <th>Attributes</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        rows.map((row, index) => (
-                                            <TableRow
-                                                key={row.key}
-                                                dragItem={dragItem}
-                                                dragOverItem={dragOverItem}
-                                            
-                                                index={index} hoverInsertIndicator={hoverInsertIndicator} row={row} setRows={setRows} tableRows={rows} deleteRow={deleteRow}
-                                            />
-                                        ))
-                                    }
-                                    <tr>
-                                        <td colSpan={5}>
-                                            <button className="row-insert-btn btn btn-light" style={{ width: "100%" }} onClick={(e) => insertNewRow(e, -1)}>Insert Row</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div ref={hoverInsertIndicator} className="horizontal-strike" style={{ position: "fixed", display: "none", justifyContent: "center", pointerEvents: "none" }}>
-                                Drop
+
+
+    const handleCreateAttribute = (att: string, rowIndex: number) => {
+        if (rows[rowIndex].rowAttributes.includes(att)) return alert("Attribute already exists!")
+        const newRows = rows.map((row, index) => {
+            return index === rowIndex ? ({ ...row, rowAttributes: [...row.rowAttributes, att] }) : row;
+        })
+        setRows(newRows);
+    }
+    const handleDeleteAttribute = (att: string, rowIndex: number) => {
+        const newRows = rows.map((row, index) => {
+            return index === rowIndex ? ({
+                ...row,
+                rowAttributes: row.rowAttributes.filter(item => item !== att)
+            }) : row;
+        })
+        setRows(newRows);
+    }
+
+    const handleEditAttribute = (oldAttribute: string, newAttribute: string, rowIndex: number) => {
+        const newRows = rows.map((row, index) => {
+            return index === rowIndex ? ({
+                ...row,
+                rowAttributes: row.rowAttributes.map(item => item === oldAttribute ? newAttribute : item)
+            }) : row;
+        })
+        setRows(newRows);
+    }
+
+    const handleRankDown = (attribute: string, rowIndex: number) => {
+        if (rows[rowIndex].rowAttributes.length < 2) return;
+
+        const newRows = [...rows]
+        let attributeBeingMovedIdx = newRows[rowIndex].rowAttributes.findIndex(x => x === attribute);
+        if (attributeBeingMovedIdx === -1 || newRows[rowIndex].rowAttributes.length - 2 < attributeBeingMovedIdx) return;
+        [newRows[rowIndex].rowAttributes[attributeBeingMovedIdx + 1], newRows[rowIndex].rowAttributes[attributeBeingMovedIdx]] = [
+            newRows[rowIndex].rowAttributes[attributeBeingMovedIdx],
+            newRows[rowIndex].rowAttributes[attributeBeingMovedIdx + 1]];
+        setRows(newRows);
+    }
+
+    const handleRankUp = (attribute: string, rowIndex: number) => {
+        if (rows[rowIndex].rowAttributes.length < 2) return;
+
+        const newRows = [...rows]
+        let attributeBeingMovedIdx = newRows[rowIndex].rowAttributes.findIndex(x => x === attribute);
+        if (attributeBeingMovedIdx < 1) return;
+        [newRows[rowIndex].rowAttributes[attributeBeingMovedIdx], newRows[rowIndex].rowAttributes[attributeBeingMovedIdx - 1]] = [
+            newRows[rowIndex].rowAttributes[attributeBeingMovedIdx - 1],
+            newRows[rowIndex].rowAttributes[attributeBeingMovedIdx]
+        ];
+        setRows(newRows);
+    }
+
+
+
+
+    return (
+        <>
+            <AttributeModal handleCreateAttribute={handleCreateAttribute} setRows={setRows} table={tableBeingEdited} handleRankDown={handleRankDown} handleRankUp={handleRankUp} handleDeleteAttribute={handleDeleteAttribute} handleSave={handleEditAttribute} modalInfo={modalInfo} setModalInfo={setModalInfo} />
+            <div className="table-edit-container">
+                <div className="vh-100 p-4 bg-grey" tabIndex={-1} style={{ display: "block" }}>
+                    <div className=" modal-dialog modal-dialog-scrollable" style={{ maxWidth: "80%" }}>
+                        <div className="p-3 border rounded border-grey modal-content bg-white">
+                            <div className="modal-header pb-2 border-bottom border-grey">
+                                <h5>Editing table</h5>
+                                <button type="button" className="btn-close" onClick={() => navigate(`/draw`)} aria-label="Close"></button>
                             </div>
-                            <hr />
-                        </div>
-                        <div className="modal-footer" style={{ display: "grid", gridTemplateColumns: "1fr 3fr" }}>
-                            <button type="button" className="btn btn-light" onClick={() => navigate(`/draw`)}>Discard changes</button>
-                            <button type="button" className="btn btn-light btn-create" id="modal-save-changes" onClick={() => saveChanges()} style={{ fontWeight: 600}}>Save changes</button>
+                            <div className="modal-body py-3">
+                                <div className="modal-title" style={{ display: "flex", gridGap: "1em" }}>
+                                    <div style={{ flex: "50%", display: "flex", alignItems: "center" }}>
+                                        <label htmlFor="table-name" className="me-3">Table name</label>
+                                        <input id="table-name" className="form-control" style={{ width: "auto" }} onChange={(e) => setTableName(e.target.value)} type="text" value={tableName} />
+                                    </div>
+                                    <div style={{ flex: "50%", display: "flex", alignItems: "center" }}>
+                                        <label className="me-3">Table action</label>
+                                        <button className="table-delete-btn btn btn-danger" onClick={() => deleteTable()}>Delete table</button>
+                                    </div>
+                                </div>
+
+                                <hr />
+                                <table >
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Name</th>
+                                            <th style={{ width: "120px" }}>Datatype</th>
+                                            <th>Attributes</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            rows.map((row, index) => (
+                                                <TableRow
+                                                    setModalInfo={setModalInfo}
+                                                    handleDeleteAttribute={handleDeleteAttribute}
+                                                    key={row.key}
+                                                    dragItem={dragItem}
+                                                    dragOverItem={dragOverItem}
+
+                                                    index={index} hoverInsertIndicator={hoverInsertIndicator} row={row} setRows={setRows} tableRows={rows} deleteRow={deleteRow}
+                                                />
+                                            ))
+                                        }
+                                        <tr>
+                                            <td colSpan={5}>
+                                                <button className="row-insert-btn btn btn-light" style={{ width: "100%" }} onClick={(e) => insertNewRow(e, -1)}>Insert Row</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div ref={hoverInsertIndicator} className="horizontal-strike" style={{ position: "fixed", display: "none", justifyContent: "center", pointerEvents: "none" }}>
+                                    Drop
+                                </div>
+                                <hr />
+                            </div>
+                            <div className="modal-footer" style={{ display: "grid", gridTemplateColumns: "1fr 3fr" }}>
+                                <button type="button" className="btn btn-light" onClick={() => navigate(`/draw`)}>Discard changes</button>
+                                <button type="button" className="btn btn-light btn-create" id="modal-save-changes" onClick={() => saveChanges()} style={{ fontWeight: 600 }}>Save changes</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
 

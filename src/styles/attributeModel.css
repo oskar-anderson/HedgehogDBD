@@ -1,0 +1,22 @@
+
+.modelSaveBtn {
+    width: 100%;
+    font-weight: bold;
+}
+
+.primaryDropdown {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+}
+
+.listCategory {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    flex-direction: column;
+}

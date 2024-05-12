@@ -19,7 +19,7 @@ interface EditAttributeModelProps {
   handleRankDown: (attribute: string, rowIndex: number) => void,
   setModalInfo: React.Dispatch<React.SetStateAction<ModalInfoData>>,
   modalInfo: ModalInfoData,
-  handleSaveAttribute: (att: string, index: number) => void
+  handleCreateAttribute: (att: string, index: number) => void
   table: DomainTable,
   setRows: React.Dispatch<React.SetStateAction<{
     key: string;
@@ -46,17 +46,21 @@ enum PrimaryAttributes {
   Foreign_Key = "Foreign_Key"
 }
 
-export const AttributeModal = ({ handleSaveAttribute, setRows, table, handleRankUp, handleSave, handleDeleteAttribute, handleRankDown, setModalInfo, modalInfo }: EditAttributeModelProps) => {
+export const AttributeModal = ({ handleCreateAttribute, setRows, table, handleRankUp, handleSave, handleDeleteAttribute, handleRankDown, setModalInfo, modalInfo }: EditAttributeModelProps) => {
 
   const [attributeText, setAttributeText] = useState<string>(modalInfo?.attribute || "")
   const [selectedPrimaryAttribute, setSelectedPrimaryAttribute] = useState<PrimaryAttributes | null>(null)
   const [selectedTableName, setSelectedTableName] = useState<null | string>(null)
   const tables = useApplicationState(state => state.schemaTables);
 
+  // Modal was closed and reopened
+  useEffect(() => {
+    if (modalInfo === null) return;
+    setAttributeText(modalInfo.attribute || "")
+    setSelectedPrimaryAttribute(null);
+  }, [modalInfo])
 
-  const onCloseModal = () => {
-    setModalInfo(null)
-  }
+  if (modalInfo === null) return null;
 
   // add attribute logic
   const handlePrimaryAttributeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -66,45 +70,27 @@ export const AttributeModal = ({ handleSaveAttribute, setRows, table, handleRank
     if (e.target.value === PrimaryAttributes.Foreign_Key) { setAttributeText(`FK("${selectedTableName}")`) }
   }
 
-
   const handleTableNameChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedTableName(e.target.value as PrimaryAttributes)
     setAttributeText(`FK("${e.target.value}")`)
   }
 
-
-  const resetModal = () => {
-    setAttributeText("")
-    setSelectedPrimaryAttribute(null)
-    setSelectedTableName(null)
-    setModalInfo(null)
-  }
-
-  // edit attribute logic
-  useEffect(() => {
-    setAttributeText(modalInfo?.attribute || "")
-  }, [modalInfo?.attribute])
-
-  if (modalInfo === null) return null;
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if (modalInfo.attribute !== '') {
-      typeof modalInfo.rowIndex === "number" && handleSaveAttribute(attributeText, modalInfo.rowIndex)
-      setModalInfo(null);
-      resetModal();
+    if (modalInfo.attribute === null) {
+      handleCreateAttribute(attributeText, modalInfo.rowIndex);
     } else {
       handleSave(modalInfo.attribute, attributeText, modalInfo.rowIndex)
-      onCloseModal();
     }
+    setModalInfo(null);
   }
 
   
   const rank = modalInfo.attribute === null ? -1 : modalInfo.row.rowAttributes.indexOf(modalInfo.attribute)
   const allAttributes = modalInfo.row.rowAttributes
-  const rankUpDisabled = rank && allAttributes && (rank > allAttributes.length - 2 || rank < 0 || allAttributes.length < 2)
-  const rankDownDisabled = rank && allAttributes && ((rank < 1) || rank > allAttributes.length - 1 || allAttributes.length < 2)
+  const rankUpDisabled = rank < 1 || allAttributes.length < 2;
+  const rankDownDisabled = rank > allAttributes.length - 2 || allAttributes.length < 2;
   let header = modalInfo.row.rowName === '' ? 'Attribute' : modalInfo.row.rowName + ' attribute';
 
   return ReactDom.createPortal(
@@ -158,7 +144,7 @@ export const AttributeModal = ({ handleSaveAttribute, setRows, table, handleRank
 
         <div onClick={(e) => e.stopPropagation()} style={{ display: "flex", flexDirection: "column", backgroundColor: "white", gap: 8, padding: "8px", borderRadius: "8px", alignItems: "center" }} >
 
-          <div onClick={() => modalInfo && handleRankUp(modalInfo.attribute!, modalInfo.rowIndex)} style={{ cursor: rankUpDisabled ? "not-allowed" : "pointer", borderRadius: "3px" }} >
+          <div onClick={() => handleRankUp(modalInfo.attribute!, modalInfo.rowIndex)} style={{ cursor: rankUpDisabled ? "not-allowed" : "pointer", borderRadius: "3px" }} >
             <ArrowUpIcon stroke={rankUpDisabled ? "#bdbdbd" : "#494a4d"} />
           </div>
           
@@ -166,7 +152,7 @@ export const AttributeModal = ({ handleSaveAttribute, setRows, table, handleRank
             Rank: {rank + 1}
           </p>
           
-          <div onClick={() => modalInfo && handleRankDown(modalInfo.attribute!, modalInfo.rowIndex)} style={{ cursor: rankDownDisabled ? "not-allowed" : "pointer", transform: 'rotate(180deg)', stroke: "gray", borderRadius: "8px" }} >
+          <div onClick={() => handleRankDown(modalInfo.attribute!, modalInfo.rowIndex)} style={{ cursor: rankDownDisabled ? "not-allowed" : "pointer", transform: 'rotate(180deg)', stroke: "gray", borderRadius: "8px" }} >
             <ArrowUpIcon stroke={rankDownDisabled ? "#bdbdbd" : "#494a4d"} />
           </div>
 

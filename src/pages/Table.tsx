@@ -180,7 +180,7 @@ export default function Table() {
 
 
 
-    const handleSaveAttribute = (att: string, rowIndex: number) => {
+    const handleCreateAttribute = (att: string, rowIndex: number) => {
         if (rows[rowIndex].rowAttributes.includes(att)) return alert("Attribute already exists!")
         const newRows = rows.map((row, index) => {
             return index === rowIndex ? ({ ...row, rowAttributes: [...row.rowAttributes, att] }) : row;
@@ -237,7 +237,7 @@ export default function Table() {
 
     return (
         <>
-            <AttributeModal handleSaveAttribute={handleSaveAttribute} setRows={setRows} table={tableBeingEdited} handleRankDown={handleRankDown} handleRankUp={handleRankUp} handleDeleteAttribute={handleDeleteAttribute} handleSave={handleEditAttribute} modalInfo={modalInfo} setModalInfo={setModalInfo} />
+            <AttributeModal handleCreateAttribute={handleCreateAttribute} setRows={setRows} table={tableBeingEdited} handleRankDown={handleRankDown} handleRankUp={handleRankUp} handleDeleteAttribute={handleDeleteAttribute} handleSave={handleEditAttribute} modalInfo={modalInfo} setModalInfo={setModalInfo} />
             <div className="table-edit-container">
                 <div className="vh-100 p-4 bg-grey" tabIndex={-1} style={{ display: "block" }}>
                     <div className=" modal-dialog modal-dialog-scrollable" style={{ maxWidth: "80%" }}>

@@ -4,11 +4,9 @@ import DataType from "../../model/DataTypes/DataType"
 import Databases from "../../model/DataTypes/Databases"
 import { OverlayTrigger, Popover } from "react-bootstrap"
 import { useParams } from "react-router-dom"
-import { CreateAttributeModel } from "../modals/createAttribute"
-import { AddAttribute, rowData } from "../../pages/Table"
-import Select from 'react-select';
+import { AddAttribute } from "../../pages/Table"
 import '../../styles/tableRow.css'
-import { AttributeBeingEdited } from "../modals/editAttibute"
+import { AttributeBeingEdited } from "../modals/attributeModal"
 
 
 export interface UiTableRowDatatype {

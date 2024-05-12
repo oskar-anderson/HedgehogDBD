@@ -11,7 +11,7 @@ import TableRow, { UiTableRowDatatype } from "../components/tableChildren/TableR
 import { CommandModifyTable, CommandModifyTableArgs } from "../commands/appCommands/CommandModifyTableArgs";
 import CommandHistory from "../commands/CommandHistory";
 import { CreateAttributeModel } from "../components/modals/createAttribute";
-import  { AttributeBeingEdited , EditAttributeModel  }   from "../components/modals/editAttibute";
+import  { AttributeBeingEdited , AttributeModal   }   from "../components/modals/attributeModal";
 
 export interface rowData {
     rowName: string
@@ -250,7 +250,7 @@ export default function Table() {
     return (
         <>
         {/* <CreateAttributeModel handleSaveAttribute={handleSaveAttribute} setRows={setRows} table={tableBeingEdited}  addRowAttributeModal={addRowAttributeModal} setAddRowAttributeModal={setAddRowAttributeModal}   ></CreateAttributeModel> */}
-        <EditAttributeModel hanldeRankDown={handleRankDown} handleRankUp={handleRankUp} handleDeleteAttribute={handleDeleteAttribute}  handleSave={handleEditAttribute}  modalInfo={modalInfo} setModalInfo={setModalInfo} />
+        <AttributeModal  handleSaveAttribute={handleSaveAttribute} setRows={setRows} table={tableBeingEdited}   hanldeRankDown={handleRankDown} handleRankUp={handleRankUp} handleDeleteAttribute={handleDeleteAttribute}  handleSave={handleEditAttribute}  modalInfo={modalInfo} setModalInfo={setModalInfo} />
         <div>
         <div className="table-edit-container">
             <div className="vh-100 p-4 bg-grey" tabIndex={-1} style={{ display: "block" }}>

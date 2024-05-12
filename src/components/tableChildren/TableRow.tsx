@@ -3,9 +3,8 @@ import { useApplicationState } from "../../Store"
 import DataType from "../../model/DataTypes/DataType"
 import Databases from "../../model/DataTypes/Databases"
 import { OverlayTrigger, Popover } from "react-bootstrap"
-import { AddAttribute } from "../../pages/Table"
 import '../../styles/tableRow.css'
-import { AttributeBeingEdited } from "../modals/attributeModal"
+import { ModalInfoData } from "../modals/attributeModal"
 
 
 export interface UiTableRowDatatype {
@@ -21,12 +20,9 @@ export interface UiTableRowDatatype {
 }
 
 export interface TableRowProps extends HTMLProps<HTMLTableRowElement> {
-    handleDeleteAttribute : (att: string, rowIndex: number) => void, 
+    handleDeleteAttribute: (att: string, rowIndex: number) => void,
     index: number,
-    setModalInfo : React.Dispatch<React.SetStateAction<{
-        attributeBeignEdited?: AttributeBeingEdited | undefined;
-        addAttribute?: AddAttribute | undefined;
-    } | null>> , 
+    setModalInfo: React.Dispatch<React.SetStateAction<ModalInfoData>>,
     hoverInsertIndicator: React.RefObject<HTMLDivElement>,
     dragItem: React.MutableRefObject<number | null>,
     dragOverItem: React.MutableRefObject<number | null>,
@@ -50,8 +46,8 @@ export interface TableRowProps extends HTMLProps<HTMLTableRowElement> {
     deleteRow: (index: number) => void
 }
 
-export default function TableRow({ index, handleDeleteAttribute , hoverInsertIndicator , setModalInfo, dragItem, dragOverItem, row, setRows  , tableRows, deleteRow}: TableRowProps) {
-    
+export default function TableRow({ index, handleDeleteAttribute, hoverInsertIndicator, setModalInfo, dragItem, dragOverItem, row, setRows, tableRows, deleteRow }: TableRowProps) {
+
     const attributesScrollRef = useRef<HTMLDivElement>(null)
     const [datatypeArguments, setDatatypeArguments] = useState<{
         value: string;
@@ -75,18 +71,18 @@ export default function TableRow({ index, handleDeleteAttribute , hoverInsertInd
     );
 
     const activeDatabaseId = useApplicationState(state => state.activeDatabaseId);
-    
+
 
     const scrollAttributes = (e: WheelEvent) => {
         e.preventDefault()
 
-        if(!attributesScrollRef.current) return 
-        attributesScrollRef.current.scrollTo({left : attributesScrollRef.current.scrollLeft + (e.deltaY > 0 ? 20 : -20) })
+        if (!attributesScrollRef.current) return
+        attributesScrollRef.current.scrollTo({ left: attributesScrollRef.current.scrollLeft + (e.deltaY > 0 ? 20 : -20) })
     }
 
     useEffect(() => {
         if (attributesScrollRef.current) {
-            attributesScrollRef.current?.addEventListener("wheel" , scrollAttributes)
+            attributesScrollRef.current?.addEventListener("wheel", scrollAttributes)
         }
 
         return () => {
@@ -115,14 +111,14 @@ export default function TableRow({ index, handleDeleteAttribute , hoverInsertInd
         setRows([...tableRows]);
     }
 
-    
+
     const handleSelectInputOnChange = (e: ChangeEvent) => {
         const selectedDatatypeId = (e.target as HTMLSelectElement).value;
         const args = DataType.getArgumentsByDatabaseAndByType(
-            Databases.get(activeDatabaseId).select, 
+            Databases.get(activeDatabaseId).select,
             selectedDatatypeId
         )
-        
+
         const dataTypeArguements = args.map(x => ({
             displayName: x.displayName,
             isReadonly: x.isReadonly,
@@ -157,11 +153,11 @@ export default function TableRow({ index, handleDeleteAttribute , hoverInsertInd
         tableRows[index].rowDatatype.arguments.map(x => x.value.isIncluded = isChecked);
         setRows([...tableRows]);
     }
-    
+
     const popover = (
         <Popover style={{ padding: "12px" }}>
             <input id="inputIncludeCustomArguments" style={{ marginRight: "6px" }} type="checkbox"
-                onChange={(e) => { handleArgumentWillNotBeProvidedCheckbox((e.target as HTMLInputElement).checked) }} 
+                onChange={(e) => { handleArgumentWillNotBeProvidedCheckbox((e.target as HTMLInputElement).checked) }}
                 defaultChecked={datatypeArguments.length === 0 ? true : datatypeArguments.every(x => x.isIncluded)}
             />
             <label htmlFor="inputIncludeCustomArguments">Include optional arguments</label>
@@ -182,25 +178,25 @@ export default function TableRow({ index, handleDeleteAttribute , hoverInsertInd
     )
 
     const tableRowRef = useRef<HTMLTableRowElement>(null);
-    
+
 
     return (
         <tr ref={tableRowRef}
-            onMouseMove={(e) => { 
+            onMouseMove={(e) => {
                 if (dragItem.current === null) { return; }
                 const tableRowRect = tableRowRef.current!.getBoundingClientRect();
                 const rectContains = (x: number, y: number, width: number, height: number, pointX: number, pointY: number) => {
                     return (x <= pointX)
-                        && (pointX < x + width) 
-                        && (y <= pointY) 
+                        && (pointX < x + width)
+                        && (y <= pointY)
                         && (pointY < y + height)
                 }
                 let extraHeightForBottomIndicator = 0;
                 if (dragItem.current > index) { // dragging up
                     if (rectContains(
-                        tableRowRect.x, 
-                        tableRowRect.y, 
-                        tableRowRect.width, 
+                        tableRowRect.x,
+                        tableRowRect.y,
+                        tableRowRect.width,
                         tableRowRect.height / 2,
                         e.clientX, e.clientY
                     )) {
@@ -214,10 +210,10 @@ export default function TableRow({ index, handleDeleteAttribute , hoverInsertInd
                     return;
                 } else { // dragging down
                     if (rectContains(
-                        tableRowRect.x, 
-                        tableRowRect.y + tableRowRect.height / 2, 
-                        tableRowRect.width, 
-                        tableRowRect.height / 2, 
+                        tableRowRect.x,
+                        tableRowRect.y + tableRowRect.height / 2,
+                        tableRowRect.width,
+                        tableRowRect.height / 2,
                         e.clientX, e.clientY)
                     ) {
                         dragOverItem.current = index;
@@ -239,12 +235,12 @@ export default function TableRow({ index, handleDeleteAttribute , hoverInsertInd
                     onMouseDown={(e) => { dragItem.current = index; }}
                 >
                     <svg style={{ userSelect: "none" }} stroke="#000000" data-bs-toggle="tooltip" data-bs-placement="bottom" width={28} height={28} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M14 18C14 18.5523 14.4477 19 15 19C15.5523 19 16 18.5523 16 18C16 17.4477 15.5523 17 15 17C14.4477 17 14 17.4477 14 18Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M8 18C8 18.5523 8.44772 19 9 19C9.55228 19 10 18.5523 10 18C10 17.4477 9.55228 17 9 17C8.44772 17 8 17.4477 8 18Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M14 12C14 12.5523 14.4477 13 15 13C15.5523 13 16 12.5523 16 12C16 11.4477 15.5523 11 15 11C14.4477 11 14 11.4477 14 12Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M8 12C8 12.5523 8.44772 13 9 13C9.55228 13 10 12.5523 10 12C10 11.4477 9.55228 11 9 11C8.44772 11 8 11.4477 8 12Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M14 6C14 6.55228 14.4477 7 15 7C15.5523 7 16 6.55228 16 6C16 5.44772 15.5523 5 15 5C14.4477 5 14 5.44772 14 6Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M8 6C8 6.55228 8.44772 7 9 7C9.55228 7 10 6.55228 10 6C10 5.44772 9.55228 5 9 5C8.44772 5 8 5.44772 8 6Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M14 18C14 18.5523 14.4477 19 15 19C15.5523 19 16 18.5523 16 18C16 17.4477 15.5523 17 15 17C14.4477 17 14 17.4477 14 18Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M8 18C8 18.5523 8.44772 19 9 19C9.55228 19 10 18.5523 10 18C10 17.4477 9.55228 17 9 17C8.44772 17 8 17.4477 8 18Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M14 12C14 12.5523 14.4477 13 15 13C15.5523 13 16 12.5523 16 12C16 11.4477 15.5523 11 15 11C14.4477 11 14 11.4477 14 12Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M8 12C8 12.5523 8.44772 13 9 13C9.55228 13 10 12.5523 10 12C10 11.4477 9.55228 11 9 11C8.44772 11 8 11.4477 8 12Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M14 6C14 6.55228 14.4477 7 15 7C15.5523 7 16 6.55228 16 6C16 5.44772 15.5523 5 15 5C14.4477 5 14 5.44772 14 6Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M8 6C8 6.55228 8.44772 7 9 7C9.55228 7 10 6.55228 10 6C10 5.44772 9.55228 5 9 5C8.44772 5 8 5.44772 8 6Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                 </button>
             </td>
@@ -255,26 +251,26 @@ export default function TableRow({ index, handleDeleteAttribute , hoverInsertInd
                     setRows(rowsCopy);
                 }} type="text" value={row.rowName} />
             </td>
-            <td style={{ width: "math(220px + 320px)"}}>
+            <td style={{ width: "math(220px + 320px)" }}>
                 <div style={{ display: "flex", alignItems: "center" }}>
                     <select style={{ width: "180px", textOverflow: "ellipsis" }}
                         className={"form-select" + ` ${row.rowDatatype.id}`}
                         name="input-datatype"
                         onChange={handleSelectInputOnChange}
-                        value={row.rowDatatype.id }
+                        value={row.rowDatatype.id}
                     >
                         {DataType.getTypes().map(x => {
                             let selectedOptionDisplayParameters = "";
                             if (x.getId() === row.rowDatatype.id) {
                                 const selectedDataTypeArguments = datatypeArguments.filter(x => x.isIncluded);
-                                selectedOptionDisplayParameters = (selectedDataTypeArguments.length !== 0) ? 
-                                    `(${selectedDataTypeArguments.map(x => x.value === "" ? "0" : x.value).join(", ")})` : 
+                                selectedOptionDisplayParameters = (selectedDataTypeArguments.length !== 0) ?
+                                    `(${selectedDataTypeArguments.map(x => x.value === "" ? "0" : x.value).join(", ")})` :
                                     "";
                             } else {
                                 const notSelectedDataTypeArguments = DataType.getArgumentsByDatabaseAndByType(
                                     Databases.get(activeDatabaseId).select,
                                     x.getId());
-                                selectedOptionDisplayParameters = (notSelectedDataTypeArguments.length !== 0) ? 
+                                selectedOptionDisplayParameters = (notSelectedDataTypeArguments.length !== 0) ?
                                     `(${notSelectedDataTypeArguments.map(x => x.defaultValue).join(", ")})` :
                                     "";
                             }
@@ -287,7 +283,7 @@ export default function TableRow({ index, handleDeleteAttribute , hoverInsertInd
                     <button className="btn btn-light btn-icon"
                         onClick={() => {
                             const rowsCopy = [...tableRows];
-                            rowsCopy[index].rowDatatype.isNullable = ! row.rowDatatype.isNullable;
+                            rowsCopy[index].rowDatatype.isNullable = !row.rowDatatype.isNullable;
                             setRows(rowsCopy);
                         }}>
                         {row.rowDatatype.isNullable ? "?" : "!"}
@@ -295,20 +291,20 @@ export default function TableRow({ index, handleDeleteAttribute , hoverInsertInd
                     <OverlayTrigger trigger="click" placement="right" overlay={popover} rootClose={true}>
                         <button className={`btn btn-light btn-icon ${datatypeArguments.length === 0 ? "disabled" : ""}`} disabled={datatypeArguments.length === 0}>
                             <svg width="28px" height="28px" viewBox="0 0 24 24" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M17 12C17 12.5523 17.4477 13 18 13C18.5523 13 19 12.5523 19 12C19 11.4477 18.5523 11 18 11C17.4477 11 17 11.4477 17 12Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                <path d="M11 12C11 12.5523 11.4477 13 12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                <path d="M5 12C5 12.5523 5.44772 13 6 13C6.55228 13 7 12.5523 7 12C7 11.4477 6.55228 11 6 11C5.44772 11 5 11.4477 5 12Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M17 12C17 12.5523 17.4477 13 18 13C18.5523 13 19 12.5523 19 12C19 11.4477 18.5523 11 18 11C17.4477 11 17 11.4477 17 12Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M11 12C11 12.5523 11.4477 13 12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M5 12C5 12.5523 5.44772 13 6 13C6.55228 13 7 12.5523 7 12C7 11.4477 6.55228 11 6 11C5.44772 11 5 11.4477 5 12Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </button>
                     </OverlayTrigger>
                 </div>
             </td>
             <td style={{ position: "relative", width: "300px", height: "100%" }} >
-                <div onClick={() => setModalInfo({ addAttribute: {rowData: row, rowIndex: index }})} 
-                    style={{ cursor: "pointer", height: "37px", right: "5px", position: "absolute", top: "9px", left: "5px" }} className="attributesLabel px-2" >            
-                    <div ref={attributesScrollRef} className="attributesScroll" style={{maxWidth: "90%", overflowX: "scroll", display : "flex", alignItems: "center", gap: 8}} >
-                        {tableRows[index].rowAttributes.map(att => 
-                            <div onClick={(e) => {e.stopPropagation(); setModalInfo({ attributeBeignEdited: {attribute: att, row: row, rowIndex: index }}) }} key={att} className="attributeLabel">
+                <div onClick={() => setModalInfo({ row: row, rowIndex: index, attribute: null })}
+                    style={{ cursor: "pointer", height: "37px", right: "5px", position: "absolute", top: "9px", left: "5px" }} className="attributesLabel px-2" >
+                    <div ref={attributesScrollRef} className="attributesScroll" style={{ maxWidth: "90%", overflowX: "scroll", display: "flex", alignItems: "center", gap: 8 }} >
+                        {tableRows[index].rowAttributes.map(att =>
+                            <div onClick={(e) => { e.stopPropagation(); setModalInfo({ attribute: att, row: row, rowIndex: index }) }} key={att} className="attributeLabel">
                                 {att}
                             </div>
                         )}

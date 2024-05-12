@@ -5,7 +5,7 @@ import Databases from "../../model/DataTypes/Databases"
 import { OverlayTrigger, Popover } from "react-bootstrap"
 import { useParams } from "react-router-dom"
 import { CreateAttributeModel } from "../modals/createAttribute"
-import { rowData } from "../../pages/Table"
+import { AddAttribute, rowData } from "../../pages/Table"
 import Select from 'react-select';
 import '../../styles/tableRow.css'
 import { AttributeBeingEdited } from "../modals/editAttibute"
@@ -25,12 +25,11 @@ export interface UiTableRowDatatype {
 
 export interface TableRowProps extends HTMLProps<HTMLTableRowElement> {
     handleDeleteAttribute : (att: string, rowIndex: number) => void, 
-    setAttributeBeignEdited : React.Dispatch<React.SetStateAction<AttributeBeingEdited>> , 
     index: number,
-    setAddRowAttributeModal: React.Dispatch<React.SetStateAction<{
-        row: rowData | null;
-        rowIndex : number |null
-    }>> ,
+    setModalInfo : React.Dispatch<React.SetStateAction<{
+        attributeBeignEdited?: AttributeBeingEdited | undefined;
+        addAttribute?: AddAttribute | undefined;
+    } | null>> , 
     hoverInsertIndicator: React.RefObject<HTMLDivElement>,
     dragItem: React.MutableRefObject<number | null>,
     dragOverItem: React.MutableRefObject<number | null>,
@@ -54,7 +53,7 @@ export interface TableRowProps extends HTMLProps<HTMLTableRowElement> {
     deleteRow: (index: number) => void
 }
 
-export default function TableRow({ index, handleDeleteAttribute , hoverInsertIndicator , setAttributeBeignEdited, dragItem, dragOverItem, row, setRows, setAddRowAttributeModal  , tableRows, deleteRow}: TableRowProps) {
+export default function TableRow({ index, handleDeleteAttribute , hoverInsertIndicator , setModalInfo, dragItem, dragOverItem, row, setRows  , tableRows, deleteRow}: TableRowProps) {
     
     const attributesScrollRef = useRef<HTMLDivElement>(null)
     const [datatypeArguments, setDatatypeArguments] = useState<{
@@ -318,8 +317,8 @@ export default function TableRow({ index, handleDeleteAttribute , hoverInsertInd
                 </div>
             </td>
             <td    style={{ position : "relative" , width: "300px", height : "100%" }} >
-<div  onClick={()=>setAddRowAttributeModal({row , rowIndex : index  })}   style={{ cursor : "pointer" , height: "37px" , right : "5px"  , position : "absolute" , top : "9px" , left : "5px"   }} className="attributesLabel px-2" >            
-              <div ref={attributesScrollRef} className="attributesScroll" style={{maxWidth : "90%" , overflowX : "scroll", display : "flex" , alignItems : "center" , gap : 8}} >{tableRows[index].rowAttributes.map(att=><div onClick={(e)=>{e.stopPropagation() ; setAttributeBeignEdited({attribute : att ,  row : row , rowIndex : index}) }}  key={att}  className="attributeLabel"    >{att}  </div>)}</div>
+<div  onClick={()=>setModalInfo({ addAttribute : {rowData : row , rowIndex : index  }})}   style={{ cursor : "pointer" , height: "37px" , right : "5px"  , position : "absolute" , top : "9px" , left : "5px"   }} className="attributesLabel px-2" >            
+              <div ref={attributesScrollRef} className="attributesScroll" style={{maxWidth : "90%" , overflowX : "scroll", display : "flex" , alignItems : "center" , gap : 8}} >{tableRows[index].rowAttributes.map(att=><div onClick={(e)=>{e.stopPropagation() ; setModalInfo({ attributeBeignEdited :  {attribute : att ,  row : row , rowIndex : index}}) }}  key={att}  className="attributeLabel"    >{att}  </div>)}</div>
               <i className="bi bi-plus-lg"  style={{  position : "absolute" , color : "gray" , top : "2px" , bottom : "2px" , right : "6px"  , fontSize : "20px" }} ></i>          
 </div>             
             </td>
@@ -331,3 +330,17 @@ export default function TableRow({ index, handleDeleteAttribute , hoverInsertInd
         </tr>
     );
 }
+
+
+
+interface user {
+    username : string ,
+    name : string ,
+    age : number
+}
+
+interface visitor extends Omit<user , "username" >{}
+
+const visitor : visitor  = {age : 20 , name  :"name"}
+
+

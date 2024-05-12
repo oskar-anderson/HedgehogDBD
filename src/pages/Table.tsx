@@ -19,6 +19,10 @@ export interface rowData {
     rowAttributes: string[]
 }
 
+
+export interface AddAttribute {rowData : rowData | null , rowIndex : number|null}
+
+
 export default function Table() {
     const { id } = useParams();
     const tables = useApplicationState(state => state.schemaTables);
@@ -88,8 +92,9 @@ export default function Table() {
     }));
 
     const [tableName, setTableName] = useState(tableBeingEdited.head);
-    const [addRowAttributeModal , setAddRowAttributeModal ] = useState<{row : rowData | null , rowIndex : number|null}>({row : null , rowIndex : null })
-    const [attributeBeignEdited , setAttributeBeignEdited ] = useState<AttributeBeingEdited | null>(null)
+     const [modalInfo , setModalInfo ] = useState<{attributeBeignEdited? : AttributeBeingEdited , addAttribute? :  AddAttribute } | null>(null)
+
+
     const saveChanges = () => {
         let oldTable = tables.find(x => x.id === tableBeingEdited.id)!;
         let newTableRows = rows.map(tableRow => new DomainTableRow(
@@ -244,8 +249,8 @@ export default function Table() {
 
     return (
         <>
-        <CreateAttributeModel handleSaveAttribute={handleSaveAttribute} setRows={setRows} table={tableBeingEdited}  addRowAttributeModal={addRowAttributeModal} setAddRowAttributeModal={setAddRowAttributeModal}   ></CreateAttributeModel>
-        <EditAttributeModel hanldeRankDown={handleRankDown} handleRankUp={handleRankUp} handleDeleteAttribute={handleDeleteAttribute} attributeBeignEdited={attributeBeignEdited} handleSave={handleEditAttribute} setAttributeBeignEdited={setAttributeBeignEdited} />
+        {/* <CreateAttributeModel handleSaveAttribute={handleSaveAttribute} setRows={setRows} table={tableBeingEdited}  addRowAttributeModal={addRowAttributeModal} setAddRowAttributeModal={setAddRowAttributeModal}   ></CreateAttributeModel> */}
+        <EditAttributeModel hanldeRankDown={handleRankDown} handleRankUp={handleRankUp} handleDeleteAttribute={handleDeleteAttribute}  handleSave={handleEditAttribute}  modalInfo={modalInfo} setModalInfo={setModalInfo} />
         <div>
         <div className="table-edit-container">
             <div className="vh-100 p-4 bg-grey" tabIndex={-1} style={{ display: "block" }}>
@@ -282,9 +287,8 @@ export default function Table() {
                                     {
                                         rows.map((row, index) => (
                                             <TableRow
-                                            setAttributeBeignEdited={setAttributeBeignEdited}
+                                               setModalInfo={setModalInfo}
                                                  handleDeleteAttribute={handleDeleteAttribute}
-                                                setAddRowAttributeModal={setAddRowAttributeModal}
                                                 key={row.key}
                                                 dragItem={dragItem}
                                                 dragOverItem={dragOverItem}

@@ -1,27 +1,7 @@
 
-.createAttributeModal {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 16px;
-    padding: 24px;
-    gap: 24px;
-}
-
-
 .modelSaveBtn {
     width: 100%;
     font-weight: bold;
-}
-
-.createAttributeModalContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(0, 0, 0 , 0.5);
-}
-.hiddenOption {
-    display: none;
 }
 
 .primaryDropdown {
@@ -39,22 +19,4 @@
     justify-content: center;
     gap: 4px;
     flex-direction: column;
-}
-.modalCloseBtn {
-    color: gray;
-}
-
-.modelHeader {
-    display: flex;
-    width: 100%;
-    padding-right: 30px;
-    flex-direction: column;
-}
-
-.modelHeader > * {
-    display: inline-block;
-}
-
-.modelHeader > h5 {
-    font-size: 16px;
 }

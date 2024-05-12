@@ -115,7 +115,7 @@ export const AttributeModal = ({ handleCreateAttribute, setRows, table, handleRa
 
           {modalInfo.attribute === null && <div className='listCategory'>
             <select onChange={handlePrimaryAttributeChange} className="form-select" aria-label="Select list">
-              {selectedPrimaryAttribute === null && <option className='hiddenOption'>Choose attribute</option>}
+              <option disabled style={{ display: 'none' }}>Choose attribute</option>
               <option value={PrimaryAttributes.Primary_Key}>Primary Key</option>
               <option value={PrimaryAttributes.Foreign_Key}>Foreign Key</option>
             </select>
@@ -124,8 +124,8 @@ export const AttributeModal = ({ handleCreateAttribute, setRows, table, handleRa
 
           {modalInfo.attribute === null && selectedPrimaryAttribute === PrimaryAttributes.Foreign_Key &&
             <div className='listCategory' >
-              <select value={selectedTableName ?? '__tablename__'} onChange={handleTableNameChange} className="form-select" aria-label="Select list">
-                {selectedTableName === null && <option value="__tablename__" className='hiddenOption'>Table name</option>}
+              <select onChange={handleTableNameChange} className="form-select" aria-label="Select list">
+                <option disabled style={{ display: 'none' }}>Table name</option>
                 {tables
                   .filter(item => item.id !== table.id)
                   .map(table => (

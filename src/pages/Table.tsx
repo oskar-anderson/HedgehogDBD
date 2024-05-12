@@ -10,7 +10,6 @@ import DomainTable from "../model/domain/DomainTable";
 import TableRow, { UiTableRowDatatype } from "../components/tableChildren/TableRow"
 import { CommandModifyTable, CommandModifyTableArgs } from "../commands/appCommands/CommandModifyTableArgs";
 import CommandHistory from "../commands/CommandHistory";
-import { CreateAttributeModel } from "../components/modals/createAttribute";
 import  { AttributeBeingEdited , AttributeModal   }   from "../components/modals/attributeModal";
 
 export interface rowData {

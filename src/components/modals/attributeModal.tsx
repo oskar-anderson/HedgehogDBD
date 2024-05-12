@@ -53,11 +53,12 @@ export const AttributeModal = ({ handleCreateAttribute, setRows, table, handleRa
   const [selectedTableName, setSelectedTableName] = useState<null | string>(null)
   const tables = useApplicationState(state => state.schemaTables);
 
-  // Modal was closed and reopened
+  // Reset state - modal was closed and reopened
   useEffect(() => {
     if (modalInfo === null) return;
     setAttributeText(modalInfo.attribute || "")
     setSelectedPrimaryAttribute(null);
+    setSelectedTableName(null);
   }, [modalInfo])
 
   if (modalInfo === null) return null;
@@ -67,7 +68,8 @@ export const AttributeModal = ({ handleCreateAttribute, setRows, table, handleRa
     setSelectedPrimaryAttribute(e.target.value as PrimaryAttributes)
 
     if (e.target.value === PrimaryAttributes.Primary_Key) { setAttributeText("PK") }
-    if (e.target.value === PrimaryAttributes.Foreign_Key) { setAttributeText(`FK("${selectedTableName}")`) }
+    if (e.target.value === PrimaryAttributes.Foreign_Key) { setAttributeText(`FK("${selectedTableName ?? '__tablename__'}")`) }
+    setSelectedTableName(null);
   }
 
   const handleTableNameChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -122,12 +124,12 @@ export const AttributeModal = ({ handleCreateAttribute, setRows, table, handleRa
 
           {modalInfo.attribute === null && selectedPrimaryAttribute === PrimaryAttributes.Foreign_Key &&
             <div className='listCategory' >
-              <select onChange={handleTableNameChange} className="form-select" aria-label="Select list">
-                {selectedTableName === null && <option className='hiddenOption'>Table Name</option>}
+              <select value={selectedTableName ?? '__tablename__'} onChange={handleTableNameChange} className="form-select" aria-label="Select list">
+                {selectedTableName === null && <option value="__tablename__" className='hiddenOption'>Table name</option>}
                 {tables
                   .filter(item => item.id !== table.id)
                   .map(table => (
-                    <option key={table.id} selected={selectedTableName === table.head} value={table.head}>{table.head}</option>
+                    <option key={table.id} value={table.head}>{table.head}</option>
                   ))
                 }
               </select>
